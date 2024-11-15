@@ -28,7 +28,7 @@ jobs:
       - name: Checkout private tools
         uses: actions/checkout@v4
         with:
-          repository: pro-padel/pro-padel-app-infra-cloud
+          repository: platform-Elearning/s3-react-app-infra-cloud
           token: ${{ secrets.GH_PAT }}
 
       - name: Setup Node.js environment
