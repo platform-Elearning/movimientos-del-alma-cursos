@@ -1,6 +1,7 @@
 import danceLogo from "../../assets/dancelogo.jpg";
 import { useNavigate } from "react-router-dom";
 import "./index.css";
+import Navbar from "../../components/navbar/Navbar";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -14,7 +15,8 @@ const Index = () => {
   };
 
   return (
-    <>
+    <div>
+    <Navbar></Navbar>
       <div className="containerIndex">
         <a target="_blank">
           <img src={danceLogo} className="logo" alt="React logo" />
@@ -56,7 +58,7 @@ const Index = () => {
           <button onClick={navigateToRegister}>Registrarse</button>
         </div>
       </div>
-    </>
+      </div>
   );
 };
 
