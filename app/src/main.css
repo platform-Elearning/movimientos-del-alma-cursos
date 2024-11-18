@@ -1,7 +1,7 @@
 body {
   margin: 0;
   padding: 0;
-  height: 100vh;
-  background-color: #f9e58e;
-  overflow: hidden;
+  height: 100%;  /* Cambia de 100vh a 100% */
+  background-color: #ffffff;
+  overflow-y: auto;  /* Permite el scroll vertical */
 }

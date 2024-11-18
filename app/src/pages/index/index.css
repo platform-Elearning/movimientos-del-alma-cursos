@@ -1,8 +1,21 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  overflow-x: hidden;  /* Para evitar el desbordamiento horizontal */
+}
 .containerIndex {
-  max-width: 1280px;
+  max-width: 100%;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 1rem;
   text-align: center;
+  min-height: 80vh;
+  overflow-y: auto; /* Permite el scroll vertical */
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  background-image: url('../../assets/bgHome.png');
+  background-size: cover; /* Asegura que la imagen cubra toda el área del contenedor */
+  background-position: center; /* Centra la imagen de fondo */
 }
 
 .containerIndex h1 {
@@ -78,4 +91,10 @@ button:focus-visible {
 
 .read-the-docs {
   color: #888;
+}
+.Titulo-Home {
+  font-size: 8rem;
+  background: linear-gradient(90deg, #746201, #ffd700, #746201);
+  -webkit-background-clip: text;
+  color: transparent;
 }
