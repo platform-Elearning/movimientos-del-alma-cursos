@@ -118,10 +118,10 @@ jobs:
         run: |
           mkdir -p ~/.aws
           echo "[default]" > ~/.aws/credentials
-          echo "aws_access_key_id=${{ secrets.AWS_ACCESS_KEY_ID_1600 }}" >> ~/.aws/credentials
-          echo "aws_secret_access_key=${{ secrets.AWS_SECRET_ACCESS_KEY_1600 }}" >> ~/.aws/credentials
-          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID_1600 }}
-          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY_1600 }}
+          echo "aws_access_key_id=${{ secrets.AWS_ACCESS_KEY_ID_JULIMAXSOFT }}" >> ~/.aws/credentials
+          echo "aws_secret_access_key=${{ secrets.AWS_SECRET_ACCESS_KEY_JULIMAXSOFT }}" >> ~/.aws/credentials
+          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID_JULIMAXSOFT }}
+          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY_JULIMAXSOFT }}
           aws configure set region us-east-1
 
       - name: Create DynamoDB table
@@ -148,8 +148,8 @@ jobs:
           #terraform plan
           terraform apply -auto-approve
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_1600 }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_1600 }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_JULIMAXSOFT }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_JULIMAXSOFT }}
 
       - name: Terraform init and apply PROD
         if: (github.ref == 'refs/heads/main') && (vars.INITIAL_CREATE == 'false')
@@ -160,8 +160,8 @@ jobs:
             -target=aws_s3_bucket.bucket_web \
             -target=aws_s3_bucket_object.site_files
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_1600 }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_1600 }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_JULIMAXSOFT }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_JULIMAXSOFT }}
 
       - name: Terraform init and apply DEV
         if: (github.ref == 'refs/heads/develop') && (vars.INITIAL_CREATE == 'false')
@@ -172,8 +172,8 @@ jobs:
             -target=aws_s3_bucket.bucket_web_dev \
             -target=aws_s3_bucket_object.site_files_dev
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_1600 }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_1600 }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_JULIMAXSOFT }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_JULIMAXSOFT }}
 
       - name: Clean cloufront cache
         if: github.ref == 'refs/heads/main'
