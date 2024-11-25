@@ -152,6 +152,7 @@ jobs:
         run: |
           cd aws-s3
           terraform init
+          terraform force-unlock -force 2b820738-c605-308e-be61-f6e70d9b1bbe
           terraform apply -auto-approve \
             -target=aws_s3_bucket.bucket_web \
             -target=aws_s3_bucket_object.site_files
