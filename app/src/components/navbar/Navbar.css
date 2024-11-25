@@ -1,0 +1,153 @@
+/* Estilos base */
+body {
+  margin: 0;
+}
+
+.navbar {
+  background-color: #ffffff;
+  color: rgb(0, 0, 0);
+  padding: 10px 20px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Agrega sombra sutil */
+  transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Transición suave */
+}
+
+.navbar:hover {
+  background-color: #f5f5f5; /* Cambia el fondo cuando pasa el ratón */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Efecto de sombra más intensa */
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap; /* Permite que los elementos se ajusten en pantallas pequeñas */
+  transition: all 0.3s ease; /* Transición suave para todo el contenedor */
+}
+
+.navbar-logo img {
+  width: 100px; /* Ajusta el tamaño a 100px de ancho */
+  height: auto; /* Mantiene la relación de aspecto */
+  opacity: 0;
+  animation: fadeIn 1s forwards; /* Animación para que el logo aparezca */
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+.navbar-links {
+  display: flex;
+  gap: 50px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  transition: all 0.3s ease;
+}
+
+.navbar-links li {
+  font-weight: bold;
+  font-style: uppercase;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.navbar-links a {
+  color: rgb(0, 0, 0);
+  text-decoration: none;
+  font-size: 1.3rem;
+  position: relative;
+  transition: color 0.3s ease, transform 0.3s ease; /* Transición suave de color y escala */
+}
+
+.navbar-links a:hover {
+  text-decoration: underline;
+  transform: scale(1.1); /* Escala el enlace ligeramente */
+}
+
+.navbar-links li:hover::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 3px;
+  bottom: -5px;
+  left: 0;
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.navbar-links li:hover::before {
+  transform: scaleX(1); /* Desliza la barra hacia el ancho del enlace */
+}
+
+/* Estilos para el botón */
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: black;
+  font-size: 2rem;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+/* Media query para pantallas pequeñas */
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: block; /* Muestra el botón de menú en móviles */
+  }
+
+  .navbar-links {
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    background-color: #444;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    padding: 10px 0;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: translateY(-20px); /* Empuja el menú hacia arriba inicialmente */
+    animation: slideDown 0.5s forwards; /* Animación de deslizamiento hacia abajo */
+  }
+
+  @keyframes slideDown {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .navbar-links.open {
+    display: flex;
+  }
+
+  .navbar-links li {
+    text-align: center;
+    width: 100%;
+    animation: slideUp 0.3s ease-out;
+  }
+
+  @keyframes slideUp {
+    0% {
+      opacity: 0;
+      transform: translateY(10px); /* Desliza el enlace hacia abajo */
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0); /* Regresa el enlace a su posición original */
+    }
+  }
+
+  .navbar-logo img {
+    width: 80px; /* Reduce el tamaño del logo en pantallas pequeñas */
+  }
+}
