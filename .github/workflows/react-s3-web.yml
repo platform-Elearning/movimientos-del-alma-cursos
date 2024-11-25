@@ -49,7 +49,7 @@ jobs:
         with:
           repository: platform-Elearning/s3-react-app-infra-cloud
           token: ${{ secrets.GH_PAT }}
-          ref: full-deploy-with-dev
+          ref: main
 
       - name: Replace $REPO in main.tf
         run: |
