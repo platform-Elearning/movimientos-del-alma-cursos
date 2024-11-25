@@ -74,7 +74,7 @@ jobs:
       - name: Replace $DOMINIO in cloudfront.tf
         run: |
           cd aws-s3
-          sed -i "s/\$SUBDOMINIO/${{ vars.DOMINIO }}/g" cloudfront.tf
+          sed -i "s/\$DOMINIO/${{ vars.DOMINIO }}/g" cloudfront.tf
       - name: Replace $SUBDOMINIO in cloudfront.tf
         run: |
           cd aws-s3
