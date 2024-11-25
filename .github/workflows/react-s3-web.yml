@@ -141,7 +141,6 @@ jobs:
         run: |
           cd aws-s3
           terraform init
-          terraform force-unlock -force 2b820738-c605-308e-be61-f6e70d9b1bbe
           #terraform plan
           terraform apply -auto-approve
         env:
