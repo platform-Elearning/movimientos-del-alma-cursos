@@ -1,0 +1,82 @@
+/* Contenedor principal */
+.home-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh; /* Asegura que el contenedor ocupe toda la altura de la pantalla */
+  background-color: #ffffff; /* Fondo blanco como fallback */
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+}
+
+/* Fondo con la imagen */
+.home-background {
+  position: relative;
+  width: 100%;
+  height: 100%; /* Asegura que el fondo cubra todo el contenedor */
+  background-image: url("../../assets/bgHome.png"); /* Ruta al fondo bgHome */
+  background-size: cover; /* La imagen cubre todo el contenedor */
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* Cambiado de center a flex-start para alinear el contenido hacia arriba */
+  align-items: center;
+  text-align: center;
+  padding-top: 5rem; /* Añadido espacio arriba para el título */
+}
+
+/* Título */
+.home-title {
+  font-size: 5rem;
+  font-weight: bold;
+  color: #a37300; /* Color dorado */
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); /* Sombra para destacar el texto */
+  margin-bottom: 2rem; /* Ajusta el espacio debajo del título */
+}
+
+/* Botón */
+.home-button {
+  background-color: #a37300; /* Fondo dorado */
+  color: white;
+  font-size: 1.2rem;
+  padding: 0.8em 2em;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.home-button:hover {
+  background-color: #7c5700; /* Cambia el color al pasar el cursor */
+}
+
+/* Media Queries para pantallas pequeñas */
+@media (max-width: 768px) {
+  /* Ajustes para pantallas de tabletas y dispositivos móviles */
+
+  .home-title {
+    font-size: 3rem; /* Reduce el tamaño de la fuente del título en pantallas pequeñas */
+    margin-bottom: 1.5rem; /* Reduce el espacio debajo del título */
+  }
+
+  .home-button {
+    font-size: 1rem; /* Reduce el tamaño de la fuente del botón */
+    padding: 0.7em 1.8em; /* Ajusta el padding para que no sea demasiado grande en pantallas pequeñas */
+  }
+}
+
+@media (max-width: 480px) {
+  /* Ajustes para pantallas de teléfonos móviles */
+
+  .home-title {
+    font-size: 2.5rem; /* Aún más pequeño para pantallas pequeñas */
+    margin-bottom: 1rem; /* Reduce aún más el espacio debajo del título */
+  }
+
+  .home-button {
+    font-size: 0.9rem; /* Reduce aún más el tamaño del texto en el botón */
+    padding: 0.6em 1.5em; /* Ajusta aún más el tamaño del botón */
+  }
+}

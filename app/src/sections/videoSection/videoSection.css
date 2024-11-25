@@ -1,0 +1,123 @@
+/* Estilo general de la sección */
+.video-section {
+  width: 100%;
+  padding: 20px;
+  text-align: left;
+  box-sizing: border-box;
+  background-color: #333; /* Fondo oscuro */
+  color: #fff; /* Texto blanco */
+}
+
+/* Título de la sección */
+.video-section-title {
+  font-size: 3rem;
+  margin-bottom: 20px;
+  margin-left: 5rem;
+  font-family: "Arial", sans-serif;
+}
+
+/* Contenedor del video e imagen */
+.video-section-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Dos columnas iguales */
+  align-items: center;
+  gap: 20px;
+  background: linear-gradient(
+    #333 0%,
+    #333 50px,
+    #7c7b7a 50px,
+    #7c7b7a 100%
+  ); /* Degradado con dos colores */
+  padding: 10px; /* Para darle algo de espacio alrededor */
+}
+
+/* Estilo de la imagen */
+.video-section-image {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+/* Placeholder para el video */
+.video-placeholder {
+  width: 100%;
+  height: 0;
+  padding-top: 56.25%; /* Relación 16:9 */
+  background-color: #555; /* Fondo gris oscuro */
+  position: relative;
+  border-radius: 8px;
+}
+
+/* Botón para reproducir el video */
+.video-play-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: white;
+  cursor: pointer;
+}
+
+.video-play-button:hover {
+  color: #ccc;
+}
+
+/* Video en lugar del botón */
+.video-player {
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #555;
+}
+
+/* Media Queries para pantallas pequeñas */
+
+/* Para tabletas (máximo 768px) */
+@media (max-width: 768px) {
+  .video-section-title {
+    font-size: 2.5rem; /* Reduce el tamaño del título */
+    margin-left: 2rem; /* Reduce el margen izquierdo */
+  }
+
+  .video-section-content {
+    grid-template-columns: 1fr; /* Una sola columna */
+  }
+
+  .video-section-image {
+    width: 90%; /* Reduce el tamaño de la imagen */
+  }
+
+  .video-placeholder {
+    padding-top: 56.25%; /* Mantiene la relación de aspecto */
+  }
+}
+
+/* Para teléfonos móviles (máximo 480px) */
+@media (max-width: 480px) {
+  .video-section-title {
+    font-size: 2rem; /* Aumenta la reducción del título */
+    margin-left: 1rem; /* Reduce más el margen izquierdo */
+  }
+
+  .video-section-content {
+    grid-template-columns: 1fr; /* Una sola columna */
+  }
+
+  .video-section-image {
+    width: 100%; /* La imagen ocupa todo el ancho disponible */
+  }
+
+  .video-placeholder {
+    padding-top: 56.25%; /* Mantiene la relación de aspecto */
+  }
+
+  .video-play-button {
+    font-size: 1.5rem; /* Reduce el tamaño del botón */
+  }
+}
