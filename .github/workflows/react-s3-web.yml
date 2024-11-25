@@ -190,7 +190,7 @@ jobs:
         run: |
           cd aws-s3
           # Ejecutar Terraform y guardar el valor de cloudfront_domain_name en una variable
-          cloudfront_domain_name_dev=$(terraform output -raw cloudfront_domain_name_dev | sed -n 's/.*\(\S\{14\}\)\.cloudfront\.net.*/\1.cloudfront.net/p' | head -n 1)
+          cloudfront_domain_name_dev=$(terraform output -raw cloudfront_domain_name_dev | sed -n 's/.*\(\S\{13\}\)\.cloudfront\.net.*/\1.cloudfront.net/p' | head -n 1)
           echo "$cloudfront_domain_name_dev"
           # Extraer el ID de la distribución de CloudFront del nombre de dominio dev
           distribution_id_dev=$(aws cloudfront list-distributions --query "DistributionList.Items[?DomainName=='${cloudfront_domain_name_dev}'].Id" --output text)
