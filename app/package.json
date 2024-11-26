@@ -5,14 +5,20 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "start-dev": "cp .dev .env && vite --host",
+    "start-prod": "cp .prod .env && vite --host",
+    "start-local": "cp .local .env && vite --host",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "start": "npm run dev"
   },
   "dependencies": {
+    "axios": "^1.7.8",
+    "js-cookie": "^3.0.5",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-icons": "^5.3.0",
     "react-router-dom": "^6.27.0"
   },
   "devDependencies": {
