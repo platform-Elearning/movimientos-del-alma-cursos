@@ -4,6 +4,7 @@ import Button from "../../components/button/Button"; // Importa el componente Bu
 import logo from "../../assets/logo.png";
 
 const Navbar = () => {
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -23,11 +24,10 @@ const Navbar = () => {
         <ul className={`navbar-links ${isMenuOpen ? "open" : ""}`}>
           <li>
             <a href="#home">Conocenos</a>
-          </li>
+          </li>       
           <li>
             <a href="#about">Nuestros cursos</a>
           </li>
-
           <li>
             <Button text="Plataforma" /> {/* El botón ahora dirá PLATAFORMA */}
           </li>

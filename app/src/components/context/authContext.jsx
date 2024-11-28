@@ -1,11 +1,12 @@
 import { createContext, useState, useContext, useEffect  } from "react"
-import { registerRequest, loginRequest, verifyTokenRequest } from "../../api/auth.jsx"
+import { registerRequest, loginRequest, verifyTokenRequest } from "../../api/auth.js"
 import Cookies from "js-cookie";
 
 export const AuthContext = createContext()
 
 export const useAuth = () => {
     const context = useContext(AuthContext)
+    
     if (!context) {
         throw new Error("useAuth must be used whitin an AuthProvider")
     }
