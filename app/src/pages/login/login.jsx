@@ -9,6 +9,14 @@ const Login = () => {
   const { signin, errors: signinErrors, isAuthenticated } = useAuth();
   const navigate = useNavigate(); // Hook para redireccionar a otras rutas
 
+  const navigateToRegister = () => {
+    navigate("/register");
+  };
+
+  const navigateToPageAuxiliar = () => {
+    navigate("/pageAuxiliar");
+  };
+
   // Estado para los datos del formulario
   const [formData, setFormData] = useState({ email: "", password: "" });
   // Estado para alternar entre mostrar/ocultar contraseña
@@ -84,9 +92,9 @@ const Login = () => {
         {/* Botones de acción */}
         <div className="btn">
           <button type="submit" className="button1">Iniciar sesión</button>
-          <button type="button" className="button2">Registrarse</button>
+          <button type="button" className="button2" onClick={navigateToRegister}>Registrarse</button>
         </div>
-        <button type="button" className="button3">¿Olvidaste tu contraseña?</button>
+        <button type="button" className="button3" onClick={navigateToPageAuxiliar}>¿Olvidaste tu contraseña?</button>
       </form>
 
       {/* Muestra los errores de inicio de sesión, si los hay */}
