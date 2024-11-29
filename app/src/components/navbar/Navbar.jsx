@@ -1,9 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Navbar.css";
 import logo from "../../assets/logo.png";
 import { FaRegUser } from 'react-icons/fa';
+import { useAuth } from "../context/authContext";
+import { useNavigate } from 'react-router-dom';
+
 
 const Navbar = () => {
+
+  const navigate = useNavigate();
+  const { logout, isAuthenticated } = useAuth();
+
+  useEffect(() => {
+      if (!isAuthenticated) {
+          navigate('/');
+      }
+  }, [isAuthenticated, navigate]);
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -28,7 +40,7 @@ const Navbar = () => {
           <li className="userListItem">
               <FaRegUser className='userIcono'/>
               <h5 className='username'>username</h5>
-              <h5 className='logout'>logout</h5>
+              <h5 className='logout' onClick={logout}>logout</h5>
           </li>
         </ul>
       </div>

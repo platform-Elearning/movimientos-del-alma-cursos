@@ -175,3 +175,8 @@ body {
 .userListItem .logout {
   margin-top: 1.5rem; /* Ajusta el espacio entre el nombre de usuario y el botón de logout */
 }
+
+.userListItem .logout:hover {
+  color: #a37300; /* Cambia el color del texto al pasar el cursor */
+  cursor: pointer; /* Cambia el cursor al pasar el cursor */
+}
