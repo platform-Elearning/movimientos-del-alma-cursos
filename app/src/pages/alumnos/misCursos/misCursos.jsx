@@ -1,23 +1,38 @@
 import "./misCursos.css";
-import { useAuth } from "../../../components/context/authContext";
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { getCursos } from "../../../api/cursos";
+import { useState, useEffect } from "react";
+
 
 const MisCursos = () => {
-    const navigate = useNavigate();
-    const { logout, isAuthenticated } = useAuth();
+
+    const [cursos, setCursos] = useState([]);
 
     useEffect(() => {
-        if (!isAuthenticated) {
-            navigate('/');
+      // Función para obtener los productos
+      const getCursosData = async () => {
+        try {
+          const cursosData = await getCursos();
+          setCursos(cursosData);
+        } catch (error) {
+          console.error(error);
         }
-    }, [isAuthenticated, navigate]);
+      }
+      
 
+      getCursosData();
+    }, []);
 
     return (
         <div>
             <h1>misCursos</h1>
-            <button onClick={logout}>logout</button>
+            <div>
+                {cursos.map((curso) => (
+                    <div key={curso.id}>
+                        <h2>{curso.nombre}</h2>
+                        <p>{curso.descripcion}</p>
+                    </div>
+                ))}
+            </div>
         </div>
     )
 }

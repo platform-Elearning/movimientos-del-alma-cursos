@@ -4,6 +4,7 @@ import "./login.css"; // Estilos para el componente
 import { useNavigate } from "react-router-dom"; // Hook para la navegación entre páginas
 import { AiFillEyeInvisible } from "react-icons/ai"; // Icono para mostrar/ocultar contraseñas
 
+
 const Login = () => {
   // Extracción de funciones y datos del contexto de autenticación
   const { signin, errors: signinErrors, isAuthenticated } = useAuth();
@@ -46,7 +47,8 @@ const Login = () => {
   };
 
   return (
-    <div className="form" style={{ color: 'white' }}>
+    <div>
+      <div className="form" style={{ color: 'white' }}>
       <h1 id="heading">Login</h1>
       <form onSubmit={handleSubmit}>
         {/* Campo de correo electrónico */}
@@ -108,6 +110,8 @@ const Login = () => {
         </div>
       )}
     </div>
+    </div>
+    
   );
 };
 
