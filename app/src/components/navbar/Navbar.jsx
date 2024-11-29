@@ -23,10 +23,12 @@ const Navbar = () => {
         </button>
         <ul className={`navbar-links ${isMenuOpen ? "open" : ""}`}>      
           <li>
-            <a href="alumno/miscursos/sd">mis cursos</a>
+            <a href="/alumnos/miscursos/asdsd">mis cursos</a>
           </li>
-          <li>
-            <FaRegUser className='userIcono'/>
+          <li className="userListItem">
+              <FaRegUser className='userIcono'/>
+              <h5 className='username'>username</h5>
+              <h5 className='logout'>logout</h5>
           </li>
         </ul>
       </div>

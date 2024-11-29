@@ -48,7 +48,6 @@ const Login = () => {
 
   return (
     <div>
-      <Contacto />
       <div className="form" style={{ color: 'white' }}>
       <h1 id="heading">Login</h1>
       <form onSubmit={handleSubmit}>
