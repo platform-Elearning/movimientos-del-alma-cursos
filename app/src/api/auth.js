@@ -1,8 +1,9 @@
-import { instance, instanceUsers } from "./axiosInstances";
+import axios from "./axios.js"
+
 
 export const registerRequest = async (user) => {
     try {
-      const response = await instance.post("/register", user);
+      const response = await axios.post("/register", user);
       return response.data; // Devuelve los datos de la respuesta si la solicitud se completa con éxito
     } catch (error) {
       throw error; // Lanza el error si ocurre una excepción durante la solicitud
@@ -11,9 +12,7 @@ export const registerRequest = async (user) => {
 
   export const loginRequest = async (user) => {
     try {
-      console.log(user)
-      const response = await instanceUsers.post("/login", user);
-      
+      const response = await axios.post("/users/login", user);
       return response.data;
     } catch (error) {
       throw error; 
@@ -22,7 +21,7 @@ export const registerRequest = async (user) => {
 
   export const logoutRequest = async (user) => {
     try {
-      const response = await instance.get("/logout");
+      const response = await axios.get("/logout");
       return response.data;
     } catch (error) {
       throw error; 
@@ -31,7 +30,7 @@ export const registerRequest = async (user) => {
 
   export const getUsersRequest = async () => {
     try {
-      const response = await instance.get("/users");
+      const response = await axios.get("/users");
       return response.data;
     } catch (error) {
       throw error; 
@@ -40,11 +39,11 @@ export const registerRequest = async (user) => {
 
   export const deleteUserRequest = async (id) => {
     try {
-      const response = await instance.delete(`/users/${id}`)
+      const response = await axios.delete(`/users/${id}`)
       return response 
     } catch (error) {
       throw error; // Lanza el error si ocurre una excepción durante la solicitud
     }
   }
 
-export const verifyTokenRequest = () => instance.get(`/verify`)
+export const verifyTokenRequest = () => axios.get(`/verify`)

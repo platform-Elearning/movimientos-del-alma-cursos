@@ -5,17 +5,12 @@ import Login from "../login/login";
 import "./index.css";
 
 const Index = () => {
-  const navigate = useNavigate();
-
-  const navigateToRegister = () => {
-    navigate("/register");
-  };
 
   return (
     <div className="page-container">
       <Navbar />
       <div className="containerIndex">
-        <Login />
+      <Login />
       </div>
     </div>
   );
