@@ -13,7 +13,7 @@ const Navbar = () => {
 
 
   useEffect(() => {
-      if (!isAuthenticated) {
+      if (!isAuthenticated && navigate==='/alumnos/miscursos/asdsd') {
           navigate('/');
       }
   }, [isAuthenticated, navigate]);
