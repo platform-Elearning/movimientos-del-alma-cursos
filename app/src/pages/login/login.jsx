@@ -24,7 +24,7 @@ const Login = () => {
 
   // Redirige a la página principal si el usuario ya está autenticado
   useEffect(() => {
-    if (isAuthenticated) navigate("/");
+    if (isAuthenticated) navigate("/alumnos/miscursos/asdsd");
   }, [isAuthenticated, navigate]);
 
   // Alterna el estado de visibilidad de la contraseña
