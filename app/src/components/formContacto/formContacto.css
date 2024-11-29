@@ -109,6 +109,7 @@
   .info-container {
     max-width: 400px;
     width: 100%;
+    color: black;
   }
   
   .contact-info {
