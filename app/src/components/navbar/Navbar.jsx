@@ -9,7 +9,8 @@ import { useNavigate } from 'react-router-dom';
 const Navbar = () => {
 
   const navigate = useNavigate();
-  const { logout, isAuthenticated } = useAuth();
+  const { logout, userNav, isAuthenticated } = useAuth();
+
 
   useEffect(() => {
       if (!isAuthenticated) {
@@ -39,8 +40,11 @@ const Navbar = () => {
           </li>
           <li className="userListItem">
               <FaRegUser className='userIcono'/>
-              <h5 className='username'>username</h5>
-              <h5 className='logout' onClick={logout}>logout</h5>
+              <h5 className='username'>{userNav}</h5>
+              {userNav && (
+                
+                <h5 className='logout' onClick={logout}>logout</h5>
+                )}
           </li>
         </ul>
       </div>

@@ -32,8 +32,9 @@ export const AuthProvider = ({children}) => {
     const signin = async (user) => {
         try {
             const res = await loginRequest(user)
-            console.log(res)
-            setUser(res.data)
+            console.log('res', res)
+            setUser(res.token)
+            setUserNav(res.token)
             setIsAuthenticated(true)
         } catch (error) {
             if(Array.isArray(error.response.data)) {
@@ -81,7 +82,7 @@ export const AuthProvider = ({children}) => {
     },[])
 
     const logout = () => {
-        setUser(null);
+        setUserNav(null);
         setIsAuthenticated(false);
     }
 
