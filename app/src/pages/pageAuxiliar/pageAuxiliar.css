@@ -1,0 +1,38 @@
+
+.page-auxiliar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #f0f8ff;
+    color: #333;
+    text-align: center;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .page-auxiliar-container:hover {
+    transform: scale(1.05);
+  }
+  
+  .page-auxiliar-container i {
+    color: #007bff;
+    margin-bottom: 15px;
+  }
+  
+  .page-auxiliar-container h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    font-family: 'Arial', sans-serif;
+    font-weight: bold;
+  }
+  
+  .page-auxiliar-container p {
+    font-size: 1.2rem;
+    color: #555;
+    font-family: 'Verdana', sans-serif;
+  }
+  
