@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./Navbar.css";
-import Button from "../../components/button/Button"; // Importa el componente Button
 import logo from "../../assets/logo.png";
+import { FaRegUser } from 'react-icons/fa';
 
 const Navbar = () => {
 
@@ -21,15 +21,12 @@ const Navbar = () => {
         <button className="menu-toggle" onClick={toggleMenu}>
           ☰
         </button>
-        <ul className={`navbar-links ${isMenuOpen ? "open" : ""}`}>
+        <ul className={`navbar-links ${isMenuOpen ? "open" : ""}`}>      
           <li>
-            <a href="#home">Conocenos</a>
-          </li>       
-          <li>
-            <a href="#about">Nuestros cursos</a>
+            <a href="alumno/miscursos/sd">mis cursos</a>
           </li>
           <li>
-            <Button text="Plataforma" /> {/* El botón ahora dirá PLATAFORMA */}
+            <FaRegUser className='userIcono'/>
           </li>
         </ul>
       </div>
