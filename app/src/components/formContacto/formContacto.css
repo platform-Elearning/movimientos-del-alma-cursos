@@ -1,0 +1,241 @@
+/* General container for the section */
+.contacto-section {
+    color: #ffffff;
+    padding: 50px 20px;
+    font-family: "Arial", sans-serif;
+    box-sizing: border-box;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  /* Header part */
+  .contacto-header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  .contacto-header h1 {
+    font-size: 36px;
+    margin-bottom: 10px;
+    font-weight: 400;
+    color: #059948;
+  }
+  
+  .contacto-header p {
+    font-size: 18px;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  /* Flexbox layout for form and info containers */
+  .contacto-container {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    align-items: center;
+    padding: 0 20px;
+    max-width: 100%;
+  }
+  
+  @media (min-width: 768px) {
+    .contacto-container {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .contacto-container {
+      padding: 0 40px;
+      gap: 50px;
+    }
+  }
+  
+  /* Styling for the form */
+  .form-container {
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    max-width: 400px;
+    width: 100%;
+    border: solid 1px white;
+    background-color: rgba(0, 0, 0, 0.5);
+    margin-bottom: 20px;
+  }
+  
+  .contact-form .input-group {
+    margin-bottom: 20px;
+  }
+  
+  .contact-form label {
+    display: block;
+    font-size: 16px;
+    margin-bottom: 5px;
+  }
+  
+  .contact-form input,
+  .contact-form textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    background-color: #3333336c;
+    color: #ffffff;
+    font-size: 14px;
+  }
+  
+  .contact-form textarea {
+    resize: none;
+  }
+  
+  .submit-button {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 5px;
+    background: linear-gradient(45deg, #e91e63, #9c27b0);
+    color: #ffffff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .submit-button:hover {
+    background: linear-gradient(45deg, #e74b85, #530475);
+  }
+  
+  /* Styling for the contact information */
+  .info-container {
+    max-width: 400px;
+    width: 100%;
+  }
+  
+  .contact-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    font-size: 18px;
+  }
+  
+  .contact-info .contact-icon {
+    color: #e91e63;
+    margin-right: 10px;
+  }
+  
+  .social-icons {
+    margin-top: 20px;
+  }
+  
+  .social-icons a {
+    color: #ffffff;
+    margin-right: 20px;
+    font-size: 24px;
+    transition: color 0.3s;
+  }
+  
+  .social-icons a:hover {
+    color: #e91e63;
+  }
+  
+  /* Media queries for smaller screens */
+  @media (max-width: 768px) {
+    .contacto-header h1 {
+      font-size: 28px;
+    }
+  
+    .contacto-header p {
+      font-size: 16px;
+      max-width: 100%;
+    }
+  
+    .form-container {
+      padding: 20px;
+      margin: 0 20px; /* Asegura un margen en pantallas medianas */
+    }
+  
+    .submit-button {
+      padding: 12px;
+      font-size: 14px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .contacto-header h1 {
+      font-size: 24px;
+    }
+  
+    .contacto-header p {
+      font-size: 14px;
+    }
+  
+    .form-container {
+      padding: 15px;
+      margin: 0 15px; /* Reduce el margen en pantallas pequeñas */
+    }
+  
+    .contact-form label {
+      font-size: 14px;
+    }
+  
+    .contact-form input,
+    .contact-form textarea {
+      padding: 8px;
+      font-size: 12px;
+    }
+  
+    .submit-button {
+      padding: 10px;
+      font-size: 14px;
+    }
+  
+    .social-icons a {
+      margin-right: 15px;
+      font-size: 20px;
+    }
+  }
+  
+  /* Media queries for very small screens */
+  @media (max-width: 390px) {
+    .contacto-header h1 {
+      font-size: 20px;
+    }
+  
+    .contacto-header p {
+      font-size: 12px;
+      max-width: 90%;
+    }
+  
+    .form-container {
+      padding: 12px;
+      max-width: 70%;
+      margin: 0 10px; /* Ajusta el margen para pantallas muy pequeñas */
+    }
+    .info-container {
+      width: 70%;
+    }
+  
+    .contact-form label {
+      font-size: 12px;
+    }
+  
+    .contact-form input,
+    .contact-form textarea {
+      padding: 6px;
+      font-size: 10px;
+    }
+  
+    .submit-button {
+      padding: 8px;
+      font-size: 12px;
+    }
+  
+    .contact-info {
+      font-size: 14px;
+    }
+  
+    .social-icons a {
+      margin-right: 10px;
+      font-size: 18px;
+    }
+  }
