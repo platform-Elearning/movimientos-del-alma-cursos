@@ -80,10 +80,13 @@ export const AuthProvider = ({children}) => {
         checkLogin()
     },[])
 
-
+    const logout = () => {
+        setUser(null);
+        setIsAuthenticated(false);
+    }
 
     return (
-        <AuthContext.Provider value= {{signup, signin,  user, userNav, setUserNav, isAuthenticated, setIsAuthenticated, errors}}>
+        <AuthContext.Provider value= {{signup, signin,  user, userNav, setUserNav, isAuthenticated, setIsAuthenticated, errors, logout }}>
             {children}
         </AuthContext.Provider>
 
