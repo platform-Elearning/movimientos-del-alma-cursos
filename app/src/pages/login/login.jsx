@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"; // Importación de React y hooks
-import { useAuth } from "../../components/context/authContext"; // Importa el contexto de autenticación personalizado
+import { useAuth } from "../../components/context/authContext.jsx"; // Importa el contexto de autenticación personalizado
 import "./login.css"; // Estilos para el componente
 import { useNavigate } from "react-router-dom"; // Hook para la navegación entre páginas
 import { AiFillEyeInvisible } from "react-icons/ai"; // Icono para mostrar/ocultar contraseñas
@@ -39,6 +39,8 @@ const Login = () => {
 
   // Maneja el envío del formulario
   const handleSubmit = async (e) => {
+    console.log(formData.email);
+    console.log(formData.password);
     e.preventDefault(); // Previene el comportamiento por defecto del formulario
     await signin(formData); // Llama a la función de inicio de sesión del contexto
   };

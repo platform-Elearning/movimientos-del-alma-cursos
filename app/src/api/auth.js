@@ -1,4 +1,4 @@
-import axios from "./axios"
+import axios from "./axios.js"
 
 
 export const registerRequest = async (user) => {
@@ -12,7 +12,7 @@ export const registerRequest = async (user) => {
 
   export const loginRequest = async (user) => {
     try {
-      const response = await axios.post("/login", user);
+      const response = await axios.post("/users/login", user);
       return response.data;
     } catch (error) {
       throw error; 
