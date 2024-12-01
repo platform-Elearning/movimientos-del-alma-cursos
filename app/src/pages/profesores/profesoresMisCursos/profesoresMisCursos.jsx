@@ -1,4 +1,4 @@
-import "./misCursos.css";
+import "./profesoresMisCursos.css";
 import { getCursos } from "../../../api/cursos";
 import { useState, useEffect } from "react";
 
