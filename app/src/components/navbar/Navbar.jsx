@@ -11,13 +11,13 @@ const Navbar = () => {
   const navigate = useNavigate();
   const { logout, userNav, isAuthenticated } = useAuth();
 
-
+  /*
   useEffect(() => {
       if (!isAuthenticated && navigate==='/alumnos/miscursos/asdsd') {
           navigate('/');
       }
   }, [isAuthenticated, navigate]);
-
+ */
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
