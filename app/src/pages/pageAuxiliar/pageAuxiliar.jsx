@@ -1,11 +1,11 @@
 import React from "react";
-import 'font-awesome/css/font-awesome.min.css';
 import "./pageAuxiliar.css";
+import workImage from "../../assets/work.png"; // Asegúrate de que la ruta sea correcta.
 
 const PageAuxiliar = () => {
   return (
     <div className="page-auxiliar-container">
-      <i className="fa fa-cogs fa-3x" aria-hidden="true"></i>
+      <img src={workImage} alt="Estamos trabajando" className="work-image" />
       <h1>Estamos trabajando en esto</h1>
       <p>Por favor, vuelve pronto para ver las actualizaciones.</p>
     </div>
