@@ -3,7 +3,7 @@ import { getCursos } from "../../../api/cursos";
 import { useState, useEffect } from "react";
 
 
-const MisCursos = () => {
+const ProfesoresMisCursos = () => {
 
     const [cursos, setCursos] = useState([]);
 
@@ -37,4 +37,4 @@ const MisCursos = () => {
     )
 }
 
-export default MisCursos;
+export default ProfesoresMisCursos;

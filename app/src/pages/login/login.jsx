@@ -4,7 +4,6 @@ import "./login.css"; // Estilos para el componente
 import { useNavigate } from "react-router-dom"; // Hook para la navegación entre páginas
 import { AiFillEyeInvisible } from "react-icons/ai"; // Icono para mostrar/ocultar contraseñas
 
-
 const Login = () => {
   // Extracción de funciones y datos del contexto de autenticación
   const { signin, errors: signinErrors, isAuthenticated } = useAuth();
@@ -25,7 +24,14 @@ const Login = () => {
 
   // Redirige a la página principal si el usuario ya está autenticado
   useEffect(() => {
-    if (isAuthenticated) navigate("/alumnos/miscursos/asdsd");
+    if (isAuthenticated) {
+      if (user.role == 'alumno') 
+        navigate("/alumnos/miscursos/:id");
+      elif (user.role == 'profesor') 
+        navigate("/profesor/miscursos/:id");
+      elif (user.role == 'admin') 
+        navigate("/admin");
+    }
   }, [isAuthenticated, navigate]);
 
   // Alterna el estado de visibilidad de la contraseña
