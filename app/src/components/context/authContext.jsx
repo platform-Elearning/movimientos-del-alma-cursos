@@ -36,6 +36,7 @@ export const AuthProvider = ({children}) => {
             setUser(res.token)
             setUserNav(res.token)
             setIsAuthenticated(true)
+            return res;
         } catch (error) {
             if(Array.isArray(error.response.data)) {
                 return setErrors(error.response.data)
