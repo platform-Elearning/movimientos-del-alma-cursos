@@ -11,7 +11,7 @@ const Navbar = () => {
   const { logout, userNav, isAuthenticated } = useAuth();
 
   useEffect(() => {
-    if (!isAuthenticated && navigate === "/alumnos/miscursos/asdsd") {
+    if (!isAuthenticated && navigate === "/alumnos/miscursos/asd") {
       navigate("/");
     }
   }, [isAuthenticated, navigate]);
