@@ -15,7 +15,7 @@ const Navbar = () => {
       navigate("/");
     }
   }, [isAuthenticated, navigate]);
- */
+ 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -33,7 +33,7 @@ const Navbar = () => {
         </button>
         <ul className={`navbar-links ${isMenuOpen ? "open" : ""}`}>
           <li>
-            <a href="/alumnos/miscursos/asdsd">mis Cursos</a>
+            <a href="/alumnos/miscursos/asd">mis Cursos</a>
           </li>
           <li className="user-section">
             <img src={userImg} alt="User" className="user-icon" />
