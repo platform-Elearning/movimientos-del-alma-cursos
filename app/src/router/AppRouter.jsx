@@ -22,7 +22,8 @@ const AppRouter = () => {
 
             <Route path="/admin" element={<PanelAdmin></PanelAdmin>}></Route>
             
-            <Route path="/alumnos/miscursos/asd" element={<AlumnosMisCursos></AlumnosMisCursos>}></Route>
+ 
+            <Route path="/alumnos/miscursos/asd" element={<AlumnosMisCursos />} />
             <Route path="/alumnos/curso/:id" element={<Curso></Curso>}></Route>
             <Route path="/alumnos/clase/:id" element={<Clase></Clase>}></Route>
 
@@ -32,3 +33,4 @@ const AppRouter = () => {
 }
 
 export default AppRouter;
+
