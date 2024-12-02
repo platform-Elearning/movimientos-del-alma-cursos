@@ -10,6 +10,10 @@ const Navbar = () => {
   const navigate = useNavigate();
   const { logout, userNav, isAuthenticated } = useAuth();
 
+  const navigateToPageAlumnnosMisCursos = () => {
+    navigate("/alumnos/miscursos/asd");
+  };
+
   useEffect(() => {
     if (!isAuthenticated && navigate === "/alumnos/miscursos/asd") {
       navigate("/");
@@ -33,7 +37,7 @@ const Navbar = () => {
         </button>
         <ul className={`navbar-links ${isMenuOpen ? "open" : ""}`}>
           <li>
-            <a href="/miscursos">mis Cursos</a>
+            <a onClick={navigateToPageAlumnnosMisCursos}>mis Cursos</a>
           </li>
           <li className="user-section">
             <img src={userImg} alt="User" className="user-icon" />
