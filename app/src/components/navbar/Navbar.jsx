@@ -15,7 +15,7 @@ const Navbar = () => {
       navigate("/");
     }
   }, [isAuthenticated, navigate]);
-
+ */
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {

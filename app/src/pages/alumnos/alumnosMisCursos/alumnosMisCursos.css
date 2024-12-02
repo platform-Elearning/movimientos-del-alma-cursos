@@ -1,0 +1,47 @@
+.cursos-container {
+  font-family: Arial, sans-serif;
+  margin: 20px auto;
+  max-width: 800px;
+  text-align: center;
+}
+
+.cursos-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.cursos-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 auto;
+  background-color: #f9f9f9;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cursos-table th,
+.cursos-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+}
+
+.cursos-table th {
+  background-color: #4CAF50;
+  color: white;
+  font-weight: bold;
+  text-align: left;
+}
+
+.cursos-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.cursos-table tr:hover {
+  background-color: #ddd;
+}
+
+.cursos-table td {
+  text-align: left;
+  color: #555;
+}
