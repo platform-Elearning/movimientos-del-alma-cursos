@@ -1,21 +1,19 @@
 import React, { useState, useEffect } from "react";
 import "./Navbar.css";
 import logo from "../../assets/logo.png";
-import { FaRegUser } from 'react-icons/fa';
+import userImg from "../../assets/user.png";
+import logoutImg from "../../assets/logout.png";
 import { useAuth } from "../context/authContext";
-import { useNavigate } from 'react-router-dom';
-
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
-
   const navigate = useNavigate();
   const { logout, userNav, isAuthenticated } = useAuth();
 
-  /*
   useEffect(() => {
-      if (!isAuthenticated && navigate==='/alumnos/miscursos/asdsd') {
-          navigate('/');
-      }
+    if (!isAuthenticated && navigate === "/alumnos/miscursos/asdsd") {
+      navigate("/");
+    }
   }, [isAuthenticated, navigate]);
  */
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -28,24 +26,28 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="navbar-container">
         <div className="navbar-logo">
-          {" "}
           <img src={logo} alt="Logo" />
         </div>
         <button className="menu-toggle" onClick={toggleMenu}>
           ☰
         </button>
-        <ul className={`navbar-links ${isMenuOpen ? "open" : ""}`}>      
+        <ul className={`navbar-links ${isMenuOpen ? "open" : ""}`}>
           <li>
-            <a href="/alumnos/miscursos/asdsd">mis cursos</a>
+            <a href="/alumnos/miscursos/asdsd">mis Cursos</a>
           </li>
-          <li className="userListItem">
-              <FaRegUser className='userIcono'/>
-              <h5 className='username'>{userNav}</h5>
-              {userNav && (
-                
-                <h5 className='logout' onClick={logout}>logout</h5>
-                )}
+          <li className="user-section">
+            <img src={userImg} alt="User" className="user-icon" />
           </li>
+          
+            <li className="logout-section">
+              <img
+                src={logoutImg}
+                alt="Logout"
+                className="logout-icon"
+                onClick={logout}
+              />
+            </li>
+          
         </ul>
       </div>
     </nav>
