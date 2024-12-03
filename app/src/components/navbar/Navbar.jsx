@@ -1,21 +1,18 @@
 import React, { useState, useEffect } from "react";
 import "./Navbar.css";
 import logo from "../../assets/logo.png";
-import { FaRegUser } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
+import { FaRegUser } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../services/authContext";
 
-
 const Navbar = () => {
-
   const navigate = useNavigate();
-  const { logout, userNav, isAuthenticated } = useAuth();
-
+  const { logout, userNav, user, isAuthenticated } = useAuth();
 
   useEffect(() => {
-      if (!isAuthenticated && navigate==='/alumnos/miscursos/asdsd') {
-          navigate('/');
-      }
+    if (!isAuthenticated && navigate === "/alumnos/miscursos/asdsd") {
+      navigate("/");
+    }
   }, [isAuthenticated, navigate]);
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -34,17 +31,18 @@ const Navbar = () => {
         <button className="menu-toggle" onClick={toggleMenu}>
           ☰
         </button>
-        <ul className={`navbar-links ${isMenuOpen ? "open" : ""}`}>      
+        <ul className={`navbar-links ${isMenuOpen ? "open" : ""}`}>
           <li>
-            <a href="/alumnos/miscursos/asdsd">mis cursos</a>
+            <a href="/alumnos/miscursos/asdsd">Mis cursos</a>
           </li>
           <li className="userListItem">
-              <FaRegUser className='userIcono'/>
-              <h5 className='username'>{userNav}</h5>
-              {userNav && (
-                
-                <h5 className='logout' onClick={logout}>logout</h5>
-                )}
+            <FaRegUser className="userIcono" />
+            <h5 className="username">{userNav}</h5>
+            <h5 className="username">{user}</h5>
+
+            <h5 className="logout" onClick={logout}>
+              logout
+            </h5>
           </li>
         </ul>
       </div>

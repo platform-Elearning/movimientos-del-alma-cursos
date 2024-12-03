@@ -1,6 +1,7 @@
 import { createContext, useState, useContext, useEffect  } from "react"
 import { registerRequest, loginRequest, verifyTokenRequest } from "../api/auth.js"
 import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode";
 
 export const AuthContext = createContext()
 
@@ -31,10 +32,11 @@ export const AuthProvider = ({children}) => {
 
     const signin = async (user) => {
         try {
-            const res = await loginRequest(user)
-            console.log('res', res)
-            setUser(res.token)
-            setUserNav(res.token)
+            const res = await loginRequest(user);
+            const dataDecoded = jwtDecode(res.token);
+            
+            setUser(dataDecoded.id)
+            setUserNav(dataDecoded.email)
             setIsAuthenticated(true)
             return res;
         } catch (error) {
