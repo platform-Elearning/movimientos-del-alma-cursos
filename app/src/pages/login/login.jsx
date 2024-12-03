@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from "react"; // Importación de React y hooks
-import { useAuth } from "../../components/context/authContext.jsx"; // Importa el contexto de autenticación personalizado
-import "./login.css"; // Estilos para el componente
-import { useNavigate } from "react-router-dom"; // Hook para la navegación entre páginas
-import { AiFillEyeInvisible } from "react-icons/ai"; // Icono para mostrar/ocultar contraseñas
+import React, { useState, useEffect } from "react"; 
+import "./login.css"; 
+import { useNavigate } from "react-router-dom"; 
+import { AiFillEyeInvisible } from "react-icons/ai";
 import { jwtDecode } from "jwt-decode";
+import { useAuth } from "../../services/authContext";
 
 
 const Login = () => {
-  // Extracción de funciones y datos del contexto de autenticación
+
   const { signin, errors: signinErrors, isAuthenticated } = useAuth();
-  const navigate = useNavigate(); // Hook para redireccionar a otras rutas
+  const navigate = useNavigate(); 
 
   const navigateToRegister = () => {
     navigate("/register");
@@ -18,32 +18,26 @@ const Login = () => {
   const navigateToPageAuxiliar = () => {
     navigate("/pageAuxiliar");
   };
-
-  // Estado para los datos del formulario
   const [formData, setFormData] = useState({ email: "", password: "" });
-  // Estado para alternar entre mostrar/ocultar contraseña
+
   const [showPassword, setShowPassword] = useState(false);
 
-  // Redirige a la página principal si el usuario ya está autenticado
   useEffect(() => {
     if (isAuthenticated) navigate("/alumnos/miscursos/asdsd");
   }, [isAuthenticated, navigate]);
 
-  // Alterna el estado de visibilidad de la contraseña
   const handleTogglePassword = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
 
-  // Maneja los cambios en los campos del formulario
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Maneja el envío del formulario
   const handleSubmit = async (e) => {
     
-    e.preventDefault(); // Previene el comportamiento por defecto del formulario
-    const response = await signin(formData); // Llama a la función de inicio de sesión del contexto
+    e.preventDefault(); 
+    const response = await signin(formData);
     const decoded = jwtDecode(response.token)
 
     console.log("holaa", decoded)
@@ -67,8 +61,8 @@ const Login = () => {
           <input
             type="email"
             name="email"
-            value={formData.email} // Valor del estado
-            onChange={handleChange} // Actualiza el estado al cambiar
+            value={formData.email}
+            onChange={handleChange} 
             placeholder="Correo electrónico"
             className="input-field"
           />

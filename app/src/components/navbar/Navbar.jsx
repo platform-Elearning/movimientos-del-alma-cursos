@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import "./Navbar.css";
 import logo from "../../assets/logo.png";
 import { FaRegUser } from 'react-icons/fa';
-import { useAuth } from "../context/authContext";
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from "../../services/authContext";
 
 
 const Navbar = () => {
