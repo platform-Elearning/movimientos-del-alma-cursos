@@ -15,7 +15,8 @@ export const useAuth = () => {
 }
 
 export const AuthProvider = ({children}) => {
-    const [user, setUser] = useState(null)
+    const [userId, setUserId] = useState(null)
+    const [userRole, setUserRole] = useState(null)
     const [isAuthenticated, setIsAuthenticated] = useState(false)
     const [errors, setErrors] = useState([])
     const [userNav, setUserNav] = useState(null)
@@ -34,18 +35,19 @@ export const AuthProvider = ({children}) => {
         try {
             const res = await loginRequest(user);
             const dataDecoded = jwtDecode(res.token);
-            
-            setUser(dataDecoded.id)
-            setUserNav(dataDecoded.email)
-            setIsAuthenticated(true)
+            console.log(dataDecoded);
+            setUserId(dataDecoded.id);
+            setUserRole(dataDecoded.role);
+            setUserNav(dataDecoded.email);
+            setIsAuthenticated(true);
             return res;
         } catch (error) {
-            if(Array.isArray(error.response.data)) {
-                return setErrors(error.response.data)
+            if (error.response && Array.isArray(error.response.data)) {
+                return setErrors(error.response.data);
             }
-            setErrors([error.response.data.message])
+            setErrors([error.response?.data?.message || "Ocurrió un error inesperado"]);
         }
-    }
+    };
 
     useEffect(() => {
         if (errors.length > 0) {
@@ -64,20 +66,24 @@ export const AuthProvider = ({children}) => {
             if (!cookies.token){
                 setIsAuthenticated(false)
                 console.log(cookies.token)
-                return setUser(null)
+                setUserId(null)
+                setUserRole(null)
+                return 
             }
             try {
                 const res = await verifyTokenRequest(cookies.token)
                if (!res.data) {
                     setIsAuthenticated(false)
+                    setUserRole(null)
                     return 
                 }
                     
                 setIsAuthenticated(true)
-                setUser(res.data)
+                setUserId(res.data)
             } catch(err) {
                 setIsAuthenticated(false)
-                setUser(null)
+                setUserId(null)
+                setUserRole(null)
             }
             
         }
@@ -90,7 +96,7 @@ export const AuthProvider = ({children}) => {
     }
 
     return (
-        <AuthContext.Provider value= {{signup, signin,  user, userNav, setUserNav, isAuthenticated, setIsAuthenticated, errors, logout }}>
+        <AuthContext.Provider value= {{signup, signin,  userId, userRole, userNav, setUserNav, isAuthenticated, setIsAuthenticated, errors, logout }}>
             {children}
         </AuthContext.Provider>
 

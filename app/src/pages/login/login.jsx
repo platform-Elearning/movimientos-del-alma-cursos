@@ -2,13 +2,12 @@ import React, { useState, useEffect } from "react";
 import "./login.css"; 
 import { useNavigate } from "react-router-dom"; 
 import { AiFillEyeInvisible } from "react-icons/ai";
-import { jwtDecode } from "jwt-decode";
 import { useAuth } from "../../services/authContext";
 
 
 const Login = () => {
 
-  const { signin, errors: signinErrors, isAuthenticated } = useAuth();
+  const { userRole, signin, errors: signinErrors, isAuthenticated } = useAuth();
   const navigate = useNavigate(); 
 
   const navigateToRegister = () => {
@@ -24,14 +23,15 @@ const Login = () => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      if (user.role == 'alumno') 
-        navigate("/alumnos/miscursos/:id");
-      elif (user.role == 'profesor') 
-        navigate("/profesor/miscursos/:id");
-      elif (user.role == 'admin') 
-        navigate("/admin");
+        if (userRole == 'student') {
+            navigate("/alumnos/miscursos/asd");
+        } else if (userRole == 'profesor') {
+            navigate("/profesor/miscursos/:id");
+        } else if (userRole == 'admin') {
+            navigate("/admin");
+        }
     }
-  }, [isAuthenticated, navigate]);
+}, [isAuthenticated, navigate]);
 
   const handleTogglePassword = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
@@ -45,9 +45,8 @@ const Login = () => {
     
     e.preventDefault(); 
     const response = await signin(formData);
-    const decoded = jwtDecode(response.token)
-
-    console.log("holaa", decoded)
+    console.log(isAuthenticated)
+    console.log(user)
   };
 
   return (
@@ -72,6 +71,7 @@ const Login = () => {
             onChange={handleChange} 
             placeholder="Correo electrónico"
             className="input-field"
+            autoComplete="username"
           />
         </div>
 
@@ -92,6 +92,7 @@ const Login = () => {
             onChange={handleChange} // Actualiza el estado al cambiar
             placeholder="Contraseña"
             className="input-field"
+            autoComplete="password"
           />
           {/* Icono para alternar visibilidad de la contraseña */}
           <AiFillEyeInvisible className="eye" onClick={handleTogglePassword} />

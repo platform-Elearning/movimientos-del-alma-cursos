@@ -3,7 +3,7 @@ import "./Navbar.css";
 import logo from "../../assets/logo.png";
 import userImg from "../../assets/user.png";
 import logoutImg from "../../assets/logout.png";
-import { useAuth } from "../context/authContext";
+import { useAuth } from "../../services/authContext";
 import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
@@ -41,6 +41,9 @@ const Navbar = () => {
           </li>
           <li className="user-section">
             <img src={userImg} alt="User" className="user-icon" />
+            <h5 className="username">
+              {userNav}
+            </h5>
           </li>
           
             <li className="logout-section">
@@ -50,6 +53,9 @@ const Navbar = () => {
                 className="logout-icon"
                 onClick={logout}
               />
+              <h5 className="logout">
+                logout
+              </h5>
             </li>
           
         </ul>
@@ -59,3 +65,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
