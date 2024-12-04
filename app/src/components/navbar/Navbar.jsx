@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const { logout, userNav, isAuthenticated, checkLogin, userId } = useAuth();
+  const { logout, userNav, isAuthenticated, checkLogin, userId, userRole } = useAuth();
 
   useEffect(() => {
     const verifyLoginAndFetchCursos = async () => {
@@ -51,9 +51,11 @@ const Navbar = () => {
           ☰
         </button>
         <ul className={`navbar-links ${isMenuOpen ? "open" : ""}`}>
-          <li>
-            <a onClick={navigateToPageAlumnnosMisCursos}>mis Cursos</a>
-          </li>
+          {userRole === "student" && ( // Mostrar "Mis Cursos" solo si el rol es student
+              <li>
+                <a onClick={navigateToPageAlumnnosMisCursos}>Mis Cursos</a>
+              </li>
+          )}
           <li className="user-section">
             <img src={userImg} alt="User" className="user-icon" />
             <h5 className="username">

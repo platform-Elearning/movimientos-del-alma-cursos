@@ -7,7 +7,7 @@ import { useAuth } from "../../services/authContext";
 
 const Login = () => {
 
-  const { userRole, signin, errors: signinErrors, isAuthenticated } = useAuth();
+  const { userRole, signin, errors: signinErrors, isAuthenticated, userId } = useAuth();
   const navigate = useNavigate(); 
 
   const navigateToRegister = () => {
@@ -24,7 +24,7 @@ const Login = () => {
   useEffect(() => {
     if (isAuthenticated) {
         if (userRole == 'student') {
-            navigate("/alumnos/miscursos/asd");
+            navigate(`/alumnos/miscursos/${userId}`);
         } else if (userRole == 'profesor') {
             navigate("/profesor/miscursos/:id");
         } else if (userRole == 'admin') {

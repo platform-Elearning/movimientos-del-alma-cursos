@@ -38,7 +38,7 @@ export const AuthProvider = ({ children }) => {
             console.log(dataDecoded);
             setUserId(dataDecoded.id);
             setUserRole(dataDecoded.role);
-            setUserNav(dataDecoded.email);
+            setUserNav(dataDecoded.name);
             setIsAuthenticated(true);
             Cookies.set("token", res.token); // Guarda el token en las cookies
             return res;

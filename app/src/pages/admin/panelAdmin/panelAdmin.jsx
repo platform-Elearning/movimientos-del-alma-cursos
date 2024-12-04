@@ -28,9 +28,32 @@ const PanelAdmin = () => {
           */
       }, [isAuthenticated, navigate]);
 
-    return (
-        <h1>clase</h1>
-    )
+      const handleNavigate = (path) => {
+        navigate(path);
+      };
+    
+      return (
+        <div className="navigation-buttons-container">
+          <button
+            className="navigation-button"
+            onClick={() => handleNavigate("/alumnos")}
+          >
+            Alumnos
+          </button>
+          <button
+            className="navigation-button"
+            onClick={() => handleNavigate("/profesores")}
+          >
+            Profesores
+          </button>
+          <button
+            className="navigation-button"
+            onClick={() => handleNavigate("/cursos")}
+          >
+            Cursos
+          </button>
+        </div>
+      );
 }
 
 export default PanelAdmin;
