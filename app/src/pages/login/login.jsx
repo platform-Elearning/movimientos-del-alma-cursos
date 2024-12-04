@@ -23,7 +23,14 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
-    if (isAuthenticated) navigate("/alumnos/miscursos/asdsd");
+    if (isAuthenticated) {
+      if (user.role == 'alumno') 
+        navigate("/alumnos/miscursos/:id");
+      elif (user.role == 'profesor') 
+        navigate("/profesor/miscursos/:id");
+      elif (user.role == 'admin') 
+        navigate("/admin");
+    }
   }, [isAuthenticated, navigate]);
 
   const handleTogglePassword = () => {
