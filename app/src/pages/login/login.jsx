@@ -46,7 +46,6 @@ const Login = () => {
     e.preventDefault(); 
     const response = await signin(formData);
     console.log(isAuthenticated)
-    console.log(user)
   };
 
   return (

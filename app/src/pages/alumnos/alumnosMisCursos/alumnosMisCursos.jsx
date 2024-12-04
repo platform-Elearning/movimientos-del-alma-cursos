@@ -1,12 +1,21 @@
 import "./alumnosMisCursos.css";
 import { getCursos } from "../../../api/cursos";
 import { useState, useEffect } from "react";
+import { useAuth } from "../../../services/authContext";
+import { useNavigate } from "react-router-dom";
 
 const AlumnosMisCursos = () => {
+
   const [cursos, setCursos] = useState([]);
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchCursosData = async () => {
+    if (!isAuthenticated) {
+      navigate("/"); // Redirige si no está autenticado
+    }
+
+    const fetchCursos = async () => {
       try {
         const cursosData = await getCursos();
         setCursos(cursosData);
@@ -15,9 +24,10 @@ const AlumnosMisCursos = () => {
       }
     };
 
-    fetchCursosData();
-  }, []);
-
+    if (isAuthenticated) {
+      fetchCursos();
+    }
+  }, [isAuthenticated, navigate]);
 
   // Datos hardcodeados como respaldo
   const hardcodedCursos = [

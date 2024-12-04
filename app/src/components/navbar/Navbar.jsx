@@ -6,16 +6,31 @@ import logoutImg from "../../assets/logout.png";
 import { useAuth } from "../../services/authContext";
 import { useNavigate } from "react-router-dom";
 
+
 const Navbar = () => {
   const navigate = useNavigate();
-  const { logout, userNav, isAuthenticated } = useAuth();
+  const { logout, userNav, isAuthenticated, checkLogin, userId } = useAuth();
 
+  useEffect(() => {
+    const verifyLoginAndFetchCursos = async () => {
+      await checkLogin(); // Verifica el login
+    };
+
+    verifyLoginAndFetchCursos();
+  }, []);
+
+  // Función para navegar a "Mis Cursos"
   const navigateToPageAlumnnosMisCursos = () => {
-    navigate("/alumnos/miscursos/asd");
+    if (userId) {
+      navigate(`/alumnos/miscursos/${userId}`);
+      console.log("Navigating to mis cursos with userId:", userId);
+    } else {
+      console.error("userId is null, cannot navigate");
+    }
   };
 
   useEffect(() => {
-    if (!isAuthenticated && navigate === "/alumnos/miscursos/asd") {
+    if (!isAuthenticated && navigate === `/alumnos/miscursos/${userId}`) {
       navigate("/");
     }
   }, [isAuthenticated, navigate]);
