@@ -1,18 +1,18 @@
 import axios from "./axios.js"
 
-
 export const registerRequest = async (user) => {
     try {
       const response = await axios.post("/register", user);
-      return response.data; // Devuelve los datos de la respuesta si la solicitud se completa con éxito
+      return response.data; 
     } catch (error) {
-      throw error; // Lanza el error si ocurre una excepción durante la solicitud
+      throw error;
     }
   };
 
   export const loginRequest = async (user) => {
     try {
       const response = await axios.post("/users/login", user);
+
       return response.data;
     } catch (error) {
       throw error; 
@@ -42,7 +42,7 @@ export const registerRequest = async (user) => {
       const response = await axios.delete(`/users/${id}`)
       return response 
     } catch (error) {
-      throw error; // Lanza el error si ocurre una excepción durante la solicitud
+      throw error; 
     }
   }
 
