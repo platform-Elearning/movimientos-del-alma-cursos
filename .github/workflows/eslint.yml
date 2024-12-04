@@ -3,7 +3,7 @@ name: Lint
 on:
   push:
     branches:
-      - main
+      - test/santi
   pull_request:
     branches:
       - main
