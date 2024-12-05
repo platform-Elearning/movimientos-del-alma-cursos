@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import "./tableAlumnos.css"; // Archivo CSS para estilizar la tabla
 //import { getAlumnos } from "../../../api/alumnos"; // Asegúrate de que esta función sea correcta
+import { useNavigate } from "react-router-dom";
 
 const AlumnosTable = () => {
+    const navigate = useNavigate();
   //const [alumnos, setAlumnos] = useState([]);
   //const [error, setError] = useState("");
 
@@ -47,7 +49,8 @@ const AlumnosTable = () => {
 
         
     const handleEdit = (id) => {
-    console.log(`Editar alumno con ID: ${id}`);
+        navigate(`/admin/editarAlumno/${id}`);
+        console.log(`Editar alumno con ID: ${id}`);
     };
         
     return (
@@ -97,5 +100,5 @@ const AlumnosTable = () => {
         );
     };
         
-    export default AlumnosTable;
+        export default AlumnosTable;
         

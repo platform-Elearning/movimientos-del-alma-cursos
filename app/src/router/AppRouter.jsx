@@ -10,6 +10,7 @@ import ProfesoresMisCursos from "../pages/profesores/profesoresMisCursos/profeso
 import PanelAdmin from "../pages/admin/panelAdmin/panelAdmin";
 import OlvideContraseña from "../pages/olvideContraseña/olvideContraseña";
 import AdminAlumnos from "../pages/admin/adminAlumnos/adminAlumnos";
+import EditAlumno from "../pages/admin/editAlumno/editAlumno";
 
 const AppRouter = () => {
     return (
@@ -23,6 +24,7 @@ const AppRouter = () => {
 
             <Route path="/admin" element={<PanelAdmin></PanelAdmin>}></Route>
             <Route path="/admin/alumnos" element={<AdminAlumnos></AdminAlumnos>}></Route>
+            <Route path="/admin/editarAlumno/:id" element={<EditAlumno></EditAlumno>}></Route>
             
  
             <Route path="/alumnos/miscursos/:id" element={<AlumnosMisCursos />} />
