@@ -1,0 +1,108 @@
+/* Contenedor principal */
+.edit-user-container {
+    max-width: 500px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Título */
+  .edit-user-title {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 24px;
+  }
+  
+  /* Formulario */
+  .edit-user-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  /* Campo del formulario */
+  .edit-user-field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  /* Etiquetas */
+  .edit-user-field label {
+    font-size: 14px;
+    font-weight: bold;
+    color: #555;
+  }
+  
+  /* Campos de entrada */
+  .edit-user-field input {
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    transition: border-color 0.3s;
+  }
+  
+  /* Efecto hover en los campos */
+  .edit-user-field input:focus {
+    border-color: #007bff;
+  }
+  
+  /* Botón de guardar */
+  .edit-user-submit {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  /* Hover en el botón */
+  .edit-user-submit:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Botón de cancelar */
+  .edit-user-cancel {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #dc3545;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  /* Hover en cancelar */
+  .edit-user-cancel:hover {
+    background-color: #c82333;
+  }
+  
+  /* Mensaje de éxito */
+  .edit-user-success {
+    color: #28a745;
+    font-size: 14px;
+    margin-top: 10px;
+    text-align: center;
+  }
+  
+  /* Contenedor de errores */
+  .edit-user-errors {
+    margin-top: 10px;
+  }
+  
+  /* Mensaje de error */
+  .edit-user-error {
+    color: #dc3545;
+    font-size: 14px;
+    text-align: center;
+  }
+  
