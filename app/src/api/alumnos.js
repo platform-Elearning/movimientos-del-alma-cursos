@@ -1,4 +1,5 @@
 import axios from "axios";
+import { instanceUsers } from "./axiosInstances";
 
 export const getAlumnos = async () => {
     try {
@@ -22,7 +23,7 @@ export const getCursosByAlumno = async (user) => {
 
   export const createAlumno = async (user) => {
     try {
-      const response = await axios.post("/alumnos", user);
+      const response = await instanceUsers.post("/createCompleteStudent", user);
       return response.data;
     } catch (error) {
       throw error; 

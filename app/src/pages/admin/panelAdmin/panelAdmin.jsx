@@ -36,7 +36,7 @@ const PanelAdmin = () => {
         <div className="navigation-buttons-container">
           <button
             className="navigation-button"
-            onClick={() => handleNavigate("/alumnos")}
+            onClick={() => handleNavigate("/admin/alumnos")}
           >
             Alumnos
           </button>
