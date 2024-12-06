@@ -1,0 +1,89 @@
+/* Contenedor de la tabla */
+.table-container {
+    margin: 2rem auto;
+    padding: 1rem;
+    max-width: 1200px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .table-title {
+    text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #333;
+  }
+  
+  .courses-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .courses-table th,
+  .courses-table td {
+    border: 1px solid #ddd;
+    text-align: left;
+    padding: 0.75rem;
+  }
+  
+  .courses-table th {
+    background-color: #007bff;
+    color: #fff;
+    font-weight: bold;
+  }
+  
+  .courses-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  .courses-table tr:hover {
+    background-color: #e6f7ff;
+  }
+  
+  .courses-table td {
+    color: #555;
+  }
+  
+  /* Botones de acciones */
+  .action-button {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+    margin-right: 0.5rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .edit-button {
+    background-color: #ffc107; /* Amarillo */
+    color: #333;
+  }
+  
+  .edit-button:hover {
+    background-color: #e0a800;
+  }
+  
+  .view-button {
+    background-color: #007bff; /* Azul */
+    color: #fff;
+  }
+  
+  .view-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .add-button {
+    background-color: #28a745; /* Verde */
+    color: #fff;
+  }
+  
+  .add-button:hover {
+    background-color: #218838;
+  }
+  
+  .action-button:active {
+    transform: translateY(1px);
+  }
+  

@@ -1,8 +1,8 @@
-import instanceCursos from "./axiosInstances";
+import { instanceCursos } from "./axiosInstances";
 
   export const getCursos = async () => {
       try {
-        const response = await instanceCursos.post("/cursos");
+        const response = await instanceCursos.get("/getAllCourses");
         return response.data;
       } catch (error) {
         throw error; 
@@ -38,9 +38,12 @@ import instanceCursos from "./axiosInstances";
 
   export const getModulosByCursos = async (curso) => {
     try {
-      const response = await axios.post("/cursos/:id/modulos", curso);
+      const response = await instanceCursos.post("/cursos/:id/modulos", curso);
       return response.data;
     } catch (error) {
       throw error; 
     }
   };
+
+
+export default getCursos;
