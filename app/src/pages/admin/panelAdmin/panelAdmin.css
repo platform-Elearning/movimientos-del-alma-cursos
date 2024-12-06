@@ -1,22 +1,30 @@
 .navigation-buttons-container {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    margin-top: 2rem;
-  }
-  
-  .navigation-button {
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    color: #fff;
-    background-color: #007bff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .navigation-button:hover {
-    background-color: #0056b3;
-  }
-  
+  display: flex;
+  gap: 6rem; /* Espaciado un poco mayor para mejor separación */
+  justify-content: center;
+  margin-top: 8.5rem; /* Margen más generoso para separación */
+}
+
+.navigation-button {
+  padding: 0.75rem 1.5rem; /* Tamaño más cómodo */
+  font-size: 1rem;
+  font-weight: 600; /* Texto más destacable */
+  color: #fff;
+  background: linear-gradient(45deg, #007bff, #0056b3); /* Gradiente para un efecto más moderno */
+  border: none;
+  border-radius: 8px; /* Esquinas más redondeadas */
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave para profundidad */
+  transition: transform 0.2s ease, background 0.3s ease, box-shadow 0.3s ease; /* Transiciones más dinámicas */
+}
+
+.navigation-button:hover {
+  background: linear-gradient(45deg, #0056b3, #003f7f); /* Gradiente más oscuro al pasar el cursor */
+  transform: translateY(-2px); /* Efecto de elevación */
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Sombra más pronunciada */
+}
+
+.navigation-button:active {
+  transform: translateY(1px); /* Efecto de presión */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Reducción de sombra al hacer clic */
+}
