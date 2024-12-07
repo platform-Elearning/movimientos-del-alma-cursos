@@ -9,6 +9,16 @@ import { instanceCursos } from "./axiosInstances";
       }
     };
 
+  export const createCourse = async (course) => {
+    try {
+      console.log("course", course);
+      const response = await instanceCursos.post("/createCourse", course);
+      return response.data;
+    } catch (error) {
+      throw error; 
+    }
+  }
+
   export const createProfesor = async (user) => {
     try {
        const response = await instanceCursos.post("/profesor", user);
@@ -45,5 +55,22 @@ import { instanceCursos } from "./axiosInstances";
     }
   };
 
+  export const registerStudentToCourse = async (enrollmentData) => {
+    try {
+      const response = await instanceCursos.post("registerToCourse", enrollmentData);
+      return response.data;
+    } catch (error) {
+      throw error; 
+    }
+  }
+
+  export const getCoursesByStudentId = async (studentId) => {
+    try {
+      const response = await instanceCursos.get(`/getCoursesById/${studentId}`);
+      return response.data;
+    } catch (error) {
+      throw error; 
+    }
+  }
 
 export default getCursos;

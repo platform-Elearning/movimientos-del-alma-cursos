@@ -1,34 +1,45 @@
 import React, { useEffect, useState } from "react";
 import getCourses from "../../../../api/cursos";
+import AddStudentModal from "../agregarAlumno/AddStudentModal";
 import "./tablaCursos.css";
 
 const CoursesTable = () => {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedCourseId, setSelectedCourseId] = useState(null);
 
-
-    // Función para traer los cursos desde la API
-    const fetchCourses = async () => {
-      try {
-        const response = await getCourses(); // Llamada a la API
-        console.log("Respuesta de la API:", response); // Verifica la respuesta de la API
-        if (response && response.data && Array.isArray(response.data)) {
-          setCourses(response.data); // Ajusta esto según el formato de tu respuesta
-          setLoading(false);
-        } else {
-          throw new Error("La respuesta de la API no es un array válido");
-        }
-      } catch (err) {
-        console.error("Error al cargar los cursos:", err);
-        setError("Error al cargar los cursos");
+  // Función para traer los cursos desde la API
+  const fetchCourses = async () => {
+    try {
+      const response = await getCourses();
+      if (response && response.data && Array.isArray(response.data)) {
+        setCourses(response.data);
         setLoading(false);
+      } else {
+        throw new Error("La respuesta de la API no es un array válido");
       }
-    };
+    } catch (err) {
+      console.error("Error al cargar los cursos:", err);
+      setError("Error al cargar los cursos");
+      setLoading(false);
+    }
+  };
 
-    useEffect(() => {
-        fetchCourses();
-    }, []);
+  useEffect(() => {
+    fetchCourses();
+  }, []);
+
+  const handleAddStudentClick = (courseId) => {
+    setSelectedCourseId(courseId);
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    setSelectedCourseId(null);
+  };
 
   if (loading) return <p className="loading-message">Cargando datos...</p>;
   if (error) return <p className="error-message">Error: {error}</p>;
@@ -62,12 +73,19 @@ const CoursesTable = () => {
               <td>
                 <button className="action-button edit-button">Editar</button>
                 <button className="action-button view-button">Ver Alumnos</button>
-                <button className="action-button add-button">Agregar Alumno</button>
+                <button
+                  className="action-button add-button"
+                  onClick={() => handleAddStudentClick(course.id)}
+                >
+                  Agregar Alumno
+                </button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+
+      {showModal && <AddStudentModal courseId={selectedCourseId} onClose={closeModal} />}
     </div>
   );
 };
