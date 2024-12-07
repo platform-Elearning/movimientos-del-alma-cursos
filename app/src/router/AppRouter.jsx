@@ -11,7 +11,7 @@ import PanelAdmin from "../pages/admin/panelAdmin/panelAdmin";
 import OlvideContraseña from "../pages/olvideContraseña/olvideContraseña";
 import AdminAlumnos from "../pages/admin/adminAlumnos/adminAlumnos";
 import EditAlumno from "../pages/admin/adminAlumnos/editAlumno/editAlumno";
-import CoursesTable from "../pages/admin/adminCursos/tablaCursos/tablaCursos";
+import AdminCourses from "../pages/admin/adminCursos/adminCourses";
 
 const AppRouter = () => {
     return (
@@ -26,7 +26,7 @@ const AppRouter = () => {
             <Route path="/admin" element={<PanelAdmin></PanelAdmin>}></Route>
             <Route path="/admin/alumnos" element={<AdminAlumnos></AdminAlumnos>}></Route>
             <Route path="/admin/editarAlumno/:id" element={<EditAlumno></EditAlumno>}></Route>
-            <Route path="/admin/cursos" element={<CoursesTable></CoursesTable>}></Route>
+            <Route path="/admin/cursos" element={<AdminCourses></AdminCourses>}></Route>
             
  
             <Route path="/alumnos/miscursos/:id" element={<AlumnosMisCursos />} />
