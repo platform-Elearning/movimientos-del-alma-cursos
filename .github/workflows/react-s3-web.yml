@@ -42,6 +42,7 @@ jobs:
         run: |
           mkdir -p ../temp-dev
           mv * ../temp-dev/
+
       - name: Checkout private tools
         uses: actions/checkout@v4
         with:
@@ -55,30 +56,37 @@ jobs:
           ls
           sed -i "s/\$REPO/${{ env.REPO }}/g" main.tf
           cat main.tf
+
       - name: Replace $REPO in variables.tf
         run: |
           cd aws-s3
           sed -i "s/\$REPO/${{ env.REPO }}/g" variables.tf
+
       - name: Replace $DOMINIO in route53.tf
         run: |
           cd aws-s3
           sed -i "s/\$DOMINIO/${{ vars.DOMINIO }}/g" route53.tf
+
       - name: Replace $SUBDOMINIO in route53.tf
         run: |
           cd aws-s3
           sed -i "s/\$SUBDOMINIO/${{ vars.SUBDOMINIO }}/g" route53.tf
+
       - name: Replace $DOMINIO in variables.tf
         run: |
           cd aws-s3
           sed -i "s/\$DOMINIO/${{ vars.DOMINIO }}/g" variables.tf
+
       - name: Replace $DOMINIO in cloudfront.tf
         run: |
           cd aws-s3
           sed -i "s/\$DOMINIO/${{ vars.DOMINIO }}/g" cloudfront.tf
+
       - name: Replace $SUBDOMINIO in cloudfront.tf
         run: |
           cd aws-s3
           sed -i "s/\$SUBDOMINIO/${{ vars.SUBDOMINIO }}/g" cloudfront.tf
+          
       - name: Setup Node.js environment
         uses: actions/setup-node@v4
         with:
