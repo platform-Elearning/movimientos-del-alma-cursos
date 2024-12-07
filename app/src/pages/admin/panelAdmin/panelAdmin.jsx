@@ -48,7 +48,7 @@ const PanelAdmin = () => {
           </button>
           <button
             className="navigation-button"
-            onClick={() => handleNavigate("/cursos")}
+            onClick={() => handleNavigate("/admin/cursos")}
           >
             Cursos
           </button>

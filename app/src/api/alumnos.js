@@ -3,13 +3,13 @@ import { instanceUsers } from "./axiosInstances";
 
 export const getAlumnos = async () => {
     try {
-      const response = await axios.get("/alumnos", user);
+      console.log(`Llamando a la API para obtener los alumnos ${instanceUsers}`);
+      const response = await instanceUsers.get("/getAllStudents");
       return response.data;
     } catch (error) {
       throw error; 
     }
   };
-
   
 export const getCursosByAlumno = async (user) => {
     try {

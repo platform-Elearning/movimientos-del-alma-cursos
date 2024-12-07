@@ -1,10 +1,16 @@
 import axios from "axios"
 
 export const instance = axios.create({
-    baseURL: `${import.meta.env.VITE_REACT_APP_API_URL}/api`,
+    baseURL: `${import.meta.env.VITE_API_URL}/api`,
     withCredentials: true
 })
 
 export const instanceUsers = axios.create({
-    baseURL: "http://127.0.0.1:8080/users",
+    baseURL: `${import.meta.env.VITE_API_URL}/users`,
 })
+
+export const instanceCursos = axios.create({
+    baseURL: `${import.meta.env.VITE_API_URL}/courses`,
+})
+
+export default instance
