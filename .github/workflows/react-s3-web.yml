@@ -86,7 +86,7 @@ jobs:
         run: |
           cd aws-s3
           sed -i "s/\$SUBDOMINIO/${{ vars.SUBDOMINIO }}/g" cloudfront.tf
-          
+
       - name: Setup Node.js environment
         uses: actions/setup-node@v4
         with:
@@ -104,6 +104,7 @@ jobs:
             ls ../../../
             mkdir ../../../$REPO/aws-s3/web
             mv * ../../../$REPO/aws-s3/web/
+
       - name: Buld y mover todos los files dev
         if: github.ref == 'refs/heads/develop'
         run: |
@@ -111,7 +112,7 @@ jobs:
             pwd
             cd ../temp-dev/app
             npm ci
-            npm run build
+            npm run build-dev
             cd dist
             ls ../../../
             mkdir ../../../$REPO/aws-s3/web-dev
