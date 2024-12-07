@@ -38,7 +38,11 @@ export const AuthProvider = ({ children }) => {
             console.log(dataDecoded);
             setUserId(dataDecoded.id);
             setUserRole(dataDecoded.role);
-            setUserNav(dataDecoded.name);
+            if (dataDecoded.role === "admin") {
+                setUserNav("administrador");
+            } else {
+                setUserNav(dataDecoded.name);
+            }
             setIsAuthenticated(true);
             Cookies.set("token", res.token); // Guarda el token en las cookies
             return res;
@@ -71,7 +75,7 @@ export const AuthProvider = ({ children }) => {
             const dataDecoded = jwtDecode(token); // Decodifica el token
             setUserId(dataDecoded.id);
             setUserRole(dataDecoded.role);
-            setUserNav(dataDecoded.email);
+            setUserNav(dataDecoded.name);
             setIsAuthenticated(true);
         } catch (err) {
             console.error("Error al verificar el token:", err);
@@ -107,6 +111,7 @@ export const AuthProvider = ({ children }) => {
                 userId,
                 userRole,
                 userNav,
+                setUserNav,
                 isAuthenticated,
                 errors,
                 logout,

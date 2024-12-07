@@ -1,19 +1,9 @@
 import "./alumnosMisCursos.css";
-import { getCursos } from "../../../api/cursos";
-import { useState, useEffect } from "react";
-import { useAuth } from "../../../services/authContext";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const AlumnosMisCursos = () => {
 
   const [cursos, setCursos] = useState([]);
-  const { isAuthenticated } = useAuth();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      navigate("/"); // Redirige si no está autenticado
-    }
 
     const fetchCursos = async () => {
       try {
@@ -24,10 +14,8 @@ const AlumnosMisCursos = () => {
       }
     };
 
-    if (isAuthenticated) {
-      fetchCursos();
-    }
-  }, [isAuthenticated, navigate]);
+
+
 
   return (
     <div className="cursos-container">
