@@ -176,7 +176,7 @@ jobs:
           terraform init
           terraform apply -auto-approve \
             -target=aws_s3_bucket.bucket_web_dev \
-            -target=aws_s3_bucket_object.site_files_dev
+            -target=aws_s3_bucket_object.site_files_dev \
             -target=aws_cloudfront_distribution.s3_distribution \ 
             -target=aws_cloudfront_distribution.s3_distribution_dev
         env:
