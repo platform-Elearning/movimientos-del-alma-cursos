@@ -99,7 +99,7 @@ jobs:
             pwd
             cd ../temp/app
             npm ci
-            npm run build
+            npm run build-prod
             cd dist
             ls ../../../
             mkdir ../../../$REPO/aws-s3/web
