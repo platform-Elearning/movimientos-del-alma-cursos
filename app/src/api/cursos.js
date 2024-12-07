@@ -45,5 +45,22 @@ import { instanceCursos } from "./axiosInstances";
     }
   };
 
+  export const registerStudentToCourse = async (enrollmentData) => {
+    try {
+      const response = await instanceCursos.post("registerToCourse", enrollmentData);
+      return response.data;
+    } catch (error) {
+      throw error; 
+    }
+  }
+
+  export const getCoursesByStudentId = async (studentId) => {
+    try {
+      const response = await instanceCursos.get(`/getCoursesById/${studentId}`);
+      return response.data;
+    } catch (error) {
+      throw error; 
+    }
+  }
 
 export default getCursos;

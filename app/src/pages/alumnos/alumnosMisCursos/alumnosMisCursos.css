@@ -1,47 +1,82 @@
+/* Contenedor principal */
 .cursos-container {
-  font-family: Arial, sans-serif;
-  margin: 20px auto;
-  max-width: 800px;
-  text-align: center;
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
 }
 
+/* Título */
 .cursos-title {
-  font-size: 24px;
-  font-weight: bold;
+  font-size: 28px;
+  text-align: center;
+  color: #343a40;
   margin-bottom: 20px;
-  color: #333;
+  font-weight: bold;
 }
 
+/* Tabla de cursos */
 .cursos-table {
   width: 100%;
   border-collapse: collapse;
-  margin: 0 auto;
-  background-color: #f9f9f9;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-.cursos-table th,
-.cursos-table td {
-  border: 1px solid #ddd;
-  padding: 10px;
+/* Encabezado de la tabla */
+.cursos-table thead {
+  background-color: #007bff;
+  color: #fff;
 }
 
 .cursos-table th {
-  background-color: #4CAF50;
-  color: white;
-  font-weight: bold;
+  padding: 12px;
+  font-size: 16px;
   text-align: left;
 }
 
-.cursos-table tr:nth-child(even) {
-  background-color: #f2f2f2;
-}
-
-.cursos-table tr:hover {
-  background-color: #ddd;
-}
-
+/* Filas de la tabla */
 .cursos-table td {
-  text-align: left;
-  color: #555;
+  padding: 12px;
+  font-size: 14px;
+  color: #495057;
+  border-bottom: 1px solid #dee2e6;
+}
+
+/* Alternar colores para filas */
+.cursos-table tr:nth-child(even) {
+  background-color: #f1f3f5;
+}
+
+/* Hover sobre filas */
+.cursos-table tr:hover {
+  background-color: #e9ecef;
+  transition: background-color 0.2s ease-in-out;
+}
+
+/* Mensajes de carga y error */
+.loading-message,
+.error-message {
+  text-align: center;
+  font-size: 18px;
+  color: #6c757d;
+  margin: 20px 0;
+}
+
+/* Estilos adicionales para hacer la tabla responsiva */
+@media (max-width: 600px) {
+  .cursos-table th,
+  .cursos-table td {
+    padding: 8px;
+    font-size: 12px;
+  }
+
+  .cursos-title {
+    font-size: 22px;
+  }
 }
