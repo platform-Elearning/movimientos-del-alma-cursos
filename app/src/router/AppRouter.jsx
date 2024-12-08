@@ -29,9 +29,9 @@ const AppRouter = () => {
             <Route path="/admin/cursos" element={<AdminCourses></AdminCourses>}></Route>
             
  
-            <Route path="/alumnos/miscursos/:id" element={<AlumnosMisCursos />} />
-            <Route path="/alumnos/curso/:id" element={<Curso></Curso>}></Route>
-            <Route path="/alumnos/clase/:id" element={<Clase></Clase>}></Route>
+            <Route path="/alumnos/miscursos/:alumnoId" element={<AlumnosMisCursos />} />
+            <Route path="/alumnos/:alumnoId/curso/:cursoId" element={<Curso></Curso>}></Route>
+            <Route path="/alumnos/:alumnoId/curso/:cursoId/clase/:claseId" element={<Clase></Clase>}></Route>
 
             <Route path="/profesores/profesoresMisCursos/:id" element={<ProfesoresMisCursos></ProfesoresMisCursos>}></Route>
         </Routes>

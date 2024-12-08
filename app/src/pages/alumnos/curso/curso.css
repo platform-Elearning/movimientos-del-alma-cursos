@@ -1,0 +1,76 @@
+/* Contenedor principal */
+.course-details-container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Título del curso */
+  .course-title {
+    font-size: 28px;
+    text-align: center;
+    color: #343a40;
+    margin-bottom: 20px;
+    font-weight: bold;
+  }
+  
+  /* Tabla de módulos */
+  .modules-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .modules-table th,
+  .modules-table td {
+    padding: 12px;
+    border-bottom: 1px solid #dee2e6;
+    text-align: left;
+  }
+  
+  /* Nombre del módulo */
+  .module-name {
+    font-weight: bold;
+    color: #007bff;
+  }
+  
+  /* Lista de clases */
+  .classes-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .class-name {
+    padding: 12px 0;
+    color: #495057;
+    font-size: medium;
+    /* negrita */
+    font-weight: bold;
+  }
+  
+  /* Hover en filas */
+  .modules-table tr:hover {
+    background-color: #f1f3f5;
+  }
+  
+  /* Mensajes de carga y error */
+  .loading-message,
+  .error-message {
+    text-align: center;
+    font-size: 18px;
+    color: #6c757d;
+    margin: 20px 0;
+  }
+  
+ .class-name:hover {
+    color: rgb(62, 179, 27);
+    cursor: pointer;
+ }

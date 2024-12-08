@@ -40,6 +40,11 @@
   text-align: left;
 }
 
+/* Evitar hover en el encabezado */
+.cursos-table thead tr {
+  pointer-events: none; /* Desactiva los eventos de puntero en el encabezado */
+}
+
 /* Filas de la tabla */
 .cursos-table td {
   padding: 12px;
@@ -49,14 +54,24 @@
 }
 
 /* Alternar colores para filas */
-.cursos-table tr:nth-child(even) {
+.cursos-table tbody tr:nth-child(even) {
   background-color: #f1f3f5;
 }
 
-/* Hover sobre filas */
-.cursos-table tr:hover {
-  background-color: #e9ecef;
+/* Hover sobre filas del cuerpo de la tabla */
+.cursos-table tbody tr:hover {
+  background-color: #18ca3f;
   transition: background-color 0.2s ease-in-out;
+}
+
+/* Clase para filas clickeables */
+.clickable-row {
+  cursor: pointer;
+}
+
+/* Hover específico para las filas clickeables */
+.clickable-row:hover {
+  background-color: #47d310;
 }
 
 /* Mensajes de carga y error */
