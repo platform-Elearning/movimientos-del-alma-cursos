@@ -6,18 +6,26 @@ import logoutImg from "../../assets/logout.png";
 import { useAuth } from "../../services/authContext";
 import { useNavigate } from "react-router-dom";
 
-
 const Navbar = () => {
   const navigate = useNavigate();
   const { logout, userNav, isAuthenticated, checkLogin, userId, userRole } = useAuth();
 
+  const [loading, setLoading] = useState(true); // Estado para verificar si checkLogin ha terminado
+
   useEffect(() => {
     const verifyLoginAndFetchCursos = async () => {
       await checkLogin(); // Verifica el login
+      setLoading(false);  // Marca que la verificación ha terminado
     };
 
     verifyLoginAndFetchCursos();
-  }, []);
+  }, [checkLogin]);
+
+  useEffect(() => {
+    if (!loading && !isAuthenticated && window.location.pathname !== "/pageAuxiliar") {
+      navigate("/");
+    }
+  }, [isAuthenticated, loading, navigate]);
 
   // Función para navegar a "Mis Cursos"
   const navigateToPageAlumnnosMisCursos = () => {
@@ -29,18 +37,16 @@ const Navbar = () => {
     }
   };
 
-  useEffect(() => {
-    // verify if actual route is pageAuxiliar
-    if (!isAuthenticated && window.location.pathname !== "/pageAuxiliar") {
-      navigate("/");
-    }
-  }, [isAuthenticated, navigate]);
- 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
+  // Mostrar un indicador de carga mientras se verifica la autenticación
+  if (loading) {
+    return <p className="loading-message">Verificando autenticación...</p>;
+  }
 
   return (
     <nav className="navbar">
@@ -52,30 +58,19 @@ const Navbar = () => {
           ☰
         </button>
         <ul className={`navbar-links ${isMenuOpen ? "open" : ""}`}>
-          {userRole === "student" && ( // Mostrar "Mis Cursos" solo si el rol es student
-              <li>
-                <a onClick={navigateToPageAlumnnosMisCursos}>Mis Cursos</a>
-              </li>
+          {userRole === "student" && (
+            <li>
+              <a onClick={navigateToPageAlumnnosMisCursos}>Mis Cursos</a>
+            </li>
           )}
           <li className="user-section">
             <img src={userImg} alt="User" className="user-icon" />
-            <h5 className="username">
-              {userNav}
-            </h5>
+            <h5 className="username">{userNav}</h5>
           </li>
-          
-            <li className="logout-section">
-              <img
-                src={logoutImg}
-                alt="Logout"
-                className="logout-icon"
-                onClick={logout}
-              />
-              <h5 className="logout">
-                logout
-              </h5>
-            </li>
-          
+          <li className="logout-section">
+            <img src={logoutImg} alt="Logout" className="logout-icon" onClick={logout} />
+            <h5 className="logout">Logout</h5>
+          </li>
         </ul>
       </div>
     </nav>
@@ -83,4 +78,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
