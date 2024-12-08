@@ -12,6 +12,7 @@ import OlvideContraseña from "../pages/olvideContraseña/olvideContraseña";
 import AdminAlumnos from "../pages/admin/adminAlumnos/adminAlumnos";
 import EditAlumno from "../pages/admin/adminAlumnos/editAlumno/editAlumno";
 import AdminCourses from "../pages/admin/adminCursos/adminCourses";
+import ChangePassword from "../pages/changePassword/changePassword";
 
 const AppRouter = () => {
     return (
@@ -22,6 +23,7 @@ const AppRouter = () => {
             <Route path="/register" element={<Register></Register>}></Route>
             <Route path="/pageAuxiliar" element={<PageAuxiliar></PageAuxiliar>}></Route>
             <Route path="/OlvideContraseña" element={<OlvideContraseña></OlvideContraseña>}></Route>
+            <Route path="/changePassword" element={<ChangePassword></ChangePassword>}></Route>
 
             <Route path="/admin" element={<PanelAdmin></PanelAdmin>}></Route>
             <Route path="/admin/alumnos" element={<AdminAlumnos></AdminAlumnos>}></Route>
