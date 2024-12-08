@@ -30,7 +30,8 @@ const Navbar = () => {
   };
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    // verify if actual route is pageAuxiliar
+    if (!isAuthenticated && window.location.pathname !== "/pageAuxiliar") {
       navigate("/");
     }
   }, [isAuthenticated, navigate]);

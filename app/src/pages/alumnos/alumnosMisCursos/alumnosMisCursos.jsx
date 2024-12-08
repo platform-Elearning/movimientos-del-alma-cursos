@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import getCoursesByStudentId from "../../../api/cursos";
 import "./alumnosMisCursos.css";
 
 const AlumnosMisCursos = () => {
-  const { id } = useParams(); // Obtener el ID del estudiante desde la URL
+  const { alumnoId } = useParams(); // Obtener el ID del estudiante desde la URL
+  const navigate = useNavigate(); // Inicializar navigate
   const [cursos, setCursos] = useState([]); // Estado inicial como un array vacío
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const fetchCursos = async () => {
     try {
-      const cursosData = await getCoursesByStudentId(id);
+      const cursosData = await getCoursesByStudentId(alumnoId);
       
       if (cursosData.success && Array.isArray(cursosData.data)) {
         setCursos(cursosData.data);
@@ -28,7 +29,11 @@ const AlumnosMisCursos = () => {
 
   useEffect(() => {
     fetchCursos();
-  }, [id]); // Llamar a fetchCursos cuando cambie el id
+  }, [alumnoId]); // Llamar a fetchCursos cuando cambie el id
+
+  const goToCourse = (courseId) => {
+    navigate(`/alumnos/${alumnoId}/curso/${courseId}`);
+  };
 
   if (loading) return <p className="loading-message">Cargando cursos...</p>;
   if (error) return <p className="error-message">{error}</p>;
@@ -48,7 +53,7 @@ const AlumnosMisCursos = () => {
         <tbody>
           {cursos.length > 0 ? (
             cursos.map((curso) => (
-              <tr key={curso.id}>
+              <tr key={curso.id} onClick={() => goToCourse(curso.id)} className="clickable-row">
                 <td>{curso.name}</td>
                 <td>{curso.duration_months}</td>
                 <td>{curso.quantity_lessons}</td>
