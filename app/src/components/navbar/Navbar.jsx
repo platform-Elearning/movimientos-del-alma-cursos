@@ -22,7 +22,7 @@ const Navbar = () => {
   }, [checkLogin]);
 
   useEffect(() => {
-    if (!loading && !isAuthenticated && window.location.pathname !== "/pageAuxiliar") {
+    if (!loading && !isAuthenticated && window.location.pathname !== "/pageAuxiliar" && window.location.pathname !== "/login" && window.location.pathname !== "/register") {
       navigate("/");
     }
   }, [isAuthenticated, loading, navigate]);
