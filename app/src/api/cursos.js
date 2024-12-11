@@ -66,11 +66,17 @@ import { instanceCursos } from "./axiosInstances";
 
   export const getCoursesByStudentId = async (studentId) => {
     try {
-      const response = await instanceCursos.get(`/getCoursesById/${studentId}`);
+      const response = await instanceCursos.get(`/getCoursesByStudentId`, {
+        headers: {
+          "id": studentId, // Pasar el ID en los headers
+        },
+      });
       return response.data;
     } catch (error) {
-      throw error; 
+      console.error("Error al obtener los cursos por studentId:", error);
+      throw error;
     }
-  }
+  };
+  
 
 export default getCursos;
