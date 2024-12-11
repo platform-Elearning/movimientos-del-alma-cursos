@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
 import "./Navbar.css";
-import logo from "../../assets/logo.png";
+import logo from "../../../assets/logo.png";
 import { FaRegUser } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../services/authContext";
+import { useAuth } from "../../../services/authContext";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const { logout, userNav, user, isAuthenticated } = useAuth();
 
   useEffect(() => {
-    if (!isAuthenticated && navigate === "/alumnos/miscursos/asdsd") {
+    if (!isAuthenticated) {
       navigate("/");
     }
   }, [isAuthenticated, navigate]);

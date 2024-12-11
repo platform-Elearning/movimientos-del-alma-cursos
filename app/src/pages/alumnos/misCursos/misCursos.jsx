@@ -1,5 +1,5 @@
 import "./misCursos.css";
-import { getCursos } from "../../../api/cursos";
+import { getCursos } from "../../../api/cursosInstances.js";
 import { useState, useEffect } from "react";
 
 

@@ -1,8 +1,8 @@
-import axios from "./axios.js"
+import { instanceLocalhost } from "./axiosInstances.js";
 
 export const getCursos = async (user) => {
     try {
-      const response = await axios.post("/cursos", user);
+      const response = await instanceLocalhost.get("/cursos", user);
       return response.data;
     } catch (error) {
       throw error; 

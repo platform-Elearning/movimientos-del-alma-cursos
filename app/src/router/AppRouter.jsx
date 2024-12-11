@@ -6,19 +6,24 @@ import PageAuxiliar from "../pages/pageAuxiliar/pageAuxiliar";
 import MisCursos from "../pages/alumnos/misCursos/misCursos";
 import Curso from "../pages/alumnos/curso/curso";
 import Clase from "../pages/alumnos/clase/clase";
+import Layout from "../components/layout/Layout";
 
 const AppRouter = () => {
     return (
         <Routes>
-            <Route path="/" element={<Index></Index>}></Route>
-            <Route path="/login" element={<Login></Login>}></Route>
-            <Route path="/register" element={<Register></Register>}></Route>
-            <Route path="/pageAuxiliar" element={<PageAuxiliar></PageAuxiliar>}></Route>
-            <Route path="/alumnos/miscursos/:id" element={<MisCursos></MisCursos>}></Route>
-            <Route path="/alumnos/curso/:id" element={<Curso></Curso>}></Route>
-            <Route path="/alumnos/clase/:id" element={<Clase></Clase>}></Route>
+          
+            <Route path="/" element={<Login />} />
+    
+            <Route element={<Layout />}>
+                <Route path="/index" element={<Index />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/pageAuxiliar" element={<PageAuxiliar />} />
+                <Route path="/alumnos/miscursos/:id" element={<MisCursos />} />
+                <Route path="/alumnos/curso/:id" element={<Curso />} />
+                <Route path="/alumnos/clase/:id" element={<Clase />} />
+            </Route>
         </Routes>
-    )
-}
+    );
+};
 
 export default AppRouter;
