@@ -4,7 +4,7 @@ import { instanceUsers } from "./axiosInstances";
 export const getAlumnos = async () => {
     try {
       console.log(`Llamando a la API para obtener los alumnos ${instanceUsers}`);
-      const response = await instanceUsers.get("/getAllStudents");
+      const response = await instanceUsers.get("/getStudentsWithCourses");
       return response.data;
     } catch (error) {
       throw error; 

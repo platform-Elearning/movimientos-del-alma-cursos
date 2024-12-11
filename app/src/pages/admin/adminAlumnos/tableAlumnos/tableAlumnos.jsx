@@ -53,17 +53,17 @@ const AlumnosTable = () => {
         <tbody>
           {alumnos.map((alumno) => (
             <tr key={alumno.id}>
-              <td>{alumno.id}</td>
+              <td>{alumno.user_id}</td>
               <td>{alumno.identification_number}</td>
               <td>{alumno.name}</td>
-              <td>{alumno.lastname}</td>
+              <td>{alumno.last_name}</td>
               <td>{alumno.email}</td>
               <td>{alumno.nationality}</td>
               <td>
-                {alumno.cursos ? (
+                {alumno.courses && alumno.courses.length > 0 ? (
                   <ul>
-                    {alumno.cursos.map((curso, index) => (
-                      <li key={index}>{curso}</li>
+                    {alumno.courses.map((course, index) => (
+                      <li key={index}>{course.courses}</li>
                     ))}
                   </ul>
                 ) : (
@@ -71,10 +71,10 @@ const AlumnosTable = () => {
                 )}
               </td>
               <td>
-                {alumno.modulos ? (
+                {alumno.courses && alumno.courses.length > 0 ? (
                   <ul>
-                    {alumno.modulos.map((modulo, index) => (
-                      <li key={index}>{modulo}</li>
+                    {alumno.courses.map((course, index) => (
+                      <li key={index}>{course.modules}</li>
                     ))}
                   </ul>
                 ) : (
