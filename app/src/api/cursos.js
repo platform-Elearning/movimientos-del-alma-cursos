@@ -78,5 +78,15 @@ import { instanceCursos } from "./axiosInstances";
     }
   };
   
+  export const createModule = async (moduleData) => {
+    try {
+      const response = await instanceCursos.post("/createCourseModule", moduleData);
+      return response.data;
+    } catch (error) {
+      console.error("Error al enviar los datos del módulo:", error);
+      throw error;
+    }
+  };
+
 
 export default getCursos;
