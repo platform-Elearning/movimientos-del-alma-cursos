@@ -54,7 +54,7 @@ const AlumnosTable = () => {
           {alumnos.map((alumno) => (
             <tr key={alumno.id}>
               <td>{alumno.user_id}</td>
-              <td>{alumno.identification_number}</td>
+              <td>{alumno.dni}</td>
               <td>{alumno.name}</td>
               <td>{alumno.last_name}</td>
               <td>{alumno.email}</td>
