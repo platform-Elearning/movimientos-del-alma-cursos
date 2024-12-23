@@ -13,4 +13,8 @@ export const instanceCursos = axios.create({
     baseURL: `${import.meta.env.VITE_API_URL}/courses`,
 })
 
+export const instanceEnrollmentss = axios.create({
+    baseURL: `${import.meta.env.VITE_API_URL}/enrollments`,
+})
+
 export default instance

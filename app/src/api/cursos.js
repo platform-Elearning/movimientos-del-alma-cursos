@@ -1,4 +1,4 @@
-import { instanceCursos } from "./axiosInstances";
+import { instanceCursos, instanceEnrollmentss } from "./axiosInstances";
 
   export const getCursos = async () => {
       try {
@@ -57,7 +57,7 @@ import { instanceCursos } from "./axiosInstances";
 
   export const registerStudentToCourse = async (enrollmentData) => {
     try {
-      const response = await instanceCursos.post("registerToCourse", enrollmentData);
+      const response = await instanceEnrollmentss.post("registerToCourse", enrollmentData);
       return response.data;
     } catch (error) {
       throw error; 

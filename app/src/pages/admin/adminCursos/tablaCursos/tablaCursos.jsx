@@ -58,12 +58,8 @@ const CoursesTable = () => {
           <tr>
             <th>ID</th>
             <th>Nombre</th>
-            <th>Duración (meses)</th>
-            <th>Lecciones</th>
-            <th>Videos</th>
-            <th>Cuota de Inscripción (USD)</th>
-            <th>Cuota Mensual (USD)</th>
-            <th>Acciones</th>
+            <th>Description</th>
+            <th>Opciones</th>
           </tr>
         </thead>
         <tbody>
@@ -71,11 +67,7 @@ const CoursesTable = () => {
             <tr key={course.id}>
               <td>{course.id}</td>
               <td>{course.name}</td>
-              <td>{course.duration_months}</td>
-              <td>{course.quantity_lessons}</td>
-              <td>{course.quantity_videos}</td>
-              <td>${course.enrollment_fee_usd}</td>
-              <td>${course.monthly_fee_usd}</td>
+              <td>{course.description}</td>
               <td>
               <button
                   className="action-button edit-button" onClick={() => handleEditClick(course.id)}>Editar</button>
