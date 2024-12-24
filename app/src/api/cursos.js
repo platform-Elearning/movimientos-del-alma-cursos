@@ -88,5 +88,13 @@ import { instanceCursos, instanceEnrollmentss } from "./axiosInstances";
     }
   };
 
+  export const getModulesByCourseID = async (id) => {
+    try {
+      const response = await instanceCursos.get("/getModulesByCourseId/" + id);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  };
 
 export default getCursos;
