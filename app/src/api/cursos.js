@@ -96,5 +96,14 @@ import { instanceCursos, instanceEnrollmentss } from "./axiosInstances";
       throw error;
     }
   };
+  
+  export const createLesson = async (lessonData) => {
+    try {
+      const response = await instanceCursos.post("/createLesson", lessonData);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  };
 
 export default getCursos;

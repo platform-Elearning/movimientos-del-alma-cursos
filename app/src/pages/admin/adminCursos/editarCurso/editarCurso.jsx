@@ -1,5 +1,5 @@
 import React from "react";
-import CreateModule from "../agregarModulo/agregarModulo";
+import CreateModule from "../createModule/agregarModulo";
 import ModulesTable from "../tableModules/tableModules";
 
 const EditarCurso = () => {

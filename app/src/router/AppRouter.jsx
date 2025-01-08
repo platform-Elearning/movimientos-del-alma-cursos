@@ -14,6 +14,7 @@ import EditAlumno from "../pages/admin/adminAlumnos/editAlumno/editAlumno";
 import AdminCourses from "../pages/admin/adminCursos/adminCourses";
 import ChangePassword from "../pages/changePassword/changePassword";
 import EditarCurso from "../pages/admin/adminCursos/editarCurso/editarCurso";
+import EditLessons from "../pages/admin/adminCursos/editLessons/editLessons";
 
 const AppRouter = () => {
     return (
@@ -31,6 +32,8 @@ const AppRouter = () => {
             <Route path="/admin/editarAlumno/:id" element={<EditAlumno></EditAlumno>}></Route>
             <Route path="/admin/cursos" element={<AdminCourses></AdminCourses>}></Route>
             <Route path="/admin/editarCurso/:cursoId" element={<EditarCurso></EditarCurso>}></Route>
+            <Route path="/admin/editarCurso/:cursoId/module/:moduleId" element={<EditLessons></EditLessons>}></Route>
+
             
             <Route path="/alumnos/miscursos/:alumnoId" element={<AlumnosMisCursos />} />
             <Route path="/alumnos/:alumnoId/curso/:cursoId" element={<Curso></Curso>}></Route>

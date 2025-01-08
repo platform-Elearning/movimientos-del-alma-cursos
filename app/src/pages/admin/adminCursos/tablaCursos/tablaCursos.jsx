@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import getCourses from "../../../../api/cursos";
-import AddStudentModal from "../agregarAlumno/AddStudentModal";
+import AddStudentModal from "../createStudent/AddStudentModal";
 import { useNavigate } from "react-router-dom";
 import "./tablaCursos.css";
 

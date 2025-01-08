@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "./tableModules.css";
 import { getModulesByCourseID } from "../../../../api/cursos";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+
 
 const ModulesTable = () => {
   const { cursoId } = useParams();
+  const navigate = useNavigate();
   const [modules, setModules] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -30,6 +32,11 @@ const ModulesTable = () => {
     fetchModules();
   }, []);
 
+  const handleModuleClick = (moduleId) => {
+    // Redirige a la página de lecciones para este módulo
+    navigate(`/admin/editarCurso/${cursoId}/module/${moduleId}`);
+  };
+
   if (loading) return <p className="custom-modules-table__loading">Cargando módulos...</p>;
   if (error) return <p className="custom-modules-table__error">Error: {error}</p>;
 
@@ -47,7 +54,7 @@ const ModulesTable = () => {
         </thead>
         <tbody className="custom-modules-table__tbody">
           {modules.map((module) => (
-            <tr key={module.id} className="custom-modules-table__row">
+            <tr key={module.id} className="custom-modules-table__row" onClick={() => handleModuleClick(module.id)}>
               <td className="custom-modules-table__cell">{module.id}</td>
               <td className="custom-modules-table__cell">{module.module_number}</td>
               <td className="custom-modules-table__cell">{module.name}</td>

@@ -63,7 +63,7 @@ const AlumnosTable = () => {
                 {alumno.courses && alumno.courses.length > 0 ? (
                   <ul>
                     {alumno.courses.map((course, index) => (
-                      <li key={index}>{course.courses}</li>
+                      <li key={index}>{course.course}</li>
                     ))}
                   </ul>
                 ) : (
