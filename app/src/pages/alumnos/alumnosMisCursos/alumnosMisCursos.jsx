@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import getCoursesByStudentId from "../../../api/cursos";
+import { getCoursesByStudentId } from "../../../api/cursos";
 import "./alumnosMisCursos.css";
 
 const AlumnosMisCursos = () => {
@@ -13,7 +13,8 @@ const AlumnosMisCursos = () => {
   const fetchCursos = async () => {
     try {
       const cursosData = await getCoursesByStudentId(alumnoId);
-      
+      console.log("Datos recibidos de la API:", cursosData);
+
       if (cursosData.success && Array.isArray(cursosData.data)) {
         setCursos(cursosData.data);
       } else {
@@ -29,7 +30,7 @@ const AlumnosMisCursos = () => {
 
   useEffect(() => {
     fetchCursos();
-  }, [alumnoId]); // Llamar a fetchCursos cuando cambie el id
+  }, [alumnoId]); // Llamar a fetchCursos cuando cambie el id del alumno
 
   const goToCourse = (courseId) => {
     navigate(`/alumnos/${alumnoId}/curso/${courseId}`);
@@ -53,8 +54,8 @@ const AlumnosMisCursos = () => {
         <tbody>
           {cursos.length > 0 ? (
             cursos.map((curso) => (
-              <tr key={curso.id} onClick={() => goToCourse(curso.id)} className="clickable-row">
-                <td>{curso.name}</td>
+              <tr key={curso.course_id} onClick={() => goToCourse(curso.course_id)} className="clickable-row">
+                <td>{curso.course_name}</td>
                 <td>{curso.duration_months}</td>
                 <td>{curso.quantity_lessons}</td>
                 <td>{curso.quantity_videos}</td>

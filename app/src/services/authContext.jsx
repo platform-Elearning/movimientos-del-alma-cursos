@@ -73,9 +73,14 @@ export const AuthProvider = ({ children }) => {
 
         try {
             const dataDecoded = jwtDecode(token); // Decodifica el token
+            console.log(dataDecoded);
             setUserId(dataDecoded.id);
             setUserRole(dataDecoded.role);
-            setUserNav(dataDecoded.name);
+            if (dataDecoded.role === "admin") {
+                setUserNav("administrador");
+            } else {
+                setUserNav(dataDecoded.name);
+            }
             setIsAuthenticated(true);
         } catch (err) {
             console.error("Error al verificar el token:", err);

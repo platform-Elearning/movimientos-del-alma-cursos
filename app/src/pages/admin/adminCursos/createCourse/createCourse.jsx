@@ -5,13 +5,7 @@ import { createCourse } from "../../../../api/cursos"; // Asegúrate de que esta
 const CreateCourse = () => {
   const [formData, setFormData] = useState({
     name: "",
-    duration_months: "",
-    quantity_lessons: "",
-    quantity_videos: "",
-    enrollment_fee: "",
-    enrollment_fee_usd: "",
-    monthly_fee: "",
-    monthly_fee_usd: "",
+    description: ""
   });
 
   const [loading, setLoading] = useState(false);
@@ -32,13 +26,7 @@ const CreateCourse = () => {
       alert(response.message || "Curso creado exitosamente");
       setFormData({
         name: "",
-        duration_months: "",
-        quantity_lessons: "",
-        quantity_videos: "",
-        enrollment_fee: "",
-        enrollment_fee_usd: "",
-        monthly_fee: "",
-        monthly_fee_usd: "",
+        description: ""
       });
     } catch (err) {
       console.error("Error al crear el curso:", err);
@@ -61,58 +49,10 @@ const CreateCourse = () => {
           required
         />
         <input
-          type="number"
-          name="duration_months"
-          placeholder="Duración (meses)"
-          value={formData.duration_months}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="number"
-          name="quantity_lessons"
-          placeholder="Cantidad de Lecciones"
-          value={formData.quantity_lessons}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="number"
-          name="quantity_videos"
-          placeholder="Cantidad de Videos"
-          value={formData.quantity_videos}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="number"
-          name="enrollment_fee"
-          placeholder="Cuota de Inscripción (CLP)"
-          value={formData.enrollment_fee}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="number"
-          name="enrollment_fee_usd"
-          placeholder="Cuota de Inscripción (USD)"
-          value={formData.enrollment_fee_usd}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="number"
-          name="monthly_fee"
-          placeholder="Cuota Mensual (CLP)"
-          value={formData.monthly_fee}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="number"
-          name="monthly_fee_usd"
-          placeholder="Cuota Mensual (USD)"
-          value={formData.monthly_fee_usd}
+          type="text"
+          name="description"
+          placeholder="Descripción del Curso"
+          value={formData.description}
           onChange={handleChange}
           required
         />

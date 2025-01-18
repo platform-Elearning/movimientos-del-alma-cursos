@@ -1,0 +1,73 @@
+.create-lesson-container {
+    max-width: 500px;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    background-color: #fdfdfd;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .create-lesson-container h2 {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  
+  .create-lesson-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .create-lesson-form input,
+  .create-lesson-form textarea {
+    font-size: 1rem;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+  
+  .create-lesson-form input:focus,
+  .create-lesson-form textarea:focus {
+    border-color: #007bff;
+  }
+  
+  .create-lesson-form textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+  
+  .create-lesson-form button {
+    font-size: 1rem;
+    padding: 0.75rem;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .create-lesson-form button:hover {
+    background-color: #0056b3;
+  }
+  
+  .success-message {
+    color: #28a745;
+    font-size: 1rem;
+    text-align: center;
+    margin-top: 1rem;
+  }
+  
+  .error-message {
+    color: #dc3545;
+    font-size: 1rem;
+    text-align: center;
+    margin-top: 1rem;
+  }
+  

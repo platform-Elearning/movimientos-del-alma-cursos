@@ -12,6 +12,10 @@ import OlvideContraseña from "../pages/olvideContraseña/olvideContraseña";
 import AdminAlumnos from "../pages/admin/adminAlumnos/adminAlumnos";
 import EditAlumno from "../pages/admin/adminAlumnos/editAlumno/editAlumno";
 import AdminCourses from "../pages/admin/adminCursos/adminCourses";
+import ChangePassword from "../pages/changePassword/changePassword";
+import EditarCurso from "../pages/admin/adminCursos/editarCurso/editarCurso";
+import EditLessons from "../pages/admin/adminCursos/editLessons/editLessons";
+import ModuleDetails from "../pages/alumnos/modulo/modulo";
 
 const AppRouter = () => {
     return (
@@ -22,16 +26,20 @@ const AppRouter = () => {
             <Route path="/register" element={<Register></Register>}></Route>
             <Route path="/pageAuxiliar" element={<PageAuxiliar></PageAuxiliar>}></Route>
             <Route path="/OlvideContraseña" element={<OlvideContraseña></OlvideContraseña>}></Route>
+            <Route path="/changePassword" element={<ChangePassword></ChangePassword>}></Route>
 
             <Route path="/admin" element={<PanelAdmin></PanelAdmin>}></Route>
             <Route path="/admin/alumnos" element={<AdminAlumnos></AdminAlumnos>}></Route>
             <Route path="/admin/editarAlumno/:id" element={<EditAlumno></EditAlumno>}></Route>
             <Route path="/admin/cursos" element={<AdminCourses></AdminCourses>}></Route>
+            <Route path="/admin/editarCurso/:cursoId" element={<EditarCurso></EditarCurso>}></Route>
+            <Route path="/admin/editarCurso/:cursoId/module/:moduleId" element={<EditLessons></EditLessons>}></Route>
+
             
- 
             <Route path="/alumnos/miscursos/:alumnoId" element={<AlumnosMisCursos />} />
             <Route path="/alumnos/:alumnoId/curso/:cursoId" element={<Curso></Curso>}></Route>
-            <Route path="/alumnos/:alumnoId/curso/:cursoId/clase/:claseId" element={<Clase></Clase>}></Route>
+            <Route path="/alumnos/:alumnoId/curso/:cursoId/modulo/:moduleId/clase/:claseId" element={<Clase></Clase>}></Route>
+            <Route path="/alumnos/:alumnoId/curso/:cursoId/modulo/:moduleId" element={<ModuleDetails></ModuleDetails>}></Route>
 
             <Route path="/profesores/profesoresMisCursos/:id" element={<ProfesoresMisCursos></ProfesoresMisCursos>}></Route>
         </Routes>
