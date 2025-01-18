@@ -1,0 +1,46 @@
+/* Contenedor principal del componente */
+.admin-lessons-container {
+  font-family: Arial, sans-serif;
+  margin: 20px auto;
+  max-width: 800px;
+}
+
+/* Título principal del componente */
+.admin-lessons-title {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Tabla de lecciones */
+.admin-lessons-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.admin-lessons-table th,
+.admin-lessons-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.admin-lessons-table th {
+  background-color: #f4f4f4;
+  color: #333;
+}
+
+.admin-lessons-table tr:hover {
+  background-color: #f9f9f9;
+}
+
+/* Enlaces de las lecciones */
+.admin-lessons-link {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.admin-lessons-link:hover {
+  text-decoration: underline;
+}

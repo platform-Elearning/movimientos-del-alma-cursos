@@ -21,6 +21,8 @@ export const getCursosByAlumno = async (user) => {
   };
 
 
+
+
   export const createAlumno = async (user) => {
     try {
       const response = await instanceUsers.post("/createCompleteStudent", user);
@@ -47,3 +49,5 @@ export const getCursosByAlumno = async (user) => {
       throw error; 
     }
   };
+
+

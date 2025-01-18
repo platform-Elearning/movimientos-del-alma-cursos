@@ -106,4 +106,23 @@ import { instanceCursos, instanceEnrollmentss } from "./axiosInstances";
     }
   };
 
+  export const getModulesByAlumnoAndCurso = async (userId, courseId) => {
+    try {
+      const response = await instanceCursos.get(`/getCoursesWithModulesAndLessonsFilteredByCourseAndStudentId?student_id=${userId}&course_id=${courseId}`);
+      return response.data;
+    } catch (error) {
+      throw error; 
+    }
+  }
+
+  export const getLessonsByCourseAndModule = async (courseId,ModuleId) => {
+    try {
+      const response = await instanceCursos.get(`/getLessonsByModuleIdAndCourseId?module_id=${ModuleId}&course_id=${courseId}`);
+      return response.data;
+    } catch (error) {
+      throw error; 
+    }
+  }
+
+
 export default getCursos;

@@ -1,23 +1,40 @@
-
-
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "./curso.css";
+import { getModulesByAlumnoAndCurso } from "../../../api/cursos";
 
 const CourseDetails = () => {
   const { cursoId, alumnoId } = useParams(); // Obtener el ID del curso y del alumno desde la URL
   const [modules, setModules] = useState([]); // Estado inicial para los módulos
-  const [loading, setLoading] = useState(false); // Cambié a false para mostrar los datos simulados directamente
+  const [loading, setLoading] = useState(true); // Mostrar el mensaje de carga al principio
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-
-    /*
+  // Función para obtener los módulos desde la API
   const fetchModules = async () => {
     try {
-      const modulesData = await getModulesByCourseId(courseId);
-      if (modulesData.success && Array.isArray(modulesData.data)) {
-        setModules(modulesData.data);
+      const response = await getModulesByAlumnoAndCurso(alumnoId, cursoId);
+      console.log("Respuesta de la API:", response);
+  
+      if (response.success && Array.isArray(response.data)) {
+        const course = response.data.find((course) => course.courseId === parseInt(cursoId));
+  
+        if (course) {
+          const formattedModules = course.courseModules.map((module) => ({
+            id: module.moduleId,
+            name: module.moduleName,
+            classes: module.moduleLessons.map((lesson) => ({
+              id: lesson.lessonId,
+              name: lesson.lessonTitle,
+              description: lesson.lessonDescription,
+              lessonUrl: lesson.lessonUrl, // Aseguramos que lessonUrl esté disponible
+            })),
+          }));
+  
+          setModules(formattedModules);
+        } else {
+          setError("Curso no encontrado");
+        }
       } else {
         throw new Error("La respuesta de la API no tiene el formato esperado");
       }
@@ -28,39 +45,19 @@ const CourseDetails = () => {
       setLoading(false);
     }
   };
-    */
+  
 
-  // Datos simulados
-  const modulesData = {
-    success: true,
-    data: [
-      {
-        id: 1,
-        name: "Módulo 1: Introducción",
-        classes: [
-          { id: 1, name: "Clase 1: Introducción a la programación" },
-          { id: 2, name: "Clase 2: Configuración del entorno" },
-        ],
-      },
-      {
-        id: 2,
-        name: "Módulo 2: Conceptos Básicos",
-        classes: [
-          { id: 3, name: "Clase 1: Variables y Tipos de Datos" },
-          { id: 4, name: "Clase 2: Estructuras de Control" },
-        ],
-      },
-    ],
-  };
-
-  // Simula cargar los datos en el estado al montar el componente
+  // Llamamos a la función para obtener los datos cuando se monta el componente
   useEffect(() => {
-    setModules(modulesData.data);
-  }, []);
+    fetchModules();
+  }, [cursoId]);
 
-  // Función para navegar a la clase específica
-  const goToClase = (classId) => {
-    navigate(`/alumnos/${alumnoId}/curso/${cursoId}/clase/${classId}`);
+  // Función para navegar al módulo específico con datos
+  const goToModule = (moduleId) => {
+    const selectedModule = modules.find((mod) => mod.id === moduleId);
+    navigate(`/alumnos/${alumnoId}/curso/${cursoId}/modulo/${moduleId}`, {
+      state: { module: selectedModule },
+    });
   };
 
   if (loading) return <p className="loading-message">Cargando módulos...</p>;
@@ -70,34 +67,17 @@ const CourseDetails = () => {
     <div className="course-details-container">
       <h2 className="course-title">Detalles del Curso</h2>
       {modules.length > 0 ? (
-        <table className="modules-table">
-          <thead>
-            <tr>
-              <th>Módulo</th>
-              <th>Clases</th>
-            </tr>
-          </thead>
-          <tbody>
-            {modules.map((module) => (
-              <tr key={module.id}>
-                <td className="module-name">{module.name}</td>
-                <td>
-                  <ul className="classes-list">
-                    {module.classes.map((classItem) => (
-                      <li
-                        key={classItem.id}
-                        className="class-name"
-                        onClick={() => goToClase(classItem.id)}
-                      >
-                        {classItem.name}
-                      </li>
-                    ))}
-                  </ul>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="modules-grid">
+          {modules.map((module) => (
+            <div
+              key={module.id}
+              className="module-card"
+              onClick={() => goToModule(module.id)}
+            >
+              <h3 className="module-name">{module.name}</h3>
+            </div>
+          ))}
+        </div>
       ) : (
         <p>No hay módulos disponibles para este curso.</p>
       )}
