@@ -212,8 +212,10 @@ Estas medidas de seguridad ayudan a proteger la aplicación y los datos de los u
 - **Autoescalado**: Utilizando plataformas de orquestación de contenedores como Kubernetes, se puede configurar el autoescalado para ajustar automáticamente el número de instancias de los microservicios en función de la carga de trabajo.
 
 ### Almacenamiento de Datos
-- **Replica Sets en MongoDB**: MongoDB permite la configuración de conjuntos de réplicas (Replica Sets) para asegurar la alta disponibilidad y la redundancia de los datos. Esto permite que la base de datos escale horizontalmente y maneje un mayor volumen de solicitudes.
-- **Sharding**: MongoDB también soporta el sharding, que permite dividir los datos en múltiples fragmentos distribuidos en diferentes servidores. Esto mejora el rendimiento y la capacidad de almacenamiento de la base de datos.
+- **Replicación en PostgreSQL**: PostgreSQL permite la configuración de replicación para asegurar la alta disponibilidad y la redundancia de los datos. Esto permite que la base de datos escale horizontalmente y maneje un mayor volumen de solicitudes.
+- **Particionamiento**: PostgreSQL soporta el particionamiento de tablas, lo que permite dividir grandes tablas en partes más pequeñas y manejables. Esto mejora el rendimiento y la capacidad de almacenamiento de la base de datos.
+- **Índices**: Utilizar índices en PostgreSQL para mejorar la velocidad de las consultas. Los índices pueden ser creados en columnas específicas para acelerar las búsquedas y las operaciones de filtrado.
+- **Copia de Seguridad y Recuperación**: Configurar estrategias de copia de seguridad y recuperación para asegurar que los datos estén protegidos contra pérdidas y puedan ser restaurados en caso de fallos.
 
 ### Caché
 - **Caché en Memoria**: Implementar una capa de caché en memoria (por ejemplo, Redis, Memcached) para almacenar temporalmente los datos más solicitados. Esto reduce la carga en la base de datos y mejora el tiempo de respuesta de la aplicación.
