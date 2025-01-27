@@ -16,7 +16,9 @@ La aplicación "Movimientos del Alma" es una plataforma web diseñada para la ge
 ### Backend
 - **Node.js**: El servidor backend está construido con Node.js.
 - **Express**: Framework utilizado para manejar las rutas y middleware del servidor.
-- **MongoDB**: Base de datos NoSQL utilizada para almacenar la información de los cursos y alumnos.
+- **PostgreSQL**: Base de datos relacional utilizada para almacenar la información de los cursos y alumnos. PostgreSQL ofrece robustez, escalabilidad y soporte para consultas complejas.
+  - **Sequelize**: ORM (Object-Relational Mapping) utilizado para interactuar con la base de datos PostgreSQL de manera más sencilla y estructurada.
+  - **pg**: Módulo de Node.js para interactuar directamente con PostgreSQL.
 
 
 ### Estructura de Directorios
@@ -75,7 +77,7 @@ app/
     - Procesa las solicitudes, aplicando lógica de negocio y validaciones.
     - Realiza operaciones en la base de datos (lectura, escritura, actualización, eliminación).
     - Devuelve las respuestas al frontend con los datos solicitados o mensajes de error.
-4. **Base de Datos (MongoDB)**:
+4. **Base de Datos (PostgreSQL)**:
     - Almacena y recupera datos según las solicitudes del backend.
     - Los datos incluyen información sobre cursos, alumnos, profesores, y autenticación de usuarios.
 5. **Respuesta al Frontend**:
@@ -177,12 +179,12 @@ Estos patrones de diseño ayudan a mantener el código organizado, modular y fá
 
 ### Validación de Datos
 - **Validación en el Frontend**: Antes de enviar datos al backend, se realizan validaciones en el frontend para asegurar que los datos ingresados por el usuario cumplen con los requisitos esperados (por ejemplo, formato de correo electrónico, longitud de la contraseña).
-- **Validación en el Backend**: El backend realiza validaciones adicionales para asegurar que los datos recibidos son válidos y seguros. Esto incluye la validación de esquemas de datos utilizando bibliotecas como Joi o Mongoose para MongoDB.
+- **Validación en el Backend**: El backend realiza validaciones adicionales para asegurar que los datos recibidos son válidos y seguros. Esto incluye la validación de esquemas de datos utilizando bibliotecas como Joi.
 
 ### Protección contra Ataques Comunes
 - **CSRF (Cross-Site Request Forgery)**: Implementamos tokens CSRF para proteger contra ataques de falsificación de solicitudes entre sitios. Estos tokens se generan en el backend y se envían al frontend, donde se incluyen en las solicitudes HTTP.
 - **XSS (Cross-Site Scripting)**: Escapamos y sanitizamos todas las entradas del usuario para prevenir la inyección de scripts maliciosos. Utilizamos bibliotecas como DOMPurify para limpiar el HTML generado dinámicamente.
-- **SQL Injection**: Aunque utilizamos MongoDB (NoSQL), seguimos las mejores prácticas para prevenir inyecciones, como el uso de consultas parametrizadas y la validación de datos.
+- **SQL Injection**: Utilizamos consultas parametrizadas y la validación de datos para prevenir inyecciones SQL en PostgreSQL.
 
 ### Seguridad en la Comunicación
 - **HTTPS**: Todas las comunicaciones entre el frontend y el backend se realizan a través de HTTPS para asegurar que los datos transmitidos estén cifrados y protegidos contra interceptaciones.
