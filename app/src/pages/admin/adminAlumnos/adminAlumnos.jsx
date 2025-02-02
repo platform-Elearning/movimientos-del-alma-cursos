@@ -44,7 +44,7 @@ const AdminAlumnos = () => {
         <h1 className="admin-alumnos-title">Crear Alumno</h1>
         <form onSubmit={handleSubmit} className="admin-alumnos-form">
             <div className="admin-alumnos-field">
-            <label htmlFor="identification_number">DNI:</label>
+            <label htmlFor="identification_number">Número Identificador:</label>
             <input
                 id="identification_number"
                 type="text"
