@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect} from "react";
 import { createAlumno } from "../../api/alumnos";
 import "./register.css";
 
@@ -10,6 +10,28 @@ const Register = () => {
     nationality: "",
     email: "",
   });
+
+  const [info, setInfo] = useState([]);
+
+  useEffect(() => {
+    const data = async () => {
+
+      try {
+        const response = await fetch("https://restcountries.com/v3.1/all");
+         if (!response.ok) {
+           throw new Error("Network response was not ok");
+         }
+        const data = await response.json();
+        setInfo(data);
+        
+      } catch (error) {
+        console.error("Error:", error); 
+      }
+
+      
+    };
+    data();
+  }, []);
 
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -70,14 +92,21 @@ const Register = () => {
           onChange={handleChange}
           required
         />
-        <input
+        {/* elegit Nacionalidad */}
+        <select
           type="text"
           name="nationality"
           placeholder="Nacionalidad"
           value={formData.nationality}
           onChange={handleChange}
           required
-        />
+        >
+          <option value="">Selecciona una Nacionalidad</option>
+          {info.map((item, index) => {
+            return <option key={index} value={item.name.common}>{item.name.common}</option>;
+          })}
+        </select>
+
         <input
           type="email"
           name="email"
