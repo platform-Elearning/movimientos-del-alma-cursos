@@ -11,7 +11,7 @@ const AddStudentModal = ({ courseId, onClose }) => {
       const modulos_Comprados = e.target[2].value; 
 
       const enrollmentData = {
-        dni: Number(student_dni),
+        identification_number: student_dni,
         course_id: courseId,
         modules_covered: Number(modulos_Comprados),
         notes: notes,
@@ -32,7 +32,7 @@ const AddStudentModal = ({ courseId, onClose }) => {
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <h2>Agregar Alumno al Curso ID: {courseId}</h2>
         <form onSubmit={handleSubmit}>
-          <input type="text" placeholder="DNI del Alumno" required />
+          <input type="text" placeholder="Identificacion del Alumno" required />
           <input type="text" placeholder="Notas" required />
           <input type="number" placeholder="modulos comprados" required />
           <button type="submit" className="modal-submit-button">Agregar</button>
