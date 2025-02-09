@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { createAlumno } from "../../api/alumnos";
 import "./register.css";
+import Form from "../../components/form/Form";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -45,49 +46,12 @@ const Register = () => {
   return (
     <div className="register-container">
       <h2>Registro de Estudiante</h2>
-      <form onSubmit={handleSubmit} className="register-form">
-        <input
-          type="text"
-          name="identification_number"
-          placeholder="Número de Identificación"
-          value={formData.identification_number}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="text"
-          name="name"
-          placeholder="Nombre"
-          value={formData.name}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="text"
-          name="lastname"
-          placeholder="Apellido"
-          value={formData.lastname}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="text"
-          name="nationality"
-          placeholder="Nacionalidad"
-          value={formData.nationality}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Correo Electrónico"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
-        <button type="submit">Registrar Estudiante</button>
-      </form>
+      <Form 
+      handleChange={handleChange}
+      handleSubmit={handleSubmit}
+      formData={formData}
+      buttonText="Registrar Estudiante"
+      />
       {message && <p className="success-message">{message}</p>}
       {error && <p className="error-message">{error}</p>}
     </div>

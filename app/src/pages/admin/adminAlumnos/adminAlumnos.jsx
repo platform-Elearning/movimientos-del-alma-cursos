@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { createAlumno } from "../../../api/alumnos"; 
 import "./adminAlumnos.css";
 import AlumnosTable from "./tableAlumnos/tableAlumnos"; 
+import Form from "../../../components/form/Form";
 
 const AdminAlumnos = () => {
   const [formData, setFormData] = useState({
@@ -12,7 +13,8 @@ const AdminAlumnos = () => {
     email: ""
   });
 
-  const [errors, setErrors] = useState([]);
+  
+  const [errors, setErrors] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
   const handleChange = (e) => {
@@ -21,10 +23,11 @@ const AdminAlumnos = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrors("");
+    setSuccessMessage("");
     try {
       const response = await createAlumno(formData);
       setSuccessMessage("Alumno creado con éxito");
-      setErrors([]);
       setFormData({
         identification_number: "",
         name: "",
@@ -42,66 +45,12 @@ const AdminAlumnos = () => {
     <div>
         <div className="admin-alumnos-container">
         <h1 className="admin-alumnos-title">Crear Alumno</h1>
-        <form onSubmit={handleSubmit} className="admin-alumnos-form">
-            <div className="admin-alumnos-field">
-            <label htmlFor="identification_number">DNI:</label>
-            <input
-                id="identification_number"
-                type="text"
-                name="identification_number"
-                value={formData.identification_number}
-                onChange={handleChange}
-                required
-            />
-            </div>
-            <div className="admin-alumnos-field">
-            <label htmlFor="name">Nombre:</label>
-            <input
-                id="name"
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-            />
-            </div>
-            <div className="admin-alumnos-field">
-            <label htmlFor="lastname">Apellido:</label>
-            <input
-                id="lastname"
-                type="text"
-                name="lastname"
-                value={formData.lastname}
-                onChange={handleChange}
-                required
-            />
-            </div>
-            <div className="admin-alumnos-field">
-            <label htmlFor="nationality">Nacionalidad:</label>
-            <input
-                id="nationality"
-                type="text"
-                name="nationality"
-                value={formData.nationality}
-                onChange={handleChange}
-                required
-            />
-            </div>
-            <div className="admin-alumnos-field">
-            <label htmlFor="email">Email:</label>
-            <input
-                id="email"
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-            />
-            </div>
-            <button type="submit" className="admin-alumnos-submit">
-            Crear Alumno
-            </button>
-        </form>
+        <Form 
+          handleChange={handleChange}
+          handleSubmit={handleSubmit}
+          formData={formData}
+          buttonText="Crear Alumno"
+        />
         {successMessage && <p className="admin-alumnos-success">{successMessage}</p>}
         {errors.length > 0 && (
             <div className="admin-alumnos-errors">

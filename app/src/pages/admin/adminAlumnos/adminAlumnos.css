@@ -47,6 +47,14 @@
   transition: border-color 0.3s;
 }
 
+.admin-alumnos-field select {
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: border-color 0.3s;
+}
+
 /* Efecto hover en los campos */
 .admin-alumnos-field input:focus {
   border-color: #007bff;

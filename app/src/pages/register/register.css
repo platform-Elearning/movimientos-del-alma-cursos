@@ -27,6 +27,13 @@
     font-size: 1rem;
   }
   
+  .register-form select {
+    padding: 0.8rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+  }
   .register-form button {
     padding: 0.8rem;
     background-color: #007bff;
