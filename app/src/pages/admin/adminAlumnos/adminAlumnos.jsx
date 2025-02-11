@@ -3,6 +3,7 @@ import { createAlumno } from "../../../api/alumnos";
 import "./adminAlumnos.css";
 import AlumnosTable from "./tableAlumnos/tableAlumnos"; 
 import Form from "../../../components/form/Form";
+import ValidateField from "../../../components/form/validateField/ValidateField";
 
 const AdminAlumnos = () => {
   const [formData, setFormData] = useState({
@@ -13,12 +14,13 @@ const AdminAlumnos = () => {
     email: ""
   });
 
-  
   const [errors, setErrors] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+    ValidateField(name, value, errors, setErrors);
   };
 
   const handleSubmit = async (e) => {
@@ -43,28 +45,28 @@ const AdminAlumnos = () => {
 
   return (
     <div>
-        <div className="admin-alumnos-container">
+      <div className="admin-alumnos-container">
         <h1 className="admin-alumnos-title">Crear Alumno</h1>
         <Form 
           handleChange={handleChange}
           handleSubmit={handleSubmit}
           formData={formData}
           buttonText="Crear Alumno"
+          error={errors}
         />
         {successMessage && <p className="admin-alumnos-success">{successMessage}</p>}
         {errors.length > 0 && (
-            <div className="admin-alumnos-errors">
+          <div className="admin-alumnos-errors">
             {errors.map((error, index) => (
-                <p key={index} className="admin-alumnos-error">
+              <p key={index} className="admin-alumnos-error">
                 {error}
-                </p>
+              </p>
             ))}
-            </div>
+          </div>
         )}
-        </div>
-        <AlumnosTable />
+      </div>
+      <AlumnosTable />
     </div>
-
   );
 };
 

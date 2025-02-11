@@ -41,7 +41,7 @@ const AlumnosMisCursos = () => {
 
   return (
     <div className="cursos-container">
-      <h3 className="cursos-title">Mis Cursos</h3>
+      <h3 className="cursos-title">Mis Formaciones</h3>
       <table className="cursos-table">
         <thead>
           <tr>

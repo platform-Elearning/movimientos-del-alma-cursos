@@ -4,6 +4,7 @@ import "./editAlumno.css"; // Archivo CSS para estilizar el formulario
 import Form from '../../../../components/form/Form';
 import Button from "../../../../components/button/Button";
 
+
 const EditAlumno = ({ user, onUpdate, onClose }) => {
   const [formData, setFormData] = useState({
     user_id: "",
@@ -32,10 +33,9 @@ const EditAlumno = ({ user, onUpdate, onClose }) => {
   }, [user]);
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+    ValidateField(name, value, errors, setErrors);
   };
 
   const handleSubmit = async (e) => {
@@ -59,6 +59,7 @@ return (
       handleSubmit={handleSubmit}
       formData={formData}
       buttonText="Guardar Cambios"
+      error={error}
       />
        <Button text="Borrar Alumno" onClick={onClose} />
       
