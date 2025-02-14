@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getCoursesByStudentId } from "../../../api/cursos";
 import "./alumnosMisCursos.css";
+import Card from "../../../components/card/Card";
 
 const AlumnosMisCursos = () => {
   const { alumnoId } = useParams(); // Obtener el ID del estudiante desde la URL
@@ -41,33 +42,22 @@ const AlumnosMisCursos = () => {
 
   return (
     <div className="cursos-container">
-      <h3 className="cursos-title">Mis Formaciones</h3>
-      <table className="cursos-table">
-        <thead>
-          <tr>
-            <th>Nombre</th>
-            <th>Duración (meses)</th>
-            <th>Lecciones</th>
-            <th>Videos</th>
-          </tr>
-        </thead>
-        <tbody>
-          {cursos.length > 0 ? (
-            cursos.map((curso) => (
-              <tr key={curso.course_id} onClick={() => goToCourse(curso.course_id)} className="clickable-row">
-                <td>{curso.course_name}</td>
-                <td>{curso.duration_months}</td>
-                <td>{curso.quantity_lessons}</td>
-                <td>{curso.quantity_videos}</td>
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="4">No hay cursos disponibles</td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+      <div className="title-container" >
+        <h2 className="cursos-title">Mis Formaciones</h2>
+      </div>
+      <div className="card-container">
+        {cursos.map((curso) => (
+          <Card
+            onClick={() => goToCourse(curso.course_id)}
+            key={curso.course_id}
+            nombre={curso.course_name}
+            duracion={curso.duration_months}
+            lecciones={curso.quantity_lessons}
+            videos={curso.quantity_videos}
+            btnText="IR AL MATERIAL"
+          />
+        ))}
+      </div>
     </div>
   );
 };
