@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { createLesson } from "../../../../api/cursos"; // Asegúrate de que esta función esté configurada
 import "./createLesson.css";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import BackLink from "../../../../components/backLink/BackLink";
 
 const CreateLesson = () => {
   const { cursoId, moduleId } = useParams(); // Obtener IDs desde la URL
@@ -16,6 +17,11 @@ const CreateLesson = () => {
 
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const navigate =useNavigate();
+  const goToModules = (cursoId)=>{
+    navigate(`/admin/editarCurso/${cursoId}`);
+  }
+
 
   // Manejar cambios en los inputs
   const handleChange = (e) => {
@@ -50,44 +56,47 @@ const CreateLesson = () => {
   };
 
   return (
-    <div className="create-lesson-container">
-      <h2>Crear Nueva Lección</h2>
-      <form onSubmit={handleSubmit} className="create-lesson-form">
-        <input
-          type="number"
-          name="lesson_number"
-          placeholder="Número de la Lección"
-          value={formData.lesson_number}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="text"
-          name="title"
-          placeholder="Título de la Lección"
-          value={formData.title}
-          onChange={handleChange}
-          required
-        />
-        <textarea
-          name="description"
-          placeholder="Descripción de la Lección"
-          value={formData.description}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="url"
-          name="url"
-          placeholder="URL del recurso"
-          value={formData.url}
-          onChange={handleChange}
-          required
-        />
-        <button type="submit">Crear Lección</button>
-      </form>
-      {message && <p className="success-message">{message}</p>}
-      {error && <p className="error-message">{error}</p>}
+    <div>
+      <BackLink title="Volver a Modulos" onClick={() => goToModules(cursoId)} />
+      <div className="create-lesson-container">
+        <h2>Crear Nueva Lección</h2>
+        <form onSubmit={handleSubmit} className="create-lesson-form">
+          <input
+            type="number"
+            name="lesson_number"
+            placeholder="Número de la Lección"
+            value={formData.lesson_number}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="text"
+            name="title"
+            placeholder="Título de la Lección"
+            value={formData.title}
+            onChange={handleChange}
+            required
+          />
+          <textarea
+            name="description"
+            placeholder="Descripción de la Lección"
+            value={formData.description}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="url"
+            name="url"
+            placeholder="URL del recurso"
+            value={formData.url}
+            onChange={handleChange}
+            required
+          />
+          <button type="submit">Crear Lección</button>
+        </form>
+        {message && <p className="success-message">{message}</p>}
+        {error && <p className="error-message">{error}</p>}
+      </div>
     </div>
   );
 };

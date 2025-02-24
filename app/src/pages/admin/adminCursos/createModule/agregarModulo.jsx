@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { createModule } from "../../../../api/cursos"; // Importa la función que hará la petición a la API
 import "./agregarModulo.css"; // Archivo CSS para los estilos
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import BackLink from "../../../../components/backLink/BackLink";
 
 const CreateModule = () => {
   const { cursoId } = useParams();
@@ -14,6 +15,11 @@ const CreateModule = () => {
 
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const navigate =useNavigate();
+  
+    const goToCourse = ()=> {
+    navigate(`/admin/cursos`);
+  }
 
   // Manejar cambios en los inputs
   const handleChange = (e) => {
@@ -47,36 +53,39 @@ const CreateModule = () => {
   };
 
   return (
-    <div className="create-module-container">
-      <h2>Crear Nuevo Módulo</h2>
-      <form onSubmit={handleSubmit} className="create-module-form">
-        <input
-          type="number"
-          name="module_number"
-          placeholder="Número del Módulo"
-          value={formData.module_number}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="text"
-          name="name"
-          placeholder="Nombre del Módulo"
-          value={formData.name}
-          onChange={handleChange}
-          required
-        />
-        <textarea
-          name="description"
-          placeholder="Descripción del Módulo"
-          value={formData.description}
-          onChange={handleChange}
-          required
-        />
-        <button type="submit">Crear Módulo</button>
-      </form>
-      {message && <p className="success-message">{message}</p>}
-      {error && <p className="error-message">{error}</p>}
+    <div>
+      <BackLink title="Volver a Cursos"  onClick={()=> goToCourse()}/>
+      <div className="create-module-container">
+        <h2>Crear Nuevo Módulo</h2>
+        <form onSubmit={handleSubmit} className="create-module-form">
+          <input
+            type="number"
+            name="module_number"
+            placeholder="Número del Módulo"
+            value={formData.module_number}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="text"
+            name="name"
+            placeholder="Nombre del Módulo"
+            value={formData.name}
+            onChange={handleChange}
+            required
+          />
+          <textarea
+            name="description"
+            placeholder="Descripción del Módulo"
+            value={formData.description}
+            onChange={handleChange}
+            required
+          />
+          <button type="submit">Crear Módulo</button>
+        </form>
+        {message && <p className="success-message">{message}</p>}
+        {error && <p className="error-message">{error}</p>}
+      </div>
     </div>
   );
 };

@@ -60,7 +60,7 @@ const Navbar = () => {
         <ul className={`navbar-links ${isMenuOpen ? "open" : ""}`}>
           {userRole === "student" && (
             <li>
-              <a onClick={navigateToPageAlumnnosMisCursos}>Mis Cursos</a>
+              <a onClick={navigateToPageAlumnnosMisCursos}>Mis Formaciones</a>
             </li>
           )}
           <li className="user-section">

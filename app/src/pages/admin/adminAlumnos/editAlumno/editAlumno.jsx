@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 import "./editAlumno.css"; // Archivo CSS para estilizar el formulario
+import CountryOption from "../../../../components/form/CountryOption";
+import BackLink from "../../../../components/backLink/BackLink";
+import { useNavigate } from "react-router-dom";
 //import { updateUser } from "../../../api/users"; // Función para actualizar usuario (asegúrate de implementarla)
+
+
 
 const EditAlumno = ({ user, onUpdate, onClose }) => {
   const [formData, setFormData] = useState({
@@ -14,6 +19,12 @@ const EditAlumno = ({ user, onUpdate, onClose }) => {
 
   const [errors, setErrors] = useState([]);
   const [successMessage, setSuccessMessage] = useState("");
+  const navigate=useNavigate();
+  const goToStudent = () => {
+     navigate(`/admin/alumnos`);
+  };
+
+
 
   // Pre-rellenar el formulario con los datos actuales del usuario
   useEffect(() => {
@@ -30,10 +41,9 @@ const EditAlumno = ({ user, onUpdate, onClose }) => {
   }, [user]);
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+    ValidateField(name, value, errors, setErrors);
   };
 
   const handleSubmit = async (e) => {
@@ -49,7 +59,9 @@ const EditAlumno = ({ user, onUpdate, onClose }) => {
     }
   };
 
-  return (
+return (
+  <div>
+    <BackLink title="Volver a Estudiantes" onClick={()=> goToStudent()}/>
     <div className="edit-user-container">
       <h2 className="edit-user-title">Editar Usuario</h2>
       <form onSubmit={handleSubmit} className="edit-user-form">
@@ -88,13 +100,9 @@ const EditAlumno = ({ user, onUpdate, onClose }) => {
         </div>
         <div className="edit-user-field">
           <label htmlFor="nationality">Nacionalidad:</label>
-          <input
-            id="nationality"
-            type="text"
-            name="nationality"
-            value={formData.nationality}
-            onChange={handleChange}
-            required
+          <CountryOption
+            handleChange={handleChange}
+            formData={formData.nationality}
           />
         </div>
         <button type="submit" className="edit-user-submit">
@@ -104,6 +112,7 @@ const EditAlumno = ({ user, onUpdate, onClose }) => {
           Borrar Alumno
         </button>
       </form>
+
       {successMessage && <p className="edit-user-success">{successMessage}</p>}
       {errors.length > 0 && (
         <div className="edit-user-errors">
@@ -115,7 +124,8 @@ const EditAlumno = ({ user, onUpdate, onClose }) => {
         </div>
       )}
     </div>
-  );
+  </div>
+);
 };
 
 export default EditAlumno;

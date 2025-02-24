@@ -2,12 +2,15 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "./curso.css";
 import { getModulesByAlumnoAndCurso } from "../../../api/cursos";
+import ModuleCard from "../../../components/moduleCard/ModuleCard";
+import BackLink from "../../../components/backLink/BackLink";
 
 const CourseDetails = () => {
   const { cursoId, alumnoId } = useParams(); // Obtener el ID del curso y del alumno desde la URL
   const [modules, setModules] = useState([]); // Estado inicial para los módulos
   const [loading, setLoading] = useState(true); // Mostrar el mensaje de carga al principio
   const [error, setError] = useState(null);
+  const [course, setCourse] = useState()
   const navigate = useNavigate();
 
   // Función para obtener los módulos desde la API
@@ -30,8 +33,10 @@ const CourseDetails = () => {
               lessonUrl: lesson.lessonUrl, // Aseguramos que lessonUrl esté disponible
             })),
           }));
-  
+          setCourse(course)
           setModules(formattedModules);
+          console.log(course.courseModules[0].moduleLessons);
+        
         } else {
           setError("Curso no encontrado");
         }
@@ -59,29 +64,37 @@ const CourseDetails = () => {
       state: { module: selectedModule },
     });
   };
+  
+   const goToFormation = (alumnoId) => {
+     navigate(`/alumnos/miscursos/${alumnoId}`);
+   };
 
   if (loading) return <p className="loading-message">Cargando módulos...</p>;
   if (error) return <p className="error-message">{error}</p>;
 
   return (
-    <div className="course-details-container">
-      <h2 className="course-title">Detalles del Curso</h2>
-      {modules.length > 0 ? (
-        <div className="modules-grid">
-          {modules.map((module) => (
-            <div
-              key={module.id}
-              className="module-card"
-              onClick={() => goToModule(module.id)}
-            >
-              <h3 className="module-name">{module.name}</h3>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <p>No hay módulos disponibles para este curso.</p>
-      )}
-    </div>
+    <>
+      <div className="course-details-container">
+        <div><BackLink title="Volver a Mis Formaciones" onClick={()=> goToFormation(alumnoId)}/></div>
+        <h2 className="course-title">Material: {course.courseName}</h2>
+        {modules.length > 0 ? (
+          <div className="modules-grid">
+            {course.courseModules.map((course) => (
+              <ModuleCard
+                moduleName={course.moduleName}
+                key={course.moduleId}
+                onClick={() => goToModule(course.moduleId)}
+                lessons = {course.moduleLessons}
+              />
+              
+            ))}
+          </div>
+        ) : (
+          <p>No hay módulos disponibles para este curso.</p>
+        )}
+      </div>
+   
+    </>
   );
 };
 

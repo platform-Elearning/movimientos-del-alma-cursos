@@ -8,6 +8,5 @@ body {
   overflow-y: auto; /* Permite el scroll vertical */
   font-family: "Montserrat", sans-serif;
   font-optical-sizing: auto;
-  font-weight: 300;
   font-style: normal;
 }
