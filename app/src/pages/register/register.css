@@ -26,14 +26,16 @@
     border-radius: 4px;
     font-size: 1rem;
   }
-  
+
   .register-form select {
-    padding: 0.8rem;
-    margin-bottom: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 1rem;
-  }
+  padding: 0.8rem;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: border-color 0.3s;
+  margin-bottom: 1rem;
+}
+  
   .register-form button {
     padding: 0.8rem;
     background-color: #007bff;
@@ -43,7 +45,6 @@
     font-size: 1rem;
     cursor: pointer;
     transition: background-color 0.3s;
-    align-self: center;
   }
   
   .register-form button:hover {
@@ -61,4 +62,3 @@
     text-align: center;
     margin-top: 1rem;
   }
-  

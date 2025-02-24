@@ -16,6 +16,7 @@ import ChangePassword from "../pages/changePassword/changePassword";
 import EditarCurso from "../pages/admin/adminCursos/editarCurso/editarCurso";
 import EditLessons from "../pages/admin/adminCursos/editLessons/editLessons";
 import ModuleDetails from "../pages/alumnos/modulo/modulo";
+import AdminProfesores from "../pages/admin/adminProfesor/adminProfesor";
 
 const AppRouter = () => {
     return (
@@ -34,6 +35,7 @@ const AppRouter = () => {
             <Route path="/admin/cursos" element={<AdminCourses></AdminCourses>}></Route>
             <Route path="/admin/editarCurso/:cursoId" element={<EditarCurso></EditarCurso>}></Route>
             <Route path="/admin/editarCurso/:cursoId/module/:moduleId" element={<EditLessons></EditLessons>}></Route>
+            <Route path="/admin/profesores" element = {<AdminProfesores/>}></Route>
 
             
             <Route path="/alumnos/miscursos/:alumnoId" element={<AlumnosMisCursos />} />

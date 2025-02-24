@@ -30,6 +30,14 @@
     flex-direction: column;
     gap: 5px;
   }
+
+  .edit-user-field select {
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: border-color 0.3s;
+}
   
   /* Etiquetas */
   .edit-user-field label {
@@ -51,22 +59,35 @@
   .edit-user-field input:focus {
     border-color: #007bff;
   }
-    
+  
+  /* Botón de guardar */
+  .edit-user-submit {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  /* Hover en el botón */
+  .edit-user-submit:hover {
+    background-color: #0056b3;
+  }
+  
   /* Botón de cancelar */
   .edit-user-cancel {
-    display: inline-block;
-    padding: 12px 24px;
-    border: 1px solid #4f4f4f;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #dc3545;
+    border: none;
     border-radius: 4px;
-    transition: all 0.2s ease-in;
-    position: relative;
-    overflow: hidden;
-    font-size: 19px;
     cursor: pointer;
-    color: black;
-    z-index: 1;
-    background: linear-gradient(90deg, #c8a700, #ffd700, #daa703); /* Gradiente dorado */
-    }
+    transition: background-color 0.3s;
+  }
   
   /* Hover en cancelar */
   .edit-user-cancel:hover {
@@ -92,4 +113,3 @@
     font-size: 14px;
     text-align: center;
   }
-  

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import "./editAlumno.css"; // Archivo CSS para estilizar el formulario
+import CountryOption from "../../../../components/form/CountryOption";
+import BackLink from "../../../../components/backLink/BackLink";
+import { useNavigate } from "react-router-dom";
 //import { updateUser } from "../../../api/users"; // Función para actualizar usuario (asegúrate de implementarla)
-import Form from '../../../../components/form/Form';
-import Button from "../../../../components/button/Button";
+
 
 
 const EditAlumno = ({ user, onUpdate, onClose }) => {
@@ -17,6 +19,12 @@ const EditAlumno = ({ user, onUpdate, onClose }) => {
 
   const [errors, setErrors] = useState([]);
   const [successMessage, setSuccessMessage] = useState("");
+  const navigate=useNavigate();
+  const goToStudent = () => {
+     navigate(`/admin/alumnos`);
+  };
+
+
 
   // Pre-rellenar el formulario con los datos actuales del usuario
   useEffect(() => {
@@ -52,17 +60,59 @@ const EditAlumno = ({ user, onUpdate, onClose }) => {
   };
 
 return (
+  <div>
+    <BackLink title="Volver a Estudiantes" onClick={()=> goToStudent()}/>
     <div className="edit-user-container">
       <h2 className="edit-user-title">Editar Usuario</h2>
-      <Form 
-      handleChange={handleChange}
-      handleSubmit={handleSubmit}
-      formData={formData}
-      buttonText="Guardar Cambios"
-      error={error}
-      />
-       <Button text="Borrar Alumno" onClick={onClose} />
-      
+      <form onSubmit={handleSubmit} className="edit-user-form">
+        <div className="edit-user-field">
+          <label htmlFor="email">Email:</label>
+          <input
+            id="email"
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="edit-user-field">
+          <label htmlFor="name">Nombre:</label>
+          <input
+            id="name"
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="edit-user-field">
+          <label htmlFor="last_name">Apellido:</label>
+          <input
+            id="last_name"
+            type="text"
+            name="last_name"
+            value={formData.last_name}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="edit-user-field">
+          <label htmlFor="nationality">Nacionalidad:</label>
+          <CountryOption
+            handleChange={handleChange}
+            formData={formData.nationality}
+          />
+        </div>
+        <button type="submit" className="edit-user-submit">
+          Guardar Cambios
+        </button>
+        <button type="button" className="edit-user-cancel" onClick={onClose}>
+          Borrar Alumno
+        </button>
+      </form>
+
       {successMessage && <p className="edit-user-success">{successMessage}</p>}
       {errors.length > 0 && (
         <div className="edit-user-errors">
@@ -74,7 +124,8 @@ return (
         </div>
       )}
     </div>
-  );
+  </div>
+);
 };
 
 export default EditAlumno;

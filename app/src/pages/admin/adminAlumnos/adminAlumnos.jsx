@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import { createAlumno } from "../../../api/alumnos"; 
 import "./adminAlumnos.css";
 import AlumnosTable from "./tableAlumnos/tableAlumnos"; 
-import Form from "../../../components/form/Form";
 import ValidateField from "../../../components/form/validateField/ValidateField";
-
+import CountryOption from "../../../components/form/CountryOption";
+import BackLink from "../../../components/backLink/BackLink";
+import { useNavigate } from "react-router-dom";
 const AdminAlumnos = () => {
   const [formData, setFormData] = useState({
     identification_number: "",
@@ -13,6 +14,12 @@ const AdminAlumnos = () => {
     nationality: "",
     email: ""
   });
+
+  const navigate=useNavigate();
+
+  const goToInicio = () => {
+     navigate(`/admin/`);
+  };
 
   const [errors, setErrors] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -45,16 +52,72 @@ const AdminAlumnos = () => {
 
   return (
     <div>
+      <BackLink title="Volver a Pagina Principal" onClick={() => goToInicio()} />
       <div className="admin-alumnos-container">
         <h1 className="admin-alumnos-title">Crear Alumno</h1>
-        <Form 
-          handleChange={handleChange}
-          handleSubmit={handleSubmit}
-          formData={formData}
-          buttonText="Crear Alumno"
-          error={errors}
-        />
-        {successMessage && <p className="admin-alumnos-success">{successMessage}</p>}
+        <form onSubmit={handleSubmit} className="admin-alumnos-form">
+          <div className="admin-alumnos-field">
+            <label htmlFor="identification_number">Número Identificador:</label>
+            <input
+              id="identification_number"
+              type="text"
+              name="identification_number"
+              value={formData.identification_number}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="admin-alumnos-field">
+            <label htmlFor="name">Nombre:</label>
+            <input
+              id="name"
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              required
+            />
+            {errors.name && <p className="error-message">{errors.name}</p>}
+          </div>
+          <div className="admin-alumnos-field">
+            <label htmlFor="lastname">Apellido:</label>
+            <input
+              id="lastname"
+              type="text"
+              name="lastname"
+              value={formData.lastname}
+              onChange={handleChange}
+              required
+            />
+            {errors.lastname && (
+              <p className="error-message">{errors.lastname}</p>
+            )}
+          </div>
+          <div className="admin-alumnos-field">
+            <label htmlFor="nationality">Nacionalidad:</label>
+            <CountryOption
+              handleChange={handleChange}
+              formData={formData.nationality}
+            />
+          </div>
+          <div className="admin-alumnos-field">
+            <label htmlFor="email">Email:</label>
+            <input
+              id="email"
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <button type="submit" className="admin-alumnos-submit">
+            Crear Alumno
+          </button>
+        </form>
+        {successMessage && (
+          <p className="admin-alumnos-success">{successMessage}</p>
+        )}
         {errors.length > 0 && (
           <div className="admin-alumnos-errors">
             {errors.map((error, index) => (
