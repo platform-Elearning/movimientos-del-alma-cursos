@@ -57,7 +57,7 @@ import { instanceCursos, instanceEnrollmentss } from "./axiosInstances";
 
   export const registerStudentToCourse = async (enrollmentData) => {
     try {
-      const response = await instanceEnrollmentss.post("registerToCourse", enrollmentData);
+      const response = await instanceEnrollmentss.post("/registerToCourse", enrollmentData);
       return response.data;
     } catch (error) {
       throw error; 
