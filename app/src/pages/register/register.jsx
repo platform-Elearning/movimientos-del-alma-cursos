@@ -55,44 +55,45 @@ const Register = () => {
 
   return (
     <div>
-      <BackLink title ="Ir pagina de Inicio" onClick={()=> goToInicio()}/>
+      <BackLink title="Ir pagina de Inicio" onClick={() => goToInicio()} />
       <div className="register-container">
         <h2>Registro de Estudiante</h2>
         <form onSubmit={handleSubmit} className="register-form">
+          <label htmlFor="identification_number">Número Identificador:</label>
           <input
             type="text"
             name="identification_number"
-            placeholder="Número de Identificación"
             value={formData.identification_number}
             onChange={handleChange}
             required
           />
+          <label htmlFor="name">Nombre:</label>
           <input
             type="text"
             name="name"
-            placeholder="Nombre"
             value={formData.name}
             onChange={handleChange}
             required
           />
           {error.name && <p className="error-message">{error.name}</p>}
+          <label htmlFor="lastname">Apellido:</label>
           <input
             type="text"
             name="lastname"
-            placeholder="Apellido"
             value={formData.lastname}
             onChange={handleChange}
             required
           />
           {error.lastname && <p className="error-message">{error.lastname}</p>}
+          <label htmlFor="nationality">Pais de Origen:</label>
           <CountryOption
             handleChange={handleChange}
             formData={formData.nationality}
           />
+          <label htmlFor="email">Email:</label>
           <input
             type="email"
             name="email"
-            placeholder="Correo Electrónico"
             value={formData.email}
             onChange={handleChange}
             required

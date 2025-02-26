@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import "./curso.css";
 import { getModulesByAlumnoAndCurso } from "../../../api/cursos";
 import ModuleCard from "../../../components/moduleCard/ModuleCard";
@@ -12,6 +12,7 @@ const CourseDetails = () => {
   const [error, setError] = useState(null);
   const [course, setCourse] = useState()
   const navigate = useNavigate();
+
 
   // Función para obtener los módulos desde la API
   const fetchModules = async () => {
@@ -35,7 +36,6 @@ const CourseDetails = () => {
           }));
           setCourse(course)
           setModules(formattedModules);
-          console.log(course.courseModules[0].moduleLessons);
         
         } else {
           setError("Curso no encontrado");
@@ -57,13 +57,6 @@ const CourseDetails = () => {
     fetchModules();
   }, [cursoId]);
 
-  // Función para navegar al módulo específico con datos
-  const goToModule = (moduleId) => {
-    const selectedModule = modules.find((mod) => mod.id === moduleId);
-    navigate(`/alumnos/${alumnoId}/curso/${cursoId}/modulo/${moduleId}`, {
-      state: { module: selectedModule },
-    });
-  };
   
    const goToFormation = (alumnoId) => {
      navigate(`/alumnos/miscursos/${alumnoId}`);
@@ -79,15 +72,17 @@ const CourseDetails = () => {
         <h2 className="course-title">Material: {course.courseName}</h2>
         {modules.length > 0 ? (
           <div className="modules-grid">
-            {course.courseModules.map((course) => (
-              <ModuleCard
-                moduleName={course.moduleName}
-                key={course.moduleId}
-                onClick={() => goToModule(course.moduleId)}
-                lessons = {course.moduleLessons}
-              />
-              
-            ))}
+            {course.courseModules.map((course) => {
+              console.log("estos son :",course.moduleLessons);
+              return (
+
+                <ModuleCard
+                  moduleName={course.moduleName}
+                  key={course.moduleId}
+                  lessons={course.moduleLessons}
+                />
+              );
+            })}
           </div>
         ) : (
           <p>No hay módulos disponibles para este curso.</p>

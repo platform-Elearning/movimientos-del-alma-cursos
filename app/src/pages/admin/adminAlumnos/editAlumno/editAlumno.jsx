@@ -99,7 +99,7 @@ return (
           />
         </div>
         <div className="edit-user-field">
-          <label htmlFor="nationality">Nacionalidad:</label>
+          <label htmlFor="nationality">Pais de Origen:</label>
           <CountryOption
             handleChange={handleChange}
             formData={formData.nationality}

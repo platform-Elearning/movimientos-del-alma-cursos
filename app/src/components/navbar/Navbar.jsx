@@ -52,7 +52,13 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="navbar-container">
         <div className="navbar-logo">
-          <img src={logo} alt="Logo" />
+          <a
+            href="https://mda-ifi.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img src={logo} alt="Logo" />
+          </a>
         </div>
         <button className="menu-toggle" onClick={toggleMenu}>
           ☰
@@ -68,7 +74,12 @@ const Navbar = () => {
             <h5 className="username">{userNav}</h5>
           </li>
           <li className="logout-section">
-            <img src={logoutImg} alt="Logout" className="logout-icon" onClick={logout} />
+            <img
+              src={logoutImg}
+              alt="Logout"
+              className="logout-icon"
+              onClick={logout}
+            />
             <h5 className="logout">Logout</h5>
           </li>
         </ul>

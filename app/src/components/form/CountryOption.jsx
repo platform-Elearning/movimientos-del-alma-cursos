@@ -25,7 +25,7 @@ function CountryOption({handleChange, formData})
 
   return (
     <select onChange={handleChange} value={formData.nationality}>
-      <option value="">Selecciona un país</option>
+      <option value=""></option>
       {info.map((country, index) => (
         <option key={index} value={country.name.common}>
           {country.name.common}

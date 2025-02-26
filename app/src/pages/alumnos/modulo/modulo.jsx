@@ -32,6 +32,7 @@ const ModuleDetails = () => {
       <h2 className="module-title">{module.name}</h2>
       <div className="classes-grid">
         {module.classes.map((cls) => (
+          console.log(cls),
           <div
             key={cls.id}
             className="class-card"

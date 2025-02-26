@@ -9,9 +9,12 @@ const Clase = () => {
   const location = useLocation();
   const { classItem } = location.state || {}; // Obtener los datos de la clase seleccionada
 
+  console.log("location.state:", location.state);
+  console.log("classItem:", classItem);
+
   const embedUrl = getEmbedUrl(classItem?.lessonUrl);
 
-  if (!classItem || !classItem.id) {
+  if (!classItem) {
     return <p>Clase no encontrada. Por favor, regresa y selecciona una clase válida.</p>;
   }
   console.log(classItem);
@@ -24,7 +27,7 @@ const Clase = () => {
     
     <div className="class-details-container">
       <BackLink title="Volver al Material" onClick={()=> goToCourse(cursoId)}/>
-      <h2>{classItem.name}: {classItem.description}</h2>
+      <h2>{classItem.lessonTitle}: {classItem.lessonDescription}</h2>
 
       <div className="video-container">
         {embedUrl ? (
@@ -32,7 +35,7 @@ const Clase = () => {
             width="80%"
             height="480"
             src={embedUrl}
-            title={classItem.name}
+            title={classItem.lessonTitle}
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
