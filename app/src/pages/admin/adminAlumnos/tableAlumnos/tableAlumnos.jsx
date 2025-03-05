@@ -45,7 +45,7 @@ const AlumnosTable = () => {
         <thead>
           <tr>
             <th>ID</th>
-            <th>DNI</th>
+            <th>Número Identificador</th>
             <th>Nombre</th>
             <th>Apellido</th>
             <th>Email</th>
