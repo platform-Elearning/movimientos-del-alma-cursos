@@ -32,18 +32,10 @@ export const getCursosByAlumno = async (user) => {
     }
   };
 
-  export const editAlumno = async () => {
-    try {
-      const response = await axios.put("/alumnos", user);
-      return response.data;
-    } catch (error) {
-      throw error; 
-    }
-  };
 
-  export const deleteAlumno = async () => {
+  export const deleteAlumno = async (user_id) => {
     try {
-      const response = await axios.delete("/alumnos", user);
+      const response = await instanceUsers.delete(`/deleteStudent/${user_id}`);
       return response.data;
     } catch (error) {
       throw error; 

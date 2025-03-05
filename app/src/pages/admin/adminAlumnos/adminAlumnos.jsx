@@ -1,28 +1,29 @@
 import React, { useState } from "react";
-import { createAlumno } from "../../../api/alumnos"; 
+import { createAlumno } from "../../../api/alumnos";
 import "./adminAlumnos.css";
-import AlumnosTable from "./tableAlumnos/tableAlumnos"; 
+import AlumnosTable from "./tableAlumnos/tableAlumnos";
 import ValidateField from "../../../components/form/validateField/ValidateField";
 import CountryOption from "../../../components/form/CountryOption";
 import BackLink from "../../../components/backLink/BackLink";
 import { useNavigate } from "react-router-dom";
+
 const AdminAlumnos = () => {
   const [formData, setFormData] = useState({
     identification_number: "",
     name: "",
     lastname: "",
     nationality: "",
-    email: ""
+    email: "",
   });
-
-  const navigate=useNavigate();
-
-  const goToInicio = () => {
-     navigate(`/admin/`);
-  };
 
   const [errors, setErrors] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const navigate = useNavigate();
+
+  const goToInicio = () => {
+  navigate(`/admin/`);
+  };
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -35,16 +36,19 @@ const AdminAlumnos = () => {
     setErrors("");
     setSuccessMessage("");
     try {
+      console.log("enviando datos:", formData)
       const response = await createAlumno(formData);
+      console.log("respuesta del servidor:", response);
       setSuccessMessage("Alumno creado con éxito");
       setFormData({
         identification_number: "",
         name: "",
         lastname: "",
         nationality: "",
-        email: ""
+        email: "",
       });
     } catch (error) {
+      console.error("Error al crear el alumno", error);
       setErrors([error.response?.data?.message || "Error al crear el alumno"]);
       setSuccessMessage("");
     }
@@ -52,7 +56,10 @@ const AdminAlumnos = () => {
 
   return (
     <div>
-      <BackLink title="Volver a Pagina Principal" onClick={() => goToInicio()} />
+      <BackLink
+        title="Volver a Pagina Principal"
+        onClick={() => goToInicio()}
+      />
       <div className="admin-alumnos-container">
         <h1 className="admin-alumnos-title">Crear Alumno</h1>
         <form onSubmit={handleSubmit} className="admin-alumnos-form">
@@ -95,10 +102,16 @@ const AdminAlumnos = () => {
           </div>
           <div className="admin-alumnos-field">
             <label htmlFor="nationality">Pais de Origen:</label>
-            <CountryOption
-              handleChange={handleChange}
-              formData={formData.nationality}
-            />
+            <select
+              type="text"
+              name="nationality"
+              placeholder="Nacionalidad"
+              value={formData.nationality}
+              onChange={handleChange}
+              required
+            >
+              <CountryOption/>
+            </select>
           </div>
           <div className="admin-alumnos-field">
             <label htmlFor="email">Email:</label>
@@ -111,7 +124,7 @@ const AdminAlumnos = () => {
               required
             />
           </div>
-          <button type="submit" className="admin-alumnos-submit">
+          <button type="submit" className="admin-alumnos-submit" onClick={handleChange}>
             Crear Alumno
           </button>
         </form>

@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import "./editAlumno.css"; // Archivo CSS para estilizar el formulario
 import CountryOption from "../../../../components/form/CountryOption";
 import BackLink from "../../../../components/backLink/BackLink";
-import { useNavigate } from "react-router-dom";
-//import { updateUser } from "../../../api/users"; // Función para actualizar usuario (asegúrate de implementarla)
+import { useNavigate, useLocation} from "react-router-dom";
+import ValidateField from "../../../../components/form/validateField/ValidateField";
+import { deleteAlumno } from "../../../../api/alumnos";
 
 
-
-const EditAlumno = ({ user, onUpdate, onClose }) => {
+const EditAlumno = ({ onUpdate, onClose }) => {
   const [formData, setFormData] = useState({
     user_id: "",
     email: "",
@@ -20,9 +20,14 @@ const EditAlumno = ({ user, onUpdate, onClose }) => {
   const [errors, setErrors] = useState([]);
   const [successMessage, setSuccessMessage] = useState("");
   const navigate=useNavigate();
+  const location = useLocation();
+  const {user} = location.state;
+
   const goToStudent = () => {
      navigate(`/admin/alumnos`);
   };
+
+  console.log("User:", user);
 
 
 
@@ -49,7 +54,7 @@ const EditAlumno = ({ user, onUpdate, onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await updateUser(formData); // Llama a la API para actualizar el usuario
+      await editAlumno(formData.user_id); // Llama a la API para actualizar el usuario
       setSuccessMessage("Usuario actualizado con éxito");
       setErrors([]);
       if (onUpdate) onUpdate(); // Llama a la función para refrescar la lista de usuarios
@@ -58,6 +63,27 @@ const EditAlumno = ({ user, onUpdate, onClose }) => {
       setSuccessMessage("");
     }
   };
+
+  const handleDelete = async () =>{
+    try{
+      console.log("Borrando alumno", formData.user_id);
+      await deleteAlumno(formData.user_id);
+      setFormData({
+        user_id: "",
+        email: "",
+        name: "",
+        last_name: "",
+        nationality: "",
+        cursos: []
+      });
+      setSuccessMessage("Alumno eliminado con éxito");
+      if (onUpdate) onUpdate();
+      goToStudent();
+    }catch (error){
+      setErrors([error.response?.data?.message || "Error al eliminar el alumno"]);
+      setSuccessMessage("");
+    }
+  }
 
 return (
   <div>
@@ -100,15 +126,21 @@ return (
         </div>
         <div className="edit-user-field">
           <label htmlFor="nationality">Pais de Origen:</label>
-          <CountryOption
-            handleChange={handleChange}
-            formData={formData.nationality}
-          />
+         <select
+              type="text"
+              name="nationality"
+              placeholder="Nacionalidad"
+              value={formData.nationality}
+              onChange={handleChange}
+              required
+            >
+              <CountryOption value={formData.nationality}/>
+            </select>
         </div>
-        <button type="submit" className="edit-user-submit">
+        <button type="submit" className="edit-user-submit" onClick={handleSubmit}>
           Guardar Cambios
         </button>
-        <button type="button" className="edit-user-cancel" onClick={onClose}>
+        <button type="button" className="edit-user-cancel" onClick={handleDelete}>
           Borrar Alumno
         </button>
       </form>

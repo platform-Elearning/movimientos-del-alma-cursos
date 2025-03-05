@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { getAlumnos } from "../../../../api/alumnos"; // Importa la función para traer los alumnos desde la API
 import "./tableAlumnos.css";
 
@@ -7,6 +7,7 @@ const AlumnosTable = () => {
   const navigate = useNavigate();
   const [alumnos, setAlumnos] = useState([]);
   const [error, setError] = useState("");
+  const location = useLocation();
 
   // Función para traer los alumnos desde la API
   const fetchAlumnos = async () => {
@@ -28,9 +29,13 @@ const AlumnosTable = () => {
     fetchAlumnos(); // Llama a la función al montar el componente
   }, []);
 
-  const handleEdit = (id) => {
-    navigate(`/admin/editarAlumno/${id}`);
-    console.log(`Editar alumno con ID: ${id}`);
+
+
+  const handleEdit = (alumno) => {
+    navigate(`/admin/editarAlumno/${alumno.user_id}`, {
+      state: { user: alumno },
+    }); // Redirige a la página de edición del alumno con el estado
+    console.log(`Editar alumno con ID: ${alumno.user_id}`);
   };
 
   return (
@@ -51,8 +56,8 @@ const AlumnosTable = () => {
           </tr>
         </thead>
         <tbody>
-          {alumnos.map((alumno) => (
-            <tr key={alumno.id}>
+          {alumnos.map((alumno, index) => (
+            <tr key={index}>
               <td>{alumno.user_id}</td>
               <td>{alumno.dni}</td>
               <td>{alumno.name}</td>
@@ -82,7 +87,7 @@ const AlumnosTable = () => {
                 )}
               </td>
               <td>
-                <button onClick={() => handleEdit(alumno.id)}>Editar</button>
+                <button onClick={() => handleEdit(alumno)}>Editar</button>
               </td>
             </tr>
           ))}

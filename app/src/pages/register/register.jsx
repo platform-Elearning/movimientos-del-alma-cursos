@@ -50,7 +50,7 @@ const Register = () => {
       alert("Te llegó un correo con la contraseña. Haz click para confirmar.");
     } catch (err) {
       setError({ general: "Error al registrar el estudiante" });
-    }
+    } 
   };
 
   return (
@@ -86,10 +86,16 @@ const Register = () => {
           />
           {error.lastname && <p className="error-message">{error.lastname}</p>}
           <label htmlFor="nationality">Pais de Origen:</label>
-          <CountryOption
-            handleChange={handleChange}
-            formData={formData.nationality}
-          />
+          <select
+            type="text"
+            name="nationality"
+            placeholder="Nacionalidad"
+            value={formData.nationality}
+            onChange={handleChange}
+            required
+          >
+            <CountryOption />
+          </select>
           <label htmlFor="email">Email:</label>
           <input
             type="email"

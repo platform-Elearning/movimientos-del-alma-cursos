@@ -31,7 +31,7 @@ const AppRouter = () => {
 
             <Route path="/admin" element={<PanelAdmin></PanelAdmin>}></Route>
             <Route path="/admin/alumnos" element={<AdminAlumnos></AdminAlumnos>}></Route>
-            <Route path="/admin/editarAlumno/:id" element={<EditAlumno></EditAlumno>}></Route>
+            <Route path="/admin/editarAlumno/:id" element={<EditAlumno ></EditAlumno>}></Route>
             <Route path="/admin/cursos" element={<AdminCourses></AdminCourses>}></Route>
             <Route path="/admin/editarCurso/:cursoId" element={<EditarCurso></EditarCurso>}></Route>
             <Route path="/admin/editarCurso/:cursoId/module/:moduleId" element={<EditLessons></EditLessons>}></Route>
