@@ -32,6 +32,17 @@ export const getCursosByAlumno = async (user) => {
     }
   };
 
+  
+  export const updateStudent = async (user_id) => {
+    try {
+      const response = await instanceUsers.put("/updateStudent", user_id);
+      return response.data;
+    } catch (error) {
+      throw error; 
+    }
+  };
+
+
 
   export const deleteAlumno = async (user_id) => {
     try {

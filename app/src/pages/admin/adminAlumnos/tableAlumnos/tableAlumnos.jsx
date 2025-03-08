@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { getAlumnos } from "../../../../api/alumnos"; // Importa la función para traer los alumnos desde la API
+import { getAlumnos } from "../../../../api/alumnos";
 import "./tableAlumnos.css";
 
 const AlumnosTable = () => {
@@ -8,14 +8,18 @@ const AlumnosTable = () => {
   const [alumnos, setAlumnos] = useState([]);
   const [error, setError] = useState("");
   const location = useLocation();
+  const tableContainerRef = useRef(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
 
   // Función para traer los alumnos desde la API
   const fetchAlumnos = async () => {
     try {
-      const response = await getAlumnos(); // Llamada a la API
-      console.log("Respuesta de la API:", response); // Verifica la respuesta de la API
+      const response = await getAlumnos();
+      console.log("Respuesta de la API:", response);
       if (response && response.response && Array.isArray(response.response)) {
-        setAlumnos(response.response); // Ajusta esto según el formato de tu respuesta
+        setAlumnos(response.response);
       } else {
         throw new Error("La respuesta de la API no es un array");
       }
@@ -26,20 +30,45 @@ const AlumnosTable = () => {
   };
 
   useEffect(() => {
-    fetchAlumnos(); // Llama a la función al montar el componente
+    fetchAlumnos();
   }, []);
-
-
 
   const handleEdit = (alumno) => {
     navigate(`/admin/editarAlumno/${alumno.user_id}`, {
       state: { user: alumno },
-    }); // Redirige a la página de edición del alumno con el estado
+    });
     console.log(`Editar alumno con ID: ${alumno.user_id}`);
   };
 
+  // 🖱️ Funciones para el desplazamiento con el mouse
+  const handleMouseDown = (e) => {
+    setIsDragging(true);
+    setStartX(e.pageX - tableContainerRef.current.offsetLeft);
+    setScrollLeft(tableContainerRef.current.scrollLeft);
+  };
+
+  const handleMouseLeaveOrUp = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    const x = e.pageX - tableContainerRef.current.offsetLeft;
+    const walk = (x - startX) * 2; // Ajusta la sensibilidad del desplazamiento
+    tableContainerRef.current.scrollLeft = scrollLeft - walk;
+  };
+
   return (
-    <div className="alumnos-table-container">
+    <div
+      className="alumnos-table-container"
+      ref={tableContainerRef}
+      onMouseDown={handleMouseDown}
+      onMouseLeave={handleMouseLeaveOrUp}
+      onMouseUp={handleMouseLeaveOrUp}
+      onMouseMove={handleMouseMove}
+      style={{ cursor: isDragging ? "grabbing" : "grab" }} // Cambio de cursor
+    >
       {error && <p className="error-message">{error}</p>}
       <table className="alumnos-table">
         <thead>
@@ -58,36 +87,41 @@ const AlumnosTable = () => {
         <tbody>
           {alumnos.map((alumno, index) => (
             <tr key={index}>
-              <td>{alumno.user_id}</td>
-              <td>{alumno.dni}</td>
-              <td>{alumno.name}</td>
-              <td>{alumno.last_name}</td>
-              <td>{alumno.email}</td>
-              <td>{alumno.nationality}</td>
-              <td>
-                {alumno.courses && alumno.courses.length > 0 ? (
+              <td data-label="ID">{alumno.user_id}</td>
+              <td data-label="Número Identificador">{alumno.dni}</td>
+              <td data-label="Nombre">{alumno.name}</td>
+              <td data-label="Apellido">{alumno.last_name}</td>
+              <td data-label="Email">{alumno.email}</td>
+              <td data-label="Nacionalidad">{alumno.nationality}</td>
+              <td data-label="Cursos">
+                {alumno.courses?.length ? (
                   <ul>
-                    {alumno.courses.map((course, index) => (
-                      <li key={index}>{course.course}</li>
+                    {alumno.courses.map((course, i) => (
+                      <li key={i}>{course.course}</li>
                     ))}
                   </ul>
                 ) : (
                   "N/A"
                 )}
               </td>
-              <td>
-                {alumno.courses && alumno.courses.length > 0 ? (
+              <td data-label="Módulos">
+                {alumno.courses?.length ? (
                   <ul>
-                    {alumno.courses.map((course, index) => (
-                      <li key={index}>{course.modules}</li>
+                    {alumno.courses.map((course, i) => (
+                      <li key={i}>{course.modules}</li>
                     ))}
                   </ul>
                 ) : (
                   "N/A"
                 )}
               </td>
-              <td>
-                <button onClick={() => handleEdit(alumno)}>Editar</button>
+              <td data-label="Acciones">
+                <button
+                  className="edit-button"
+                  onClick={() => handleEdit(alumno)}
+                >
+                  Editar
+                </button>
               </td>
             </tr>
           ))}

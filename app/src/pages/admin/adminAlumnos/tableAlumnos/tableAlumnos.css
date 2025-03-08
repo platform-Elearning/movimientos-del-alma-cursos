@@ -1,54 +1,67 @@
-/* Contenedor de la tabla */
 .alumnos-table-container {
     max-width: 1100px;
-    margin: 20px auto; /* Márgenes arriba y centrado */
-    padding: 10px;
-    border: 1px solid #ddd;
+    margin: 20px auto;
+    padding: 15px;
     border-radius: 8px;
-    background-color: #f9f9f9;
-  }
-  
-  /* Estilo de la tabla */
-  .alumnos-table {
+    background-color: #ffffff;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    overflow-x: auto; /* Habilita desplazamiento horizontal */
+    white-space: nowrap; /* Evita el salto de línea */
+    cursor: grab;
+}
+
+/* Cuando el usuario está arrastrando */
+.alumnos-table-container:active {
+    cursor: grabbing;
+}
+
+/* Estilos generales de la tabla */
+.alumnos-table {
     width: 100%;
     border-collapse: collapse;
     text-align: left;
-  }
-  
-  /* Encabezado de la tabla */
-  .alumnos-table thead th {
+}
+
+/* Encabezados */
+.alumnos-table thead th {
     background-color: #007bff;
     color: #fff;
-    padding: 10px;
+    padding: 12px;
     border: 1px solid #ddd;
     text-align: center;
-  }
-  
-  /* Cuerpo de la tabla */
-  .alumnos-table tbody td {
-    padding: 10px;
+    font-size: 16px;
+}
+
+/* Celdas */
+.alumnos-table tbody td {
+    padding: 12px;
     border: 1px solid #ddd;
     text-align: center;
-  }
-  
-  /* Filas alternadas */
-  .alumnos-table tbody tr:nth-child(odd) {
+    font-size: 15px;
+}
+
+/* Filas alternadas */
+.alumnos-table tbody tr:nth-child(odd) {
     background-color: #f2f2f2;
-  }
-  
-  /* Botón de editar */
-  .edit-button {
-    padding: 5px 10px;
+}
+
+/* Hover en filas */
+.alumnos-table tbody tr:hover {
+    background-color: #e9ecef;
+}
+
+/* Botón de editar */
+.edit-button {
+    padding: 6px 10px;
     font-size: 14px;
     color: #fff;
     background-color: #28a745;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .edit-button:hover {
+    transition: background-color 0.3s ease;
+}
+
+.edit-button:hover {
     background-color: #218838;
-  }
-  
+}

@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams, useLocation,useNavigate } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import "./clase.css";
 import BackLink from "../../../components/backLink/BackLink";
 
@@ -15,19 +15,27 @@ const Clase = () => {
   const embedUrl = getEmbedUrl(classItem?.lessonUrl);
 
   if (!classItem) {
-    return <p>Clase no encontrada. Por favor, regresa y selecciona una clase válida.</p>;
+    return (
+      <p>
+        Clase no encontrada. Por favor, regresa y selecciona una clase válida.
+      </p>
+    );
   }
   console.log(classItem);
 
-   const goToCourse = (coursoId) => {
-     navigate(`/alumnos/${alumnoId}/curso/${coursoId}`);
-   };
+  const goToCourse = (coursoId) => {
+    navigate(`/alumnos/${alumnoId}/curso/${coursoId}`);
+  };
 
   return (
-    
     <div className="class-details-container">
-      <BackLink title="Volver al Material" onClick={()=> goToCourse(cursoId)}/>
-      <h2>{classItem.lessonTitle}: {classItem.lessonDescription}</h2>
+      <BackLink
+        title="Volver al Material"
+        onClick={() => goToCourse(cursoId)}
+      />
+      <h2>
+        {classItem.lessonTitle}: {classItem.lessonDescription}
+      </h2>
 
       <div className="video-container">
         {embedUrl ? (
@@ -50,7 +58,14 @@ const Clase = () => {
 
 const getEmbedUrl = (url) => {
   if (!url) return ""; // Devuelve vacío si no hay URL
-  const videoIdMatch = url.match(/v=([^&]+)/); // Extrae el ID del video de la URL
+
+  let videoIdMatch;
+  if (url.includes("youtube.com")) {
+    videoIdMatch = url.match(/v=([^&]+)/); // Extrae el ID del video de la URL
+  } else if (url.includes("youtu.be")) {
+    videoIdMatch = url.match(/youtu.be\/([^?]+)/); // Extrae el ID del video de la URL corta
+  }
+
   return videoIdMatch ? `https://www.youtube.com/embed/${videoIdMatch[1]}` : "";
 };
 
