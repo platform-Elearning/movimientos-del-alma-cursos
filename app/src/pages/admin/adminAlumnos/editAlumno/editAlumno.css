@@ -30,6 +30,14 @@
     flex-direction: column;
     gap: 5px;
   }
+
+  .edit-user-field select {
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: border-color 0.3s;
+}
   
   /* Etiquetas */
   .edit-user-field label {
@@ -105,4 +113,3 @@
     font-size: 14px;
     text-align: center;
   }
-  

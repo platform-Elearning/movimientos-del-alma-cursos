@@ -56,7 +56,7 @@
   gap: 0.5em;
 }
 
-.button1, .button2, .button3 {
+.button1, .button2, .btn3 {
   padding: 0.5em 1.5em;
   border-radius: 5px;
   border: none;
@@ -68,6 +68,10 @@
   max-width: 200px;
 }
 
+.btn3 {
+  margin: 10px;
+}
+
 .button1:hover, .button2:hover, .button3:hover {
   background-color: black;
   color: white;
@@ -75,6 +79,10 @@
 
 .button3:hover {
   background-color: red;
+}
+
+.error-text {
+color: #d3d3d3;
 }
 
 @media (max-width: 768px) {

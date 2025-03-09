@@ -1,7 +1,11 @@
 import React, { useState } from "react";
-import { createAlumno } from "../../../api/alumnos"; 
+import { createAlumno } from "../../../api/alumnos";
 import "./adminAlumnos.css";
-import AlumnosTable from "./tableAlumnos/tableAlumnos"; 
+import AlumnosTable from "./tableAlumnos/tableAlumnos";
+import ValidateField from "../../../components/form/validateField/ValidateField";
+import CountryOption from "../../../components/form/CountryOption";
+import BackLink from "../../../components/backLink/BackLink";
+import { useNavigate } from "react-router-dom";
 
 const AdminAlumnos = () => {
   const [formData, setFormData] = useState({
@@ -9,30 +13,42 @@ const AdminAlumnos = () => {
     name: "",
     lastname: "",
     nationality: "",
-    email: ""
+    email: "",
   });
 
-  const [errors, setErrors] = useState([]);
+  const [errors, setErrors] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const navigate = useNavigate();
+
+  const goToInicio = () => {
+  navigate(`/admin/`);
+  };
+
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+    ValidateField(name, value, errors, setErrors);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrors("");
+    setSuccessMessage("");
     try {
+      console.log("enviando datos:", formData)
       const response = await createAlumno(formData);
+      console.log("respuesta del servidor:", response);
       setSuccessMessage("Alumno creado con éxito");
-      setErrors([]);
       setFormData({
         identification_number: "",
         name: "",
         lastname: "",
         nationality: "",
-        email: ""
+        email: "",
       });
     } catch (error) {
+      console.error("Error al crear el alumno", error);
       setErrors([error.response?.data?.message || "Error al crear el alumno"]);
       setSuccessMessage("");
     }
@@ -40,82 +56,93 @@ const AdminAlumnos = () => {
 
   return (
     <div>
-        <div className="admin-alumnos-container">
+      <BackLink
+        title="Volver a Pagina Principal"
+        onClick={() => goToInicio()}
+      />
+      <div className="admin-alumnos-container">
         <h1 className="admin-alumnos-title">Crear Alumno</h1>
         <form onSubmit={handleSubmit} className="admin-alumnos-form">
-            <div className="admin-alumnos-field">
+          <div className="admin-alumnos-field">
             <label htmlFor="identification_number">Número Identificador:</label>
             <input
-                id="identification_number"
-                type="text"
-                name="identification_number"
-                value={formData.identification_number}
-                onChange={handleChange}
-                required
+              id="identification_number"
+              type="text"
+              name="identification_number"
+              value={formData.identification_number}
+              onChange={handleChange}
+              required
             />
-            </div>
-            <div className="admin-alumnos-field">
+          </div>
+          <div className="admin-alumnos-field">
             <label htmlFor="name">Nombre:</label>
             <input
-                id="name"
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                required
+              id="name"
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              required
             />
-            </div>
-            <div className="admin-alumnos-field">
+            {errors.name && <p className="error-message">{errors.name}</p>}
+          </div>
+          <div className="admin-alumnos-field">
             <label htmlFor="lastname">Apellido:</label>
             <input
-                id="lastname"
-                type="text"
-                name="lastname"
-                value={formData.lastname}
-                onChange={handleChange}
-                required
+              id="lastname"
+              type="text"
+              name="lastname"
+              value={formData.lastname}
+              onChange={handleChange}
+              required
             />
-            </div>
-            <div className="admin-alumnos-field">
-            <label htmlFor="nationality">Nacionalidad:</label>
-            <input
-                id="nationality"
-                type="text"
-                name="nationality"
-                value={formData.nationality}
-                onChange={handleChange}
-                required
-            />
-            </div>
-            <div className="admin-alumnos-field">
+            {errors.lastname && (
+              <p className="error-message">{errors.lastname}</p>
+            )}
+          </div>
+          <div className="admin-alumnos-field">
+            <label htmlFor="nationality">Pais de Origen:</label>
+            <select
+              type="text"
+              name="nationality"
+              placeholder="Nacionalidad"
+              value={formData.nationality}
+              onChange={handleChange}
+              required
+            >
+              <CountryOption/>
+            </select>
+          </div>
+          <div className="admin-alumnos-field">
             <label htmlFor="email">Email:</label>
             <input
-                id="email"
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
+              id="email"
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
             />
-            </div>
-            <button type="submit" className="admin-alumnos-submit">
+          </div>
+          <button type="submit" className="admin-alumnos-submit" onClick={handleChange}>
             Crear Alumno
-            </button>
+          </button>
         </form>
-        {successMessage && <p className="admin-alumnos-success">{successMessage}</p>}
-        {errors.length > 0 && (
-            <div className="admin-alumnos-errors">
-            {errors.map((error, index) => (
-                <p key={index} className="admin-alumnos-error">
-                {error}
-                </p>
-            ))}
-            </div>
+        {successMessage && (
+          <p className="admin-alumnos-success">{successMessage}</p>
         )}
-        </div>
-        <AlumnosTable />
+        {errors.length > 0 && (
+          <div className="admin-alumnos-errors">
+            {errors.map((error, index) => (
+              <p key={index} className="admin-alumnos-error">
+                {error}
+              </p>
+            ))}
+          </div>
+        )}
+      </div>
+      <AlumnosTable />
     </div>
-
   );
 };
 

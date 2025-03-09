@@ -102,7 +102,7 @@ const Login = () => {
           <button type="submit" className="button1">Iniciar sesión</button>
           <button type="button" className="button2" onClick={navigateToRegister}>Registrarse</button>
         </div>
-        <button type="button" className="button3" onClick={navigateToPageAuxiliar}>¿Olvidaste tu contraseña?</button>
+        <button type="button" className="btn3" onClick={navigateToPageAuxiliar}>¿Olvidaste tu contraseña?</button>
       </form>
 
       {/* Muestra los errores de inicio de sesión, si los hay */}
