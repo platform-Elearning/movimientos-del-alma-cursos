@@ -1,6 +1,6 @@
 .card{
     width: 400px;
-    height: 216px;
+    height: auto;
     border: 2px solid;
     border-color: white;
     display: flex;
@@ -55,7 +55,8 @@
 
 
 .card-info{
-    display: flex;  
+    display: flex;
+    text-align: center;  
     font-weight: medium;
     font-size: 16px;
     line-height: auto;
@@ -70,7 +71,7 @@ p {
     margin: 3px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 868px) {
     .card {
         width: 300px;
         height: auto;
@@ -89,7 +90,7 @@ p {
     .card {
         width: 100%;
         height: auto;
-        border-radius: 20px; /* Ajuste del radio de borde redondeado */
+    
     }
 
     .card-title {

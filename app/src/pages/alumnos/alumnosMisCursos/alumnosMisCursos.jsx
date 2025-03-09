@@ -51,9 +51,7 @@ const AlumnosMisCursos = () => {
             onClick={() => goToCourse(curso.course_id)}
             key={curso.course_id}
             nombre={curso.course_name}
-            duracion={curso.duration_months}
-            lecciones={curso.quantity_lessons}
-            videos={curso.quantity_videos}
+            description={curso.description}
             btnText="IR AL MATERIAL"
           />
         ))}

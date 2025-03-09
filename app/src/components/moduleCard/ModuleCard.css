@@ -12,6 +12,7 @@
 
 .head-container {
     display: flex;
+    width: min-content;
     flex-direction: column;
     justify-content: center;
     padding: 16px;
