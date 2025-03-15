@@ -8,7 +8,7 @@
     align-items: center;
     justify-content: space-around;
     background-color: white;
-    border-radius: 50px; /* Radio de borde redondeado */
+    border-radius: 20px; /* Radio de borde redondeado */
     position: relative;
     overflow: hidden;
     z-index: 1;
@@ -21,7 +21,7 @@
     left: 0px;
     right: 0px;
     bottom: 0px;
-    border-radius: 50px; /* Radio de borde redondeado */
+    border-radius: 20px; /* Radio de borde redondeado */
     padding: 2px;
     background: linear-gradient(90deg, #83711B, #FFBB80, #83711B);
     -webkit-mask:
@@ -44,11 +44,16 @@
     
 }
 
+.card-description{
+    margin: 10px;
+}
+
 .card-title{
     align-content: center;
     color: #252422;
     font-size: 24px;
     font-weight: 600;
+    margin-top: 20px;
 
 }
 

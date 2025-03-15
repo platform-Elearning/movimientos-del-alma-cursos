@@ -45,6 +45,11 @@
     color: #555;
   }
   
+  .actions-cell{
+    display: flex;
+    justify-content: center;
+  }
+
   /* Botones de acciones */
   .action-button {
     padding: 0.4rem 0.8rem;
