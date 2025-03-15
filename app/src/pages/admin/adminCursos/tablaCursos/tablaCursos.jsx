@@ -68,7 +68,7 @@ const CoursesTable = () => {
               <td>{course.id}</td>
               <td>{course.name}</td>
               <td>{course.description}</td>
-              <td>
+              <td className="actions-cell">
               <button
                   className="action-button edit-button" onClick={() => handleEditClick(course.id)}>Editar</button>
                 <button className="action-button view-button">Ver Alumnos</button>

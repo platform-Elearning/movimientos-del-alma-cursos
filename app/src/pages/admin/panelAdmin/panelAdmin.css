@@ -1,30 +1,86 @@
+/* Contenedor principal responsivo */
 .navigation-buttons-container {
   display: flex;
-  gap: 6rem; /* Espaciado un poco mayor para mejor separación */
-  justify-content: center;
-  margin-top: 8.5rem; /* Margen más generoso para separación */
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  gap: 2rem; /* Espaciado adaptable */
+  margin-top: 5rem;
+  padding: 0 2rem;
 }
 
+/* Card principal */
+.btnContainer {
+  width: 100%;
+  max-width: 350px;
+  height: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid #252422;
+  border-radius: 20px;
+  background: #f8f9fa;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.btnContainer:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+}
+
+/* Imagen dentro del card */
+.btnContainer img {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 1rem;
+}
+
+/* Botón de navegación */
 .navigation-button {
-  padding: 0.75rem 1.5rem; /* Tamaño más cómodo */
-  font-size: 1rem;
-  font-weight: 600; /* Texto más destacable */
+  padding: 0.75rem 1.5rem;
+  font-size: 20px;
+  font-weight: 500;
   color: #fff;
-  background: linear-gradient(45deg, #007bff, #0056b3); /* Gradiente para un efecto más moderno */
+  background: #252422;
   border: none;
-  border-radius: 8px; /* Esquinas más redondeadas */
+  border-radius: 8px;
   cursor: pointer;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave para profundidad */
-  transition: transform 0.2s ease, background 0.3s ease, box-shadow 0.3s ease; /* Transiciones más dinámicas */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, background 0.3s ease, box-shadow 0.3s ease;
 }
 
 .navigation-button:hover {
-  background: linear-gradient(45deg, #0056b3, #003f7f); /* Gradiente más oscuro al pasar el cursor */
-  transform: translateY(-2px); /* Efecto de elevación */
-  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Sombra más pronunciada */
+  background: linear-gradient(45deg, #0056b3, #003f7f);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
 }
 
 .navigation-button:active {
-  transform: translateY(1px); /* Efecto de presión */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Reducción de sombra al hacer clic */
+  transform: translateY(1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Diseño responsivo */
+@media (max-width: 768px) {
+  .navigation-buttons-container {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .btnContainer {
+    max-width: 300px;
+    height: 200px;
+  }
+  
+  .btnContainer img {
+    width: 70px;
+    height: 70px;
+  }
+
+  .navigation-button {
+    font-size: 18px;
+  }
 }

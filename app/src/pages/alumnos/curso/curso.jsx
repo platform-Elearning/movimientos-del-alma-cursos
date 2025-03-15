@@ -69,7 +69,7 @@ const CourseDetails = () => {
     <>
       <div className="course-details-container">
         <div><BackLink title="Volver a Mis Formaciones" onClick={()=> goToFormation(alumnoId)}/></div>
-        <h2 className="course-title">Material: {course.courseName}</h2>
+        <h2 className="course-title">Material:<span>{course.courseName}</span> </h2>
         {modules.length > 0 ? (
           <div className="modules-grid">
             {course.courseModules.map((course) => {

@@ -23,7 +23,6 @@ const ModuleCard = ({ moduleName,lessons}) => {
     <div className="module-card">
       <div className="head-container">
         <h2>{moduleName}</h2>
-        <p>clases en vivo:</p>
       </div>
       <div className="card-lesson">
         <ul>

@@ -2,11 +2,11 @@
 .button {
   width: 189px;
   height: 46px;
-  margin: 10px;
+  margin: 20px;
   border: 1px solid transparent; /* Sin bordes visibles */
-  border-radius: 15px; /* Bordes redondeados */
+  border-radius: 10px; /* Bordes redondeados */
   color: white;
-  background-image: linear-gradient(90deg, #83711B, #FFBB80, #83711B); /* Gradiente dorado */
+  background-color: #252422; /* Gradiente dorado */
   transition: background-color 0.3s ease, border-color 0.25s ease;
   font-family: "Monserrat", sans-serif; /* Fuente */
   font-weight: bold;
