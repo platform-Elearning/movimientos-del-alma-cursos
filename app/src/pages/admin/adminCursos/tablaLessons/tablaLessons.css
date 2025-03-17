@@ -17,6 +17,7 @@
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
+  overflow-x: auto; /* Habilita el desplazamiento horizontal */
 }
 
 .admin-lessons-table th,
@@ -43,4 +44,41 @@
 
 .admin-lessons-link:hover {
   text-decoration: underline;
+}
+
+/* Media queries para dispositivos móviles */
+@media (max-width: 768px) {
+  .admin-lessons-container {
+    padding: 0 10px;
+  }
+
+  .admin-lessons-title {
+    font-size: 1.5rem;
+  }
+
+  .admin-lessons-table th,
+  .admin-lessons-table td {
+    padding: 6px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-lessons-container {
+    padding: 0 5px;
+  }
+
+  .admin-lessons-title {
+    font-size: 1.2rem;
+  }
+
+  .admin-lessons-table th,
+  .admin-lessons-table td {
+    padding: 4px;
+    font-size: 0.8rem;
+  }
+
+  .admin-lessons-table {
+    overflow-x: auto; /* Habilita el desplazamiento horizontal */
+  }
 }
