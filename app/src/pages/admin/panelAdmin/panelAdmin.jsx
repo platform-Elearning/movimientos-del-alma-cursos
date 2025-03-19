@@ -2,6 +2,9 @@ import "./panelAdmin.css";
 import { useAuth } from "../../../services/authContext";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import emojiAlumno from "../../../assets/emoji-alumnos.png";
+import emojiProfesor from "../../../assets/emoji-profesores.png";
+import emojiCurso from "../../../assets/emoji-cursos.png";
 
 const PanelAdmin = () => {
     
@@ -34,24 +37,33 @@ const PanelAdmin = () => {
     
       return (
         <div className="navigation-buttons-container">
-          <button
-            className="navigation-button"
-            onClick={() => handleNavigate("/admin/alumnos")}
-          >
-            Alumnos
-          </button>
-          <button
-            className="navigation-button"
-            onClick={() => handleNavigate("/profesores")}
-          >
-            Profesores
-          </button>
-          <button
-            className="navigation-button"
-            onClick={() => handleNavigate("/admin/cursos")}
-          >
-            Cursos
-          </button>
+          <section className="btnContainer">
+            <img src={emojiAlumno} alt="alumnoLogo" />
+            <button
+              className="navigation-button"
+              onClick={() => handleNavigate("/admin/alumnos")}
+            >
+              Alumnos
+            </button>
+          </section>
+          <section className="btnContainer">
+            <img src={emojiProfesor} alt="profesorLogo" />
+            <button
+              className="navigation-button"
+              onClick={() => handleNavigate("/admin/profesores")}
+            >
+              Profesores
+            </button>
+          </section>
+          <section className="btnContainer">
+            <img src={emojiCurso} alt="cursoLogo" />
+            <button
+              className="navigation-button"
+              onClick={() => handleNavigate("/admin/cursos")}
+            >
+              Cursos
+            </button>
+          </section>
         </div>
       );
 }

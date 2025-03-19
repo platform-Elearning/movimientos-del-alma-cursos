@@ -1,5 +1,7 @@
 /* Importación de fuentes */
 @import url("https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
 
 /* Reset general */
 html,
@@ -11,8 +13,7 @@ body {
   overflow-x: hidden; /* Evita el desbordamiento horizontal */
   font-family: "Montserrat", sans-serif;
   font-optical-sizing: auto;
-  font-weight: 300;
-  font-style: normal;
+
 }
 
 /* Contenedor principal de la página */
@@ -56,40 +57,6 @@ body {
   text-align: center; /* Centrado horizontal */
 }
 
-/* Estilos para botones */
-button {
-  border-radius: 8px; /* Bordes redondeados */
-  border: 1px solid transparent; /* Sin bordes visibles */
-  padding: 0.8em 1.5em; /* Espaciado interno */
-  font-size: 1rem; /* Tamaño de fuente */
-  font-family: inherit;
-  background-color: #1a1a1a; /* Fondo oscuro */
-  color: white;
-  cursor: pointer;
-  transition: background-color 0.3s ease, border-color 0.25s ease;
-  margin: 10px;
-}
-
-button:hover {
-  background-color: #333; /* Fondo más claro al pasar el cursor */
-  border-color: #646cff;
-}
-
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color; /* Enfoque accesible */
-}
-
-/* Tarjeta que contiene el botón */
-.card {
-  margin: 2rem auto; /* Centra la tarjeta */
-  padding: 2rem;
-  max-width: 400px; /* Máxima anchura */
-  background-color: rgba(255, 255, 255, 0.8); /* Fondo semitransparente */
-  border-radius: 8px; /* Bordes redondeados */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra ligera */
-}
-
 /* Contenedor de la sección de video */
 .video-section-container {
   width: 100%;
@@ -104,7 +71,7 @@ button:focus-visible {
 .containerIndex p {
   font-size: 1.2rem; /* Tamaño de fuente */
   line-height: 1.5; /* Altura de línea */
-  color: black;
+  color: #f9f9f9;
   margin: 1.5em 0;
   max-width: 800px; /* Limita la anchura del texto */
   margin-left: auto;
@@ -150,13 +117,5 @@ button:focus-visible {
     font-size: 3rem; /* Reduce el tamaño del texto */
   }
 
-  .card {
-    padding: 1.5rem;
-    max-width: 90%; /* Asegura que la tarjeta sea más pequeña en pantallas móviles */
-  }
-
-  button {
-    padding: 0.6em 1.2em;
-    font-size: 0.9rem;
-  }
+ 
 }

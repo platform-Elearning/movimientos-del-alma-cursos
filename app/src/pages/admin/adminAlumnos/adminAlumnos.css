@@ -1,20 +1,22 @@
-/* Contenedor principal */
+/* Contenedor principal responsivo */
 .admin-alumnos-container {
-  max-width: 500px;
-  margin: 0 auto;
+  max-width: 600px;
+  width: 90%;
+  margin: 2rem auto;
   padding: 20px;
   border: 1px solid #ccc;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
 }
 
 /* Título */
 .admin-alumnos-title {
   text-align: center;
-  color: #333;
+  color: #222;
   margin-bottom: 20px;
-  font-size: 24px;
+  font-size: 26px;
+  font-weight: bold;
 }
 
 /* Formulario */
@@ -28,63 +30,104 @@
 .admin-alumnos-field {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 8px;
 }
 
 /* Etiquetas */
 .admin-alumnos-field label {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: bold;
-  color: #555;
+  color: #444;
 }
 
 /* Campos de entrada */
-.admin-alumnos-field input {
-  padding: 10px;
-  font-size: 14px;
+.admin-alumnos-field input,
+.admin-alumnos-field select {
+  padding: 12px;
+  font-size: 16px;
   border: 1px solid #ccc;
-  border-radius: 4px;
-  transition: border-color 0.3s;
+  border-radius: 6px;
+  transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
 /* Efecto hover en los campos */
-.admin-alumnos-field input:focus {
-  border-color: #007bff;
+.admin-alumnos-field input:focus,
+.admin-alumnos-field select:focus {
+  border-color: #0056b3;
+  box-shadow: 0 0 5px rgba(0, 86, 179, 0.3);
 }
 
 /* Botón de envío */
 .admin-alumnos-submit {
-  padding: 10px 20px;
-  font-size: 16px;
+  padding: 12px;
+  font-size: 18px;
+  font-weight: bold;
   color: #fff;
-  background-color: #007bff;
+  background: linear-gradient(45deg, #007bff, #0056b3);
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: transform 0.2s ease, background 0.3s ease, box-shadow 0.3s ease;
 }
 
 /* Hover en el botón */
 .admin-alumnos-submit:hover {
-  background-color: #0056b3;
+  background: linear-gradient(45deg, #0056b3, #004494);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.admin-alumnos-submit:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* Mensaje de éxito */
 .admin-alumnos-success {
   color: #28a745;
-  font-size: 14px;
-  margin-top: 10px;
+  font-size: 16px;
+  margin-top: 15px;
   text-align: center;
+  font-weight: bold;
 }
 
 /* Contenedor de errores */
 .admin-alumnos-errors {
-  margin-top: 10px;
+  margin-top: 15px;
 }
 
 /* Mensaje de error */
 .admin-alumnos-error {
   color: #dc3545;
-  font-size: 14px;
+  font-size: 16px;
   text-align: center;
+  font-weight: bold;
+}
+
+/* Diseño responsivo */
+@media (max-width: 768px) {
+  .admin-alumnos-container {
+    max-width: 90%;
+    padding: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-alumnos-title {
+    font-size: 22px;
+  }
+
+  .admin-alumnos-field label {
+    font-size: 14px;
+  }
+
+  .admin-alumnos-field input,
+  .admin-alumnos-field select {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .admin-alumnos-submit {
+    font-size: 16px;
+  }
 }

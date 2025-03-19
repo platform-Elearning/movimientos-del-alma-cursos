@@ -6,47 +6,57 @@
     background-color: #f9f9f9;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  .table-title {
+    overflow-x: auto; /* Habilita el desplazamiento horizontal */
+}
+
+/* Título de la tabla */
+.table-title {
     text-align: center;
     font-size: 1.5rem;
     margin-bottom: 1rem;
     color: #333;
-  }
-  
-  .courses-table {
+}
+
+/* Tabla de cursos */
+.courses-table {
     width: 100%;
     border-collapse: collapse;
-  }
-  
-  .courses-table th,
-  .courses-table td {
+    min-width: 600px; /* Asegura que la tabla tenga un ancho mínimo */
+}
+
+.courses-table th,
+.courses-table td {
     border: 1px solid #ddd;
     text-align: left;
     padding: 0.75rem;
-  }
-  
-  .courses-table th {
+}
+
+.courses-table th {
     background-color: #007bff;
     color: #fff;
     font-weight: bold;
-  }
-  
-  .courses-table tr:nth-child(even) {
+}
+
+.courses-table tr:nth-child(even) {
     background-color: #f2f2f2;
-  }
-  
-  .courses-table tr:hover {
+}
+
+.courses-table tr:hover {
     background-color: #e6f7ff;
-  }
-  
-  .courses-table td {
+}
+
+.courses-table td {
     color: #555;
-  }
-  
-  /* Botones de acciones */
-  .action-button {
+}
+
+/* Celda de acciones */
+.actions-cell {
+    display: flex;
+    justify-content: center;
+}
+
+/* Botones de acciones */
+.action-button {
     padding: 0.4rem 0.8rem;
     font-size: 0.9rem;
     margin-right: 0.5rem;
@@ -54,36 +64,82 @@
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
-  }
-  
-  .edit-button {
+}
+
+.edit-button {
     background-color: #ffc107; /* Amarillo */
     color: #333;
-  }
-  
-  .edit-button:hover {
+}
+
+.edit-button:hover {
     background-color: #e0a800;
-  }
-  
-  .view-button {
+}
+
+.view-button {
     background-color: #007bff; /* Azul */
     color: #fff;
-  }
-  
-  .view-button:hover {
+}
+
+.view-button:hover {
     background-color: #0056b3;
-  }
-  
-  .add-button {
+}
+
+.add-button {
     background-color: #28a745; /* Verde */
     color: #fff;
-  }
-  
-  .add-button:hover {
+}
+
+.add-button:hover {
     background-color: #218838;
-  }
-  
-  .action-button:active {
+}
+
+.action-button:active {
     transform: translateY(1px);
-  }
-  
+}
+
+/* Media queries para dispositivos móviles */
+@media (max-width: 768px) {
+    .table-container {
+        padding: 0.5rem;
+    }
+
+    .table-title {
+        font-size: 1.2rem;
+    }
+
+    .action-button {
+        padding: 0.3rem 0.6rem;
+        font-size: 0.8rem;
+    }
+
+    .courses-table th,
+    .courses-table td {
+        padding: 0.5rem;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .table-container {
+        padding: 0.5rem;
+    }
+
+    .table-title {
+        font-size: 1rem;
+    }
+
+    .action-button {
+        padding: 0.2rem 0.4rem;
+        font-size: 0.7rem;
+    }
+
+    .courses-table th,
+    .courses-table td {
+        padding: 0.4rem;
+        font-size: 0.8rem;
+    }
+
+    .courses-table {
+        min-width: 100%; /* Asegura que la tabla ocupe todo el ancho en pantallas pequeñas */
+    }
+}

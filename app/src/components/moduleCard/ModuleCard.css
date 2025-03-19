@@ -1,0 +1,154 @@
+.module-card {
+    width: 1294px;
+    height: auto;
+    background-color: #252422;
+    display: flex;
+    flex-direction: row;
+    border-radius: 50px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+
+.head-container {
+    display: flex;
+    width: min-content;
+    flex-direction: column;
+    justify-content: center;
+    padding: 16px;
+    background-color: #252422;
+    text-align: center;
+    
+}
+
+.head-container h2 {
+  margin: 30px;
+  font-size: 24px;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  color: #ffffff;
+
+
+}
+
+.head-container p{
+    font-family: 16px;
+    font-weight: 300px;
+    color: #FFFFFF;
+}
+
+.card-lesson {
+    display: flex;
+    align-items: center;        
+}
+
+
+.card-lesson ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    list-style-type: none;
+    padding: 10px;
+    border-left: 3px solid;
+    border-image: linear-gradient(180deg, #83711B, #FFBB80, #83711B) 1;
+}
+
+.card-text {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 72px;
+    font-size: 16px;
+    margin: 8px;
+    background-color: #e0e0e0;
+    border-radius: 15px
+}
+
+.card-text span {
+    font-weight: bold;
+}
+
+.img-play{
+    padding: 15px;
+    cursor: pointer;
+}
+
+.lesson-text{
+    padding-left: 10px;
+}
+
+@media (max-width: 1024px) {
+    .module-card {
+        width: 100%;
+        height: auto;
+    
+    }
+
+    .head-container {
+        padding: 12px;
+    }
+
+    .head-container h2 {
+        font-size: 20px;
+        margin: 20px;
+    }
+
+    .card-text {
+        width: 100%;
+        height: auto;
+        font-size: 14px;
+        margin: 6px;
+    }
+}
+
+@media (max-width: 768px) {
+    .module-card {
+        width: 100%;
+        height: auto;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .head-container {
+        padding: 8px;
+    }
+
+    .head-container h2 {
+        font-size: 18px;
+        margin: 15px;
+    }
+
+    .card-text {
+        width: 100%;
+        height: auto;
+        font-size: 12px;
+        margin: 4px;
+    }
+}
+
+@media (max-width: 480px) {
+    .module-card {
+        width: 100%;
+        height: auto;
+        flex-direction: column;
+    }
+
+    .head-container {
+        padding: 4px;
+    }
+
+    .head-container h2 {
+        font-size: 16px;
+        margin: 10px;
+    }
+
+    .card-text {
+        width: 100%;
+        height: auto;
+        font-size: 10px;
+        margin: 2px;
+    }
+    
+}
