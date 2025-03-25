@@ -17,4 +17,11 @@ export const instanceEnrollmentss = axios.create({
     baseURL: `${import.meta.env.VITE_API_URL}/enrollments`,
 })
 
+export const instanceReports = axios.create({
+  baseURL: `${import.meta.env.VITE_API_URL}/report-problem`,
+  headers: {
+    "Content-Type": "application/json",
+  }
+});
+
 export default instance

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import "./ReportForm.css";
+
 
 const ReportForm = () => {
   const [userId, setUserId] = useState("");
