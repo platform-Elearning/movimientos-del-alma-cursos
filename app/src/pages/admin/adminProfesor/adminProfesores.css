@@ -1,0 +1,105 @@
+.teacher-container {
+  width: 100%;
+  max-width: 400px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.teacher-container h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.teacher-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.teacher-form input,
+.teacher-form select {
+  padding: 0.8rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  width: 100%; /* Asegura que los campos ocupen todo el ancho disponible */
+  box-sizing: border-box; /* Incluye el padding y el borde en el ancho total */
+}
+
+.teacher-form select {
+  font-size: 14px;
+  transition: border-color 0.3s;
+}
+
+.teacher-form button {
+  padding: 0.8rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.teacher-form button:hover {
+  background-color: #0056b3;
+}
+
+.success-message {
+  color: #28a745;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.error-message {
+  color: #dc3545;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .teacher-container {
+    padding: 1rem;
+    margin: 1rem;
+    max-width: 90%; /* Reduce el ancho máximo en tablets */
+  }
+
+  .teacher-form input,
+  .teacher-form select {
+    font-size: 0.9rem;
+  }
+
+  .teacher-form button {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .teacher-container {
+    padding: 1rem;
+    margin: 1rem auto; /* Centrado horizontal */
+    max-width: 100%; /* Ocupa todo el ancho disponible en celulares */
+    box-shadow: none; /* Elimina la sombra para un diseño más limpio */
+  }
+
+  .teacher-form input,
+  .teacher-form select {
+    font-size: 0.85rem;
+    padding: 0.7rem; /* Reduce el padding en dispositivos pequeños */
+  }
+
+  .teacher-form button {
+    font-size: 0.85rem;
+    padding: 0.7rem; /* Reduce el padding del botón */
+  }
+
+  .teacher-container h2 {
+    font-size: 1.5rem; /* Ajusta el tamaño del título */
+  }
+}

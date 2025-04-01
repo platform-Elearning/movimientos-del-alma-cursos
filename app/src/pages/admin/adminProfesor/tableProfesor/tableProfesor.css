@@ -1,4 +1,4 @@
-.alumnos-table-container {
+.profesores-table-container {
   overflow-x: auto;
   margin: 20px auto; /* Centrado horizontalmente */
   border: 1px solid #ddd;
@@ -9,26 +9,26 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra ligera */
 }
 
-.alumnos-table {
+.profesores-table {
   width: 100%;
   border-collapse: collapse;
   text-align: left;
 }
 
-.alumnos-table th,
-.alumnos-table td {
+.profesores-table th,
+.profesores-table td {
   padding: 12px;
   border-bottom: 1px solid #ddd;
 }
 
-.alumnos-table th {
+.profesores-table th {
   background-color: #f4f4f4;
   font-weight: bold;
   text-transform: uppercase;
   font-size: 0.95rem;
 }
 
-.alumnos-table tr:hover {
+.profesores-table tr:hover {
   background-color: #f9f9f9;
 }
 
@@ -54,14 +54,14 @@
 
 /* Responsive styles */
 @media (max-width: 1024px) {
-  .alumnos-table-container {
+  .profesores-table-container {
     margin: 15px auto;
     padding: 0.8rem;
     max-width: 95%; /* Reduce el ancho máximo en tablets */
   }
 
-  .alumnos-table th,
-  .alumnos-table td {
+  .profesores-table th,
+  .profesores-table td {
     padding: 10px;
     font-size: 0.9rem;
   }
@@ -73,14 +73,14 @@
 }
 
 @media (max-width: 768px) {
-  .alumnos-table-container {
+  .profesores-table-container {
     margin: 10px auto;
     padding: 0.8rem;
     max-width: 100%; /* Ocupa todo el ancho disponible */
   }
 
-  .alumnos-table th,
-  .alumnos-table td {
+  .profesores-table th,
+  .profesores-table td {
     padding: 8px;
     font-size: 0.85rem;
   }
@@ -92,7 +92,7 @@
 }
 
 @media (max-width: 480px) {
-  .alumnos-table-container {
+  .profesores-table-container {
     border: none;
     margin: 10px auto;
     padding: 0.5rem;
@@ -100,29 +100,29 @@
     box-shadow: none; /* Elimina la sombra para un diseño más limpio */
   }
 
-  .alumnos-table {
+  .profesores-table {
     display: block;
     width: 100%;
   }
 
-  .alumnos-table thead {
+  .profesores-table thead {
     display: none;
   }
 
-  .alumnos-table tr {
+  .profesores-table tr {
     display: block;
     margin-bottom: 10px;
     border-bottom: 1px solid #ddd;
   }
 
-  .alumnos-table td {
+  .profesores-table td {
     display: flex;
     justify-content: space-between;
     padding: 8px;
     font-size: 0.85rem;
   }
 
-  .alumnos-table td::before {
+  .profesores-table td::before {
     content: attr(data-label);
     font-weight: bold;
     text-transform: uppercase;
