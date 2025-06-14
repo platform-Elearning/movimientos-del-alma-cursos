@@ -1,42 +1,58 @@
 import React, { useState, useEffect } from "react";
-import "./editAlumno.css"; // Archivo CSS para estilizar el formulario
-import CountryOption from "../../../../components/form/CountryOption";
+import "./editProfesor.css"; // Archivo CSS para estilizar el formulario
 import BackLink from "../../../../components/backLink/BackLink";
 import { useNavigate, useLocation } from "react-router-dom";
 import ValidateField from "../../../../components/form/validateField/ValidateField";
-import { deleteAlumno, updateStudent } from "../../../../api/alumnos";
+import { deleteProfesor, updateTeacher } from "../../../../api/profesores";
+import { getCursos } from "../../../../api/cursos"; // Importar la función para obtener los cursos
 
-const EditAlumno = ({ onUpdate }) => {
+const EditProfesor = ({ onUpdate }) => {
   const [formData, setFormData] = useState({
-    user_id: "",
+    id: "", // Cambiado de user_id a id para coincidir con el backend
     email: "",
     name: "",
     lastname: "",
-    nationality: "",
+    course_id: "", // Nuevo campo para el curso asignado
   });
 
+  const [courses, setCourses] = useState([]); // Estado para almacenar los cursos disponibles
   const [errors, setErrors] = useState([]);
   const [successMessage, setSuccessMessage] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
   const { user } = location.state;
 
-  const goToStudent = () => {
-    navigate(`/admin/alumnos`);
+  const goToTeachers = () => {
+    navigate(`/admin/profesores`);
   };
 
   console.log("User:", user);
 
-  // Pre-rellenar el formulario con los datos actuales del usuario
+  // Obtener los cursos disponibles al cargar el componente
+  useEffect(() => {
+    const fetchCursos = async () => {
+      try {
+        const response = await getCursos();
+        if (response && response.data) {
+          setCourses(response.data); // Guardar los cursos en el estado
+        }
+      } catch (error) {
+        console.error("Error al cargar los cursos:", error);
+      }
+    };
+
+    fetchCursos();
+  }, []);
+
+  // Pre-rellenar el formulario con los datos actuales del profesor
   useEffect(() => {
     if (user) {
       setFormData({
-        user_id: user.user_id || "",
+        id: user.id || "", // Cambiado de user_id a id
         email: user.email || "",
         name: user.name || "",
-        last_name: user.last_name || "",
-        nationality: user.nationality || "",
-        cursos: user.cursos || [],
+        lastname: user.lastname || "",
+        course_id: user.course_id || "", // Pre-rellenar el curso asignado
       });
     }
   }, [user]);
@@ -50,13 +66,15 @@ const EditAlumno = ({ onUpdate }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await updateStudent(formData); // Pasar los datos actualizados del formulario
-      setSuccessMessage("Usuario actualizado con éxito");
+      console.log("Actualizando profesor con datos:", formData);
+      await updateTeacher(formData); // Pasar los datos actualizados del formulario
+      setSuccessMessage("Profesor actualizado con éxito");
       setErrors([]);
-      if (onUpdate) onUpdate(); // Llama a la función para refrescar la lista de usuarios
+      if (onUpdate) onUpdate(); // Llama a la función para refrescar la lista de profesores
     } catch (error) {
+      console.error("Error al actualizar el profesor:", error);
       setErrors([
-        error.response?.data?.message || "Error al actualizar el usuario",
+        error.response?.data?.message || "Error al actualizar el profesor",
       ]);
       setSuccessMessage("");
     }
@@ -64,26 +82,27 @@ const EditAlumno = ({ onUpdate }) => {
 
   const handleDelete = async () => {
     const confirmed = window.confirm(
-      "¿Estás seguro de que deseas borrar este alumno?"
+      "¿Estás seguro de que deseas borrar este profesor?"
     );
     if (!confirmed) return;
 
     try {
-      console.log("Borrando alumno", formData.user_id);
-      await deleteAlumno(formData.user_id);
+      console.log("Borrando profesor con ID:", formData.id);
+      await deleteProfesor(formData.id); // Pasar el ID directamente
       setFormData({
-        user_id: "",
+        id: "",
         email: "",
         name: "",
-        last_name: "",
-        nationality: "",
+        lastname: "",
+        course_id: "",
       });
-      setSuccessMessage("Alumno eliminado con éxito");
+      setSuccessMessage("Profesor eliminado con éxito");
       if (onUpdate) onUpdate();
-      goToStudent();
+      goToTeachers();
     } catch (error) {
+      console.error("Error al eliminar el profesor:", error);
       setErrors([
-        error.response?.data?.message || "Error al eliminar el alumno",
+        error.response?.data?.message || "Error al eliminar el profesor",
       ]);
       setSuccessMessage("");
     }
@@ -91,9 +110,9 @@ const EditAlumno = ({ onUpdate }) => {
 
   return (
     <div>
-      <BackLink title="Volver a Estudiantes" onClick={() => goToStudent()} />
+      <BackLink title="Volver a Profesores" onClick={() => goToTeachers()} />
       <div className="edit-user-container">
-        <h2 className="edit-user-title">Editar Usuario</h2>
+        <h2 className="edit-user-title">Editar Profesor</h2>
         <form onSubmit={handleSubmit} className="edit-user-form">
           <div className="edit-user-field">
             <label htmlFor="email">Email:</label>
@@ -118,27 +137,30 @@ const EditAlumno = ({ onUpdate }) => {
             />
           </div>
           <div className="edit-user-field">
-            <label htmlFor="last_name">Apellido:</label>
+            <label htmlFor="lastname">Apellido:</label>
             <input
-              id="last_name"
+              id="lastname"
               type="text"
-              name="last_name"
-              value={formData.last_name}
+              name="lastname"
+              value={formData.lastname}
               onChange={handleChange}
               required
             />
           </div>
           <div className="edit-user-field">
-            <label htmlFor="nationality">Pais de Origen:</label>
+            <label htmlFor="course_id">Curso Asignado:</label>
             <select
-              type="text"
-              name="nationality"
-              placeholder="Nacionalidad"
-              value={formData.nationality}
+              id="course_id"
+              name="course_id"
+              value={formData.course_id}
               onChange={handleChange}
               required
             >
-              <CountryOption value={formData.nationality} />
+              {courses.map((course) => (
+                <option key={course.id} value={course.id}>
+                  {course.name}
+                </option>
+              ))}
             </select>
           </div>
           <button type="submit" className="edit-user-submit">
@@ -149,7 +171,7 @@ const EditAlumno = ({ onUpdate }) => {
             className="edit-user-cancel"
             onClick={handleDelete}
           >
-            Borrar Alumno
+            Borrar Profesor
           </button>
         </form>
 
@@ -170,4 +192,4 @@ const EditAlumno = ({ onUpdate }) => {
   );
 };
 
-export default EditAlumno;
+export default EditProfesor;
