@@ -3,7 +3,6 @@ import { createAlumno } from "../../../api/alumnos";
 import "./adminAlumnos.css";
 import AlumnosTable from "./tableAlumnos/tableAlumnos";
 import ValidateField from "../../../components/form/validateField/ValidateField";
-import CountryOption from "../../../components/form/CountryOption";
 import BackLink from "../../../components/backLink/BackLink";
 import { useNavigate } from "react-router-dom";
 
@@ -102,16 +101,14 @@ const AdminAlumnos = () => {
           </div>
           <div className="admin-alumnos-field">
             <label htmlFor="nationality">Pais de Origen:</label>
-            <select
+            <input
+              id="nationality"
               type="text"
               name="nationality"
-              placeholder="Nacionalidad"
               value={formData.nationality}
               onChange={handleChange}
               required
-            >
-              <CountryOption/>
-            </select>
+            />
           </div>
           <div className="admin-alumnos-field">
             <label htmlFor="email">Email:</label>
@@ -124,7 +121,11 @@ const AdminAlumnos = () => {
               required
             />
           </div>
-          <button type="submit" className="admin-alumnos-submit" onClick={handleChange}>
+          <button
+            type="submit"
+            className="admin-alumnos-submit"
+            onClick={handleChange}
+          >
             Crear Alumno
           </button>
         </form>
