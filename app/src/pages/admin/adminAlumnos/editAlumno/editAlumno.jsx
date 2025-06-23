@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import "./editAlumno.css"; // Archivo CSS para estilizar el formulario
-import CountryOption from "../../../../components/form/CountryOption";
 import BackLink from "../../../../components/backLink/BackLink";
 import { useNavigate, useLocation } from "react-router-dom";
 import ValidateField from "../../../../components/form/validateField/ValidateField";
