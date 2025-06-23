@@ -130,16 +130,14 @@ const EditAlumno = ({ onUpdate }) => {
           </div>
           <div className="edit-user-field">
             <label htmlFor="nationality">Pais de Origen:</label>
-            <select
-              type="text"
-              name="nationality"
-              placeholder="Nacionalidad"
-              value={formData.nationality}
+            <input
+              id="email"
+              type="email"
+              name="email"
+              value={formData.email}
               onChange={handleChange}
               required
-            >
-              <CountryOption value={formData.nationality} />
-            </select>
+            />
           </div>
           <button type="submit" className="edit-user-submit">
             Guardar Cambios

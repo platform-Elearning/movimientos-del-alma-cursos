@@ -86,16 +86,14 @@ const Register = () => {
           />
           {error.lastname && <p className="error-message">{error.lastname}</p>}
           <label htmlFor="nationality">Pais de Origen:</label>
-          <select
-            type="text"
-            name="nationality"
-            placeholder="Nacionalidad"
-            value={formData.nationality}
+          <input
+            id="email"
+            type="email"
+            name="email"
+            value={formData.email}
             onChange={handleChange}
             required
-          >
-            <CountryOption />
-          </select>
+          />
           <label htmlFor="email">Email:</label>
           <input
             type="email"
