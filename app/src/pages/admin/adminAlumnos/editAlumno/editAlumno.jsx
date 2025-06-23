@@ -130,10 +130,10 @@ const EditAlumno = ({ onUpdate }) => {
           <div className="edit-user-field">
             <label htmlFor="nationality">Pais de Origen:</label>
             <input
-              id="email"
-              type="email"
-              name="email"
-              value={formData.email}
+              id="nationality"
+              type="text"
+              name="nationality"
+              value={formData.nationality}
               onChange={handleChange}
               required
             />
