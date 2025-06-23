@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import { createAlumno } from "../../../api/alumnos";
 import "./adminAlumnos.css";
 import AlumnosTable from "./tableAlumnos/tableAlumnos";

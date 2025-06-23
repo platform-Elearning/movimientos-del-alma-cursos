@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import "./editAlumno.css"; // Archivo CSS para estilizar el formulario
-import CountryOption from "../../../../components/form/CountryOption";
 import BackLink from "../../../../components/backLink/BackLink";
 import { useNavigate, useLocation } from "react-router-dom";
 import ValidateField from "../../../../components/form/validateField/ValidateField";
@@ -131,10 +130,10 @@ const EditAlumno = ({ onUpdate }) => {
           <div className="edit-user-field">
             <label htmlFor="nationality">Pais de Origen:</label>
             <input
-              id="email"
-              type="email"
-              name="email"
-              value={formData.email}
+              id="nationality"
+              type="text"
+              name="nationality"
+              value={formData.nationality}
               onChange={handleChange}
               required
             />
