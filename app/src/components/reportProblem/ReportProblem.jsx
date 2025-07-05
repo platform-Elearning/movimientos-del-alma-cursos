@@ -11,7 +11,6 @@ const ReportsList = () => {
     const fetchData = async () => {
       try {
         const data = await getReports();
-        console.log(data.data.data);
         setReports(data.data.data);
         setError(null);
       } catch (err) {
