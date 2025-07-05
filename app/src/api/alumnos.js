@@ -25,7 +25,13 @@ export const getCursosByAlumno = async (user) => {
 
   export const createAlumno = async (user) => {
     try {
-      const response = await instanceUsers.post("/createCompleteStudent", user);
+      const token = localStorage.getItem("token");
+      const response = await instanceUsers.post("/createCompleteStudent", user, 
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       return response.data;
     } catch (error) {
       throw error; 
