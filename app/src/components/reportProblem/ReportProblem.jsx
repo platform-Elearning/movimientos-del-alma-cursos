@@ -11,6 +11,7 @@ const ReportsList = () => {
     const fetchData = async () => {
       try {
         const data = await getReports();
+        console.log(`RESPONSE REPORT LIST: ${data}`);
         setReports(data);
         setError(null);
       } catch (err) {

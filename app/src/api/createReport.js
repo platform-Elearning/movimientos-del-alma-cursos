@@ -17,7 +17,7 @@ export const getReports = async () => {
         Authorization: `Bearer ${token}`,
       },
     });
-    return response.data;
+    return response;
   } catch (error) {
     throw error;
   }
