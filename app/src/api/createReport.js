@@ -1,4 +1,5 @@
 import { instanceReports } from "./axiosInstances";
+import Cookies from "js-cookie";
 
 export const createReport = async (data) => {
   try {
@@ -11,7 +12,7 @@ export const createReport = async (data) => {
 
 export const getReports = async () => {
   try {
-    const token = localStorage.getItem("token");
+    const token = Cookies.get("token");
     const response = await instanceReports.get("/get-reports", {
       headers: {
         Authorization: `Bearer ${token}`,
