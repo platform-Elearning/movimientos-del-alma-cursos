@@ -11,8 +11,8 @@ const ReportsList = () => {
     const fetchData = async () => {
       try {
         const data = await getReports();
-        console.log(`RESPONSE REPORT LIST: ${data}`);
-        setReports(data);
+        console.log(data.data.data);
+        setReports(data.data.data);
         setError(null);
       } catch (err) {
         setError(
@@ -68,17 +68,21 @@ const ReportsList = () => {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-      {reports.map((report) => (
-        <div key={report.id} className="card">
+      {reports.map((report, index) => (
+        <div key={index} className="card">
+          {" "}
+          {/* Usamos el índice como key ya que no hay id */}
           <section className="card-header">
-            <h2 className="card-title">Reporte #{report.id}</h2>
+            <h2 className="card-title">Reporte #{index + 1}</h2>{" "}
+            {/* Mostramos el índice + 1 como número de reporte */}
           </section>
           <section
             className="card-info"
             style={{ textAlign: "left", padding: "15px" }}
           >
             <div style={{ marginBottom: "10px" }}>
-              <strong>Usuario ID:</strong> {report.user_id}
+              <strong>Email:</strong> {report.email}{" "}
+              {/* Mostramos el email en lugar de user_id */}
             </div>
             <div style={{ marginBottom: "10px" }}>
               <strong>Fecha:</strong>{" "}
