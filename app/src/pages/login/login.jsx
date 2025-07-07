@@ -30,7 +30,7 @@ const Login = () => {
     if (isAuthenticated) {
       if (userRole === "student") {
         navigate(`/alumnos/miscursos/${userId}`);
-      } else if (userRole === "profesor") {
+      } else if (userRole === "teacher") {
         navigate(`/profesores/profesoresMisCursos/${userId}`);
       } else if (userRole === "admin") {
         navigate("/admin");
