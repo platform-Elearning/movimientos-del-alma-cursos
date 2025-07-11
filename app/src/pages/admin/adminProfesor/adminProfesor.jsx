@@ -13,10 +13,8 @@ const AdminProfesores = () => {
     name: "",
     lastname: "",
     email: "",
-    course_id: "", // Nuevo campo para el curso asignado
   });
 
-  const [courses, setCourses] = useState([]); // Estado para almacenar los cursos disponibles
   const [errors, setErrors] = useState("");
   const [successMessage, setSuccessMessage] = useState(""); // Used to display success messages
   const navigate = useNavigate();
@@ -26,21 +24,7 @@ const AdminProfesores = () => {
     navigate(`/admin/`);
   };
 
-  // Obtener los cursos disponibles al cargar el componente
-  useEffect(() => {
-    const fetchCursos = async () => {
-      try {
-        const response = await getCursos();
-        if (response && response.data) {
-          setCourses(response.data); // Guardar los cursos en el estado
-        }
-      } catch (error) {
-        console.error("Error al cargar los cursos:", error);
-      }
-    };
-
-    fetchCursos();
-  }, []);
+ 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -64,7 +48,6 @@ const AdminProfesores = () => {
         name: "",
         lastname: "",
         email: "",
-        course_id: "", // Reiniciar el campo del curso
       });
     } catch (error) {
       console.error("Error al crear el profesor:", error);
@@ -115,22 +98,7 @@ const AdminProfesores = () => {
             onChange={handleChange}
             required
           />
-          <label htmlFor="course_id">Asignar Curso:</label>
-          <select
-            name="course_id"
-            value={formData.course_id}
-            onChange={handleChange}
-            required
-          >
-            <option value="" disabled>
-              Selecciona un curso
-            </option>
-            {courses.map((course) => (
-              <option key={course.id} value={course.id}>
-                {course.name}
-              </option>
-            ))}
-          </select>
+          
           <button type="submit">Registrar Profesor</button>
         </form>
         {successMessage && <p className="success-message">{successMessage}</p>}
