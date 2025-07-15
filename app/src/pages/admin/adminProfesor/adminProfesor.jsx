@@ -23,7 +23,11 @@ const AdminProfesores = () => {
     navigate(`/admin/`);
   };
 
+<<<<<<< HEAD
 
+=======
+ 
+>>>>>>> d67044b3c972a28e889fc0b11a4370b8c798375c
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -97,7 +101,11 @@ const AdminProfesores = () => {
             onChange={handleChange}
             required
           />
+<<<<<<< HEAD
 
+=======
+          
+>>>>>>> d67044b3c972a28e889fc0b11a4370b8c798375c
           <button type="submit">Registrar Profesor</button>
         </form>
         {successMessage && <p className="success-message">{successMessage}</p>}

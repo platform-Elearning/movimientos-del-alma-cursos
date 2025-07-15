@@ -19,32 +19,6 @@ import { instanceCursos, instanceEnrollmentss } from "./axiosInstances";
     }
   }
 
-  export const createProfesor = async (user) => {
-    try {
-       const response = await instanceCursos.post("/profesor", user);
-      return response.data;
-    } catch (error) {
-      throw error; 
-    }
-  };
-  
-  export const editProfesor = async () => {
-    try {
-      const response = await instanceCursos.put("/profesor", user);
-      return response.data;
-     } catch (error) {
-        throw error; 
-      }
-    };
-  
-    export const deleteProfesor = async () => {
-      try {
-        const response = await instanceCursos.delete("/Profesor", user);
-      return response.data;
-    } catch (error) {
-      throw error; 
-    }
-  };
 
   export const getModulosByCursos = async (curso) => {
     try {

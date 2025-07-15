@@ -21,7 +21,13 @@ export const getProfesores = async (user) => {
 
 export const createProfesor = async (user) => {
   try {
-    const response = await instanceUsers.post("/createCompleteTeacher", user);
+    const token = localStorage.getItem("token");
+    const response = await instanceUsers.post("/createCompleteTeacher", user, 
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data;
   } catch (error) {
     throw error;
