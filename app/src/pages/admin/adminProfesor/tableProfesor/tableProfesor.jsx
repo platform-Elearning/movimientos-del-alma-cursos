@@ -91,7 +91,9 @@ const ProfesoresTable = () => {
               <td data-label="Nombre">{profesor.name}</td>
               <td data-label="Apellido">{profesor.lastname}</td>
               <td data-label="Email">{profesor.email}</td>
-              <td data-label="Curso Asignado"></td>
+              <td data-label="Curso Asignado">
+                {profesor.assigned_course || "Sin asignar"}
+              </td>
               <td data-label="Acciones">
                 <button
                   className="edit-button"

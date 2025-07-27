@@ -19,6 +19,14 @@ import ModuleDetails from "../pages/alumnos/modulo/modulo";
 import AdminProfesores from "../pages/admin/adminProfesor/adminProfesor";
 import EditProfesor from "../pages/admin/adminProfesor/editProfesor/editProfesor";
 
+// Teacher Dashboard Components
+import TeacherDashboard from "../pages/profesores/dashboard/TeacherDashboard";
+import CourseManagement from "../pages/profesores/courses/CourseManagement";
+import StudentsManagement from "../pages/profesores/students/StudentsManagement";
+import LibraryManagement from "../pages/profesores/library/LibraryManagement";
+import MessagesManagement from "../pages/profesores/messages/MessagesManagement";
+import SettingsManagement from "../pages/profesores/settings/SettingsManagement";
+
 const AppRouter = () => {
     return (
         <Routes>
@@ -45,6 +53,17 @@ const AppRouter = () => {
             <Route path="/alumnos/:alumnoId/curso/:cursoId/clase/:claseId" element={<Clase></Clase>}></Route>
 
             <Route path="/profesores/profesoresMisCursos/:id" element={<ProfesoresMisCursos></ProfesoresMisCursos>}></Route>
+            
+            {/* Teacher Dashboard Routes */}
+            <Route path="/profesores/dashboard" element={<TeacherDashboard />} />
+            <Route path="/profesores/curso/:courseId" element={<CourseManagement />} />
+            <Route path="/profesores/curso/:courseId/modulos" element={<CourseManagement />} />
+            <Route path="/profesores/curso/:courseId/estudiantes" element={<StudentsManagement />} />
+            <Route path="/profesores/mis-cursos" element={<CourseManagement />} />
+            <Route path="/profesores/estudiantes" element={<StudentsManagement />} />
+            <Route path="/profesores/biblioteca" element={<LibraryManagement />} />
+            <Route path="/profesores/mensajes" element={<MessagesManagement />} />
+            <Route path="/profesores/configuracion" element={<SettingsManagement />} />
         </Routes>
     )
 }

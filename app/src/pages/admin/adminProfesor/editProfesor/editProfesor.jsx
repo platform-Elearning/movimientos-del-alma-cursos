@@ -1,23 +1,29 @@
 import React, { useState, useEffect } from "react";
-import "./editProfesor.css"; // Archivo CSS para estilizar el formulario
+import "./editProfesor.css";
 import BackLink from "../../../../components/backLink/BackLink";
 import { useNavigate, useLocation } from "react-router-dom";
 import ValidateField from "../../../../components/form/validateField/ValidateField";
-import { deleteProfesor, updateTeacher } from "../../../../api/profesores";
-import { getCursos } from "../../../../api/cursos"; // Importar la función para obtener los cursos
+import { 
+  deleteProfesor, 
+  updateTeacher, 
+  assignCourseToTeacher
+} from "../../../../api/profesores";
+import { getCursos } from "../../../../api/cursos";
 
 const EditProfesor = ({ onUpdate }) => {
   const [formData, setFormData] = useState({
-    id: "", // Cambiado de user_id a id para coincidir con el backend
+    id: "",
     email: "",
     name: "",
     lastname: "",
-    course_id: "", // Nuevo campo para el curso asignado
+    course_id: "",
   });
 
-  const [courses, setCourses] = useState([]); // Estado para almacenar los cursos disponibles
+  const [courses, setCourses] = useState([]);
   const [errors, setErrors] = useState([]);
   const [successMessage, setSuccessMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  
   const navigate = useNavigate();
   const location = useLocation();
   const { user } = location.state;
@@ -28,31 +34,32 @@ const EditProfesor = ({ onUpdate }) => {
 
   console.log("User:", user);
 
-  // Obtener los cursos disponibles al cargar el componente
+  // Cargar cursos disponibles
   useEffect(() => {
-    const fetchCursos = async () => {
+    const fetchCourses = async () => {
       try {
-        const response = await getCursos();
-        if (response && response.data) {
-          setCourses(response.data); // Guardar los cursos en el estado
+        const coursesResponse = await getCursos();
+        if (coursesResponse && coursesResponse.data) {
+          setCourses(coursesResponse.data);
         }
       } catch (error) {
         console.error("Error al cargar los cursos:", error);
+        setErrors(["Error al cargar los cursos disponibles"]);
       }
     };
 
-    fetchCursos();
+    fetchCourses();
   }, []);
 
-  // Pre-rellenar el formulario con los datos actuales del profesor
+  // Pre-rellenar el formulario con los datos del profesor
   useEffect(() => {
     if (user) {
       setFormData({
-        id: user.id || "", // Cambiado de user_id a id
+        id: user.id || "",
         email: user.email || "",
         name: user.name || "",
         lastname: user.lastname || "",
-        course_id: user.course_id || "", // Pre-rellenar el curso asignado
+        course_id: "",
       });
     }
   }, [user]);
@@ -65,18 +72,46 @@ const EditProfesor = ({ onUpdate }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+    
     try {
       console.log("Actualizando profesor con datos:", formData);
-      await updateTeacher(formData); // Pasar los datos actualizados del formulario
+      await updateTeacher(formData);
       setSuccessMessage("Profesor actualizado con éxito");
       setErrors([]);
-      if (onUpdate) onUpdate(); // Llama a la función para refrescar la lista de profesores
+      if (onUpdate) onUpdate();
     } catch (error) {
       console.error("Error al actualizar el profesor:", error);
       setErrors([
         error.response?.data?.message || "Error al actualizar el profesor",
       ]);
       setSuccessMessage("");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // 🆕 Función para asignar curso
+  const handleAssignCourse = async () => {
+    if (!formData.course_id) {
+      setErrors(["Por favor selecciona un curso para asignar"]);
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      await assignCourseToTeacher(formData.id, formData.course_id);
+      setSuccessMessage("Curso asignado exitosamente al profesor");
+      setFormData({ ...formData, course_id: "" }); // Limpiar selección
+      setErrors([]);
+      if (onUpdate) onUpdate(); // Refrescar la tabla
+    } catch (error) {
+      console.error("Error al asignar curso:", error);
+      const errorMessage = error.response?.data?.error || "Error al asignar el curso";
+      setErrors([errorMessage]);
+      setSuccessMessage("");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -86,16 +121,10 @@ const EditProfesor = ({ onUpdate }) => {
     );
     if (!confirmed) return;
 
+    setIsLoading(true);
     try {
       console.log("Borrando profesor con ID:", formData.id);
-      await deleteProfesor(formData.id); // Pasar el ID directamente
-      setFormData({
-        id: "",
-        email: "",
-        name: "",
-        lastname: "",
-        course_id: "",
-      });
+      await deleteProfesor(formData.id);
       setSuccessMessage("Profesor eliminado con éxito");
       if (onUpdate) onUpdate();
       goToTeachers();
@@ -105,6 +134,8 @@ const EditProfesor = ({ onUpdate }) => {
         error.response?.data?.message || "Error al eliminar el profesor",
       ]);
       setSuccessMessage("");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -113,6 +144,7 @@ const EditProfesor = ({ onUpdate }) => {
       <BackLink title="Volver a Profesores" onClick={() => goToTeachers()} />
       <div className="edit-user-container">
         <h2 className="edit-user-title">Editar Profesor</h2>
+        
         <form onSubmit={handleSubmit} className="edit-user-form">
           <div className="edit-user-field">
             <label htmlFor="email">Email:</label>
@@ -123,8 +155,10 @@ const EditProfesor = ({ onUpdate }) => {
               value={formData.email}
               onChange={handleChange}
               required
+              disabled={isLoading}
             />
           </div>
+          
           <div className="edit-user-field">
             <label htmlFor="name">Nombre:</label>
             <input
@@ -134,8 +168,10 @@ const EditProfesor = ({ onUpdate }) => {
               value={formData.name}
               onChange={handleChange}
               required
+              disabled={isLoading}
             />
           </div>
+          
           <div className="edit-user-field">
             <label htmlFor="lastname">Apellido:</label>
             <input
@@ -145,17 +181,20 @@ const EditProfesor = ({ onUpdate }) => {
               value={formData.lastname}
               onChange={handleChange}
               required
+              disabled={isLoading}
             />
           </div>
+
           <div className="edit-user-field">
-            <label htmlFor="course_id">Curso Asignado:</label>
+            <label htmlFor="course_id">Asignar Curso:</label>
             <select
               id="course_id"
               name="course_id"
               value={formData.course_id}
               onChange={handleChange}
-              required
+              disabled={isLoading}
             >
+              <option value="">Selecciona un curso...</option>
               {courses.map((course) => (
                 <option key={course.id} value={course.id}>
                   {course.name}
@@ -163,15 +202,31 @@ const EditProfesor = ({ onUpdate }) => {
               ))}
             </select>
           </div>
-          <button type="submit" className="edit-user-submit">
-            Guardar Cambios
+
+          <button 
+            type="submit" 
+            className="edit-user-submit"
+            disabled={isLoading}
+          >
+            {isLoading ? "Guardando..." : "Guardar Cambios"}
           </button>
+          
+          <button
+            type="button"
+            className="assign-course-btn"
+            onClick={handleAssignCourse}
+            disabled={isLoading || !formData.course_id}
+          >
+            {isLoading ? "Asignando..." : "Asignar Curso"}
+          </button>
+          
           <button
             type="button"
             className="edit-user-cancel"
             onClick={handleDelete}
+            disabled={isLoading}
           >
-            Borrar Profesor
+            {isLoading ? "Eliminando..." : "Borrar Profesor"}
           </button>
         </form>
 
