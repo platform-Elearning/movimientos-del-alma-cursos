@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./TeacherDashboard.css";
 import Card from "../../../components/card/Card";
-import { getCoursesByTeacher } from "../../../api/profesores";
+import { getCourseByTeacherId } from "../../../api/profesores";
 import { useAuth } from "../../../services/authContext";
 
 const TeacherDashboard = () => {
@@ -26,7 +26,7 @@ const TeacherDashboard = () => {
         console.log("Cargando cursos para profesor ID:", userId);
 
         // Obtener cursos asignados al profesor
-        const coursesResponse = await getCoursesByTeacher(userId);
+        const coursesResponse = await getCourseByTeacherId(userId);
         if (coursesResponse && coursesResponse.data) {
           setAssignedCourses(coursesResponse.data);
         }
@@ -81,7 +81,7 @@ const TeacherDashboard = () => {
           </div>
         ) : (
           <div className="courses-grid">
-            { .map((course) => (
+            {assignedCourses.map((course) => (
               <Card
                 key={course.id}
                 nombre={course.name}

@@ -12,7 +12,7 @@ export const registerRequest = async (user) => {
 
   export const loginRequest = async (user) => {
     try {
-      const response = await instanceUsers.post("/login", user);
+      const response = await instanceUsers.post("/session/login", user);
 
       return response.data;
     } catch (error) {
@@ -22,7 +22,7 @@ export const registerRequest = async (user) => {
 
   export const logoutRequest = async (user) => {
     try {
-      const response = await instance.get("/logout");
+      const response = await instanceUsers.post("/session/logout");
       return response.data;
     } catch (error) {
       throw error; 
@@ -50,7 +50,7 @@ export const registerRequest = async (user) => {
   export const changePassword = async ({ email, password, newPassword1, newPassword2 }) => {
     console.log(email, password, newPassword1, newPassword2)
     try {
-      const response = await instanceUsers.post("/changePassword", {
+      const response = await instanceUsers.post("/users/changePassword", {
         email,
         password,
         newPassword1,
@@ -73,4 +73,15 @@ export const registerRequest = async (user) => {
     }
   };
 
-export const verifyTokenRequest = () => instance.get(`/verify`)
+export const verifyTokenRequest = () => instanceUsers.get(`/session/verify`)
+
+export const refreshTokenRequest = async () => {
+  try {
+    const response = await instanceUsers.post("/session/refresh-token", {}, {
+      withCredentials: true
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

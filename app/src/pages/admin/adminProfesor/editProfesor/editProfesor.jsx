@@ -97,17 +97,42 @@ const EditProfesor = ({ onUpdate }) => {
       setErrors(["Por favor selecciona un curso para asignar"]);
       return;
     }
+    
+    if (!formData.id) {
+      setErrors(["Error: ID del profesor no encontrado"]);
+      return;
+    }
+
+    console.log('🔍 Intentando asignar curso:', {
+      teacherId: formData.id,
+      courseId: formData.course_id,
+      teacherIdType: typeof formData.id,
+      courseIdType: typeof formData.course_id
+    });
 
     setIsLoading(true);
     try {
-      await assignCourseToTeacher(formData.id, formData.course_id);
+      const result = await assignCourseToTeacher(formData.id, formData.course_id);
+      console.log('✅ Asignación exitosa:', result);
+      
       setSuccessMessage("Curso asignado exitosamente al profesor");
       setFormData({ ...formData, course_id: "" }); // Limpiar selección
       setErrors([]);
       if (onUpdate) onUpdate(); // Refrescar la tabla
     } catch (error) {
-      console.error("Error al asignar curso:", error);
-      const errorMessage = error.response?.data?.error || "Error al asignar el curso";
+      console.error('❌ Error al asignar curso:', error);
+      
+      // Manejo mejorado de errores
+      let errorMessage = "Error al asignar el curso";
+      
+      if (error.response?.data?.error) {
+        errorMessage = error.response.data.error;
+      } else if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
       setErrors([errorMessage]);
       setSuccessMessage("");
     } finally {

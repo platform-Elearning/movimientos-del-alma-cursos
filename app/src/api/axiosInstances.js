@@ -21,19 +21,23 @@ const addAuthInterceptor = (instance) => {
     }
   );
 
-
+  // Interceptor de respuestas (response) - SIMPLIFICADO
   instance.interceptors.response.use(
     (response) => {
       return response;
     },
     (error) => {
-      if (error.response && error.response.status === 401) {
-        // Token expirado o inválido, limpiar tokens
+      // Solo limpiar tokens en caso de 401, sin intentar refresh automático
+      if (error.response?.status === 401) {
+        console.warn('❌ Token inválido (401), limpiando tokens...');
         Cookies.remove('token');
         localStorage.removeItem('token');
-        console.warn('Token expirado. Por favor, inicia sesión nuevamente.');
-        // Opcional: redirigir al login
-        window.location.href = '/login';
+        
+        // Solo redirigir si no estamos ya en login
+        if (!window.location.pathname.includes('/login')) {
+          console.log('🔄 Redirigiendo al login...');
+          window.location.href = '/login';
+        }
       }
       return Promise.reject(error);
     }
@@ -48,22 +52,22 @@ export const instance = addAuthInterceptor(axios.create({
 }));
 
 export const instanceUsers = addAuthInterceptor(axios.create({
-    baseURL: `${import.meta.env.VITE_API_URL}/users`,
+    baseURL: `${import.meta.env.VITE_API_URL}`,
     withCredentials: true
 }));
 
 export const instanceCursos = addAuthInterceptor(axios.create({
-    baseURL: `${import.meta.env.VITE_API_URL}/courses`,
+    baseURL: `${import.meta.env.VITE_API_URL}`,
     withCredentials: true
 }));
 
 export const instanceEnrollmentss = addAuthInterceptor(axios.create({
-    baseURL: `${import.meta.env.VITE_API_URL}/enrollments`,
+    baseURL: `${import.meta.env.VITE_API_URL}`,
     withCredentials: true
 }));
 
 export const instanceReports = addAuthInterceptor(axios.create({
-  baseURL: `${import.meta.env.VITE_API_URL}/report-problem`,
+  baseURL: `${import.meta.env.VITE_API_URL}`,
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",

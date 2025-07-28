@@ -22,6 +22,7 @@ import EditProfesor from "../pages/admin/adminProfesor/editProfesor/editProfesor
 // Teacher Dashboard Components
 import TeacherDashboard from "../pages/profesores/dashboard/TeacherDashboard";
 import CourseManagement from "../pages/profesores/courses/CourseManagement";
+import CourseDetailManagement from "../pages/profesores/courseDetail/CourseDetailManagement";
 import StudentsManagement from "../pages/profesores/students/StudentsManagement";
 import LibraryManagement from "../pages/profesores/library/LibraryManagement";
 import MessagesManagement from "../pages/profesores/messages/MessagesManagement";
@@ -57,7 +58,8 @@ const AppRouter = () => {
             {/* Teacher Dashboard Routes */}
             <Route path="/profesores/dashboard" element={<TeacherDashboard />} />
             <Route path="/profesores/curso/:courseId" element={<CourseManagement />} />
-            <Route path="/profesores/curso/:courseId/modulos" element={<CourseManagement />} />
+            <Route path="/profesores/curso/:courseId/completo" element={<CourseDetailManagement />} />
+            <Route path="/profesores/curso/:courseId/modulos" element={<CourseDetailManagement />} />
             <Route path="/profesores/curso/:courseId/estudiantes" element={<StudentsManagement />} />
             <Route path="/profesores/mis-cursos" element={<CourseManagement />} />
             <Route path="/profesores/estudiantes" element={<StudentsManagement />} />

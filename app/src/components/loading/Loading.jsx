@@ -1,0 +1,1 @@
+const Loading = () => {\n  return (\n    <div>\n      <h2>Cargando...</h2>\n    </div>\n  );\n};\n\nexport default Loading;

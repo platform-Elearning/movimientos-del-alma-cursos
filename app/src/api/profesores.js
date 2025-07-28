@@ -12,7 +12,7 @@ export const getCursosByProfesor = async (profesor) => {
 
 export const getProfesores = async (user) => {
   try {
-    const response = await instanceUsers.get("/getAllTeachers", user);
+    const response = await instanceUsers.get("/users/getAllTeachers", user);
     return response.data;
   } catch (error) {
     throw error;
@@ -21,7 +21,7 @@ export const getProfesores = async (user) => {
 
 export const createProfesor = async (user) => {
   try {
-    const response = await instanceUsers.post("/createCompleteTeacher", user);
+    const response = await instanceUsers.post("/users/createCompleteTeacher", user);
     return response.data;
   } catch (error) {
     throw error;
@@ -30,7 +30,7 @@ export const createProfesor = async (user) => {
 
 export const updateTeacher = async (userData) => {
   try {
-    const response = await instanceUsers.put("/updateTeacher", userData);
+    const response = await instanceUsers.put("/users/updateTeacher", userData);
     return response.data;
   } catch (error) {
     throw error;
@@ -39,7 +39,7 @@ export const updateTeacher = async (userData) => {
 
 export const deleteProfesor = async (id) => {
   try {
-    const response = await instanceUsers.delete(`/deleteTeacher/${id}`, id);
+    const response = await instanceUsers.delete(`/users/deleteTeacher/${id}`, id);
     return response.data;
   } catch (error) {
     throw error;
@@ -48,55 +48,90 @@ export const deleteProfesor = async (id) => {
 
 export const assignCourseToTeacher = async (teacherId, courseId) => {
   try {
-    const response = await instanceCursos.post("/assignCourseToTeacher", {
-      course_id: parseInt(courseId), 
-      teacher_id: teacherId             
-    });
+    console.log('🔍 Asignando curso - teacherId:', teacherId, 'courseId:', courseId);
+    console.log('🔍 Tipos - teacherId:', typeof teacherId, 'courseId:', typeof courseId);
+    
+    // ✅ CORRECTO: course_id y teacher_id con tipos correctos
+    const payload = {
+      course_id: parseInt(courseId),    // Course ID debe ser entero
+      teacher_id: String(teacherId)     // Teacher ID debe ser string
+    };
+    
+    console.log('🔍 Payload enviado:', payload);
+    console.log('🔍 Tipos en payload - teacher_id:', typeof payload.teacher_id, 'course_id:', typeof payload.course_id);
+    
+    const response = await instanceCursos.post("/courses/assignCourseToTeacher", payload);
+    
+    console.log('✅ Respuesta exitosa:', response.data);
     return response.data;
   } catch (error) {
-    console.error("Error en assignCourseToTeacher:", error.response?.data || error.message);
+    console.error('❌ Error en assignCourseToTeacher:', error.response?.data || error.message);
     throw error;
   }
 };
 
-
-export const getCoursesByTeacher = async (teacherId) => {
+// 🆕 Función para obtener cursos por ID de profesor (LISTA BÁSICA)
+// USAR LA RUTA CORRECTA DEL BACKEND PARA TEACHERS
+export const getCourseByTeacherId = async (teacherId) => {
   try {
-    // TODO: Tu compañero debe crear este endpoint:
-    // GET /courses/getCoursesByTeacher/:teacherId
-    // const response = await instanceCursos.get(`/getCoursesByTeacher/${teacherId}`);
-    // return response.data;
+    console.log(`🔍 getCourseByTeacherId llamada con teacherId: ${teacherId}`);
     
-    console.warn(`🚨 ENDPOINT FALTANTE: GET /courses/getCoursesByTeacher/${teacherId}`);
-    console.log("📋 Dile a tu compañero que cree este endpoint en el backend");
+    // ✅ CORREGIDO: Usar la ruta correcta que acepta teachers
+    const response = await instanceCursos.get(`/courses/getCourseCompleteByTeacherId/${teacherId}`);
     
-    // Simulación temporal elegante basada en asignaciones reales
-    // Esto verifica si el profesor tiene cursos asignados revisando la tabla teacher_courses
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({
-          success: true,
-          data: [
-            {
-              id: 1,
-              name: "Capacitación en Composición Coreográfica",
-              description: "Curso completo de composición coreográfica caracterizada por ritmo, participación comunitaria, movimientos conectados"
-            }
-          ]
-        });
-      }, 500); // Simula tiempo de carga
-    });
+    if (response.data && response.data.success && response.data.data) {
+      // Extraer solo la información básica de los cursos
+      const basicCourses = response.data.data.map(course => ({
+        id: course.id,
+        name: course.name,
+        description: course.description
+      }));
+      
+      console.log('✅ getCourseByTeacherId respuesta (extraída):', basicCourses);
+      return {
+        success: true,
+        data: basicCourses
+      };
+    }
     
+    return { success: false, data: [] };
   } catch (error) {
-    console.warn("Error obteniendo cursos del profesor:", error);
-    return { data: [] };
+    console.error('❌ Error en getCourseByTeacherId:', error.response?.data || error.message);
+    throw error;
+  }
+};
+
+// 🆕 Función para obtener curso completo con módulos y lecciones por ID de profesor
+export const getCourseCompleteByTeacherId = async (teacherId) => {
+  try {
+    console.log(`🔍 getCourseCompleteByTeacherId llamada con teacherId: ${teacherId}`);
+    const response = await instanceCursos.get(`/courses/getCourseCompleteByTeacherId/${teacherId}`);
+    console.log('✅ getCourseCompleteByTeacherId respuesta:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('❌ Error en getCourseCompleteByTeacherId:', error.response?.data || error.message);
+    throw error;
+  }
+};
+
+// 🆕 Función para obtener estudiantes por ID de curso
+export const getStudentByCourseId = async (courseId) => {
+  try {
+    console.log(`🔍 getStudentByCourseId llamada con courseId: ${courseId}`);
+    // NOTA: El backend usa "courseId" como parámetro, no "course_id"
+    const response = await instanceUsers.get(`/users/getStudentsByCourseId?courseId=${courseId}`);
+    console.log('✅ getStudentByCourseId respuesta:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('❌ Error en getStudentByCourseId:', error.response?.data || error.message);
+    throw error;
   }
 };
 
 // 🆕 Función para obtener módulos de un curso
 export const getCourseModules = async (courseId) => {
   try {
-    const response = await instanceCursos.get(`/getModulesByCourseId/${courseId}`);
+    const response = await instanceCursos.get(`/courses/getModulesByCourseId/${courseId}`);
     return response.data;
   } catch (error) {
     console.error("Error obteniendo módulos del curso:", error);
@@ -107,7 +142,7 @@ export const getCourseModules = async (courseId) => {
 // 🆕 Función para crear módulo
 export const createCourseModule = async (moduleData) => {
   try {
-    const response = await instanceCursos.post("/createCourseModule", moduleData);
+    const response = await instanceCursos.post("/courses/createCourseModule", moduleData);
     return response.data;
   } catch (error) {
     console.error("Error creando módulo:", error);
@@ -118,7 +153,7 @@ export const createCourseModule = async (moduleData) => {
 // 🆕 Función para eliminar módulo
 export const deleteCourseModule = async (moduleId) => {
   try {
-    const response = await instanceCursos.delete(`/deleteModule/${moduleId}`);
+    const response = await instanceCursos.delete(`/courses/deleteModule/${moduleId}`);
     return response.data;
   } catch (error) {
     console.error("Error eliminando módulo:", error);
@@ -129,7 +164,7 @@ export const deleteCourseModule = async (moduleId) => {
 // 🆕 Función para crear lección
 export const createLesson = async (lessonData) => {
   try {
-    const response = await instanceCursos.post("/createLesson", lessonData);
+    const response = await instanceCursos.post("/courses/createLesson", lessonData);
     return response.data;
   } catch (error) {
     console.error("Error creando lección:", error);
@@ -140,7 +175,7 @@ export const createLesson = async (lessonData) => {
 // 🆕 Función para eliminar lección
 export const deleteLesson = async (lessonId) => {
   try {
-    const response = await instanceCursos.delete(`/deleteLesson/${lessonId}`);
+    const response = await instanceCursos.delete(`/courses/deleteLesson/${lessonId}`);
     return response.data;
   } catch (error) {
     console.error("Error eliminando lección:", error);
@@ -151,7 +186,7 @@ export const deleteLesson = async (lessonId) => {
 // 🆕 Función para obtener lecciones por módulo
 export const getLessonsByModule = async (moduleId, courseId) => {
   try {
-    const response = await instanceCursos.get(`/getLessonsByModuleIdAndCourseId?module_id=${moduleId}&course_id=${courseId}`);
+    const response = await instanceCursos.get(`/courses/getLessonsByModuleIdAndCourseId?module_id=${moduleId}&course_id=${courseId}`);
     return response.data;
   } catch (error) {
     console.error("Error obteniendo lecciones:", error);
@@ -184,7 +219,7 @@ export const getStudentsByCourse = async (courseId) => {
         const param = possibleParams[i];
         console.log(`🔄 Intento ${i + 1}: /getStudentsByCourseId?${param}`);
         
-        const response = await instanceUsers.get(`/getStudentsByCourseId?${param}`);
+        const response = await instanceUsers.get(`/users/getStudentsByCourseId?${param}`);
         
         console.log('✅ ¡ÉXITO! Respuesta exitosa con parámetro:', param);
         console.log('✅ Datos recibidos:', response.data);
@@ -222,29 +257,36 @@ export const getStudentsByCourse = async (courseId) => {
   }
 };
 
-export const getCourseDetails = async (courseId) => {
+// ✅ CORREGIDO: getCourseDetails usando la ruta correcta para teachers
+export const getCourseDetails = async (courseId, teacherId) => {
   try {
-    // TODO: Tu compañero puede crear este endpoint opcional:
-    // GET /courses/getCourseDetails/:courseId
-    // Por ahora simulamos con datos básicos
+    console.log(`🔍 getCourseDetails llamada con courseId: ${courseId}, teacherId: ${teacherId}`);
     
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({
+    if (!teacherId) {
+      throw new Error('teacherId es requerido para obtener detalles del curso');
+    }
+    
+    // ✅ USAR LA RUTA CORRECTA: getCourseCompleteByTeacherId que acepta teachers
+    const response = await instanceCursos.get(`/courses/getCourseCompleteByTeacherId/${teacherId}`);
+    
+    if (response.data && response.data.success && response.data.data) {
+      // Buscar el curso específico en la lista de cursos del teacher
+      const courseData = response.data.data.find(course => course.id === parseInt(courseId));
+      
+      if (courseData) {
+        console.log('✅ getCourseDetails respuesta:', courseData);
+        return {
           success: true,
-          data: {
-            id: courseId,
-            name: "Capacitación en Composición Coreográfica",
-            description: "Curso completo de composición coreográfica caracterizada por ritmo, participación comunitaria, movimientos conectados",
-            total_modules: 0, // Se cargarán dinámicamente
-            total_lessons: 0, // Se cargarán dinámicamente
-            total_students: 0 // Se cargarán dinámicamente
-          }
-        });
-      }, 300);
-    });
+          data: courseData
+        };
+      } else {
+        throw new Error(`No se encontró el curso con ID ${courseId} para el profesor ${teacherId}`);
+      }
+    }
+    
+    throw new Error('No se pudieron obtener los cursos del profesor');
   } catch (error) {
-    console.error("Error obteniendo detalles del curso:", error);
+    console.error('❌ Error en getCourseDetails:', error.response?.data || error.message);
     throw error;
   }
 };

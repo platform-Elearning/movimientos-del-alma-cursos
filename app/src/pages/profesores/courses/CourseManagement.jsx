@@ -25,10 +25,10 @@ const CourseManagement = () => {
           return;
         }
 
-        console.log("Cargando datos del curso:", courseId);
+        console.log("Cargando datos del curso:", courseId, "para profesor:", userId);
 
-        // Obtener detalles del curso
-        const response = await getCourseDetails(courseId);
+        // ✅ CORREGIDO: Pasar teacherId como segundo parámetro
+        const response = await getCourseDetails(courseId, userId);
         if (response && response.data) {
           setCourseData(response.data);
         }
@@ -41,13 +41,13 @@ const CourseManagement = () => {
       }
     };
 
-    if (isAuthenticated !== null && courseId) {
+    if (isAuthenticated !== null && courseId && userId) {
       loadCourseData();
     }
-  }, [courseId, navigate, isAuthenticated, userRole]);
+  }, [courseId, navigate, isAuthenticated, userRole, userId]);
 
-  const handleModulesClick = () => {
-    navigate(`/profesores/curso/${courseId}/modulos`);
+  const handleCompleteViewClick = () => {
+    navigate(`/profesores/curso/${courseId}/completo`);
   };
 
   const handleStudentsClick = () => {
@@ -76,7 +76,7 @@ const CourseManagement = () => {
       <div className="course-management">
         <BackLink title="Volver al Dashboard" onClick={handleBackClick} />
         <div className="error-message">
-          No se pudo cargar la información del curso
+          {error || "No se pudo cargar la información del curso"}
         </div>
       </div>
     );
@@ -99,15 +99,15 @@ const CourseManagement = () => {
 
       <div className="course-actions">
         <Card
-          nombre="Módulos y Lecciones"
-          description="Gestiona los módulos y lecciones de tu curso"
-          btnText="Gestionar"
-          onClick={handleModulesClick}
+          nombre="Vista Completa del Curso"
+          description="Ve todos los módulos, lecciones y detalles completos del curso. Esta vista incluye toda la información necesaria para gestionar el curso."
+          btnText="Ver Vista Completa"
+          onClick={handleCompleteViewClick}
         />
         
         <Card
-          nombre="Estudiantes"
-          description="Ve el progreso y gestiona a tus estudiantes"
+          nombre="Estudiantes del Curso"
+          description="Ve el progreso y gestiona a todos los estudiantes inscritos en este curso"
           btnText="Ver Estudiantes"
           onClick={handleStudentsClick}
         />

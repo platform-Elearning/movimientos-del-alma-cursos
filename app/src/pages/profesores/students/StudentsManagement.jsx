@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import AuthUtils from '../../../utils/authUtils';
-import { getStudentsByCourse } from '../../../api/profesores';
+import { getStudentByCourseId } from '../../../api/profesores';
 import './StudentsManagement.css';
 
 const StudentsManagement = () => {
@@ -39,7 +39,7 @@ const StudentsManagement = () => {
       console.log('🔍 URL que se va a llamar:', `/users/getStudentsByCourseId?course_id=${courseId}`);
       
       // Llamar a la API real para obtener estudiantes del curso
-      const response = await getStudentsByCourse(courseId);
+      const response = await getStudentByCourseId(courseId);
       
       console.log('📋 Respuesta completa de la API:', response);
       
