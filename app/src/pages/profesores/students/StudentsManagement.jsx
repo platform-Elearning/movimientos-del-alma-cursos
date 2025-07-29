@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import AuthUtils from '../../../utils/authUtils';
 import { getStudentByCourseId } from '../../../api/profesores';
+import BackLink from '../../../components/backLink/BackLink';
 import './StudentsManagement.css';
 
 const StudentsManagement = () => {
@@ -135,12 +136,10 @@ const StudentsManagement = () => {
     return (
       <div className="students-management">
         <header className="page-header">
-          <button 
-            className="back-btn"
+          <BackLink 
+            title="Volver"
             onClick={() => navigate(-1)}
-          >
-            ← Volver
-          </button>
+          />
           <h1>Gestión de Estudiantes</h1>
         </header>
         <div className="error-message">
@@ -171,12 +170,10 @@ const StudentsManagement = () => {
   return (
     <div className="students-management">
       <header className="page-header">
-        <button 
-          className="back-btn"
-          onClick={() => navigate(-1)} // Volver a la página anterior
-        >
-          ← Volver
-        </button>
+        <BackLink 
+          title="Volver"
+          onClick={() => navigate(-1)}
+        />
         <h1>Gestión de Estudiantes</h1>
       </header>
 

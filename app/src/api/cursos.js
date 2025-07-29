@@ -21,11 +21,9 @@ export const getAllCursos = async () => {
   }
 };
 
-// ✅ NUEVA: Función genérica que decide qué endpoint usar según el contexto
 export const getCursos = async (studentId = null) => {
   try {
     if (studentId) {
-      // Si se proporciona studentId, usar la ruta de estudiante
       console.log('🎓 Obteniendo cursos para estudiante:', studentId);
       const response = await instanceCursos.get(`/courses/getCoursesByStudentId`, {
         headers: {

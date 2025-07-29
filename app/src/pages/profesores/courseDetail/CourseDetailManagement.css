@@ -14,33 +14,78 @@
   align-items: center;
   justify-content: center;
   height: 60vh;
-  color: #6b7280;
+  gap: 24px;
 }
 
-.loading-dots {
-  display: flex;
-  gap: 6px;
-  margin-bottom: 16px;
+.course-detail-loading p {
+  color: #374151;
+  font-size: 1.125rem;
+  font-weight: 500;
+  margin: 0;
+  text-align: center;
+  letter-spacing: 0.025em;
+  animation: fade-pulse 2s ease-in-out infinite;
 }
 
-.loading-dots span {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background-color: #10b981;
-  animation: pulse 1.4s ease-in-out infinite both;
-}
-
-.loading-dots span:nth-child(1) { animation-delay: -0.32s; }
-.loading-dots span:nth-child(2) { animation-delay: -0.16s; }
-
-@keyframes pulse {
-  0%, 80%, 100% {
-    opacity: 0.3;
-    transform: scale(0.8);
-  } 40% {
+@keyframes fade-pulse {
+  0%, 100% {
+    opacity: 0.7;
+  }
+  50% {
     opacity: 1;
-    transform: scale(1);
+  }
+}
+
+/* Loading spinner moderno */
+.loading-spinner {
+  position: relative;
+}
+
+.spinner-ring {
+  display: inline-block;
+  position: relative;
+  width: 64px;
+  height: 64px;
+}
+
+.spinner-ring div {
+  box-sizing: border-box;
+  display: block;
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  margin: 8px;
+  border: 4px solid transparent;
+  border-radius: 50%;
+  animation: spinner-ring-animation 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  border-color: #10b981 transparent transparent transparent;
+}
+
+.spinner-ring div:nth-child(1) {
+  animation-delay: -0.45s;
+  border-color: #10b981 transparent transparent transparent;
+}
+
+.spinner-ring div:nth-child(2) {
+  animation-delay: -0.3s;
+  border-color: #059669 transparent transparent transparent;
+}
+
+.spinner-ring div:nth-child(3) {
+  animation-delay: -0.15s;
+  border-color: #047857 transparent transparent transparent;
+}
+
+.spinner-ring div:nth-child(4) {
+  border-color: #065f46 transparent transparent transparent;
+}
+
+@keyframes spinner-ring-animation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }
 
@@ -208,26 +253,29 @@
   box-shadow: 0 4px 16px rgba(99, 102, 241, 0.3);
 }
 
-/* === GRID DE MÓDULOS EN COLUMNAS === */
+/* === LISTA DE MÓDULOS EN FILAS (VERTICAL) === */
 .modules-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
   margin-top: 16px;
 }
 
 .module-card {
   background: #ffffff;
   border: 1px solid #e5e7eb;
-  border-radius: 20px;
-  padding: 32px;
+  border-radius: 16px;
+  padding: 24px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   display: flex;
-  flex-direction: column;
-  min-height: 280px;
+  flex-direction: row;
+  align-items: center;
+  gap: 24px;
+  min-height: auto;
+  width: 100%;
 }
 
 .module-card:hover {
@@ -238,11 +286,11 @@
 
 .module-header {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 20px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid #f3f4f6;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  min-width: 120px;
+  flex-shrink: 0;
 }
 
 .module-header h3 {
@@ -260,8 +308,8 @@
 
 .module-actions {
   display: flex;
-  gap: 4px;
-  opacity: 0.6;
+  gap: 8px;
+  opacity: 0.7;
   transition: all 0.2s ease;
 }
 
@@ -270,45 +318,48 @@
   transform: scale(1.05);
 }
 
+.module-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
 .module-name {
   color: #111827;
-  font-size: 1.5rem;
-  font-weight: 800;
-  margin-bottom: 16px;
-  line-height: 1.2;
+  font-size: 1.375rem;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.3;
   letter-spacing: -0.025em;
-  flex-grow: 0;
 }
 
 .module-description {
   color: #6b7280;
-  font-size: 1rem;
-  line-height: 1.6;
-  margin-bottom: auto;
-  flex-grow: 1;
-  min-height: 60px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 0;
 }
 
 .module-stats {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-top: 20px;
-  margin-top: 16px;
-  border-top: 1px solid #f3f4f6;
+  min-width: 160px;
+  flex-shrink: 0;
 }
 
 .lessons-count {
   background: linear-gradient(135deg, #10b981, #059669);
   color: white;
-  padding: 10px 20px;
+  padding: 8px 16px;
   border-radius: 12px;
   font-size: 0.875rem;
   font-weight: 700;
   letter-spacing: 0.025em;
   box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);
   text-align: center;
-  width: 100%;
+  white-space: nowrap;
 }
 
 /* === LISTA DE LECCIONES === */
@@ -407,6 +458,7 @@
 /* === BOTONES DE ACCIÓN MINIMALISTAS === */
 .btn-edit,
 .btn-delete,
+.btn-delete-force,
 .btn-view {
   background: none;
   border: none;
@@ -429,6 +481,32 @@
 .btn-delete:hover {
   background: #fef2f2;
   transform: scale(1.1);
+}
+
+.btn-delete-force {
+  position: relative;
+}
+
+.btn-delete-force:hover {
+  background: #fef2f2;
+  transform: scale(1.1);
+}
+
+.btn-delete-force::after {
+  content: '⚡';
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  font-size: 0.7rem;
+  background: #dc2626;
+  color: white;
+  border-radius: 50%;
+  width: 14px;
+  height: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
 }
 
 .btn-view:hover {
@@ -607,13 +685,20 @@
   }
   
   .modules-grid {
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 24px;
+    gap: 20px;
   }
   
   .module-card {
-    min-height: 240px;
-    padding: 24px;
+    padding: 20px;
+    gap: 20px;
+  }
+  
+  .module-header {
+    min-width: 100px;
+  }
+  
+  .module-stats {
+    min-width: 140px;
   }
 }
 
@@ -644,8 +729,26 @@
   }
   
   .modules-grid {
-    grid-template-columns: 1fr;
     gap: 16px;
+  }
+  
+  .module-card {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+    padding: 20px;
+  }
+  
+  .module-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    min-width: auto;
+  }
+  
+  .module-stats {
+    min-width: auto;
+    align-self: center;
   }
   
   .modules-section,
@@ -710,19 +813,40 @@
     font-size: 1.375rem;
   }
   
-  .module-card,
+  .module-card {
+    padding: 16px;
+  }
+  
+  .module-header h3 {
+    font-size: 0.7rem;
+    padding: 4px 8px;
+  }
+  
+  .module-name {
+    font-size: 1.25rem;
+  }
+  
+  .module-description {
+    font-size: 0.9rem;
+  }
+  
+  .lessons-count {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+  
   .lesson-card {
-    padding: 20px;
+    padding: 16px;
   }
   
   .lesson-number {
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     font-size: 0.875rem;
   }
   
   .no-modules,
   .no-lessons {
-    padding: 60px 24px;
+    padding: 40px 20px;
   }
 }

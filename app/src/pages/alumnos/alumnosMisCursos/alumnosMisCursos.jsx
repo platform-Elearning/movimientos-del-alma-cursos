@@ -14,7 +14,6 @@ const AlumnosMisCursos = () => {
   const fetchCursos = async () => {
     try {
       const cursosData = await getCoursesByStudentId(alumnoId);
-      console.log("Datos recibidos de la API:", cursosData);
 
       if (cursosData.success && Array.isArray(cursosData.data)) {
         setCursos(cursosData.data);

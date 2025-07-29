@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AuthUtils from '../../../utils/authUtils';
+import BackLink from '../../../components/backLink/BackLink';
 import './LibraryManagement.css';
 
 const LibraryManagement = () => {
@@ -228,12 +229,10 @@ const LibraryManagement = () => {
   return (
     <div className="library-management">
       <header className="page-header">
-        <button 
-          className="back-btn"
+        <BackLink 
+          title="Volver al Dashboard"
           onClick={() => navigate('/profesores/dashboard')}
-        >
-          ← Volver al Dashboard
-        </button>
+        />
         <h1>Biblioteca de Archivos</h1>
       </header>
 

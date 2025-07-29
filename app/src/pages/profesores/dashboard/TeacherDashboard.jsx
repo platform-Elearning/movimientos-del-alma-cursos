@@ -50,12 +50,15 @@ const TeacherDashboard = () => {
   if (isLoading) {
     return (
       <div className="teacher-loading">
-        <div className="loading-dots">
-          <span></span>
-          <span></span>
-          <span></span>
+        <div className="loading-spinner">
+          <div className="spinner-ring">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
         </div>
-        <p>Cargando panel del profesor...</p>
+        <p>Cargando dashboard del profesor...</p>
       </div>
     );
   }
