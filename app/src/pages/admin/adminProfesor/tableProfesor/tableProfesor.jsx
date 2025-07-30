@@ -12,18 +12,16 @@ const ProfesoresTable = () => {
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
 
-  // Función para traer los profesores desde la API
   const fetchProfesores = async () => {
     try {
       const response = await getProfesores();
-      console.log("Respuesta de la API:", response);
       if (response && response.data && Array.isArray(response.data)) {
         setProfesores(response.data);
+        setError("");
       } else {
-        throw new Error("La respuesta de la API no es un array");
+        throw new Error("La respuesta de la API no es válida");
       }
     } catch (err) {
-      console.error("Error al cargar los profesores:", err);
       setError("Error al cargar los profesores");
     }
   };
@@ -36,10 +34,8 @@ const ProfesoresTable = () => {
     navigate(`/admin/editarProfesor/${profesor.id}`, {
       state: { user: profesor },
     });
-    console.log(`Editar profesor con ID: ${profesor.id}`);
   };
 
-  // 🖱️ Funciones para el desplazamiento con el mouse
   const handleMouseDown = (e) => {
     setIsDragging(true);
     setStartX(e.pageX - tableContainerRef.current.offsetLeft);
@@ -54,7 +50,7 @@ const ProfesoresTable = () => {
     if (!isDragging) return;
     e.preventDefault();
     const x = e.pageX - tableContainerRef.current.offsetLeft;
-    const walk = (x - startX) * 2; // Ajusta la sensibilidad del desplazamiento
+    const walk = (x - startX) * 2;
     tableContainerRef.current.scrollLeft = scrollLeft - walk;
   };
 
@@ -66,7 +62,7 @@ const ProfesoresTable = () => {
       onMouseLeave={handleMouseLeaveOrUp}
       onMouseUp={handleMouseLeaveOrUp}
       onMouseMove={handleMouseMove}
-      style={{ cursor: isDragging ? "grabbing" : "grab" }} // Cambio de cursor
+      style={{ cursor: isDragging ? "grabbing" : "grab" }}
     >
       {error && <p className="error-message">{error}</p>}
       <table className="profesores-table">
@@ -83,7 +79,7 @@ const ProfesoresTable = () => {
         </thead>
         <tbody>
           {profesores.map((profesor, index) => (
-            <tr key={index}>
+            <tr key={profesor.id || index}>
               <td data-label="ID">{profesor.id}</td>
               <td data-label="Número Identificador">
                 {profesor.identification_number}

@@ -11,8 +11,9 @@ const Clase = () => {
 
   console.log("location.state:", location.state);
   console.log("classItem:", classItem);
+  console.log("🎥 URL del video:", classItem?.lessonUrl || classItem?.url); // ✅ AGREGADO: Debug de URL
 
-  const embedUrl = getEmbedUrl(classItem?.lessonUrl);
+  const embedUrl = getEmbedUrl(classItem?.lessonUrl || classItem?.url); // ✅ CORREGIDO: Soportar ambos nombres de propiedad
 
   if (!classItem) {
     return (
@@ -57,16 +58,37 @@ const Clase = () => {
 };
 
 const getEmbedUrl = (url) => {
-  if (!url) return ""; // Devuelve vacío si no hay URL
+  console.log('🔗 getEmbedUrl recibió URL:', url);
+  
+  if (!url) {
+    console.log('⚠️ No hay URL proporcionada');
+    return ""; // Devuelve vacío si no hay URL
+  }
 
   let videoIdMatch;
   if (url.includes("youtube.com")) {
-    videoIdMatch = url.match(/v=([^&]+)/); // Extrae el ID del video de la URL
+    // ✅ MEJORADO: Regex más robusta que maneja parámetros adicionales
+    videoIdMatch = url.match(/[?&]v=([a-zA-Z0-9_-]{11})/);
+    console.log('🎥 YouTube URL estándar detectada, ID extraído:', videoIdMatch?.[1]);
   } else if (url.includes("youtu.be")) {
-    videoIdMatch = url.match(/youtu.be\/([^?]+)/); // Extrae el ID del video de la URL corta
+    // ✅ MEJORADO: Regex más robusta para URLs cortas
+    videoIdMatch = url.match(/youtu.be\/([a-zA-Z0-9_-]{11})/);
+    console.log('🎥 YouTube URL corta detectada, ID extraído:', videoIdMatch?.[1]);
+  } else {
+    console.log('⚠️ URL no es de YouTube:', url);
   }
 
-  return videoIdMatch ? `https://www.youtube.com/embed/${videoIdMatch[1]}` : "";
+  // ✅ FALLBACK: Si no se encontró match, intentar extraer cualquier ID de 11 caracteres
+  if (!videoIdMatch) {
+    console.log('🔄 Intentando extraer ID con método alternativo...');
+    videoIdMatch = url.match(/([a-zA-Z0-9_-]{11})/);
+    console.log('🔍 ID alternativo encontrado:', videoIdMatch?.[1]);
+  }
+
+  const embedUrl = videoIdMatch ? `https://www.youtube.com/embed/${videoIdMatch[1]}` : "";
+  console.log('🎥 URL de embed generada:', embedUrl);
+  
+  return embedUrl;
 };
 
 export default Clase;

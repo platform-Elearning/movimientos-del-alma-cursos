@@ -16,7 +16,6 @@ export const createAlumno = async (user) => {
 
 export const getAlumnos = async () => {
   try {
-    console.log(`Llamando a la API para obtener los alumnos ${instanceUsers}`);
     const response = await instanceUsers.get("/users/getStudentsWithCourses");
     return response.data;
   } catch (error) {
@@ -32,7 +31,6 @@ export const updateStudent = async (user_id) => {
     throw error;
   }
 };
-
 
 export const deleteAlumno = async (user_id) => {
   try {
@@ -51,6 +49,3 @@ export const getCursosByAlumno = async (user) => {
     throw error;
   }
 };
-
-
-

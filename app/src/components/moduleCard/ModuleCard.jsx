@@ -10,9 +10,20 @@ const ModuleCard = ({ moduleName,lessons}) => {
   const { classItem } = location.state || {};
   
   
-  const goToModule = (classItem) => {
+  const goToModule = (lesson) => {
+    // ✅ CORREGIDO: Normalizar los datos de la lección
+    const classItem = {
+      lessonNumber: lesson.lessonNumber,
+      lessonTitle: lesson.lessonTitle,
+      lessonDescription: lesson.lessonDescription,
+      lessonUrl: lesson.url, // ✅ IMPORTANTE: Mapear 'url' a 'lessonUrl'
+      id: lesson.id
+    };
+    
+    console.log('📁 Navegando a clase con datos:', classItem);
+    
     navigate(
-      `/alumnos/${alumnoId}/curso/${cursoId}/clase/${classItem.lessonNumber}`,
+      `/alumnos/${alumnoId}/curso/${cursoId}/clase/${lesson.lessonNumber}`,
       {
         state: { classItem },
       }

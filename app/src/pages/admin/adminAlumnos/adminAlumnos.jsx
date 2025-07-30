@@ -1,4 +1,4 @@
-import  { useState } from "react";
+import { useState } from "react";
 import { createAlumno } from "../../../api/alumnos";
 import "./adminAlumnos.css";
 import AlumnosTable from "./tableAlumnos/tableAlumnos";
@@ -20,9 +20,8 @@ const AdminAlumnos = () => {
   const navigate = useNavigate();
 
   const goToInicio = () => {
-  navigate(`/admin/`);
+    navigate('/admin/');
   };
-
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -34,10 +33,9 @@ const AdminAlumnos = () => {
     e.preventDefault();
     setErrors("");
     setSuccessMessage("");
+    
     try {
-      console.log("enviando datos:", formData)
       const response = await createAlumno(formData);
-      console.log("respuesta del servidor:", response);
       setSuccessMessage("Alumno creado con éxito");
       setFormData({
         identification_number: "",
@@ -47,7 +45,6 @@ const AdminAlumnos = () => {
         email: "",
       });
     } catch (error) {
-      console.error("Error al crear el alumno", error);
       setErrors([error.response?.data?.message || "Error al crear el alumno"]);
       setSuccessMessage("");
     }
@@ -56,8 +53,8 @@ const AdminAlumnos = () => {
   return (
     <div>
       <BackLink
-        title="Volver a Pagina Principal"
-        onClick={() => goToInicio()}
+        title="Volver a Página Principal"
+        onClick={goToInicio}
       />
       <div className="admin-alumnos-container">
         <h1 className="admin-alumnos-title">Crear Alumno</h1>
@@ -73,6 +70,7 @@ const AdminAlumnos = () => {
               required
             />
           </div>
+          
           <div className="admin-alumnos-field">
             <label htmlFor="name">Nombre:</label>
             <input
@@ -85,6 +83,7 @@ const AdminAlumnos = () => {
             />
             {errors.name && <p className="error-message">{errors.name}</p>}
           </div>
+          
           <div className="admin-alumnos-field">
             <label htmlFor="lastname">Apellido:</label>
             <input
@@ -95,12 +94,11 @@ const AdminAlumnos = () => {
               onChange={handleChange}
               required
             />
-            {errors.lastname && (
-              <p className="error-message">{errors.lastname}</p>
-            )}
+            {errors.lastname && <p className="error-message">{errors.lastname}</p>}
           </div>
+          
           <div className="admin-alumnos-field">
-            <label htmlFor="nationality">Pais de Origen:</label>
+            <label htmlFor="nationality">País de Origen:</label>
             <input
               id="nationality"
               type="text"
@@ -110,6 +108,7 @@ const AdminAlumnos = () => {
               required
             />
           </div>
+          
           <div className="admin-alumnos-field">
             <label htmlFor="email">Email:</label>
             <input
@@ -121,17 +120,16 @@ const AdminAlumnos = () => {
               required
             />
           </div>
-          <button
-            type="submit"
-            className="admin-alumnos-submit"
-            onClick={handleChange}
-          >
+          
+          <button type="submit" className="admin-alumnos-submit">
             Crear Alumno
           </button>
         </form>
+        
         {successMessage && (
           <p className="admin-alumnos-success">{successMessage}</p>
         )}
+        
         {errors.length > 0 && (
           <div className="admin-alumnos-errors">
             {errors.map((error, index) => (
@@ -142,6 +140,7 @@ const AdminAlumnos = () => {
           </div>
         )}
       </div>
+      
       <AlumnosTable />
     </div>
   );

@@ -1,8 +1,11 @@
-import { instanceCursos, instanceEnrollmentss } from "./axiosInstances";
+import { instanceCursos, instanceEnrollments } from "./axiosInstances";
+
+// =====================================================
+// 🎓 GESTIÓN DE CURSOS
+// =====================================================
 
 export const createCourse = async (course) => {
   try {
-    console.log("course", course);
     const response = await instanceCursos.post("/courses/createCourse", course);
     return response.data;
   } catch (error) {
@@ -10,8 +13,6 @@ export const createCourse = async (course) => {
   }
 };
 
-// ⚠️ PROBLEMA: Esta función requiere permisos de ADMIN
-// Solo debe usarse en contextos administrativos
 export const getAllCursos = async () => {
   try {
     const response = await instanceCursos.get("/courses/getAllCourses");
@@ -24,7 +25,6 @@ export const getAllCursos = async () => {
 export const getCursos = async (studentId = null) => {
   try {
     if (studentId) {
-      console.log('🎓 Obteniendo cursos para estudiante:', studentId);
       const response = await instanceCursos.get(`/courses/getCoursesByStudentId`, {
         headers: {
           id: studentId,
@@ -32,23 +32,10 @@ export const getCursos = async (studentId = null) => {
       });
       return response.data;
     } else {
-      // Si no hay studentId, intentar obtener todos los cursos (requiere admin)
-      console.log('🔧 Obteniendo todos los cursos (requiere admin)');
       const response = await instanceCursos.get("/courses/getAllCourses");
       return response.data;
     }
   } catch (error) {
-    console.error("Error al obtener cursos:", error);
-    throw error;
-  }
-};
-  
-export const registerStudentToCourse = async (enrollmentData) => {
-  try {
-    const response = await instanceEnrollmentss.post("/enrollments/registerToCourse", enrollmentData);
-    return response.data;
-  } catch (error) {
-    console.error("Error registering student to course:", error);
     throw error;
   }
 };
@@ -57,15 +44,18 @@ export const getCoursesByStudentId = async (studentId) => {
   try {
     const response = await instanceCursos.get(`/courses/getCoursesByStudentId`, {
       headers: {
-        id: studentId, // Pasar el ID en los headers
+        id: studentId, // Pasar el ID en los headers como espera el backend
       },
     });
     return response.data;
   } catch (error) {
-    console.error("Error al obtener los cursos por studentId:", error);
     throw error;
   }
 };
+
+// =====================================================
+// 📚 GESTIÓN DE MÓDULOS
+// =====================================================
 
 export const createModule = async (moduleData) => {
   try {
@@ -75,10 +65,11 @@ export const createModule = async (moduleData) => {
     );
     return response.data;
   } catch (error) {
-    console.error("Error al enviar los datos del módulo:", error);
     throw error;
   }
 };
+
+export const createCourseModule = createModule;
 
 export const getModulosByCursos = async (curso) => {
   try {
@@ -98,6 +89,15 @@ export const getModulesByCourseID = async (id) => {
   }
 };
 
+export const getCourseModules = async (courseId) => {
+  try {
+    const response = await instanceCursos.get(`/courses/getModulesByCourseId/${courseId}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const getModulesByAlumnoAndCurso = async (userId, courseId) => {
   try {
     const response = await instanceCursos.get(
@@ -108,7 +108,20 @@ export const getModulesByAlumnoAndCurso = async (userId, courseId) => {
     throw error;
   }
 };
-  
+
+export const deleteCourseModule = async (moduleId) => {
+  try {
+    const response = await instanceCursos.delete(`/courses/deleteModule/${moduleId}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// =====================================================
+// 📖 GESTIÓN DE LECCIONES
+// =====================================================
+
 export const createLesson = async (lessonData) => {
   try {
     const response = await instanceCursos.post("/courses/createLesson", lessonData);
@@ -116,12 +129,19 @@ export const createLesson = async (lessonData) => {
   } catch (error) {
     throw error;
   }
-};  
+};
 
-// CORREGIDA: Los parámetros estaban en el orden incorrecto
+export const deleteLesson = async (lessonId) => {
+  try {
+    const response = await instanceCursos.delete(`/courses/deleteLesson/${lessonId}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const getLessonsByModuleIdAndCourseId = async (courseId, moduleId) => {
   try {
-    // Corregido el orden de los parámetros para que coincida con el backend
     const response = await instanceCursos.get(
       `/courses/getLessonsByModuleIdAndCourseId?module_id=${moduleId}&course_id=${courseId}`
     );
@@ -129,7 +149,28 @@ export const getLessonsByModuleIdAndCourseId = async (courseId, moduleId) => {
   } catch (error) {
     throw error;
   }
-};  
-  
+};
+
+export const getLessonsByModule = async (moduleId, courseId) => {
+  try {
+    const response = await instanceCursos.get(`/courses/getLessonsByModuleIdAndCourseId?module_id=${moduleId}&course_id=${courseId}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// =====================================================
+// 🎯 INSCRIPCIONES Y REGISTROS
+// =====================================================
+
+export const registerStudentToCourse = async (enrollmentData) => {
+  try {
+    const response = await instanceEnrollments.post("/enrollments/registerToCourse", enrollmentData);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 
 export default getCursos;

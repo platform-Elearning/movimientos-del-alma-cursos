@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import "./curso.css";
 import { getModulesByAlumnoAndCurso, getCoursesByStudentId, getModulesByCourseID, getLessonsByModuleIdAndCourseId } from "../../../api/cursos";
+import { getTokenInfo } from "../../../api/axiosInstances";
 import ModuleCard from "../../../components/moduleCard/ModuleCard";
 import BackLink from "../../../components/backLink/BackLink";
 
@@ -18,6 +19,10 @@ const CourseDetails = () => {
     try {
       console.log('🔍 Obteniendo módulos para alumno:', alumnoId, 'curso:', cursoId);
       
+      // Obtener información del token para verificar el rol del usuario
+      const tokenInfo = getTokenInfo();
+      console.log('🔑 Token info:', tokenInfo);
+      
       // ✅ CORREGIDO: Usar getCoursesByStudentId en lugar de getCursos
       const courseResponse = await getCoursesByStudentId(alumnoId);
       console.log('📚 Cursos del estudiante:', courseResponse);
@@ -31,14 +36,56 @@ const CourseDetails = () => {
         });
       }
       
-      // Ahora obtener los módulos del curso
-      const modulesResponse = await getModulesByCourseID(cursoId);
-      console.log('📝 Módulos del curso:', modulesResponse);
+      // ✅ NUEVO: Usar la función correcta según el rol del usuario
+      let modulesData = [];
       
-      if (modulesResponse.success && Array.isArray(modulesResponse.data)) {
-        // Para cada módulo, obtener sus lecciones
+      if (tokenInfo?.userRole === 'student') {
+        // Para estudiantes: usar la función que filtra por modules_covered
+        console.log('👨‍🎓 Usuario es estudiante, obteniendo módulos filtrados...');
+        const filteredResponse = await getModulesByAlumnoAndCurso(alumnoId, cursoId);
+        console.log('📝 Módulos filtrados para estudiante:', filteredResponse);
+        
+        if (filteredResponse.success && Array.isArray(filteredResponse.data) && filteredResponse.data.length > 0) {
+          // La respuesta ya viene con la estructura completa: curso > módulos > lecciones
+          const courseData = filteredResponse.data[0]; // Primer (y único) curso
+          if (courseData.courseModules && Array.isArray(courseData.courseModules)) {
+            modulesData = courseData.courseModules.map(module => ({
+              id: module.moduleId,
+              name: module.moduleName,
+              description: module.moduleDescription || 'Sin descripción',
+              classes: module.moduleLessons?.map(lesson => ({
+                lessonNumber: lesson.lessonNumber,
+                lessonTitle: lesson.lessonTitle,
+                lessonDescription: lesson.lessonDescription,
+                url: lesson.lessonUrl,
+                id: lesson.lessonId
+              })) || []
+            }));
+          }
+        } else {
+          console.warn('⚠️ No se encontraron módulos filtrados, usando función estándar...');
+          // Fallback a la función estándar
+          const modulesResponse = await getModulesByCourseID(cursoId);
+          if (modulesResponse.success && Array.isArray(modulesResponse.data)) {
+            modulesData = modulesResponse.data;
+          }
+        }
+      } else {
+        // Para admin/teacher: usar la función estándar que obtiene todos los módulos
+        console.log('👨‍💼 Usuario es admin/teacher, obteniendo todos los módulos...');
+        const modulesResponse = await getModulesByCourseID(cursoId);
+        console.log('📝 Todos los módulos del curso:', modulesResponse);
+        
+        if (modulesResponse.success && Array.isArray(modulesResponse.data)) {
+          modulesData = modulesResponse.data;
+        }
+      }
+      
+      // Si modulesData no tiene lecciones, las obtenemos
+      if (modulesData.length > 0 && !modulesData[0].classes) {
+        console.log('🔄 Obteniendo lecciones para los módulos...');
         const modulesWithLessons = await Promise.all(
-          modulesResponse.data.map(async (module) => {
+          modulesData.map(async (module) => {
             try {
               // Obtener las lecciones de cada módulo
               const lessonsResponse = await getLessonsByModuleIdAndCourseId(cursoId, module.id);
@@ -72,26 +119,26 @@ const CourseDetails = () => {
             }
           })
         );
-        
         setModules(modulesWithLessons);
-        
-        // Actualizamos course con los módulos
-        setCourse(prev => ({
-          ...prev,
-          courseModules: modulesWithLessons.map(module => ({
-            moduleId: module.id,
-            moduleName: module.name,
-            moduleDescription: module.description,
-            moduleLessons: module.classes
-          }))
-        }));
       } else {
-        throw new Error('No se pudieron obtener los módulos del curso');
+        // Ya tenemos las lecciones
+        setModules(modulesData);
       }
+      
+      // Actualizamos course con los módulos
+      setCourse(prev => ({
+        ...prev,
+        courseModules: modulesData.map(module => ({
+          moduleId: module.id,
+          moduleName: module.name,
+          moduleDescription: module.description,
+          moduleLessons: module.classes || []
+        }))
+      }));
       
     } catch (error) {
       console.error('❌ Error al obtener los módulos:', error);
-      setError('Error al obtener los módulos');
+      setError(`Error al obtener los módulos: ${error.message}`);
     } finally {
       setLoading(false);
     }

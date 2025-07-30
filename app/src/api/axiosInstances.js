@@ -2,11 +2,38 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 
-// Flag para evitar múltiples intentos de refresh simultáneos
+// =====================================================
+// 🔧 CONFIGURACIÓN Y CONSTANTES
+// =====================================================
+
+const TOKEN_REFRESH_THRESHOLD = 300; // 5 minutos en segundos
+const REQUEST_TIMEOUT = 30000; // 30 segundos
+const REFRESH_TIMEOUT = 10000; // 10 segundos para refresh
+
+// Estado para controlar refresh simultáneos
 let isRefreshing = false;
 let failedQueue = [];
 
-// Función para procesar la cola de peticiones fallidas
+// =====================================================
+// 🛠️ UTILIDADES DE TOKEN
+// =====================================================
+
+const getAuthToken = () => {
+  return Cookies.get('token') || localStorage.getItem('token');
+};
+
+const isTokenExpiringSoon = (token, threshold = TOKEN_REFRESH_THRESHOLD) => {
+  try {
+    const decoded = jwtDecode(token);
+    const currentTime = Date.now() / 1000;
+    const timeUntilExpiry = decoded.exp - currentTime;
+    
+    return timeUntilExpiry < threshold;
+  } catch (error) {
+    return true;
+  }
+};
+
 const processQueue = (error, token = null) => {
   failedQueue.forEach(({ resolve, reject }) => {
     if (error) {
@@ -19,30 +46,12 @@ const processQueue = (error, token = null) => {
   failedQueue = [];
 };
 
-// Función para obtener el token de las cookies
-const getAuthToken = () => {
-  return Cookies.get('token') || localStorage.getItem('token');
-};
+// =====================================================
+// 🔄 MANEJO DE REFRESH TOKEN
+// =====================================================
 
-// Función para verificar si el token está próximo a expirar
-const isTokenExpiringSoon = (token, threshold = 300) => {
-  try {
-    const decoded = jwtDecode(token);
-    const currentTime = Date.now() / 1000;
-    const timeUntilExpiry = decoded.exp - currentTime;
-    
-    return timeUntilExpiry < threshold; // threshold en segundos (default: 5 minutos)
-  } catch (error) {
-    return true; // Si no se puede decodificar, asumir que expira
-  }
-};
-
-// Función para refrescar el token
 const refreshAuthToken = async () => {
   try {
-    console.log('🔄 Renovando token...');
-    
-    // Configurar correctamente las cookies para el backend
     const response = await axios.post(
       `${import.meta.env.VITE_API_URL}/session/refresh-token`,
       {},
@@ -52,7 +61,7 @@ const refreshAuthToken = async () => {
           'Content-Type': 'application/json',
           'Accept': 'application/json'
         },
-        timeout: 10000 // 10 segundos de timeout
+        timeout: REFRESH_TIMEOUT
       }
     );
 
@@ -62,102 +71,57 @@ const refreshAuthToken = async () => {
       throw new Error('No se recibió token del servidor');
     }
     
-    // Verificar que el nuevo token sea válido
     const decoded = jwtDecode(token);
     
-    // Guardar el nuevo token con configuración correcta para el backend
     Cookies.set('token', token, {
       expires: new Date(decoded.exp * 1000),
-      secure: false, // Cambiar a false para desarrollo local
-      sameSite: 'Lax', // Cambiar de Strict a Lax
-      path: '/' // Asegurar que sea accesible en toda la app
+      secure: false,
+      sameSite: 'Lax',
+      path: '/'
     });
     localStorage.setItem('token', token);
     
-    console.log('✅ Token renovado exitosamente');
     return token;
   } catch (error) {
-    console.error('❌ Error al renovar token:', error.response?.data || error.message);
-    
-    // Si falla el refresh, limpiar todo
     Cookies.remove('token');
     localStorage.removeItem('token');
     
-    // Emitir evento personalizado para que otros componentes puedan reaccionar
+    // Emitir evento para componentes que lo escuchen
     window.dispatchEvent(new CustomEvent('auth:token-expired'));
-    
-    // Solo redirigir si no estamos ya en login
-    if (!window.location.pathname.includes('/login')) {
-      console.log('🔄 Redirigiendo al login...');
-      window.location.href = '/login';
-    }
     
     throw error;
   }
 };
 
+// =====================================================
+// 🔒 INTERCEPTORES DE AXIOS
+// =====================================================
+
 const addAuthInterceptor = (instance, instanceName = 'default') => {
-  // Interceptor de peticiones (request)
+  // Request Interceptor
   instance.interceptors.request.use(
     async (config) => {
       const token = getAuthToken();
       
       if (token) {
-        // TEMPORALMENTE DESACTIVADO: Verificar si el token está próximo a expirar
-        // Uncomment when backend refresh-token is fixed:
-        /*
-        if (isTokenExpiringSoon(token, 300)) { // 5 minutos
-          console.log(`🔄 Token próximo a expirar en ${instanceName}, renovando antes de la petición...`);
-          
-          try {
-            // Si ya se está refrescando, esperar
-            if (isRefreshing) {
-              await new Promise((resolve, reject) => {
-                failedQueue.push({ resolve, reject });
-              });
-            } else {
-              await refreshAuthToken();
-            }
-            
-            // Usar el token actualizado
-            const newToken = getAuthToken();
-            if (newToken) {
-              config.headers.Authorization = `Bearer ${newToken}`;
-            }
-          } catch (error) {
-            console.error(`❌ Error al renovar token antes de petición en ${instanceName}:`, error);
-            return Promise.reject(error);
-          }
-        } else {
-          config.headers.Authorization = `Bearer ${token}`;
-        }
-        */
-        
-        // Por ahora, solo usar el token actual sin renovación automática
         config.headers.Authorization = `Bearer ${token}`;
       }
       
       return config;
     },
     (error) => {
-      console.error(`❌ Error en request interceptor de ${instanceName}:`, error);
       return Promise.reject(error);
     }
   );
 
-  // Interceptor de respuestas (response)
+  // Response Interceptor
   instance.interceptors.response.use(
     (response) => {
       return response;
     },
     async (error) => {
-      console.warn(`Error ${error.response?.status} en ${instanceName}:`, error.message);
-      
-      // SOLO emitir evento para errores 401 (token realmente expirado)
+      // Solo emitir evento para errores 401 (token realmente expirado)
       if (error.response?.status === 401) {
-        console.warn('Token inválido o expirado detectado en axios interceptor');
-        
-        // Emitir evento para que el hook maneje la redirección
         window.dispatchEvent(new CustomEvent('auth:token-expired', {
           detail: { error: error, instance: instanceName }
         }));
@@ -170,16 +134,18 @@ const addAuthInterceptor = (instance, instanceName = 'default') => {
   return instance;
 };
 
-// Configuración base para todas las instancias
+// =====================================================
+// 📡 INSTANCIAS DE AXIOS
+// =====================================================
+
 const baseConfig = {
   withCredentials: true,
-  timeout: 30000, // 30 segundos
+  timeout: REQUEST_TIMEOUT,
   headers: {
     'Content-Type': 'application/json'
   }
 };
 
-// Crear instancias con configuraciones específicas
 export const instance = addAuthInterceptor(
   axios.create({
     ...baseConfig,
@@ -204,7 +170,7 @@ export const instanceCursos = addAuthInterceptor(
   'instanceCursos'
 );
 
-export const instanceEnrollmentss = addAuthInterceptor(
+export const instanceEnrollments = addAuthInterceptor(
   axios.create({
     ...baseConfig,
     baseURL: `${import.meta.env.VITE_API_URL}`,
@@ -220,7 +186,10 @@ export const instanceReports = addAuthInterceptor(
   'instanceReports'
 );
 
-// Función utilitaria para obtener información del token actual
+// =====================================================
+// 🔍 UTILIDADES PÚBLICAS
+// =====================================================
+
 export const getTokenInfo = () => {
   const token = getAuthToken();
   if (!token) return null;
@@ -238,16 +207,14 @@ export const getTokenInfo = () => {
       isValid: timeUntilExpiry > 0,
       expiresIn: Math.floor(timeUntilExpiry),
       expiresInMinutes: Math.floor(timeUntilExpiry / 60),
-      isExpiringSoon: timeUntilExpiry < 300, // menos de 5 minutos
+      isExpiringSoon: timeUntilExpiry < TOKEN_REFRESH_THRESHOLD,
       token: token
     };
   } catch (error) {
-    console.error('Error al decodificar token:', error);
     return null;
   }
 };
 
-// Función para forzar renovación de token (útil para debugging)
 export const forceTokenRefresh = () => {
   return refreshAuthToken();
 };

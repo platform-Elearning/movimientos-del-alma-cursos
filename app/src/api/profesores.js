@@ -1,5 +1,8 @@
-import axios from "axios";
 import { instanceUsers, instanceCursos } from "./axiosInstances";
+
+// =====================================================
+// 👨‍🏫 FUNCIONES ESPECÍFICAS DE GESTIÓN DE PROFESORES
+// =====================================================
 
 export const createProfesor = async (user) => {
   try {
@@ -31,7 +34,6 @@ export const updateTeacher = async (userData) => {
   }
 };
 
-
 export const deleteProfesor = async (id) => {
   try {
     const response = await instanceUsers.delete(
@@ -44,15 +46,9 @@ export const deleteProfesor = async (id) => {
   }
 };
 
-export const getCursosByProfesor = async (profesor) => {
-  try {
-    const response = await axios.get("/profesores/cursos", profesor);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
-
+// =====================================================
+// 🎯 FUNCIONES DE ASIGNACIÓN Y RELACIÓN PROFESOR-CURSO
+// =====================================================
 
 export const assignCourseToTeacher = async (teacherId, courseId) => {
   try {
@@ -97,63 +93,13 @@ export const getCourseCompleteByTeacherId = async (teacherId) => {
   }
 };
 
+// =====================================================
+// 👥 FUNCIONES DE CONSULTA DE ESTUDIANTES POR CURSO
+// =====================================================
+
 export const getStudentByCourseId = async (courseId) => {
   try {
     const response = await instanceUsers.get(`/users/getStudentsByCourseId?courseId=${courseId}`);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const getCourseModules = async (courseId) => {
-  try {
-    const response = await instanceCursos.get(`/courses/getModulesByCourseId/${courseId}`);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const createCourseModule = async (moduleData) => {
-  try {
-    const response = await instanceCursos.post("/courses/createCourseModule", moduleData);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const deleteCourseModule = async (moduleId) => {
-  try {
-    const response = await instanceCursos.delete(`/courses/deleteModule/${moduleId}`);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const createLesson = async (lessonData) => {
-  try {
-    const response = await instanceCursos.post("/courses/createLesson", lessonData);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const deleteLesson = async (lessonId) => {
-  try {
-    const response = await instanceCursos.delete(`/courses/deleteLesson/${lessonId}`);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const getLessonsByModule = async (moduleId, courseId) => {
-  try {
-    const response = await instanceCursos.get(`/courses/getLessonsByModuleIdAndCourseId?module_id=${moduleId}&course_id=${courseId}`);
     return response.data;
   } catch (error) {
     throw error;
@@ -168,6 +114,10 @@ export const getStudentsByCourse = async (courseId) => {
     throw error;
   }
 };
+
+// =====================================================
+// 📋 FUNCIONES DE DETALLE DE CURSO PARA PROFESOR
+// =====================================================
 
 export const getCourseDetails = async (courseId, teacherId) => {
   try {

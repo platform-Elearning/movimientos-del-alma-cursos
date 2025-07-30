@@ -16,28 +16,22 @@ const AdminProfesores = () => {
   });
 
   const [errors, setErrors] = useState("");
-  const [successMessage, setSuccessMessage] = useState(""); // Used to display success messages
+  const [successMessage, setSuccessMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  // Verificar autenticación al cargar el componente
   useEffect(() => {
     if (!AuthUtils.checkAndCleanExpiredToken()) {
-      console.log('Token expirado o no válido, redirigiendo al login');
-      // navigate('/login'); // Descomenta esta línea si tienes una ruta de login
+      navigate('/login');
     }
   }, [navigate]);
 
   const goToInicio = () => {
-    console.log("Navegando a la página de inicio...");
-    navigate(`/admin/`);
+    navigate('/admin/');
   };
-
-
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log(`Campo cambiado: ${name}, Valor: ${value}`);
     setFormData({ ...formData, [name]: value });
     ValidateField(name, value, errors, setErrors);
   };
@@ -45,21 +39,17 @@ const AdminProfesores = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Verificar autenticación antes de enviar
     if (!AuthUtils.checkAndCleanExpiredToken()) {
       setErrors("Sesión expirada. Por favor, inicia sesión nuevamente.");
       return;
     }
 
-    console.log("Formulario enviado con los siguientes datos:", formData);
     setErrors("");
     setSuccessMessage("");
     setIsLoading(true);
     
     try {
-      console.log("Enviando datos al servidor...");
       await createProfesor(formData);
-      console.log("Profesor creado con éxito en el servidor.");
       setSuccessMessage("Profesor creado con éxito");
       setFormData({
         identification_number: "",
@@ -68,9 +58,6 @@ const AdminProfesores = () => {
         email: "",
       });
     } catch (error) {
-      console.error("Error al crear el profesor:", error);
-      
-      // Manejo detallado de errores
       if (error.response?.status === 401) {
         setErrors("Sesión expirada. Por favor, inicia sesión nuevamente.");
         AuthUtils.removeToken();
@@ -89,7 +76,7 @@ const AdminProfesores = () => {
 
   return (
     <div>
-      <BackLink title="Ir pagina de Inicio" onClick={() => goToInicio()} />
+      <BackLink title="Ir página de Inicio" onClick={goToInicio} />
       <div className="teacher-container">
         <h2>Registro de Profesor</h2>
         <form onSubmit={handleSubmit} className="teacher-form">
@@ -101,6 +88,7 @@ const AdminProfesores = () => {
             onChange={handleChange}
             required
           />
+          
           <label htmlFor="name">Nombre:</label>
           <input
             type="text"
@@ -110,6 +98,7 @@ const AdminProfesores = () => {
             required
           />
           {errors.name && <p className="error-message">{errors.name}</p>}
+          
           <label htmlFor="lastname">Apellido:</label>
           <input
             type="text"
@@ -118,9 +107,8 @@ const AdminProfesores = () => {
             onChange={handleChange}
             required
           />
-          {errors.lastname && (
-            <p className="error-message">{errors.lastname}</p>
-          )}
+          {errors.lastname && <p className="error-message">{errors.lastname}</p>}
+          
           <label htmlFor="email">Email:</label>
           <input
             type="email"
@@ -134,10 +122,12 @@ const AdminProfesores = () => {
             {isLoading ? "Registrando..." : "Registrar Profesor"}
           </button>
         </form>
+        
         {successMessage && <p className="success-message">{successMessage}</p>}
         {errors && typeof errors === 'string' && <p className="error-message">{errors}</p>}
         {errors && typeof errors === 'object' && errors.general && <p className="error-message">{errors.general}</p>}
       </div>
+      
       <ProfesoresTable />
     </div>
   );

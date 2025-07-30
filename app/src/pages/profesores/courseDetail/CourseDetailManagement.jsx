@@ -4,25 +4,24 @@ import "./CourseDetailManagement.css";
 import BackLink from "../../../components/backLink/BackLink";
 import { useAuth } from "../../../services/authContext";
 import useTokenExpiration from "../../../hooks/useTokenExpiration";
+import { getCourseCompleteByTeacherId } from "../../../api/profesores";
 import { 
-  getCourseCompleteByTeacherId, 
   createCourseModule, 
   deleteCourseModule,
   createLesson,
-  deleteLesson,
-  getLessonsByModule 
-} from "../../../api/profesores";
+  deleteLesson
+} from "../../../api/cursos";
 
 const CourseDetailManagement = () => {
   const { courseId } = useParams();
   const navigate = useNavigate();
   const { isAuthenticated, userId, userRole } = useAuth();
-  const { handleAuthError, checkTokenValidity } = useTokenExpiration();
+  const { handleAuthError } = useTokenExpiration();
   
   const [courseCompleteData, setCourseCompleteData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
-  const [currentView, setCurrentView] = useState('modules'); // 'modules' or 'lessons'
+  const [currentView, setCurrentView] = useState('modules');
   const [selectedModule, setSelectedModule] = useState(null);
   const [showModuleForm, setShowModuleForm] = useState(false);
   const [showLessonForm, setShowLessonForm] = useState(false);
@@ -65,15 +64,10 @@ const CourseDetailManagement = () => {
           setError("No se encontró información del curso");
         }
       }
-
     } catch (error) {
-      console.error("Error al cargar datos del curso:", error.response?.status);
-      
-      // Usar el hook para manejar errores de autenticación
       const isAuthError = handleAuthError(error);
-      
       if (!isAuthError) {
-        setError("Error al cargar los datos completos del curso");
+        setError("Error al cargar los datos del curso");
       }
     } finally {
       setIsLoading(false);
@@ -99,35 +93,21 @@ const CourseDetailManagement = () => {
       
       if (confirmDeleteLessons) {
         try {
-          // Eliminar todas las lecciones primero
-          console.log('Eliminando lecciones del módulo...');
           for (const lesson of module.lessons) {
             await deleteLesson(lesson.id);
-            console.log(`Lección ${lesson.id} eliminada`);
           }
           
-          // Luego eliminar el módulo
-          console.log('Eliminando módulo...');
           await deleteCourseModule(moduleId);
-          
-          // Recargar datos del curso
-          const response = await getCourseCompleteByTeacherId(userId);
-          if (response && response.data) {
-            const courseData = Array.isArray(response.data) 
-              ? response.data.find(course => course.id === parseInt(courseId))
-              : response.data;
-            setCourseCompleteData(courseData);
-          }
-          
-          console.log('Módulo y lecciones eliminados exitosamente');
+          await loadCourseCompleteData();
+          setError('');
         } catch (error) {
-          console.error('Error al eliminar módulo con lecciones:', error);
-          setError('Error al eliminar el módulo y sus lecciones. Algunas lecciones pueden haber sido eliminadas.');
-          setTimeout(() => setError(''), 5000);
+          const isAuthError = handleAuthError(error);
+          if (!isAuthError) {
+            setError('Error al eliminar el módulo y sus lecciones');
+          }
         }
       }
     } else {
-      // Si no tiene lecciones, usar el método normal
       handleDeleteModule(moduleId, module);
     }
   };
@@ -152,22 +132,16 @@ const CourseDetailManagement = () => {
       };
 
       await createCourseModule(moduleData);
+      await loadCourseCompleteData();
       
-      // Recargar datos del curso
-      const response = await getCourseCompleteByTeacherId(userId);
-      if (response && response.data) {
-        const courseData = Array.isArray(response.data) 
-          ? response.data.find(course => course.id === parseInt(courseId))
-          : response.data;
-        setCourseCompleteData(courseData);
-      }
-
-      // Resetear formulario
       setModuleFormData({ name: '', description: '', module_number: '' });
       setShowModuleForm(false);
+      setError('');
     } catch (error) {
-      console.error('Error al crear módulo:', error);
-      setError('Error al crear el módulo');
+      const isAuthError = handleAuthError(error);
+      if (!isAuthError) {
+        setError('Error al crear el módulo');
+      }
     }
   };
 
@@ -183,45 +157,12 @@ const CourseDetailManagement = () => {
       try {
         await deleteCourseModule(moduleId);
         await loadCourseCompleteData();
-        setError(''); // Limpiar errores
-        
+        setError('');
       } catch (error) {
-        console.error('Error al eliminar módulo:', error.response?.status, error.response?.data?.message);
-        
-        // Usar el hook para manejar errores de autenticación
         const isAuthError = handleAuthError(error);
-        
         if (!isAuthError) {
-          // Si no es error de autenticación, mostrar mensaje de error normal
-          const status = error.response?.status;
-          const message = error.response?.data?.message || error.response?.data?.errorMessage || '';
-          
-          let errorMessage = 'Error al eliminar el módulo';
-          
-          if (status === 500) {
-            errorMessage = 'Error interno del servidor. Contacta al administrador técnico o inténtalo más tarde.';
-          } else if (status === 409) {
-            if (message.toLowerCase().includes('user not exist')) {
-              errorMessage = 'Error de usuario: Tu usuario no fue encontrado en el servidor. Contacta al administrador.';
-            } else if (message.toLowerCase().includes('lecciones') || message.toLowerCase().includes('lessons')) {
-              errorMessage = `El módulo tiene lecciones asociadas en el servidor. Usa el botón especial ⚡ para eliminar con lecciones.`;
-            } else {
-              errorMessage = `Error de conflicto: ${message || 'Hay dependencias que impiden la eliminación'}`;
-            }
-          } else if (status === 404) {
-            errorMessage = 'El módulo no existe o ya fue eliminado.';
-          } else if (status === 403) {
-            errorMessage = 'No tienes permisos para eliminar este módulo.';
-          } else if (!error.response) {
-            errorMessage = 'No se pudo conectar con el servidor. Verifica tu conexión a internet.';
-          } else {
-            errorMessage = `Error del servidor (${status}): ${message || 'Error desconocido'}`;
-          }
-          
-          setError(errorMessage);
-          setTimeout(() => setError(''), 8000);
+          setError('Error al eliminar el módulo');
         }
-        // Si es error de auth, el hook ya maneja la redirección
       }
     }
   };
@@ -239,80 +180,36 @@ const CourseDetailManagement = () => {
       };
 
       await createLesson(lessonData);
+      await loadCourseCompleteData();
       
-      // Recargar datos del curso
-      const response = await getCourseCompleteByTeacherId(userId);
-      if (response && response.data) {
-        const courseData = Array.isArray(response.data) 
-          ? response.data.find(course => course.id === parseInt(courseId))
-          : response.data;
-        setCourseCompleteData(courseData);
-        
-        // Actualizar el módulo seleccionado
-        const updatedModule = courseData.modules.find(m => m.id === selectedModule.id);
-        setSelectedModule(updatedModule);
-      }
-
-      // Resetear formulario
+      const updatedModule = courseCompleteData.modules.find(m => m.id === selectedModule.id);
+      setSelectedModule(updatedModule);
+      
       setLessonFormData({ title: '', description: '', url: '', lesson_number: '' });
       setShowLessonForm(false);
+      setError('');
     } catch (error) {
-      console.error('Error al crear lección:', error);
-      setError('Error al crear la lección');
+      const isAuthError = handleAuthError(error);
+      if (!isAuthError) {
+        setError('Error al crear la lección');
+      }
     }
   };
 
   const handleDeleteLesson = async (lessonId) => {
     if (window.confirm('¿Estás seguro de que quieres eliminar esta lección?')) {
       try {
-        console.log('Intentando eliminar lección con ID:', lessonId);
         await deleteLesson(lessonId);
+        await loadCourseCompleteData();
         
-        // Recargar datos del curso
-        const response = await getCourseCompleteByTeacherId(userId);
-        if (response && response.data) {
-          const courseData = Array.isArray(response.data) 
-            ? response.data.find(course => course.id === parseInt(courseId))
-            : response.data;
-          setCourseCompleteData(courseData);
-          
-          // Actualizar el módulo seleccionado
-          const updatedModule = courseData.modules.find(m => m.id === selectedModule.id);
-          setSelectedModule(updatedModule);
-        }
-        
-        console.log('Lección eliminada exitosamente');
+        const updatedModule = courseCompleteData.modules.find(m => m.id === selectedModule.id);
+        setSelectedModule(updatedModule);
+        setError('');
       } catch (error) {
-        console.error('Error al eliminar lección:', error);
-        
-        // Manejo específico de errores
-        let errorMessage = 'Error al eliminar la lección';
-        
-        if (error.response) {
-          const status = error.response.status;
-          const data = error.response.data;
-          
-          switch (status) {
-            case 404:
-              errorMessage = 'La lección no existe o ya fue eliminada.';
-              break;
-            case 403:
-              errorMessage = 'No tienes permisos para eliminar esta lección.';
-              break;
-            case 400:
-              errorMessage = data.message || 'Solicitud inválida. Verifica los datos de la lección.';
-              break;
-            default:
-              errorMessage = `Error del servidor (${status}): ${data.message || 'Error desconocido'}`;
-          }
-        } else if (error.request) {
-          errorMessage = 'No se pudo conectar con el servidor. Verifica tu conexión a internet.';
+        const isAuthError = handleAuthError(error);
+        if (!isAuthError) {
+          setError('Error al eliminar la lección');
         }
-        
-        setError(errorMessage);
-        
-        // Limpiar el error después de 5 segundos
-        setTimeout(() => setError(''), 5000);
       }
     }
   };
@@ -328,7 +225,7 @@ const CourseDetailManagement = () => {
             <div></div>
           </div>
         </div>
-        <p>Cargando dashboard del profesor...</p>
+        <p>Cargando información del curso...</p>
       </div>
     );
   }
@@ -362,14 +259,12 @@ const CourseDetailManagement = () => {
           <button 
             className="btn-secondary"
             onClick={() => setError('')}
-            style={{ marginTop: '1rem' }}
           >
             ✖ Cerrar
           </button>
         </div>
       )}
 
-      {/* Estadísticas del curso */}
       <div className="course-stats">
         <div className="stat-item">
           <span className="stat-number">
@@ -394,7 +289,6 @@ const CourseDetailManagement = () => {
         </div>
       </div>
 
-      {/* Botón para ver estudiantes */}
       <div className="course-actions">
         <button 
           className="btn-primary students-btn"
@@ -404,7 +298,6 @@ const CourseDetailManagement = () => {
         </button>
       </div>
 
-      {/* Vista de Módulos */}
       {currentView === 'modules' && (
         <div className="modules-section">
           <div className="section-header">
@@ -417,7 +310,6 @@ const CourseDetailManagement = () => {
             </button>
           </div>
 
-          {/* Formulario para crear módulo */}
           {showModuleForm && (
             <div className="form-overlay">
               <div className="form-container">
@@ -464,7 +356,6 @@ const CourseDetailManagement = () => {
             </div>
           )}
 
-          {/* Lista de módulos */}
           {!courseCompleteData.modules || courseCompleteData.modules.length === 0 ? (
             <div className="no-modules">
               <h3>No hay módulos disponibles</h3>
@@ -485,7 +376,6 @@ const CourseDetailManagement = () => {
                         📖
                       </button>
                       {module.lessons && module.lessons.length > 0 ? (
-                        // Si tiene lecciones, mostrar botón especial
                         <button 
                           className="btn-delete-force"
                           onClick={() => handleDeleteModuleWithLessons(module.id, module)}
@@ -494,7 +384,6 @@ const CourseDetailManagement = () => {
                           🗑️
                         </button>
                       ) : (
-                        // Si no tiene lecciones, botón normal
                         <button 
                           className="btn-delete"
                           onClick={() => handleDeleteModule(module.id, module)}
@@ -521,7 +410,6 @@ const CourseDetailManagement = () => {
         </div>
       )}
 
-      {/* Vista de Lecciones */}
       {currentView === 'lessons' && selectedModule && (
         <div className="lessons-section">
           <div className="section-header">
@@ -534,7 +422,6 @@ const CourseDetailManagement = () => {
             </button>
           </div>
 
-          {/* Formulario para crear lección */}
           {showLessonForm && (
             <div className="form-overlay">
               <div className="form-container">
@@ -590,7 +477,6 @@ const CourseDetailManagement = () => {
             </div>
           )}
 
-          {/* Lista de lecciones */}
           {!selectedModule.lessons || selectedModule.lessons.length === 0 ? (
             <div className="no-lessons">
               <h3>No hay lecciones disponibles</h3>
