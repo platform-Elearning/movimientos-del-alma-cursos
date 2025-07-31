@@ -5,9 +5,9 @@ import "./alumnosMisCursos.css";
 import Card from "../../../components/card/Card";
 
 const AlumnosMisCursos = () => {
-  const { alumnoId } = useParams(); // Obtener el ID del estudiante desde la URL
-  const navigate = useNavigate(); // Inicializar navigate
-  const [cursos, setCursos] = useState([]); // Estado inicial como un array vacío
+  const { alumnoId } = useParams(); 
+  const navigate = useNavigate();
+  const [cursos, setCursos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 

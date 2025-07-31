@@ -2,17 +2,10 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 
-// =====================================================
-// 🔧 CONFIGURACIÓN Y CONSTANTES
-// =====================================================
 
 const TOKEN_REFRESH_THRESHOLD = 300; // 5 minutos en segundos
 const REQUEST_TIMEOUT = 30000; // 30 segundos
 const REFRESH_TIMEOUT = 10000; // 10 segundos para refresh
-
-// Estado para controlar refresh simultáneos
-let isRefreshing = false;
-let failedQueue = [];
 
 // =====================================================
 // 🛠️ UTILIDADES DE TOKEN
@@ -22,33 +15,6 @@ const getAuthToken = () => {
   return Cookies.get('token') || localStorage.getItem('token');
 };
 
-const isTokenExpiringSoon = (token, threshold = TOKEN_REFRESH_THRESHOLD) => {
-  try {
-    const decoded = jwtDecode(token);
-    const currentTime = Date.now() / 1000;
-    const timeUntilExpiry = decoded.exp - currentTime;
-    
-    return timeUntilExpiry < threshold;
-  } catch (error) {
-    return true;
-  }
-};
-
-const processQueue = (error, token = null) => {
-  failedQueue.forEach(({ resolve, reject }) => {
-    if (error) {
-      reject(error);
-    } else {
-      resolve(token);
-    }
-  });
-  
-  failedQueue = [];
-};
-
-// =====================================================
-// 🔄 MANEJO DE REFRESH TOKEN
-// =====================================================
 
 const refreshAuthToken = async () => {
   try {
@@ -213,10 +179,6 @@ export const getTokenInfo = () => {
   } catch (error) {
     return null;
   }
-};
-
-export const forceTokenRefresh = () => {
-  return refreshAuthToken();
 };
 
 export default instance;

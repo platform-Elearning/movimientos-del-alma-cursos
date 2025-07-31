@@ -25,14 +25,37 @@ const CourseDetails = () => {
       
       // ✅ CORREGIDO: Usar getCoursesByStudentId en lugar de getCursos
       const courseResponse = await getCoursesByStudentId(alumnoId);
-      console.log('📚 Cursos del estudiante:', courseResponse);
+      console.log('📚 Cursos del estudiante COMPLETO:', courseResponse);
       
       // Buscar el curso específico
-      const courseInfo = courseResponse.data?.find(course => course.id === parseInt(cursoId));
+      console.log('🆔 ID del curso desde URL (cursoId):', cursoId, 'tipo:', typeof cursoId);
+      console.log('🆔 ID del curso parseado:', parseInt(cursoId), 'tipo:', typeof parseInt(cursoId));
+      console.log('📋 Lista DETALLADA de cursos disponibles:');
+      courseResponse.data?.forEach((course, index) => {
+        console.log(`   Curso ${index + 1}: ID=${course.course_id || course.id} (tipo: ${typeof (course.course_id || course.id)}), Nombre="${course.course_name || course.name}"`);
+      });
+      
+      const courseInfo = courseResponse.data?.find(course => {
+        const courseId = course.course_id || course.id; // ✅ CORREGIDO: Soporte para ambos nombres
+        console.log(`🔍 Comparando: curso.id=${courseId} vs cursoId=${parseInt(cursoId)}`);
+        return courseId === parseInt(cursoId);
+      });
+      console.log('🎯 Curso encontrado:', courseInfo);
+      console.log('🆔 Buscando curso con ID:', parseInt(cursoId));
+      console.log('📋 Lista de cursos disponibles:', courseResponse.data?.map(c => ({id: c.course_id || c.id, name: c.course_name || c.name})));
+      
       if (courseInfo) {
+        const courseName = courseInfo.course_name || courseInfo.name; // ✅ CORREGIDO: Soporte para ambos nombres
+        console.log('✅ Estableciendo nombre del curso:', courseName);
         setCourse({
-          courseName: courseInfo.name,
+          courseName: courseName,
           courseDescription: courseInfo.description
+        });
+      } else {
+        console.warn('❌ No se encontró el curso con ID:', cursoId);
+        setCourse({
+          courseName: 'Curso no encontrado',
+          courseDescription: ''
         });
       }
       
@@ -158,11 +181,13 @@ const CourseDetails = () => {
   if (loading) return <p className="loading-message">Cargando módulos...</p>;
   if (error) return <p className="error-message">{error}</p>;
 
+  console.log('📝 Estado actual del curso antes de renderizar:', course);
+
   return (
     <>
       <div className="course-details-container">
         <div><BackLink title="Volver a Mis Formaciones" onClick={()=> goToFormation(alumnoId)}/></div>
-        <h2 className="course-title">Material:<span>{course?.courseName}</span> </h2>
+        <h2 className="course-title">{course?.courseName || 'Cargando curso...'}</h2>
         {modules.length > 0 ? (
           <div className="modules-grid">
             {modules.map((module) => {

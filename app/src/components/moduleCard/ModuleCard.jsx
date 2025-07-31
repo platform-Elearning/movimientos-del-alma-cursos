@@ -2,21 +2,19 @@ import React from 'react';
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import './ModuleCard.css';
 import btnPlay from "../../assets/botonPlay.png"
-const ModuleCard = ({ moduleName,lessons}) => {
-  // Función para navegar al módulo específico con datos
-  const { alumnoId, cursoId } = useParams(); // Obtener IDs de la URL
+
+const ModuleCard = ({ moduleName, lessons }) => {
+  const { alumnoId, cursoId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
   const { classItem } = location.state || {};
   
-  
   const goToModule = (lesson) => {
-    // ✅ CORREGIDO: Normalizar los datos de la lección
     const classItem = {
       lessonNumber: lesson.lessonNumber,
       lessonTitle: lesson.lessonTitle,
       lessonDescription: lesson.lessonDescription,
-      lessonUrl: lesson.url, // ✅ IMPORTANTE: Mapear 'url' a 'lessonUrl'
+      lessonUrl: lesson.url,
       id: lesson.id
     };
     
@@ -40,12 +38,16 @@ const ModuleCard = ({ moduleName,lessons}) => {
           {lessons.map((lesson, index) => (
             <li className="card-text" key={index}>
               <div className="lesson-text">
-                <span> {lesson.lessonTitle}:</span> {lesson.lessonDescription}
+                <span className="lesson-title">{lesson.lessonTitle}:</span> 
+                <span className="lesson-description">{lesson.lessonDescription}</span>
               </div>
               <div className="img-play">
-                <a onClick={() => goToModule(lesson)}>
+                <button 
+                  onClick={() => goToModule(lesson)}
+                  className="play-button"
+                >
                   <img src={btnPlay} alt="boton Play" />
-                </a>
+                </button>
               </div>
             </li>
           ))}

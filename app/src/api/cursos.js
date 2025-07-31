@@ -1,9 +1,5 @@
 import { instanceCursos, instanceEnrollments } from "./axiosInstances";
 
-// =====================================================
-// 🎓 GESTIÓN DE CURSOS
-// =====================================================
-
 export const createCourse = async (course) => {
   try {
     const response = await instanceCursos.post("/courses/createCourse", course);
@@ -52,10 +48,6 @@ export const getCoursesByStudentId = async (studentId) => {
     throw error;
   }
 };
-
-// =====================================================
-// 📚 GESTIÓN DE MÓDULOS
-// =====================================================
 
 export const createModule = async (moduleData) => {
   try {
@@ -118,9 +110,6 @@ export const deleteCourseModule = async (moduleId) => {
   }
 };
 
-// =====================================================
-// 📖 GESTIÓN DE LECCIONES
-// =====================================================
 
 export const createLesson = async (lessonData) => {
   try {
@@ -159,10 +148,6 @@ export const getLessonsByModule = async (moduleId, courseId) => {
     throw error;
   }
 };
-
-// =====================================================
-// 🎯 INSCRIPCIONES Y REGISTROS
-// =====================================================
 
 export const registerStudentToCourse = async (enrollmentData) => {
   try {

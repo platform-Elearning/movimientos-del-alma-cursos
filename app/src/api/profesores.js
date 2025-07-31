@@ -1,9 +1,5 @@
 import { instanceUsers, instanceCursos } from "./axiosInstances";
 
-// =====================================================
-// 👨‍🏫 FUNCIONES ESPECÍFICAS DE GESTIÓN DE PROFESORES
-// =====================================================
-
 export const createProfesor = async (user) => {
   try {
     const response = await instanceUsers.post(
@@ -45,10 +41,6 @@ export const deleteProfesor = async (id) => {
     throw error;
   }
 };
-
-// =====================================================
-// 🎯 FUNCIONES DE ASIGNACIÓN Y RELACIÓN PROFESOR-CURSO
-// =====================================================
 
 export const assignCourseToTeacher = async (teacherId, courseId) => {
   try {
@@ -93,10 +85,6 @@ export const getCourseCompleteByTeacherId = async (teacherId) => {
   }
 };
 
-// =====================================================
-// 👥 FUNCIONES DE CONSULTA DE ESTUDIANTES POR CURSO
-// =====================================================
-
 export const getStudentByCourseId = async (courseId) => {
   try {
     const response = await instanceUsers.get(`/users/getStudentsByCourseId?courseId=${courseId}`);
@@ -115,9 +103,6 @@ export const getStudentsByCourse = async (courseId) => {
   }
 };
 
-// =====================================================
-// 📋 FUNCIONES DE DETALLE DE CURSO PARA PROFESOR
-// =====================================================
 
 export const getCourseDetails = async (courseId, teacherId) => {
   try {

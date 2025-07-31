@@ -1,9 +1,5 @@
 import { instance, instanceUsers } from "./axiosInstances.js";
 
-/**
- * Auth API Service
- * Handles all authentication-related API calls
- */
 
 export const registerRequest = async (user) => {
   try {
@@ -70,8 +66,6 @@ export const changePassword = async ({ email, password, newPassword1, newPasswor
     }
   }
 };
-
-export const verifyTokenRequest = () => instanceUsers.get("/session/verify");
 
 export const refreshTokenRequest = async () => {
   try {
