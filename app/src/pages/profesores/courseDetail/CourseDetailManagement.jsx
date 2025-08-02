@@ -3,7 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import "./CourseDetailManagement.css";
 import BackLink from "../../../components/backLink/BackLink";
 import { useAuth } from "../../../services/authContext";
-import useTokenExpiration from "../../../hooks/useTokenExpiration";
 import { getCourseCompleteByTeacherId } from "../../../api/profesores";
 import { 
   createCourseModule, 
@@ -15,8 +14,7 @@ import {
 const CourseDetailManagement = () => {
   const { courseId } = useParams();
   const navigate = useNavigate();
-  const { isAuthenticated, userId, userRole } = useAuth();
-  const { handleAuthError } = useTokenExpiration();
+  const { isAuthenticated, userId, userRole, logout } = useAuth();
   
   const [courseCompleteData, setCourseCompleteData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -65,8 +63,10 @@ const CourseDetailManagement = () => {
         }
       }
     } catch (error) {
-      const isAuthError = handleAuthError(error);
-      if (!isAuthError) {
+      // Manejo simple de errores - si es 401/403 hacer logout, sino mostrar error
+      if (error.response?.status === 401 || error.response?.status === 403) {
+        logout();
+      } else {
         setError("Error al cargar los datos del curso");
       }
     } finally {
@@ -101,8 +101,9 @@ const CourseDetailManagement = () => {
           await loadCourseCompleteData();
           setError('');
         } catch (error) {
-          const isAuthError = handleAuthError(error);
-          if (!isAuthError) {
+          if (error.response?.status === 401 || error.response?.status === 403) {
+            logout();
+          } else {
             setError('Error al eliminar el módulo y sus lecciones');
           }
         }
@@ -138,8 +139,9 @@ const CourseDetailManagement = () => {
       setShowModuleForm(false);
       setError('');
     } catch (error) {
-      const isAuthError = handleAuthError(error);
-      if (!isAuthError) {
+      if (error.response?.status === 401 || error.response?.status === 403) {
+        logout();
+      } else {
         setError('Error al crear el módulo');
       }
     }
@@ -159,8 +161,9 @@ const CourseDetailManagement = () => {
         await loadCourseCompleteData();
         setError('');
       } catch (error) {
-        const isAuthError = handleAuthError(error);
-        if (!isAuthError) {
+        if (error.response?.status === 401 || error.response?.status === 403) {
+          logout();
+        } else {
           setError('Error al eliminar el módulo');
         }
       }
@@ -189,8 +192,9 @@ const CourseDetailManagement = () => {
       setShowLessonForm(false);
       setError('');
     } catch (error) {
-      const isAuthError = handleAuthError(error);
-      if (!isAuthError) {
+      if (error.response?.status === 401 || error.response?.status === 403) {
+        logout();
+      } else {
         setError('Error al crear la lección');
       }
     }
@@ -206,8 +210,9 @@ const CourseDetailManagement = () => {
         setSelectedModule(updatedModule);
         setError('');
       } catch (error) {
-        const isAuthError = handleAuthError(error);
-        if (!isAuthError) {
+        if (error.response?.status === 401 || error.response?.status === 403) {
+          logout();
+        } else {
           setError('Error al eliminar la lección');
         }
       }

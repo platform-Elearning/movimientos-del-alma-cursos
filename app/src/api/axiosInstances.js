@@ -2,21 +2,37 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 
+const REQUEST_TIMEOUT = 30000; // Para evitar peticiones colgadas
+const REFRESH_TIMEOUT = 10000; // Para evitar refresh colgado
 
-const TOKEN_REFRESH_THRESHOLD = 300; // 5 minutos en segundos
-const REQUEST_TIMEOUT = 30000; // 30 segundos
-const REFRESH_TIMEOUT = 10000; // 10 segundos para refresh
+// Control de refresh concurrente
+let isRefreshing = false;
+let refreshSubscribers = [];
 
-// =====================================================
-// 🛠️ UTILIDADES DE TOKEN
-// =====================================================
+const onRefreshed = (token) => {
+  refreshSubscribers.forEach(callback => callback(token));
+  refreshSubscribers = [];
+};
+
+const addRefreshSubscriber = (callback) => {
+  refreshSubscribers.push(callback);
+};
 
 const getAuthToken = () => {
   return Cookies.get('token') || localStorage.getItem('token');
 };
 
-
 const refreshAuthToken = async () => {
+  if (isRefreshing) {
+    return new Promise((resolve) => {
+      addRefreshSubscriber((token) => {
+        resolve(token);
+      });
+    });
+  }
+
+  isRefreshing = true;
+
   try {
     const response = await axios.post(
       `${import.meta.env.VITE_API_URL}/session/refresh-token`,
@@ -39,6 +55,7 @@ const refreshAuthToken = async () => {
     
     const decoded = jwtDecode(token);
     
+    // Guardar el nuevo token
     Cookies.set('token', token, {
       expires: new Date(decoded.exp * 1000),
       secure: false,
@@ -47,50 +64,79 @@ const refreshAuthToken = async () => {
     });
     localStorage.setItem('token', token);
     
+    onRefreshed(token);
+    
+    // Notificar al contexto que el token se renovó
+    window.dispatchEvent(new CustomEvent('auth:token-refreshed', {
+      detail: { token, user: decoded }
+    }));
+    
     return token;
   } catch (error) {
     Cookies.remove('token');
     localStorage.removeItem('token');
     
-    // Emitir evento para componentes que lo escuchen
-    window.dispatchEvent(new CustomEvent('auth:token-expired'));
+    window.dispatchEvent(new CustomEvent('auth:token-expired', {
+      detail: { error }
+    }));
     
+    onRefreshed(null);
     throw error;
+  } finally {
+    isRefreshing = false;
   }
 };
 
-// =====================================================
-// 🔒 INTERCEPTORES DE AXIOS
-// =====================================================
+// Verificar error específico del backend
+const isTokenExpiredError = (error) => {
+  if (!error.response) return false;
+  
+  const { status, data } = error.response;
+  
+  return (
+    status === 403 &&
+    data &&
+    data.error === "Forbidden" &&
+    data.expired === true &&
+    typeof data.details === "string"
+  );
+};
 
-const addAuthInterceptor = (instance, instanceName = 'default') => {
+const addAuthInterceptor = (instance) => {
   // Request Interceptor
   instance.interceptors.request.use(
-    async (config) => {
+    (config) => {
       const token = getAuthToken();
-      
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
-      
       return config;
     },
-    (error) => {
-      return Promise.reject(error);
-    }
+    (error) => Promise.reject(error)
   );
 
   // Response Interceptor
   instance.interceptors.response.use(
-    (response) => {
-      return response;
-    },
+    (response) => response,
     async (error) => {
-      // Solo emitir evento para errores 401 (token realmente expirado)
-      if (error.response?.status === 401) {
-        window.dispatchEvent(new CustomEvent('auth:token-expired', {
-          detail: { error: error, instance: instanceName }
-        }));
+      const originalRequest = error.config;
+      
+      if (isTokenExpiredError(error) && !originalRequest._retry) {
+        originalRequest._retry = true;
+        
+        try {
+          const newToken = await refreshAuthToken();
+          
+          if (newToken) {
+            originalRequest.headers.Authorization = `Bearer ${newToken}`;
+            return instance(originalRequest);
+          }
+        } catch (refreshError) {
+          window.dispatchEvent(new CustomEvent('auth:token-expired', {
+            detail: { error: refreshError }
+          }));
+          return Promise.reject(refreshError);
+        }
       }
       
       return Promise.reject(error);
@@ -100,10 +146,7 @@ const addAuthInterceptor = (instance, instanceName = 'default') => {
   return instance;
 };
 
-// =====================================================
-// 📡 INSTANCIAS DE AXIOS
-// =====================================================
-
+// Configuración base
 const baseConfig = {
   withCredentials: true,
   timeout: REQUEST_TIMEOUT,
@@ -112,73 +155,40 @@ const baseConfig = {
   }
 };
 
+// Instancias de Axios
 export const instance = addAuthInterceptor(
   axios.create({
     ...baseConfig,
     baseURL: `${import.meta.env.VITE_API_URL}/api`,
-  }),
-  'instance'
+  })
 );
 
 export const instanceUsers = addAuthInterceptor(
   axios.create({
     ...baseConfig,
     baseURL: `${import.meta.env.VITE_API_URL}`,
-  }),
-  'instanceUsers'
+  })
 );
 
 export const instanceCursos = addAuthInterceptor(
   axios.create({
     ...baseConfig,
     baseURL: `${import.meta.env.VITE_API_URL}`,
-  }),
-  'instanceCursos'
+  })
 );
 
 export const instanceEnrollments = addAuthInterceptor(
   axios.create({
     ...baseConfig,
     baseURL: `${import.meta.env.VITE_API_URL}`,
-  }),
-  'instanceEnrollments'
+  })
 );
 
 export const instanceReports = addAuthInterceptor(
   axios.create({
     ...baseConfig,
     baseURL: `${import.meta.env.VITE_API_URL}`,
-  }),
-  'instanceReports'
+  })
 );
-
-// =====================================================
-// 🔍 UTILIDADES PÚBLICAS
-// =====================================================
-
-export const getTokenInfo = () => {
-  const token = getAuthToken();
-  if (!token) return null;
-  
-  try {
-    const decoded = jwtDecode(token);
-    const currentTime = Date.now() / 1000;
-    const timeUntilExpiry = decoded.exp - currentTime;
-    
-    return {
-      userId: decoded.id,
-      userRole: decoded.role,
-      userName: decoded.name,
-      email: decoded.email,
-      isValid: timeUntilExpiry > 0,
-      expiresIn: Math.floor(timeUntilExpiry),
-      expiresInMinutes: Math.floor(timeUntilExpiry / 60),
-      isExpiringSoon: timeUntilExpiry < TOKEN_REFRESH_THRESHOLD,
-      token: token
-    };
-  } catch (error) {
-    return null;
-  }
-};
 
 export default instance;

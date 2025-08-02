@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import "./curso.css";
 import { getModulesByAlumnoAndCurso, getCoursesByStudentId, getModulesByCourseID, getLessonsByModuleIdAndCourseId } from "../../../api/cursos";
-import { getTokenInfo } from "../../../api/axiosInstances";
+import { useAuth } from "../../../services/authContext";
 import ModuleCard from "../../../components/moduleCard/ModuleCard";
 import BackLink from "../../../components/backLink/BackLink";
 
@@ -13,15 +13,13 @@ const CourseDetails = () => {
   const [error, setError] = useState(null);
   const [course, setCourse] = useState()
   const navigate = useNavigate();
+  const { userRole, logout } = useAuth(); // Obtener el rol del usuario del contexto
 
   // Función para obtener los módulos desde la API
   const fetchModules = async () => {
     try {
       console.log('🔍 Obteniendo módulos para alumno:', alumnoId, 'curso:', cursoId);
-      
-      // Obtener información del token para verificar el rol del usuario
-      const tokenInfo = getTokenInfo();
-      console.log('🔑 Token info:', tokenInfo);
+      console.log('🔑 Rol del usuario:', userRole);
       
       // ✅ CORREGIDO: Usar getCoursesByStudentId en lugar de getCursos
       const courseResponse = await getCoursesByStudentId(alumnoId);
@@ -62,7 +60,7 @@ const CourseDetails = () => {
       // ✅ NUEVO: Usar la función correcta según el rol del usuario
       let modulesData = [];
       
-      if (tokenInfo?.userRole === 'student') {
+      if (userRole === 'student') {
         // Para estudiantes: usar la función que filtra por modules_covered
         console.log('👨‍🎓 Usuario es estudiante, obteniendo módulos filtrados...');
         const filteredResponse = await getModulesByAlumnoAndCurso(alumnoId, cursoId);
@@ -161,7 +159,12 @@ const CourseDetails = () => {
       
     } catch (error) {
       console.error('❌ Error al obtener los módulos:', error);
-      setError(`Error al obtener los módulos: ${error.message}`);
+      // Manejo simple de errores - si es 401/403 hacer logout, sino mostrar error
+      if (error.response?.status === 401 || error.response?.status === 403) {
+        logout();
+      } else {
+        setError(`Error al obtener los módulos: ${error.message}`);
+      }
     } finally {
       setLoading(false);
     }

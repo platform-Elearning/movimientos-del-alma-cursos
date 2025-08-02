@@ -1,4 +1,4 @@
-import { createContext, useState, useContext, useEffect, useRef } from "react";
+import { createContext, useState, useContext, useEffect } from "react";
 import { registerRequest, loginRequest, refreshTokenRequest, logoutRequest } from "../api/auth.js";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
@@ -16,14 +16,9 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
     const [userId, setUserId] = useState(null);
     const [userRole, setUserRole] = useState(null);
-    const [isAuthenticated, setIsAuthenticated] = useState(null); // null = loading, false = not auth, true = auth
+    const [isAuthenticated, setIsAuthenticated] = useState(null);
     const [errors, setErrors] = useState([]);
     const [userNav, setUserNav] = useState(null);
-    
-    // Refs para controlar el refresh token
-    const isRefreshing = useRef(false);
-    const refreshPromise = useRef(null);
-    const tokenCheckInterval = useRef(null);
 
     // Función para limpiar el estado de usuario
     const clearUserState = () => {
@@ -33,12 +28,6 @@ export const AuthProvider = ({ children }) => {
         setIsAuthenticated(false);
         Cookies.remove("token");
         localStorage.removeItem("token");
-        
-        // Limpiar el intervalo de verificación de token
-        if (tokenCheckInterval.current) {
-            clearInterval(tokenCheckInterval.current);
-            tokenCheckInterval.current = null;
-        }
     };
 
     // Función para establecer el estado del usuario desde el token
@@ -63,106 +52,32 @@ export const AuthProvider = ({ children }) => {
             }
             
             setIsAuthenticated(true);
+            
+            // Guardar token
             Cookies.set("token", token, {
-                expires: new Date(dataDecoded.exp * 1000), // Usar la fecha de expiración del token
-                secure: false, // Cambiar a false para desarrollo local
-                sameSite: 'Lax', // Cambiar de Strict a Lax
-                path: '/' // Asegurar que sea accesible en toda la app
+                expires: new Date(dataDecoded.exp * 1000),
+                secure: false,
+                sameSite: 'Lax',
+                path: '/'
             });
             localStorage.setItem("token", token);
             
-            // TEMPORALMENTE DESACTIVADO: Iniciar verificación periódica del token
-            // Uncomment when backend refresh-token is fixed:
-            // startTokenCheck();
-            
             return dataDecoded;
         } catch (error) {
-            console.error('Error al decodificar token:', error);
             clearUserState();
             throw error;
         }
-    };
-
-    // Función para verificar si el token está próximo a expirar
-    const isTokenExpiringSoon = (token) => {
-        try {
-            const decoded = jwtDecode(token);
-            const currentTime = Date.now() / 1000;
-            const timeUntilExpiry = decoded.exp - currentTime;
-            
-            // Si queda menos de 5 minutos (300 segundos), considerar que expira pronto
-            return timeUntilExpiry < 300;
-        } catch (error) {
-            return true; // Si no se puede decodificar, asumir que expira
-        }
-    };
-
-    // Función para verificar el estado del token periódicamente
-    const startTokenCheck = () => {
-        // Limpiar intervalo anterior si existe
-        if (tokenCheckInterval.current) {
-            clearInterval(tokenCheckInterval.current);
-        }
-        
-        // Verificar cada 4 minutos (240 segundos)
-        tokenCheckInterval.current = setInterval(async () => {
-            const token = Cookies.get("token") || localStorage.getItem("token");
-            
-            if (!token) {
-                clearUserState();
-                return;
-            }
-            
-            if (isTokenExpiringSoon(token)) {
-                try {
-                    await refreshToken();
-                } catch (error) {
-                    console.error('Error al renovar token automáticamente:', error);
-                    clearUserState();
-                }
-            }
-        }, 4 * 60 * 1000); // 4 minutos
-    };
-
-    // Función para intentar refrescar el token
-    const refreshToken = async () => {
-        // Si ya estamos refrescando, retornar la promesa existente
-        if (isRefreshing.current && refreshPromise.current) {
-            return refreshPromise.current;
-        }
-
-        isRefreshing.current = true;
-        
-        // Crear la promesa del refresh
-        refreshPromise.current = (async () => {
-            try {
-                const response = await refreshTokenRequest();
-                const { token } = response;
-                
-                setUserFromToken(token);
-                
-                return token;
-                
-            } catch (error) {
-                console.error('Error al refrescar token:', error.message);
-                clearUserState();
-                throw error;
-            } finally {
-                isRefreshing.current = false;
-                refreshPromise.current = null;
-            }
-        })();
-        
-        return refreshPromise.current;
     };
 
     // Función para registro
     const signup = async (user) => {
         try {
             const res = await registerRequest(user);
-            console.log(res);
+            return res;
         } catch (err) {
-            setErrors(err.response?.data || ["Error en el registro"]);
+            const message = err.response?.data?.message || err.message || "Error en el registro";
+            setErrors([message]);
+            throw err;
         }
     };
 
@@ -187,14 +102,12 @@ export const AuthProvider = ({ children }) => {
     // Función para cerrar sesión
     const logout = async () => {
         try {
-            // TEMPORALMENTE DESACTIVADO: logout en servidor
-            // await logoutRequest();
-            console.log('Logout local - servidor deshabilitado temporalmente');
+            await logoutRequest();
         } catch (error) {
-            console.warn('Error al hacer logout en servidor:', error.message);
+            // Continuar con logout local independientemente del resultado del servidor
         } finally {
-            // Limpiar estado local independientemente del resultado del servidor
             clearUserState();
+            window.dispatchEvent(new CustomEvent('auth:logout'));
         }
     };
 
@@ -211,72 +124,48 @@ export const AuthProvider = ({ children }) => {
             const dataDecoded = jwtDecode(token);
             const currentTime = Date.now() / 1000;
             
-            // TEMPORALMENTE DESACTIVADO: Renovación automática de tokens
-            // Hasta que el backend tenga configurado el cookie-parser
-            
-            // Si el token ha expirado, no intentar renovar, solo limpiar
             if (dataDecoded.exp < currentTime) {
-                console.warn('Token expirado, redirigiendo al login');
                 setIsAuthenticated(false);
                 clearUserState();
                 return;
             }
             
-            // Si el token es válido, usarlo
             setUserFromToken(token);
             
         } catch (err) {
-            console.error("Error al verificar el token:", err);
             setIsAuthenticated(false);
+            clearUserState();
         }
     };
 
     // Manejo de errores con temporizador
     useEffect(() => {
         if (errors.length > 0) {
-            const timer = setTimeout(() => setErrors([]), 5000);
+            const timer = setTimeout(() => {
+                setErrors([]);
+            }, 5000);
             return () => clearTimeout(timer);
         }
     }, [errors]);
 
-    // Verificar autenticación al montar el componente
+    // Solo escuchar eventos para limpiar estado
     useEffect(() => {
+        const handleTokenExpired = () => {
+            clearUserState();
+        };
+
+        // Solo escuchar eventos críticos
+        window.addEventListener('auth:token-expired', handleTokenExpired);
+        window.addEventListener('auth:logout', handleTokenExpired);
+
+        // Verificar autenticación inicial
         checkLogin();
-        
-        // Cleanup al desmontar
+
         return () => {
-            if (tokenCheckInterval.current) {
-                clearInterval(tokenCheckInterval.current);
-            }
+            window.removeEventListener('auth:token-expired', handleTokenExpired);
+            window.removeEventListener('auth:logout', handleTokenExpired);
         };
     }, []);
-
-    // Función para verificar manualmente el token (útil para debugging)
-    const verifyToken = () => {
-        const token = Cookies.get("token") || localStorage.getItem("token");
-        if (!token) {
-            console.log('❌ No hay token');
-            return null;
-        }
-        
-        try {
-            const decoded = jwtDecode(token);
-            const currentTime = Date.now() / 1000;
-            const timeUntilExpiry = decoded.exp - currentTime;
-            
-            console.log('🔍 Estado del token:', {
-                válido: timeUntilExpiry > 0,
-                expiraEn: `${Math.floor(timeUntilExpiry / 60)} minutos`,
-                usuario: decoded.name || decoded.email,
-                rol: decoded.role
-            });
-            
-            return decoded;
-        } catch (error) {
-            console.error('❌ Token inválido:', error);
-            return null;
-        }
-    };
 
     return (
         <AuthContext.Provider
@@ -290,9 +179,7 @@ export const AuthProvider = ({ children }) => {
                 setUserNav,
                 isAuthenticated,
                 errors,
-                checkLogin,
-                refreshToken,
-                verifyToken, // Para debugging
+                checkLogin
             }}
         >
             {children}
