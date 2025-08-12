@@ -2,17 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import AuthUtils from '../../../utils/authUtils';
 import { getStudentByCourseId } from '../../../api/profesores';
+import { getModulesByCourseID } from '../../../api/cursos';
 import BackLink from '../../../components/backLink/BackLink';
+import CardModuleTeacher from '../../../components/cardModuleTeacher/CardModuleTeacher';
 import './StudentsManagement.css';
 
 const StudentsManagement = () => {
-  const { courseId } = useParams(); // Obtener courseId de la URL
+  const { courseId } = useParams();
   const [students, setStudents] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [showStudentDetails, setShowStudentDetails] = useState(false);
   const [error, setError] = useState('');
+  const [totalModules, setTotalModules] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,60 +33,77 @@ const StudentsManagement = () => {
     loadStudentsData();
   }, [navigate, courseId]);
 
+  // Obtener total de módulos del curso
+  const getCourseModules = async () => {
+    try {
+      const response = await getModulesByCourseID(courseId);
+      if (response && response.data && Array.isArray(response.data)) {
+        setTotalModules(response.data.length);
+        return response.data.length;
+      } else {
+        setTotalModules(0);
+        return 0;
+      }
+    } catch (error) {
+      console.error('Error obteniendo módulos:', error);
+      setTotalModules(0);
+      return 0;
+    }
+  };
+
   const loadStudentsData = async () => {
     try {
       setIsLoading(true);
       setError('');
       
-      console.log('🔍 Cargando estudiantes para el curso:', courseId);
-      console.log('🔍 Tipo de courseId:', typeof courseId);
-      console.log('🔍 URL que se va a llamar:', `/users/getStudentsByCourseId?course_id=${courseId}`);
+      // Primero obtener módulos del curso
+      const moduleCount = await getCourseModules();
       
-      // Llamar a la API real para obtener estudiantes del curso
+      console.log('🔍 Cargando estudiantes para el curso:', courseId);
+      
       const response = await getStudentByCourseId(courseId);
       
-      console.log('📋 Respuesta completa de la API:', response);
-      
       if (response && response.success && response.data) {
-        // Mapear los datos de la API al formato esperado por el componente
-        const mappedStudents = response.data.map(student => ({
-          id: student.id || student.user_id,
-          name: student.name || `${student.first_name || ''} ${student.last_name || ''}`.trim(),
-          email: student.email,
-          identification_number: student.identification_number || student.dni || 'N/A',
-          enrollment_date: student.enrollment_date || student.created_at,
-          course_name: student.course_name || 'Curso actual',
-          // Por ahora usamos valores por defecto para el progreso hasta que tengamos la API
-          progress: student.progress || Math.floor(Math.random() * 100), // Temporal
-          last_activity: student.last_activity || new Date().toISOString(),
-          completed_lessons: student.completed_lessons || Math.floor(Math.random() * 20),
-          total_lessons: student.total_lessons || 20,
-          status: student.status || 'active'
-        }));
+        const mappedStudents = response.data.map(student => {
+          const modulesOwned = student.modules_covered || 0;
+          
+          // Calcular progreso basado en módulos reales del curso
+          const progressPercentage = moduleCount > 0 
+            ? Math.round((modulesOwned / moduleCount) * 100)
+            : 0;
+          
+          return {
+            id: student.id || student.user_id,
+            name: student.name || `${student.first_name || ''} ${student.last_name || ''}`.trim(),
+            email: student.email,
+            identification_number: student.identification_number || student.dni || 'N/A',
+            enrollment_date: student.enrollment_date || student.created_at,
+            course_name: student.course_name || 'Curso actual',
+            progress: progressPercentage,
+            last_activity: student.last_activity || new Date().toISOString(),
+            completed_lessons: modulesOwned,
+            total_lessons: moduleCount,
+            status: student.status || 'active'
+          };
+        });
         
         setStudents(mappedStudents);
-        console.log('✅ Estudiantes cargados:', mappedStudents);
+        console.log('✅ Estudiantes cargados con progreso real:', mappedStudents);
       } else {
         setStudents([]);
-        console.log('⚠️ No se encontraron estudiantes para este curso');
-        console.log('📋 Respuesta recibida:', response);
-        
-        // Si no hay estudiantes, mostrar mensaje informativo
         setError('No hay estudiantes inscritos en este curso aún.');
       }
     } catch (error) {
       console.error('❌ Error cargando estudiantes:', error);
-      console.error('❌ Error details:', error.response?.data || error.message);
       
-      // Mejorar el mensaje de error para diferentes casos
       let errorMessage = 'Error al cargar los estudiantes del curso';
       
       if (error.response?.status === 400) {
-        errorMessage = 'Error 400: El servidor no pudo procesar la petición. Contacta al administrador para verificar la configuración del curso.';
+        errorMessage = 'Error 400: El servidor no pudo procesar la petición.';
       } else if (error.response?.status === 404) {
-        errorMessage = 'Error 404: No se encontró el endpoint para obtener estudiantes. Contacta al administrador técnico.';
+        errorMessage = 'Error 404: No se encontraron estudiantes para este curso.';
       } else if (error.response?.status === 500) {
-        errorMessage = 'Error 500: Error interno del servidor. Contacta al administrador técnico.';
+        errorMessage = 'Error 500: Error interno del servidor.';
       } else if (error.message === 'Network Error') {
         errorMessage = 'Error de conexión: No se pudo conectar con el servidor.';
       }
@@ -152,14 +172,12 @@ const StudentsManagement = () => {
             Reintentar
           </button>
           
-          {/* Información adicional para debugging */}
           <details style={{ marginTop: '1rem', textAlign: 'left' }}>
             <summary style={{ cursor: 'pointer', fontWeight: 'bold' }}>Información técnica</summary>
             <div style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666' }}>
               <p><strong>Curso ID:</strong> {courseId}</p>
-              <p><strong>URL esperada:</strong> /users/getStudentsByCourseId?course_id={courseId}</p>
-              <p><strong>¿El curso existe?</strong> Verificar en el panel de administración</p>
-              <p><strong>¿Hay estudiantes inscritos?</strong> Verificar las inscripciones</p>
+              <p><strong>Módulos detectados:</strong> {totalModules}</p>
+              <p><strong>Estudiantes encontrados:</strong> {students.length}</p>
             </div>
           </details>
         </div>
@@ -212,7 +230,7 @@ const StudentsManagement = () => {
           </div>
         </div>
 
-        {/* Lista de estudiantes */}
+        {/* Lista de estudiantes usando el nuevo componente */}
         <div className="students-list">
           {filteredStudents.length === 0 ? (
             <div className="no-students">
@@ -221,71 +239,14 @@ const StudentsManagement = () => {
             </div>
           ) : (
             filteredStudents.map(student => (
-              <div key={student.id} className="student-card">
-                <div className="student-avatar">
-                  <img 
-                    src={`https://ui-avatars.com/api/?name=${encodeURIComponent(student.name)}&background=4CAF50&color=fff&size=60`}
-                    alt={student.name}
-                  />
-                </div>
-                
-                <div className="student-info">
-                  <div className="student-main-info">
-                    <h3>{student.name}</h3>
-                    <p className="student-email">{student.email}</p>
-                    <p className="student-id">ID: {student.identification_number}</p>
-                  </div>
-                  
-                  <div className="student-course-info">
-                    <p className="course-name">{student.course_name}</p>
-                    <p className="enrollment-date">
-                      Inscrito: {new Date(student.enrollment_date).toLocaleDateString()}
-                    </p>
-                  </div>
-                </div>
-                
-                <div className="student-progress">
-                  <div className="progress-info">
-                    <span className="progress-text">{student.progress}% completado</span>
-                    <span className="lessons-info">
-                      {student.completed_lessons}/{student.total_lessons} lecciones
-                    </span>
-                  </div>
-                  <div className="progress-bar">
-                    <div 
-                      className="progress-fill"
-                      style={{
-                        width: `${student.progress}%`,
-                        backgroundColor: getProgressColor(student.progress)
-                      }}
-                    />
-                  </div>
-                  <p className="last-activity">
-                    Última actividad: {new Date(student.last_activity).toLocaleDateString()}
-                  </p>
-                </div>
-                
-                <div className="student-status">
-                  {getStatusBadge(student.status)}
-                </div>
-                
-                <div className="student-actions">
-                  <button 
-                    className="btn-primary"
-                    onClick={() => handleViewProgress(student)}
-                    title="Ver progreso detallado"
-                  >
-                    📊 Progreso
-                  </button>
-                  <button 
-                    className="btn-secondary"
-                    onClick={() => handleSendMessage(student)}
-                    title="Enviar mensaje"
-                  >
-                    💬 Mensaje
-                  </button>
-                </div>
-              </div>
+              <CardModuleTeacher
+                key={student.id}
+                student={student}
+                onViewProgress={handleViewProgress}
+                onSendMessage={handleSendMessage}
+                getProgressColor={getProgressColor}
+                getStatusBadge={getStatusBadge}
+              />
             ))
           )}
         </div>
@@ -322,7 +283,7 @@ const StudentsManagement = () => {
                     <span className="detail-value">{selectedStudent.course_name}</span>
                   </div>
                   <div className="detail-item">
-                    <span className="detail-label">Lecciones completadas:</span>
+                    <span className="detail-label">Módulos completados:</span>
                     <span className="detail-value">
                       {selectedStudent.completed_lessons} de {selectedStudent.total_lessons}
                     </span>
@@ -342,9 +303,8 @@ const StudentsManagement = () => {
                 </div>
               </div>
               
-              {/* Aquí puedes agregar más detalles como historial de lecciones */}
               <div className="lessons-progress">
-                <h4>Progreso por Lecciones</h4>
+                <h4>Progreso por Módulos</h4>
                 <div className="lessons-grid">
                   {Array.from({ length: selectedStudent.total_lessons }, (_, index) => (
                     <div 

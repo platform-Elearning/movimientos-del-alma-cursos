@@ -1,4 +1,4 @@
-/* Estilos generales */
+/* === CURSO DETAILS - SIN INTERFERENCIAS CON MODULE CARD === */
 .course-details-container {
   padding: 20px;
   font-family: Arial, sans-serif;
@@ -22,17 +22,18 @@
   color: #ff6b6b;
 }
 
-/* Estilos del contenedor de módulos */
+/* === CONTENEDOR DE MÓDULOS === */
 .modules-grid {
   display: flex;
   flex-direction: column;
   gap: 20px;
   justify-content: center;
+  align-items: center;
   max-width: 1400px;
   margin: 0 auto;
 }
 
-/* Ajustes para dispositivos móviles */
+/* === RESPONSIVE DESIGN === */
 @media (max-width: 768px) {
   .course-details-container {
     padding: 16px;

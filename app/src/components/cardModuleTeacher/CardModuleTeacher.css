@@ -1,0 +1,303 @@
+/* Estilos base del componente CardModuleTeacher */
+/* Conservando la estructura visual de ModuleCard pero con nuevas clases */
+
+.teacher-student-card {
+    width: 100% !important;
+    max-width: 1294px !important;
+    height: auto !important;
+    background-color: #252422 !important;
+    display: flex !important;
+    flex-direction: row !important;
+    border-radius: 50px !important;
+    overflow: hidden !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+    margin: 16px auto !important;
+    border: none !important;
+    align-items: center !important;
+    padding: 20px !important;
+}
+
+.teacher-card-avatar {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-width: 80px !important;
+    margin-right: 20px !important;
+}
+
+.teacher-card-avatar img {
+    width: 60px !important;
+    height: 60px !important;
+    border-radius: 50% !important;
+    object-fit: cover !important;
+    border: 3px solid #FFBB80 !important;
+}
+
+.teacher-card-info {
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    margin-right: 20px !important;
+}
+
+.teacher-card-main-info {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 4px !important;
+}
+
+.teacher-card-name {
+    margin: 0 !important;
+    font-size: 20px !important;
+    font-weight: bold !important;
+    color: #ffffff !important;
+    text-transform: uppercase !important;
+}
+
+.teacher-card-email {
+    margin: 0 !important;
+    font-size: 14px !important;
+    color: #FFBB80 !important;
+    font-weight: 300 !important;
+}
+
+.teacher-card-id {
+    margin: 0 !important;
+    font-size: 12px !important;
+    color: #cccccc !important;
+    font-weight: 300 !important;
+}
+
+.teacher-card-course-info {
+    margin-top: 8px !important;
+}
+
+.teacher-card-course-name {
+    margin: 0 !important;
+    font-size: 14px !important;
+    color: #ffffff !important;
+    font-weight: bold !important;
+}
+
+.teacher-card-enrollment-date {
+    margin: 4px 0 0 0 !important;
+    font-size: 12px !important;
+    color: #cccccc !important;
+}
+
+.teacher-card-progress {
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    margin-right: 20px !important;
+    padding: 16px !important;
+    background-color: rgba(255, 187, 128, 0.1) !important;
+    border-radius: 15px !important;
+    border-left: 3px solid !important;
+    border-image: linear-gradient(180deg, #83711B, #FFBB80, #83711B) 1 !important;
+}
+
+.teacher-progress-info {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+}
+
+.teacher-progress-text {
+    font-weight: bold !important;
+    color: #ffffff !important;
+    font-size: 14px !important;
+}
+
+.teacher-lessons-info {
+    color: #FFBB80 !important;
+    font-size: 12px !important;
+}
+
+.teacher-progress-bar {
+    width: 100% !important;
+    height: 8px !important;
+    background-color: #444444 !important;
+    border-radius: 4px !important;
+    overflow: hidden !important;
+}
+
+.teacher-progress-fill {
+    height: 100% !important;
+    transition: width 0.3s ease !important;
+    border-radius: 4px !important;
+}
+
+.teacher-last-activity {
+    margin: 0 !important;
+    font-size: 10px !important;
+    color: #cccccc !important;
+    text-align: center !important;
+}
+
+.teacher-card-status {
+    display: flex !important;
+    align-items: center !important;
+    margin-right: 20px !important;
+}
+
+.teacher-card-actions {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    min-width: 120px !important;
+}
+
+.teacher-btn-primary,
+.teacher-btn-secondary {
+    padding: 8px 16px !important;
+    border: none !important;
+    border-radius: 15px !important;
+    font-size: 12px !important;
+    font-weight: bold !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    text-align: center !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 4px !important;
+}
+
+.teacher-btn-primary {
+    background-color: #4CAF50 !important;
+    color: white !important;
+}
+
+.teacher-btn-primary:hover {
+    background-color: #45a049 !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3) !important;
+}
+
+.teacher-btn-secondary {
+    background-color: #FFBB80 !important;
+    color: #252422 !important;
+}
+
+.teacher-btn-secondary:hover {
+    background-color: #83711B !important;
+    color: white !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 8px rgba(255, 187, 128, 0.3) !important;
+}
+
+/* Status badges - reutilizando del componente original */
+.teacher-card-status .status-badge {
+    padding: 4px 12px !important;
+    border-radius: 12px !important;
+    font-size: 10px !important;
+    font-weight: bold !important;
+    text-transform: uppercase !important;
+}
+
+.teacher-card-status .status-badge.active {
+    background-color: #4CAF50 !important;
+    color: white !important;
+}
+
+.teacher-card-status .status-badge.inactive {
+    background-color: #f44336 !important;
+    color: white !important;
+}
+
+/* === RESPONSIVE DESIGN === */
+@media (max-width: 1024px) {
+    .teacher-student-card {
+        width: 100% !important;
+        max-width: none !important;
+        padding: 16px !important;
+    }
+    
+    .teacher-card-name {
+        font-size: 18px !important;
+    }
+    
+    .teacher-card-actions {
+        min-width: 100px !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .teacher-student-card {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        padding: 16px !important;
+    }
+    
+    .teacher-card-avatar {
+        margin-right: 0 !important;
+        margin-bottom: 16px !important;
+        align-self: center !important;
+    }
+    
+    .teacher-card-info {
+        margin-right: 0 !important;
+        margin-bottom: 16px !important;
+        text-align: center !important;
+    }
+    
+    .teacher-card-progress {
+        margin-right: 0 !important;
+        margin-bottom: 16px !important;
+    }
+    
+    .teacher-card-status {
+        margin-right: 0 !important;
+        margin-bottom: 16px !important;
+        justify-content: center !important;
+    }
+    
+    .teacher-card-actions {
+        flex-direction: row !important;
+        justify-content: center !important;
+        gap: 12px !important;
+        min-width: auto !important;
+    }
+    
+    .teacher-card-name {
+        font-size: 16px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .teacher-student-card {
+        padding: 12px !important;
+        border-radius: 25px !important;
+    }
+    
+    .teacher-card-avatar img {
+        width: 50px !important;
+        height: 50px !important;
+    }
+    
+    .teacher-card-name {
+        font-size: 14px !important;
+    }
+    
+    .teacher-card-email {
+        font-size: 12px !important;
+    }
+    
+    .teacher-card-id {
+        font-size: 10px !important;
+    }
+    
+    .teacher-card-actions {
+        flex-direction: column !important;
+        gap: 8px !important;
+    }
+    
+    .teacher-btn-primary,
+    .teacher-btn-secondary {
+        padding: 6px 12px !important;
+        font-size: 10px !important;
+    }
+}

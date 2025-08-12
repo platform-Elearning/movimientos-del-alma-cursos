@@ -1,4 +1,4 @@
-import { instanceUsers, instanceCursos } from "./axiosInstances";
+import { instanceUsers, instanceCursos, instanceEnrollments } from "./axiosInstances";
 
 export const createProfesor = async (user) => {
   try {
@@ -97,6 +97,40 @@ export const getStudentByCourseId = async (courseId) => {
 export const getStudentsByCourse = async (courseId) => {
   try {
     const response = await instanceUsers.get(`/users/getStudentsByCourseId?courseId=${courseId}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// ✅ NUEVA FUNCIÓN: Agregar módulos a un alumno
+export const addModuleToStudent = async (studentDni, courseId, modulesToAdd = 1) => {
+  try {
+    const enrollmentData = {
+      identification_number: studentDni,
+      course_id: parseInt(courseId),
+      modules_covered: modulesToAdd,
+      notes: `Módulo agregado via admin - ${new Date().toLocaleDateString()}`
+    };
+
+    const response = await instanceEnrollments.post("/enrollments/registerToCourse", enrollmentData);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// ✅ NUEVA FUNCIÓN: Quitar módulos a un alumno
+export const removeModuleFromStudent = async (studentDni, courseId, modulesToRemove = 1) => {
+  try {
+    const enrollmentData = {
+      identification_number: studentDni,
+      course_id: parseInt(courseId),
+      modules_covered: -modulesToRemove, // Número negativo para restar
+      notes: `Módulo removido via admin - ${new Date().toLocaleDateString()}`
+    };
+
+    const response = await instanceEnrollments.post("/enrollments/registerToCourse", enrollmentData);
     return response.data;
   } catch (error) {
     throw error;

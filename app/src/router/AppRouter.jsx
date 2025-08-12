@@ -19,6 +19,9 @@ import ModuleDetails from "../pages/alumnos/modulo/modulo";
 import AdminProfesores from "../pages/admin/adminProfesor/adminProfesor";
 import EditProfesor from "../pages/admin/adminProfesor/editProfesor/editProfesor";
 
+// ✅ Nueva importación para ver alumnos del curso
+import VerAlumnosCurso from "../pages/admin/adminCursos/verAlumnos/VerAlumnosCurso";
+
 // Teacher Dashboard Components
 import TeacherDashboard from "../pages/profesores/dashboard/TeacherDashboard";
 import CourseManagement from "../pages/profesores/courses/CourseManagement";
@@ -45,6 +48,10 @@ const AppRouter = () => {
             <Route path="/admin/cursos" element={<AdminCourses></AdminCourses>}></Route>
             <Route path="/admin/editarCurso/:cursoId" element={<EditarCurso></EditarCurso>}></Route>
             <Route path="/admin/editarCurso/:cursoId/module/:moduleId" element={<EditLessons></EditLessons>}></Route>
+            
+            {/* ✅ Nueva ruta para ver alumnos de un curso */}
+            <Route path="/admin/cursos/alumnos/:courseId" element={<VerAlumnosCurso />} />
+            
             <Route path="/admin/profesores" element = {<AdminProfesores/>}></Route>
             <Route path="/admin/editarProfesor/:id" element={<EditProfesor/>}></Route>
             
@@ -71,4 +78,3 @@ const AppRouter = () => {
 }
 
 export default AppRouter;
-

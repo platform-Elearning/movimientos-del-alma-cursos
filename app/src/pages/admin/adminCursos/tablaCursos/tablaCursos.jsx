@@ -47,6 +47,11 @@ const CoursesTable = () => {
     navigate(`/admin/editarCurso/${courseId}`); 
   };
 
+  // ✅ Nueva función para ver alumnos del curso
+  const handleViewStudentsClick = (courseId) => {
+    navigate(`/admin/cursos/alumnos/${courseId}`);
+  };
+
   if (loading) return <p className="loading-message">Cargando datos...</p>;
   if (error) return <p className="error-message">Error: {error}</p>;
 
@@ -69,9 +74,18 @@ const CoursesTable = () => {
               <td>{course.name}</td>
               <td>{course.description}</td>
               <td className="actions-cell">
-              <button
-                  className="action-button edit-button" onClick={() => handleEditClick(course.id)}>Editar</button>
-                <button className="action-button view-button">Ver Alumnos</button>
+                <button
+                  className="action-button edit-button" 
+                  onClick={() => handleEditClick(course.id)}
+                >
+                  Editar
+                </button>
+                <button 
+                  className="action-button view-button"
+                  onClick={() => handleViewStudentsClick(course.id)}
+                >
+                  Ver Alumnos
+                </button>
                 <button
                   className="action-button add-button"
                   onClick={() => handleAddStudentClick(course.id)}
