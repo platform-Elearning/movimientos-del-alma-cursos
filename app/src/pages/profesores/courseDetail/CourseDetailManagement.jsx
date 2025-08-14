@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "./CourseDetailManagement.css";
 import BackLink from "../../../components/backLink/BackLink";
+import TeacherModuleCard from "../../../components/teacherModuleCard/TeacherModuleCard";
 import { useAuth } from "../../../services/authContext";
 import { getCourseCompleteByTeacherId } from "../../../api/profesores";
 import { 
@@ -368,48 +369,16 @@ const CourseDetailManagement = () => {
             </div>
           ) : (
             <div className="modules-grid">
-              {courseCompleteData.modules.map((module, index) => (
-                <div key={module.id || index} className="module-card">
-                  <div className="module-header">
-                    <h3>Módulo {module.module_number || index + 1}</h3>
-                    <div className="module-actions">
-                      <button 
-                        className="btn-edit"
-                        onClick={() => handleModuleClick(module)}
-                        title="Ver lecciones"
-                      >
-                        📖
-                      </button>
-                      {module.lessons && module.lessons.length > 0 ? (
-                        <button 
-                          className="btn-delete-force"
-                          onClick={() => handleDeleteModuleWithLessons(module.id, module)}
-                          title="Eliminar módulo y todas sus lecciones"
-                        >
-                          🗑️
-                        </button>
-                      ) : (
-                        <button 
-                          className="btn-delete"
-                          onClick={() => handleDeleteModule(module.id, module)}
-                          title="Eliminar módulo"
-                        >
-                          🗑️
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                  <div className="module-info">
-                    <h4 className="module-name">{module.name}</h4>
-                    <p className="module-description">{module.description}</p>
-                  </div>
-                  <div className="module-stats">
-                    <span className="lessons-count">
-                      📚 {module.lessons ? module.lessons.length : 0} lecciones
-                    </span>
-                  </div>
-                </div>
-              ))}
+            {courseCompleteData.modules.map((module, index) => (
+            <TeacherModuleCard
+            key={module.id || index}
+            module={module}
+            index={index}
+            onModuleClick={handleModuleClick}
+            onDeleteModule={handleDeleteModule}
+            onDeleteModuleWithLessons={handleDeleteModuleWithLessons}
+            />
+            ))}
             </div>
           )}
         </div>

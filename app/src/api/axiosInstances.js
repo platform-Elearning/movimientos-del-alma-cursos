@@ -32,6 +32,7 @@ const refreshAuthToken = async () => {
   }
 
   isRefreshing = true;
+  console.log("🔄 Starting token refresh process...");
 
   try {
     const response = await axios.post(
@@ -54,6 +55,7 @@ const refreshAuthToken = async () => {
     }
     
     const decoded = jwtDecode(token);
+    console.log("✅ Token refreshed successfully, expires at:", new Date(decoded.exp * 1000));
     
     // Guardar el nuevo token
     Cookies.set('token', token, {
@@ -73,6 +75,7 @@ const refreshAuthToken = async () => {
     
     return token;
   } catch (error) {
+    console.log("❌ Refresh token failed:", error.message);
     Cookies.remove('token');
     localStorage.removeItem('token');
     

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import './ModuleCard.css';
-import btnPlay from "../../assets/botonPlay.png"
+import btnPlay from "../../assets/botonPlay.png";
 
 const ModuleCard = ({ moduleName, lessons }) => {
   const { alumnoId, cursoId } = useParams();
@@ -10,7 +10,7 @@ const ModuleCard = ({ moduleName, lessons }) => {
   const { classItem } = location.state || {};
   
   // Debug: log de los datos recibidos
-  console.log('🎯 ModuleCard recibió:', { moduleName, lessons });
+  console.log('ModuleCard recibió:', { moduleName, lessons });
   
   const goToModule = (lesson) => {
     const classItem = {
@@ -21,7 +21,7 @@ const ModuleCard = ({ moduleName, lessons }) => {
       id: lesson.id
     };
     
-    console.log('📁 Navegando a clase con datos:', classItem);
+    console.log('Navegando a clase con datos:', classItem);
     
     navigate(
       `/alumnos/${alumnoId}/curso/${cursoId}/clase/${lesson.lessonNumber}`,
@@ -34,15 +34,15 @@ const ModuleCard = ({ moduleName, lessons }) => {
   // Verificar si hay lecciones válidas
   if (!lessons || lessons.length === 0) {
     return (
-      <div className="module-card">
-        <div className="head-container">
+      <div className="module-card-container">
+        <div className="module-card-header">
           <h2>{moduleName || 'Módulo sin nombre'}</h2>
         </div>
-        <div className="card-lesson">
+        <div className="module-card-lessons">
           <ul>
-            <li className="card-text">
-              <div className="lesson-text">
-                <span className="lesson-title">No hay clases disponibles</span>
+            <li className="module-card-lesson-item">
+              <div className="module-card-lesson-content">
+                <span className="module-card-lesson-title">No hay clases disponibles</span>
               </div>
             </li>
           </ul>
@@ -52,34 +52,34 @@ const ModuleCard = ({ moduleName, lessons }) => {
   }
 
   return (
-    <div className="module-card">
-      <div className="head-container">
+    <div className="module-card-container">
+      <div className="module-card-header">
         <h2>{moduleName || 'Módulo'}</h2>
       </div>
-      <div className="card-lesson">
+      <div className="module-card-lessons">
         <ul>
           {lessons.map((lesson, index) => {
             // Debug: log de cada lección
-            console.log(`🎓 Lección ${index}:`, lesson);
+            console.log(`Lección ${index}:`, lesson);
             
             // Obtener título y descripción con fallbacks
             const lessonTitle = lesson.lessonTitle || lesson.title || `Clase ${index + 1}`;
             const lessonDescription = lesson.lessonDescription || lesson.description || 'Sin descripción';
             
             return (
-              <li className="card-text" key={lesson.id || index}>
-                <div className="lesson-text">
-                  <span >{lessonTitle}:</span> 
-                  <span >{lessonDescription}</span>
+              <li className="module-card-lesson-item" key={lesson.id || index}>
+                <div className="module-card-lesson-content">
+                  <span className="module-card-lesson-title">{lessonTitle}:</span> 
+                  <span className="module-card-lesson-desc">{lessonDescription}</span>
                 </div>
-                <div className="img-play">
+                <div className="module-card-play-button">
                   <button 
                     onClick={() => goToModule({
                       ...lesson,
                       lessonTitle,
                       lessonDescription
                     })}
-                    className="play-button"
+                    className="module-card-btn-play"
                   >
                     <img src={btnPlay} alt="boton Play" />
                   </button>

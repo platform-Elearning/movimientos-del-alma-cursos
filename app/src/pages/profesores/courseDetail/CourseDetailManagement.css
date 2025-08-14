@@ -257,8 +257,9 @@
 .modules-grid {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 8px;
   margin-top: 16px;
+  align-items: center;
 }
 
 .module-card {

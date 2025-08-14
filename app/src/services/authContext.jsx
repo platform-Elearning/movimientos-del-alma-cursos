@@ -99,7 +99,7 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    // Función para cerrar sesión
+
     const logout = async () => {
         try {
             await logoutRequest();
@@ -116,7 +116,14 @@ export const AuthProvider = ({ children }) => {
         const token = Cookies.get("token") || localStorage.getItem("token");
 
         if (!token) {
-            setIsAuthenticated(false);
+            // No hay access token, intentar refresh
+            try {
+                console.log("No access token found, attempting refresh...");
+                await attemptTokenRefresh();
+            } catch (error) {
+                console.log("No refresh token available or expired");
+                setIsAuthenticated(false);
+            }
             return;
         }
 
@@ -124,17 +131,47 @@ export const AuthProvider = ({ children }) => {
             const dataDecoded = jwtDecode(token);
             const currentTime = Date.now() / 1000;
             
+            // Si el token ha expirado, intentar refresh
             if (dataDecoded.exp < currentTime) {
-                setIsAuthenticated(false);
-                clearUserState();
+                console.log("Access token expired, attempting refresh...");
+                try {
+                    await attemptTokenRefresh();
+                } catch (error) {
+                    console.log("Failed to refresh token on startup");
+                    clearUserState();
+                }
                 return;
             }
             
+            // Token válido, establecer usuario
             setUserFromToken(token);
             
         } catch (err) {
-            setIsAuthenticated(false);
+            console.log("Invalid token format, attempting refresh...");
+            try {
+                await attemptTokenRefresh();
+            } catch (error) {
+                console.log("Failed to refresh invalid token");
+                clearUserState();
+            }
+        }
+    };
+
+    // Función para intentar refresh token
+    const attemptTokenRefresh = async () => {
+        try {
+            const response = await refreshTokenRequest();
+            if (response && response.token) {
+                const dataDecoded = setUserFromToken(response.token);
+                console.log("Token refreshed successfully on startup");
+                return dataDecoded;
+            } else {
+                throw new Error('No token received from refresh');
+            }
+        } catch (error) {
+            console.log("Refresh failed:", error.message);
             clearUserState();
+            throw error;
         }
     };
 
@@ -148,13 +185,31 @@ export const AuthProvider = ({ children }) => {
         }
     }, [errors]);
 
-    // Solo escuchar eventos para limpiar estado
+    // Solo escuchar eventos para manejar renovación y expiración
     useEffect(() => {
+        const handleTokenRefreshed = (event) => {
+            const { token, user } = event.detail;
+            console.log("Token refreshed via event, updating user state");
+            
+            setUserId(user.id);
+            setUserRole(user.role);
+            
+            if (user.role === "admin") {
+                setUserNav("administrador");
+            } else {
+                setUserNav(user.name);
+            }
+            
+            setIsAuthenticated(true);
+        };
+
         const handleTokenExpired = () => {
+            console.log("Token expired event received, clearing state");
             clearUserState();
         };
 
-        // Solo escuchar eventos críticos
+        // Escuchar eventos de renovación y expiración
+        window.addEventListener('auth:token-refreshed', handleTokenRefreshed);
         window.addEventListener('auth:token-expired', handleTokenExpired);
         window.addEventListener('auth:logout', handleTokenExpired);
 
@@ -162,6 +217,7 @@ export const AuthProvider = ({ children }) => {
         checkLogin();
 
         return () => {
+            window.removeEventListener('auth:token-refreshed', handleTokenRefreshed);
             window.removeEventListener('auth:token-expired', handleTokenExpired);
             window.removeEventListener('auth:logout', handleTokenExpired);
         };

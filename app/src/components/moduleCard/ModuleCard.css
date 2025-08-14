@@ -1,178 +1,173 @@
-div.module-card {
-    width: 1294px !important;
-    height: auto !important;
-    background-color: #252422 !important;
-    display: flex !important;
-    flex-direction: row !important;
-    border-radius: 50px !important;
-    overflow: hidden !important;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
-    margin: 0 auto !important;
-    border: none !important;
+.module-card-container {
+    width: 1294px;
+    height: auto;
+    background-color: #252422;
+    display: flex;
+    flex-direction: row;
+    border-radius: 50px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-div.module-card .head-container {
-    display: flex !important;
-    width: min-content !important;
-    flex-direction: column !important;
-    justify-content: center !important;
-    padding: 16px !important;
-    background-color: #252422 !important;
-    text-align: center !important;
+.module-card-header {
+    display: flex;
+    width: min-content;
+    flex-direction: column;
+    justify-content: center;
+    padding: 16px;
+    background-color: #252422;
+    text-align: center;
 }
 
-div.module-card .head-container h2 {
-    margin: 30px !important;
-    font-size: 24px !important;
-    font-weight: bold !important;
-    text-transform: uppercase !important;
-    margin-bottom: 20px !important;
-    color: #ffffff !important;
+.module-card-header h2 {
+    margin: 30px;
+    font-size: 24px;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    color: #ffffff;
 }
 
-div.module-card .head-container p {
-    font-family: 16px !important;
-    font-weight: 300px !important;
-    color: #FFFFFF !important;
+.module-card-header p {
+    font-family: 16px;
+    font-weight: 300px;
+    color: #FFFFFF;
 }
 
-div.module-card .card-lesson {
-    display: flex !important;
-    align-items: center !important;
-    background-color: transparent !important;
+.module-card-lessons {
+    display: flex;
+    align-items: center;        
 }
 
-div.module-card .card-lesson ul {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    justify-content: flex-start !important;
-    list-style-type: none !important;
-    padding: 10px !important;
-    border-left: 3px solid !important;
-    border-image: linear-gradient(180deg, #83711B, #FFBB80, #83711B) 1 !important;
-    margin: 0 !important;
+.module-card-lessons ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    list-style-type: none;
+    padding: 10px;
+    border-left: 3px solid;
+    border-image: linear-gradient(180deg, #83711B, #FFBB80, #83711B) 1;
 }
 
-div.module-card .card-text {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    width: 100% !important;
-    height: 72px !important;
-    font-size: 16px !important;
-    margin: 8px !important;
-    background-color: #e0e0e0 !important;
-    border-radius: 15px !important;
-    cursor: pointer !important;
-    border: none !important;
-    box-shadow: none !important;
+.module-card-lesson-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 72px;
+    font-size: 16px;
+    margin: 8px;
+    background-color: #e0e0e0;
+    border-radius: 15px;
 }
 
-div.module-card .card-text span {
-    font-weight: bold !important;
+.module-card-lesson-item span {
+    font-weight: bold;
 }
 
-div.module-card .img-play {
-    padding: 15px !important;
-    cursor: pointer !important;
+.module-card-play-button {
+    padding: 15px;
+    cursor: pointer;
 }
 
-div.module-card .lesson-text {
-    padding-left: 10px !important;
+.module-card-lesson-content {
+    padding-left: 10px;
 }
 
-div.module-card .lesson-title {
-    font-weight: bold !important;
-    color: #252422 !important;
+.module-card-lesson-title {
+    font-weight: bold;
+    color: #252422;
 }
 
-div.module-card .lesson-description {
-    color: #666666 !important;
-    font-weight: normal !important;
+.module-card-lesson-desc {
+    color: #666666;
+    font-weight: normal;
+    margin-left: 8px;
 }
 
-div.module-card .play-button {
-    background: none !important;
-    border: none !important;
-    cursor: pointer !important;
-    padding: 0 !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
+.module-card-btn-play {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-div.module-card .play-button img {
-    width: 32px !important;
-    height: 32px !important;
+.module-card-btn-play img {
+    width: 32px;
+    height: 32px;
 }
 
-/* === RESPONSIVE DESIGN CON ALTA ESPECIFICIDAD === */
 @media (max-width: 1024px) {
-    div.module-card {
-        width: 100% !important;
-        height: auto !important;
+    .module-card-container {
+        width: 100%;
+        height: auto;
     }
-    
-    div.module-card .head-container {
-        padding: 12px !important;
+
+    .module-card-header {
+        padding: 12px;
     }
-    
-    div.module-card .head-container h2 {
-        font-size: 20px !important;
-        margin: 20px !important;
+
+    .module-card-header h2 {
+        font-size: 20px;
+        margin: 20px;
     }
-    
-    div.module-card .card-text {
-        width: 100% !important;
-        height: auto !important;
-        font-size: 14px !important;
-        margin: 6px !important;
+
+    .module-card-lesson-item {
+        width: 100%;
+        height: auto;
+        font-size: 14px;
+        margin: 6px;
     }
 }
 
 @media (max-width: 768px) {
-    div.module-card {
-        width: 100% !important;
-        height: auto !important;
-        flex-direction: column !important;
-        align-items: center !important;
+    .module-card-container {
+        width: 100%;
+        height: auto;
+        flex-direction: column;
+        align-items: center;
     }
-    
-    div.module-card .head-container {
-        padding: 8px !important;
+
+    .module-card-header {
+        padding: 8px;
     }
-    
-    div.module-card .head-container h2 {
-        font-size: 18px !important;
-        margin: 15px !important;
+
+    .module-card-header h2 {
+        font-size: 18px;
+        margin: 15px;
     }
-    
-    div.module-card .card-text {
-        width: 100% !important;
-        height: auto !important;
-        font-size: 12px !important;
-        margin: 4px !important;
+
+    .module-card-lesson-item {
+        width: 100%;
+        height: auto;
+        font-size: 12px;
+        margin: 4px;
     }
 }
 
 @media (max-width: 480px) {
-    div.module-card {
-        width: 100% !important;
-        height: auto !important;
-        flex-direction: column !important;
+    .module-card-container {
+        width: 100%;
+        height: auto;
+        flex-direction: column;
     }
-    
-    div.module-card .head-container {
-        padding: 4px !important;
+
+    .module-card-header {
+        padding: 4px;
     }
-    
-    div.module-card .head-container h2 {
-        font-size: 16px !important;
-        margin: 10px !important;
+
+    .module-card-header h2 {
+        font-size: 16px;
+        margin: 10px;
     }
-    
-    div.module-card .card-text {
-        width: 100% !important;
-        height: auto !important;
-        font-size: 10px !important;
-        margin: 2px !important;
+
+    .module-card-lesson-item {
+        width: 100%;
+        height: auto;
+        font-size: 10px;
+        margin: 2px;
+    }
+}

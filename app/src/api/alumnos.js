@@ -2,12 +2,7 @@ import { instanceUsers } from "./axiosInstances";
 
 export const createAlumno = async (user) => {
   try {
-    const token = localStorage.getItem("token");
-    const response = await instanceUsers.post("/users/createCompleteStudent", user, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await instanceUsers.post("/users/createCompleteStudent");
     return response.data;
   } catch (error) {
     throw error;
