@@ -29,25 +29,6 @@ const TeacherModuleCard = ({
           <span className="teacher-module-label">MÓDULO</span>
           <span className="teacher-module-number">{module.module_number || index + 1}</span>
         </div>
-        
-        <div className="teacher-module-actions">
-          <button 
-            className="teacher-btn-view"
-            onClick={() => onModuleClick(module)}
-            title="Ver lecciones"
-          >
-            <span className="teacher-btn-icon">📖</span>
-          </button>
-          
-          <button 
-            className={`teacher-btn-delete ${hasLessons ? 'teacher-btn-delete-force' : ''}`}
-            onClick={handleDeleteClick}
-            title={hasLessons ? "Eliminar módulo y todas sus lecciones" : "Eliminar módulo"}
-          >
-            <span className="teacher-btn-icon">🗑️</span>
-            {hasLessons && <span className="teacher-force-indicator">⚡</span>}
-          </button>
-        </div>
       </div>
       
       {/* Información principal */}
@@ -66,6 +47,26 @@ const TeacherModuleCard = ({
           <span className="teacher-lessons-text">
             {module.lessons && module.lessons.length === 1 ? 'lección' : 'lecciones'}
           </span>
+        </div>
+        
+        {/* Acciones del módulo - Movidas aquí */}
+        <div className="teacher-module-actions">
+          <button 
+            className="teacher-btn-view"
+            onClick={() => onModuleClick(module)}
+            title="Ver lecciones"
+          >
+            <span className="teacher-btn-icon">📖</span>
+          </button>
+          
+          <button 
+            className={`teacher-btn-delete ${hasLessons ? 'teacher-btn-delete-force' : ''}`}
+            onClick={handleDeleteClick}
+            title={hasLessons ? "Eliminar módulo y todas sus lecciones" : "Eliminar módulo"}
+          >
+            <span className="teacher-btn-icon">🗑️</span>
+            {hasLessons && <span className="teacher-force-indicator">⚡</span>}
+          </button>
         </div>
       </div>
       

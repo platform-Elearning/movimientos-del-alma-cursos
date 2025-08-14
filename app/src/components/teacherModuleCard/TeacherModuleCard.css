@@ -1,9 +1,9 @@
-/* TeacherModuleCard - Estilo claro con estética dorada de la plataforma */
+/* TeacherModuleCard - Estilo armonioso con verde y morado */
 
 .teacher-module-card {
-  background-color: #ffffff !important;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fffe 100%) !important;
   border: none !important;
-  border-radius: 50px !important;
+  border-radius: 25px !important;
   padding: 24px 32px !important;
   margin: 16px 0 !important;
   display: flex !important;
@@ -14,13 +14,13 @@
   max-width: 1294px !important;
   position: relative !important;
   overflow: hidden !important;
-  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
   transform: translateY(0) !important;
   cursor: pointer !important;
-  box-shadow: 0 8px 32px rgba(37, 36, 34, 0.15) !important;
+  box-shadow: 0 4px 20px rgba(16, 185, 129, 0.1) !important;
 }
 
-/* Borde gradiente como las otras cards */
+/* Borde gradiente verde-morado */
 .teacher-module-card:before {
   content: '' !important;
   position: absolute !important;
@@ -28,19 +28,19 @@
   left: 0px !important;
   right: 0px !important;
   bottom: 0px !important;
-  border-radius: 50px !important;
-  padding: 3px !important;
-  background: linear-gradient(135deg, #83711B, #FFBB80, #83711B, #FFBB80) !important;
+  border-radius: 25px !important;
+  padding: 2px !important;
+  background: linear-gradient(135deg, #10b981, #6366f1, #10b981) !important;
   background-size: 200% 200% !important;
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0) !important;
   mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0) !important;
   -webkit-mask-composite: destination-out !important;
   mask-composite: exclude !important;
   z-index: -1 !important;
-  animation: gradient-border 3s ease infinite !important;
+  animation: gradient-border-flow 4s ease infinite !important;
 }
 
-@keyframes gradient-border {
+@keyframes gradient-border-flow {
   0%, 100% {
     background-position: 0% 50% !important;
   }
@@ -49,17 +49,17 @@
   }
 }
 
-/* Efecto hover */
+/* Efecto hover suave */
 .teacher-module-card:hover {
-  transform: translateY(-6px) scale(1.015) !important;
-  box-shadow: 0 16px 48px rgba(37, 36, 34, 0.25) !important;
+  transform: translateY(-4px) !important;
+  box-shadow: 0 12px 40px rgba(16, 185, 129, 0.15) !important;
 }
 
 .teacher-module-card:hover:before {
-  animation-duration: 1s !important;
+  animation-duration: 2s !important;
 }
 
-/* Header del módulo */
+/* Header del módulo - Sin acciones */
 .teacher-module-header {
   display: flex !important;
   flex-direction: column !important;
@@ -70,12 +70,12 @@
 }
 
 .teacher-module-badge {
-  background: linear-gradient(135deg, #83711B, #FFBB80) !important;
+  background: linear-gradient(135deg, #10b981, #059669) !important;
   color: #ffffff !important;
   padding: 12px 20px !important;
-  border-radius: 20px !important;
+  border-radius: 16px !important;
   text-align: center !important;
-  box-shadow: 0 4px 16px rgba(131, 113, 27, 0.3) !important;
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3) !important;
   position: relative !important;
   overflow: hidden !important;
 }
@@ -122,7 +122,7 @@
 }
 
 .teacher-module-name {
-  color: #252422 !important;
+  color: #1f2937 !important;
   font-size: 28px !important;
   font-weight: 700 !important;
   margin: 0 !important;
@@ -140,7 +140,7 @@
   letter-spacing: 0.025em !important;
 }
 
-/* Estadísticas y acciones del módulo - Nueva organización */
+/* Estadísticas y acciones del módulo */
 .teacher-module-stats {
   display: flex !important;
   flex-direction: column !important;
@@ -152,14 +152,14 @@
 }
 
 .teacher-lessons-badge {
-  background: linear-gradient(135deg, #FFBB80, #83711B) !important;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6) !important;
   color: #ffffff !important;
   padding: 16px 24px !important;
-  border-radius: 25px !important;
+  border-radius: 20px !important;
   display: flex !important;
   align-items: center !important;
   gap: 12px !important;
-  box-shadow: 0 6px 20px rgba(255, 187, 128, 0.4) !important;
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.3) !important;
   position: relative !important;
   overflow: hidden !important;
   transition: all 0.3s ease !important;
@@ -179,7 +179,7 @@
 
 .teacher-module-card:hover .teacher-lessons-badge {
   transform: scale(1.05) !important;
-  box-shadow: 0 8px 24px rgba(255, 187, 128, 0.5) !important;
+  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.4) !important;
 }
 
 .teacher-module-card:hover .teacher-lessons-badge:before {
@@ -205,13 +205,14 @@
   opacity: 0.9 !important;
 }
 
-/* Acciones del módulo - Reorganizadas debajo del contador */
+/* Acciones del módulo - Ahora dentro de stats, debajo del badge */
 .teacher-module-actions {
   display: flex !important;
   gap: 12px !important;
   opacity: 0.8 !important;
   transition: all 0.3s ease !important;
   justify-content: center !important;
+  margin-top: 8px !important;
 }
 
 .teacher-module-card:hover .teacher-module-actions {
@@ -221,91 +222,94 @@
 
 .teacher-btn-view,
 .teacher-btn-delete {
-  background: linear-gradient(135deg, #f8f9fa, #ffffff) !important;
-  border: 2px solid rgba(131, 113, 27, 0.2) !important;
-  border-radius: 15px !important;
+  background: linear-gradient(135deg, #ffffff, #f8fafc) !important;
+  border: 2px solid rgba(16, 185, 129, 0.2) !important;
+  border-radius: 12px !important;
   padding: 12px !important;
   cursor: pointer !important;
   transition: all 0.3s ease !important;
   position: relative !important;
-  overflow: hidden !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+  overflow: visible !important;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.1) !important;
 }
 
 .teacher-btn-view:hover {
-  background: linear-gradient(135deg, #FFBB80, #83711B) !important;
-  border-color: #FFBB80 !important;
-  transform: translateY(-3px) !important;
-  box-shadow: 0 8px 20px rgba(255, 187, 128, 0.4) !important;
+  background: linear-gradient(135deg, #10b981, #059669) !important;
+  border-color: #10b981 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.3) !important;
 }
 
 .teacher-btn-view:hover .teacher-btn-icon {
   transform: scale(1.1) !important;
+  color: #ffffff !important;
 }
 
 .teacher-btn-delete:hover {
-  background: linear-gradient(135deg, #fee2e2, #fecaca) !important;
+  background: linear-gradient(135deg, #ef4444, #dc2626) !important;
   border-color: #ef4444 !important;
-  transform: translateY(-3px) !important;
-  box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 16px rgba(239, 68, 68, 0.3) !important;
 }
 
 .teacher-btn-delete:hover .teacher-btn-icon {
   transform: scale(1.1) !important;
+  color: #ffffff !important;
 }
 
 .teacher-btn-delete-force {
-  background: linear-gradient(135deg, #fee2e2, #fecaca) !important;
-  border-color: rgba(239, 68, 68, 0.4) !important;
+  background: linear-gradient(135deg, #fef2f2, #fee2e2) !important;
+  border-color: rgba(239, 68, 68, 0.3) !important;
 }
 
 .teacher-btn-delete-force:hover {
-  background: linear-gradient(135deg, #dc2626, #ef4444) !important;
-  border-color: #dc2626 !important;
+  background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+  border-color: #ef4444 !important;
 }
 
 .teacher-btn-icon {
   font-size: 18px !important;
-  color: #374151 !important;
+  color: #6b7280 !important;
   transition: all 0.3s ease !important;
   filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1)) !important;
 }
 
-.teacher-btn-view:hover .teacher-btn-icon,
-.teacher-btn-delete-force:hover .teacher-btn-icon {
-  color: #ffffff !important;
-}
-
-.teacher-btn-delete:hover .teacher-btn-icon {
-  color: #dc2626 !important;
-}
-
 .teacher-force-indicator {
   position: absolute !important;
-  top: -8px !important;
-  right: -8px !important;
-  font-size: 12px !important;
-  background: linear-gradient(135deg, #dc2626, #ef4444) !important;
+  top: -12px !important;
+  right: -12px !important;
+  font-size: 16px !important;
+  background: linear-gradient(135deg, #ef4444, #dc2626) !important;
   color: #ffffff !important;
   border-radius: 50% !important;
-  width: 22px !important;
-  height: 22px !important;
+  width: 28px !important;
+  height: 28px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.4) !important;
-  animation: pulse-force 2s infinite !important;
-  border: 2px solid #ffffff !important;
+  box-shadow: 0 4px 16px rgba(239, 68, 68, 0.6) !important;
+  animation: pulse-force 1.5s infinite !important;
+  border: 3px solid #ffffff !important;
+  z-index: 20 !important;
+  font-weight: bold !important;
+  line-height: 1 !important;
 }
 
 @keyframes pulse-force {
   0%, 100% {
     transform: scale(1) !important;
     opacity: 1 !important;
+    box-shadow: 0 4px 16px rgba(239, 68, 68, 0.6) !important;
   }
-  50% {
-    transform: scale(1.1) !important;
-    opacity: 0.8 !important;
+  25% {
+    transform: scale(1.2) !important;
+    opacity: 0.9 !important;
+    box-shadow: 0 6px 24px rgba(239, 68, 68, 0.8) !important;
+  }
+  75% {
+    transform: scale(0.95) !important;
+    opacity: 1 !important;
+    box-shadow: 0 2px 12px rgba(239, 68, 68, 0.5) !important;
   }
 }
 
@@ -316,7 +320,7 @@
   left: 0 !important;
   right: 0 !important;
   bottom: 0 !important;
-  background: radial-gradient(circle at center, rgba(255, 187, 128, 0.08) 0%, transparent 70%) !important;
+  background: radial-gradient(circle at center, rgba(16, 185, 129, 0.05) 0%, transparent 70%) !important;
   opacity: 0 !important;
   transition: opacity 0.4s ease !important;
   pointer-events: none !important;
@@ -377,7 +381,7 @@
     padding: 24px !important;
     gap: 20px !important;
     min-height: auto !important;
-    border-radius: 30px !important;
+    border-radius: 20px !important;
   }
   
   .teacher-module-header {
@@ -389,7 +393,7 @@
   
   .teacher-module-badge {
     padding: 8px 16px !important;
-    border-radius: 16px !important;
+    border-radius: 12px !important;
   }
   
   .teacher-module-label {
@@ -421,7 +425,7 @@
   
   .teacher-lessons-badge {
     padding: 12px 20px !important;
-    border-radius: 20px !important;
+    border-radius: 16px !important;
   }
   
   .teacher-lessons-icon {
@@ -444,7 +448,7 @@
   .teacher-btn-view,
   .teacher-btn-delete {
     padding: 12px 16px !important;
-    border-radius: 12px !important;
+    border-radius: 10px !important;
   }
 }
 
@@ -452,7 +456,7 @@
   .teacher-module-card {
     padding: 20px !important;
     gap: 16px !important;
-    border-radius: 25px !important;
+    border-radius: 16px !important;
     margin: 12px 0 !important;
   }
   
@@ -462,7 +466,7 @@
   
   .teacher-module-badge {
     padding: 6px 12px !important;
-    border-radius: 12px !important;
+    border-radius: 10px !important;
   }
   
   .teacher-module-label {
@@ -489,7 +493,7 @@
   .teacher-lessons-badge {
     padding: 10px 16px !important;
     gap: 8px !important;
-    border-radius: 16px !important;
+    border-radius: 12px !important;
   }
   
   .teacher-lessons-icon {
@@ -511,7 +515,7 @@
   .teacher-btn-view,
   .teacher-btn-delete {
     padding: 10px 14px !important;
-    border-radius: 10px !important;
+    border-radius: 8px !important;
   }
   
   .teacher-btn-icon {
@@ -519,10 +523,11 @@
   }
   
   .teacher-force-indicator {
-    width: 18px !important;
-    height: 18px !important;
-    font-size: 10px !important;
-    top: -6px !important;
-    right: -6px !important;
+    width: 20px !important;
+    height: 20px !important;
+    font-size: 12px !important;
+    top: -8px !important;
+    right: -8px !important;
+    border: 2px solid #ffffff !important;
   }
 }

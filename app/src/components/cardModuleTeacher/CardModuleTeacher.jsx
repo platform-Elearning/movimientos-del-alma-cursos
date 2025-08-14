@@ -65,13 +65,13 @@ const CardModuleTeacher = ({
         >
           📊 Progreso
         </button>
-        <button 
+       {/*  <button 
           className="teacher-btn-secondary"
           onClick={() => onSendMessage(student)}
           title="Enviar mensaje"
         >
           💬 Mensaje
-        </button>
+        </button> */}
       </div>
     </div>
   );
