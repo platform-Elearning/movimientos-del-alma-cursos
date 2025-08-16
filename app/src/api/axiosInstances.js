@@ -81,7 +81,6 @@ const refreshAuthToken = async () => {
     console.log("❌ Refresh token failed:", error.message);
     console.log("Error status:", error.response?.status);
     console.log("Error data:", error.response?.data);
-    console.log("Request config:", error.config);
     
     Cookies.remove('token');
     localStorage.removeItem('token');

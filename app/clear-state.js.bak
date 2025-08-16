@@ -1,0 +1,19 @@
+// Ejecuta esto en la consola del navegador para limpiar todo
+
+// Limpiar localStorage
+localStorage.clear();
+
+// Limpiar sessionStorage  
+sessionStorage.clear();
+
+// Limpiar TODAS las cookies
+document.cookie.split(";").forEach(function(c) { 
+    document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); 
+});
+
+console.log("✅ Todo limpiado!");
+
+// Recargar la página
+setTimeout(() => {
+    window.location.reload();
+}, 1000);
