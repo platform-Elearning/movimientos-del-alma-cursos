@@ -113,66 +113,66 @@ export const AuthProvider = ({ children }) => {
 
     // Verificar autenticación al montar
     const checkLogin = async () => {
-        const token = Cookies.get("token") || localStorage.getItem("token");
+    const token = Cookies.get("token") || localStorage.getItem("token");
 
-        if (!token) {
-            // No hay access token, intentar refresh
-            try {
-                console.log("No access token found, attempting refresh...");
-                await attemptTokenRefresh();
-            } catch (error) {
-                console.log("No refresh token available or expired");
-                setIsAuthenticated(false);
-            }
-            return;
-        }
+    if (!token) {
+      // No hay access token, intentar refresh SOLO si hay refresh token
+      try {
+        console.log("No access token found, attempting refresh...");
+        await attemptTokenRefresh();
+      } catch (error) {
+        console.log("No refresh token available or expired");
+        setIsAuthenticated(false);
+      }
+      return;
+    }
 
+    try {
+    const dataDecoded = jwtDecode(token);
+    const currentTime = Date.now() / 1000;
+    
+      // Si el token ha expirado, intentar refresh
+      if (dataDecoded.exp < currentTime) {
+        console.log("Access token expired, attempting refresh...");
         try {
-            const dataDecoded = jwtDecode(token);
-            const currentTime = Date.now() / 1000;
-            
-            // Si el token ha expirado, intentar refresh
-            if (dataDecoded.exp < currentTime) {
-                console.log("Access token expired, attempting refresh...");
-                try {
-                    await attemptTokenRefresh();
-                } catch (error) {
-                    console.log("Failed to refresh token on startup");
-                    clearUserState();
-                }
-                return;
-            }
-            
-            // Token válido, establecer usuario
-            setUserFromToken(token);
-            
-        } catch (err) {
-            console.log("Invalid token format, attempting refresh...");
-            try {
-                await attemptTokenRefresh();
-            } catch (error) {
-                console.log("Failed to refresh invalid token");
-                clearUserState();
-            }
+          await attemptTokenRefresh();
+        } catch (error) {
+          console.log("Failed to refresh token on startup");
+          clearUserState();
         }
-    };
+          return;
+      }
+      
+      // Token válido, establecer usuario
+      setUserFromToken(token);
+      
+    } catch (err) {
+      console.log("Invalid token format, attempting refresh...");
+      try {
+        await attemptTokenRefresh();
+      } catch (error) {
+        console.log("Failed to refresh invalid token");
+        clearUserState();
+      }
+    }
+  };
 
     // Función para intentar refresh token
     const attemptTokenRefresh = async () => {
-        try {
-            const response = await refreshTokenRequest();
-            if (response && response.token) {
-                const dataDecoded = setUserFromToken(response.token);
-                console.log("Token refreshed successfully on startup");
-                return dataDecoded;
-            } else {
-                throw new Error('No token received from refresh');
-            }
-        } catch (error) {
-            console.log("Refresh failed:", error.message);
-            clearUserState();
-            throw error;
+      try {
+        const response = await refreshTokenRequest();
+        if (response && response.token) {
+          const dataDecoded = setUserFromToken(response.token);
+          console.log("Token refreshed successfully on startup");
+          return dataDecoded;
+        } else {
+          throw new Error('No token received from refresh');
         }
+      } catch (error) {
+        console.log("Refresh failed:", error.message);
+        clearUserState();
+        throw error;
+      }
     };
 
     // Manejo de errores con temporizador
