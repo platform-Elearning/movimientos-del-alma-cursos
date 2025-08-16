@@ -118,39 +118,62 @@ export const AuthProvider = ({ children }) => {
     // Verificar autenticación al montar
     const checkLogin = async () => {
     const token = Cookies.get("token") || localStorage.getItem("token");
-
+    
+    // ❌ TEMPORALMENTE DESACTIVAR REFRESH EN DEVELOP
+    const isDevelop = window.location.hostname.includes('platform-dev') || window.location.hostname.includes('railway');
+    
     if (!token) {
-      // No hay access token, intentar refresh SOLO si hay refresh token
+    if (isDevelop) {
+      console.log("No access token found in develop - refresh disabled");
+    setIsAuthenticated(false);
+    return;
+    }
+    
+      // Solo en local: intentar refresh
       try {
         console.log("No access token found, attempting refresh...");
-        await attemptTokenRefresh();
-      } catch (error) {
-        console.log("No refresh token available or expired");
-        setIsAuthenticated(false);
-      }
-      return;
+      await attemptTokenRefresh();
+    } catch (error) {
+      console.log("No refresh token available or expired");
+      setIsAuthenticated(false);
+    }
+    return;
     }
 
     try {
     const dataDecoded = jwtDecode(token);
     const currentTime = Date.now() / 1000;
     
-      // Si el token ha expirado, intentar refresh
-      if (dataDecoded.exp < currentTime) {
-        console.log("Access token expired, attempting refresh...");
-        try {
-          await attemptTokenRefresh();
-        } catch (error) {
-          console.log("Failed to refresh token on startup");
-          clearUserState();
+    // Si el token ha expirado
+    if (dataDecoded.exp < currentTime) {
+      if (isDevelop) {
+        console.log("Access token expired in develop - clearing state");
+        clearUserState();
+        return;
         }
-          return;
+      
+      // Solo en local: intentar refresh
+    console.log("Access token expired, attempting refresh...");
+      try {
+      await attemptTokenRefresh();
+    } catch (error) {
+        console.log("Failed to refresh token on startup");
+          clearUserState();
+          }
+        return;
       }
       
       // Token válido, establecer usuario
       setUserFromToken(token);
       
     } catch (err) {
+      if (isDevelop) {
+        console.log("Invalid token format in develop - clearing state");
+        clearUserState();
+        return;
+      }
+      
+      // Solo en local: intentar refresh
       console.log("Invalid token format, attempting refresh...");
       try {
         await attemptTokenRefresh();

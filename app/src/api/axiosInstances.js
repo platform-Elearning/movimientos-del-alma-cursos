@@ -132,7 +132,10 @@ const addAuthInterceptor = (instance) => {
     async (error) => {
       const originalRequest = error.config;
       
-      if (isTokenExpiredError(error) && !originalRequest._retry) {
+      // ❌ DESACTIVAR REFRESH EN DEVELOP
+      const isDevelop = window.location.hostname.includes('platform-dev') || window.location.hostname.includes('railway');
+      
+      if (isTokenExpiredError(error) && !originalRequest._retry && !isDevelop) {
         originalRequest._retry = true;
         console.log("🔄 Token expired, attempting refresh...");
         
