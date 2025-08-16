@@ -1,0 +1,452 @@
+.ver-alumnos-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+/* Loading State */
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #e3e3e3;
+  border-top: 4px solid #007bff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 15px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Course Header - CENTRADO */
+.course-header {
+  background: white;
+  padding: 30px 25px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 25px;
+  text-align: center;
+  position: relative;
+}
+
+.course-info {
+  margin-bottom: 20px;
+}
+
+.page-title {
+  margin: 0 0 15px 0;
+  color: #333;
+  font-size: 1.8rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.course-description {
+  margin: 0 auto;
+  color: #666;
+  font-size: 1rem;
+  line-height: 1.6;
+  text-align: center;
+  max-width: 800px;
+}
+
+.header-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.students-count {
+  display: flex;
+  align-items: center;
+}
+
+.count-badge {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 20px;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+/* ✅ NUEVO: Badge de módulos disponibles */
+.course-modules-info {
+  display: flex;
+  align-items: center;
+}
+
+.modules-badge {
+  background-color: #28a745;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 20px;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+/* Content Area */
+.alumnos-content {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+/* Error State */
+.error-state {
+  padding: 60px 20px;
+  text-align: center;
+  color: #666;
+}
+
+.error-icon {
+  font-size: 3rem;
+  margin-bottom: 15px;
+}
+
+.error-state h3 {
+  margin: 0 0 10px 0;
+  color: #dc3545;
+  font-size: 1.4rem;
+}
+
+.error-state p {
+  margin: 0 0 20px 0;
+  font-size: 1rem;
+}
+
+.retry-btn {
+  padding: 10px 20px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease;
+}
+
+.retry-btn:hover {
+  background-color: #c82333;
+}
+
+/* Empty State */
+.empty-state {
+  padding: 60px 20px;
+  text-align: center;
+  color: #666;
+}
+
+.empty-icon {
+  font-size: 3rem;
+  margin-bottom: 15px;
+}
+
+.empty-state h3 {
+  margin: 0 0 10px 0;
+  color: #333;
+  font-size: 1.4rem;
+}
+
+.empty-state p {
+  margin: 0;
+  font-size: 1rem;
+}
+
+/* Table Styles */
+.alumnos-table-container {
+  overflow-x: auto;
+}
+
+.alumnos-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.alumnos-table th {
+  background-color: #f8f9fa;
+  padding: 15px 12px;
+  text-align: left;
+  font-weight: 600;
+  color: #495057;
+  border-bottom: 2px solid #dee2e6;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.alumnos-table td {
+  padding: 15px 12px;
+  border-bottom: 1px solid #dee2e6;
+  vertical-align: middle;
+}
+
+.alumnos-table tr:hover {
+  background-color: #f8f9fa;
+}
+
+.alumnos-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* Student Info Styling */
+.student-name,
+.student-lastname {
+  font-weight: 500;
+  color: #333;
+}
+
+.student-email {
+  color: #007bff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.student-email:hover {
+  color: #0056b3;
+  text-decoration: underline;
+}
+
+.student-nationality {
+  color: #666;
+  font-style: italic;
+}
+
+/* Módulos y Acciones */
+.modules-cell {
+  text-align: center;
+}
+
+.modules-count {
+  display: inline-block;
+  background-color: #e9ecef;
+  color: #495057;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  min-width: 50px;
+}
+
+.actions-cell {
+  text-align: center;
+}
+
+.module-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+}
+
+.module-btn {
+  width: 35px;
+  height: 35px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.module-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.add-btn {
+  background-color: #28a745;
+  color: white;
+}
+
+.add-btn:hover:not(:disabled) {
+  background-color: #218838;
+  transform: translateY(-1px);
+}
+
+.add-btn:disabled {
+  background-color: #6c757d;
+}
+
+.remove-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+.remove-btn:hover:not(:disabled) {
+  background-color: #c82333;
+  transform: translateY(-1px);
+}
+
+.remove-btn:disabled {
+  background-color: #6c757d;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+  .page-title {
+    font-size: 1.5rem;
+  }
+
+  .course-description {
+    font-size: 0.95rem;
+  }
+
+  .header-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .ver-alumnos-container {
+    padding: 15px;
+  }
+
+  .course-header {
+    padding: 25px 20px;
+  }
+
+  .page-title {
+    font-size: 1.3rem;
+  }
+
+  .course-description {
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  .count-badge,
+  .modules-badge {
+    font-size: 0.9rem;
+    padding: 8px 14px;
+  }
+
+  /* Mobile Table */
+  .alumnos-table {
+    display: block;
+  }
+
+  .alumnos-table thead {
+    display: none;
+  }
+
+  .alumnos-table tr {
+    display: block;
+    margin-bottom: 15px;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 15px;
+    background: white;
+  }
+
+  .alumnos-table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #f1f1f1;
+  }
+
+  .alumnos-table td:last-child {
+    border-bottom: none;
+  }
+
+  .alumnos-table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #495057;
+    flex-shrink: 0;
+    margin-right: 15px;
+    min-width: 120px;
+  }
+
+  /* Mobile module actions */
+  .module-actions {
+    justify-content: flex-end;
+  }
+
+  .module-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .ver-alumnos-container {
+    padding: 10px;
+  }
+
+  .course-header {
+    padding: 20px 15px;
+  }
+
+  .page-title {
+    font-size: 1.2rem;
+    line-height: 1.4;
+  }
+
+  .course-description {
+    font-size: 0.85rem;
+  }
+
+  .count-badge,
+  .modules-badge {
+    font-size: 0.85rem;
+    padding: 6px 12px;
+  }
+
+  .header-actions {
+    gap: 8px;
+  }
+
+  .alumnos-table td::before {
+    min-width: 100px;
+    font-size: 0.85rem;
+  }
+
+  .alumnos-table td {
+    font-size: 0.9rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+
+  .alumnos-table td::before {
+    margin-right: 0;
+    margin-bottom: 2px;
+  }
+
+  /* Acciones en móvil */
+  .actions-cell .module-actions {
+    justify-content: flex-start;
+    margin-top: 5px;
+  }
+
+  .module-btn {
+    width: 30px;
+    height: 30px;
+    font-size: 0.9rem;
+  }
+}

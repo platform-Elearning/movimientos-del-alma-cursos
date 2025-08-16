@@ -1,102 +1,161 @@
-import { instanceCursos, instanceEnrollmentss } from "./axiosInstances";
+import { instanceCursos, instanceEnrollments } from "./axiosInstances";
 
-  export const getCursos = async () => {
-      try {
-        const response = await instanceCursos.get("/getAllCourses");
-        return response.data;
-      } catch (error) {
-        throw error; 
-      }
-    };
-
-  export const createCourse = async (course) => {
-    try {
-      console.log("course", course);
-      const response = await instanceCursos.post("/createCourse", course);
-      return response.data;
-    } catch (error) {
-      throw error; 
-    }
+export const createCourse = async (course) => {
+  try {
+    const response = await instanceCursos.post("/courses/createCourse", course);
+    return response.data;
+  } catch (error) {
+    throw error;
   }
+};
 
-
-  export const getModulosByCursos = async (curso) => {
-    try {
-      const response = await instanceCursos.post("/cursos/:id/modulos", curso);
-      return response.data;
-    } catch (error) {
-      throw error; 
-    }
-  };
-
-  export const registerStudentToCourse = async (enrollmentData) => {
-    try {
-      const response = await instanceEnrollmentss.post("/registerToCourse", enrollmentData);
-      return response.data;
-    } catch (error) {
-      throw error; 
-    }
+export const getAllCursos = async () => {
+  try {
+    const response = await instanceCursos.get("/courses/getAllCourses");
+    return response.data;
+  } catch (error) {
+    throw error;
   }
+};
 
-  export const getCoursesByStudentId = async (studentId) => {
-    try {
-      const response = await instanceCursos.get(`/getCoursesByStudentId`, {
+export const getCursos = async (studentId = null) => {
+  try {
+    if (studentId) {
+      const response = await instanceCursos.get(`/courses/getCoursesByStudentId`, {
         headers: {
-          "id": studentId, // Pasar el ID en los headers
+          id: studentId,
         },
       });
       return response.data;
-    } catch (error) {
-      console.error("Error al obtener los cursos por studentId:", error);
-      throw error;
-    }
-  };
-  
-  export const createModule = async (moduleData) => {
-    try {
-      const response = await instanceCursos.post("/createCourseModule", moduleData);
+    } else {
+      const response = await instanceCursos.get("/courses/getAllCourses");
       return response.data;
-    } catch (error) {
-      console.error("Error al enviar los datos del módulo:", error);
-      throw error;
     }
-  };
-
-  export const getModulesByCourseID = async (id) => {
-    try {
-      const response = await instanceCursos.get("/getModulesByCourseId/" + id);
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
-  };
-  
-  export const createLesson = async (lessonData) => {
-    try {
-      const response = await instanceCursos.post("/createLesson", lessonData);
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
-  };
-
-  export const getModulesByAlumnoAndCurso = async (userId, courseId) => {
-    try {
-      const response = await instanceCursos.get(`/getCoursesWithModulesAndLessonsFilteredByCourseAndStudentId?student_id=${userId}&course_id=${courseId}`);
-      return response.data;
-    } catch (error) {
-      throw error; 
-    }
+  } catch (error) {
+    throw error;
   }
+};
 
-  export const getLessonsByCourseAndModule = async (courseId,ModuleId) => {
-    try {
-      const response = await instanceCursos.get(`/getLessonsByModuleIdAndCourseId?module_id=${ModuleId}&course_id=${courseId}`);
-      return response.data;
-    } catch (error) {
-      throw error; 
-    }
+export const getCoursesByStudentId = async (studentId) => {
+  try {
+    const response = await instanceCursos.get(`/courses/getCoursesByStudentId`, {
+      headers: {
+        id: studentId, // Pasar el ID en los headers como espera el backend
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
   }
+};
 
+export const createModule = async (moduleData) => {
+  try {
+    const response = await instanceCursos.post(
+      "/courses/createCourseModule",
+      moduleData
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const createCourseModule = createModule;
+
+export const getModulosByCursos = async (curso) => {
+  try {
+    const response = await instanceCursos.post("/courses/cursos/:id/modulos", curso);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getModulesByCourseID = async (id) => {
+  try {
+    const response = await instanceCursos.get("/courses/getModulesByCourseId/" + id);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getCourseModules = async (courseId) => {
+  try {
+    const response = await instanceCursos.get(`/courses/getModulesByCourseId/${courseId}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getModulesByAlumnoAndCurso = async (userId, courseId) => {
+  try {
+    const response = await instanceCursos.get(
+      `/courses/getCoursesWithModulesAndLessonsFilteredByCourseAndStudentId?student_id=${userId}&course_id=${courseId}`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const deleteCourseModule = async (moduleId) => {
+  try {
+    const response = await instanceCursos.delete(`/courses/deleteModule/${moduleId}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const createLesson = async (lessonData) => {
+  try {
+    const response = await instanceCursos.post("/courses/createLesson", lessonData);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const deleteLesson = async (lessonId) => {
+  try {
+    const response = await instanceCursos.delete(`/courses/deleteLesson/${lessonId}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getLessonsByModuleIdAndCourseId = async (courseId, moduleId) => {
+  try {
+    const response = await instanceCursos.get(
+      `/courses/getLessonsByModuleIdAndCourseId?module_id=${moduleId}&course_id=${courseId}`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getLessonsByModule = async (moduleId, courseId) => {
+  try {
+    const response = await instanceCursos.get(`/courses/getLessonsByModuleIdAndCourseId?module_id=${moduleId}&course_id=${courseId}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const registerStudentToCourse = async (enrollmentData) => {
+  try {
+    const response = await instanceEnrollments.post("/enrollments/registerToCourse", enrollmentData);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 
 export default getCursos;

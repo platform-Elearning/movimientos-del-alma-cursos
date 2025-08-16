@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { createLesson } from "../../../../api/cursos"; // Asegúrate de que esta función esté configurada
+import { createLesson } from "../../../../api/cursos";
 import "./createLesson.css";
 import { useParams, useNavigate } from "react-router-dom";
 import BackLink from "../../../../components/backLink/BackLink";
 
 const CreateLesson = () => {
-  const { cursoId, moduleId } = useParams(); // Obtener IDs desde la URL
+  const { cursoId, moduleId } = useParams();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     course_id: cursoId,
     module_id: moduleId,
@@ -17,30 +18,25 @@ const CreateLesson = () => {
 
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-  const navigate =useNavigate();
-  const goToModules = (cursoId)=>{
+
+  const goToModules = (cursoId) => {
     navigate(`/admin/editarCurso/${cursoId}`);
-  }
+  };
 
-
-  // Manejar cambios en los inputs
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  // Manejar el envío del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage("");
     setError("");
 
     try {
-      console.log(formData);
-      await createLesson(formData); // Llamar a la función para crear la lección
+      await createLesson(formData);
       setMessage("Lección creada exitosamente");
 
-      // Limpiar el formulario después de una creación exitosa
       setFormData({
         course_id: cursoId,
         module_id: moduleId,
@@ -50,14 +46,13 @@ const CreateLesson = () => {
         url: "",
       });
     } catch (err) {
-      console.error("Error al crear la lección:", err);
       setError("Error al crear la lección");
     }
   };
 
   return (
     <div>
-      <BackLink title="Volver a Modulos" onClick={() => goToModules(cursoId)} />
+      <BackLink title="Volver a Módulos" onClick={() => goToModules(cursoId)} />
       <div className="create-lesson-container">
         <h2>Crear Nueva Lección</h2>
         <form onSubmit={handleSubmit} className="create-lesson-form">

@@ -23,7 +23,6 @@ const CoursesTable = () => {
         throw new Error("La respuesta de la API no es un array válido");
       }
     } catch (err) {
-      console.error("Error al cargar los cursos:", err);
       setError("Error al cargar los cursos");
       setLoading(false);
     }
@@ -45,6 +44,11 @@ const CoursesTable = () => {
 
   const handleEditClick = (courseId) => {
     navigate(`/admin/editarCurso/${courseId}`); 
+  };
+
+  // ✅ Nueva función para ver alumnos del curso
+  const handleViewStudentsClick = (courseId) => {
+    navigate(`/admin/cursos/alumnos/${courseId}`);
   };
 
   if (loading) return <p className="loading-message">Cargando datos...</p>;
@@ -69,9 +73,18 @@ const CoursesTable = () => {
               <td>{course.name}</td>
               <td>{course.description}</td>
               <td className="actions-cell">
-              <button
-                  className="action-button edit-button" onClick={() => handleEditClick(course.id)}>Editar</button>
-                <button className="action-button view-button">Ver Alumnos</button>
+                <button
+                  className="action-button edit-button" 
+                  onClick={() => handleEditClick(course.id)}
+                >
+                  Editar
+                </button>
+                <button 
+                  className="action-button view-button"
+                  onClick={() => handleViewStudentsClick(course.id)}
+                >
+                  Ver Alumnos
+                </button>
                 <button
                   className="action-button add-button"
                   onClick={() => handleAddStudentClick(course.id)}

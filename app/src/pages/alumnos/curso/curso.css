@@ -1,4 +1,4 @@
-/* Estilos generales */
+/* === CURSO DETAILS - SIN INTERFERENCIAS CON MODULE CARD === */
 .course-details-container {
   padding: 20px;
   font-family: Arial, sans-serif;
@@ -22,39 +22,24 @@
   color: #ff6b6b;
 }
 
-/* Estilos de las tarjetas de módulos */
+/* === CONTENEDOR DE MÓDULOS === */
 .modules-grid {
   display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
+  flex-direction: column;
+  gap: 20px;
   justify-content: center;
+  align-items: center;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
-.module-card {
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  width: 250px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.module-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
-}
-
-.module-name {
-  font-size: 18px;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 10px;
-  text-align: center;
-}
-
-/* Ajustes para dispositivos móviles */
+/* === RESPONSIVE DESIGN === */
 @media (max-width: 768px) {
-  .module-card {
-    width: 100%;
+  .course-details-container {
+    padding: 16px;
+  }
+  
+  .modules-grid {
+    gap: 16px;
   }
 }

@@ -48,8 +48,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await signin(formData);
-    console.log(isAuthenticated);
+    await signin(formData);
   };
 
   return (

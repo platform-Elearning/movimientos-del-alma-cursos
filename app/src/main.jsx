@@ -5,11 +5,19 @@ import "./main.css";
 import Navbar from "./components/navbar/Navbar.jsx";
 import { AuthProvider } from "./services/authContext.jsx";
 
+const App = () => {
+  return (
+    <>
+      <Navbar />
+      <AppRouter />
+    </>
+  );
+};
+
 ReactDOM.createRoot(document.getElementById("root")).render(
   <AuthProvider>
     <BrowserRouter>
-      <Navbar />
-      <AppRouter />
+      <App />
     </BrowserRouter>
   </AuthProvider>
 );

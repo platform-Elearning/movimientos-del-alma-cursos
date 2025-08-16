@@ -37,7 +37,6 @@ const CreateCourse = () => {
         description: "",
       });
     } catch (err) {
-      console.error("Error al crear el curso:", err);
       setError(
         `El curso ${formData.name} ya ha sido creado. Elija otro nombre.`
       );

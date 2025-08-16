@@ -16,14 +16,12 @@ const AlumnosTable = () => {
   const fetchAlumnos = async () => {
     try {
       const response = await getAlumnos();
-      console.log("Respuesta de la API:", response);
       if (response && response.response && Array.isArray(response.response)) {
         setAlumnos(response.response);
       } else {
         throw new Error("La respuesta de la API no es un array");
       }
     } catch (err) {
-      console.error("Error al cargar los alumnos:", err);
       setError("Error al cargar los alumnos");
     }
   };
@@ -36,7 +34,6 @@ const AlumnosTable = () => {
     navigate(`/admin/editarAlumno/${alumno.user_id}`, {
       state: { user: alumno },
     });
-    console.log(`Editar alumno con ID: ${alumno.user_id}`);
   };
 
   // 🖱️ Funciones para el desplazamiento con el mouse

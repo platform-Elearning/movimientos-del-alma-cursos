@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getLessonsByCourseAndModule } from '../../../../api/cursos';
+import { getLessonsByModuleIdAndCourseId } from '../../../../api/cursos';
 import { useParams } from 'react-router-dom';
 import './tablaLessons.css';
 
@@ -9,13 +9,18 @@ const TablaLessons = () => {
 
   useEffect(() => {
     const getLessons = async () => {
-      const response = await getLessonsByCourseAndModule(cursoId, moduleId );
-      if (response.success) {
-        setLessons(response.data);
+      try {
+        // Corregido: usar la función correcta y el orden correcto de parámetros
+        const response = await getLessonsByModuleIdAndCourseId(cursoId, moduleId);
+        if (response.success) {
+          setLessons(response.data);
+        }
+      } catch (error) {
+        console.error('Error al cargar las lecciones:', error);
       }
     };
     getLessons();
-  }, []);
+  }, [cursoId, moduleId]);
 
   return (
     <div className="admin-lessons-container">
