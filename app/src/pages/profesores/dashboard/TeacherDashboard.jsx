@@ -22,16 +22,12 @@ const TeacherDashboard = () => {
           navigate('/login');
           return;
         }
-
-        console.log("Cargando cursos para profesor ID:", userId);
-
         // Obtener cursos asignados al profesor
         const coursesResponse = await getCourseByTeacherId(userId);
         if (coursesResponse && coursesResponse.data) {
           setAssignedCourses(coursesResponse.data);
         }
       } catch (error) {
-        console.error("Error al cargar datos del profesor:", error);
         setError("Error al cargar los cursos asignados");
       } finally {
         setIsLoading(false);

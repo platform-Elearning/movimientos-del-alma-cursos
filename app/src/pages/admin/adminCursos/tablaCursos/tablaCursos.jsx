@@ -23,7 +23,6 @@ const CoursesTable = () => {
         throw new Error("La respuesta de la API no es un array válido");
       }
     } catch (err) {
-      console.error("Error al cargar los cursos:", err);
       setError("Error al cargar los cursos");
       setLoading(false);
     }

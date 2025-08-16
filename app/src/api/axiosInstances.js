@@ -32,7 +32,6 @@ const refreshAuthToken = async () => {
   }
 
   isRefreshing = true;
-  console.log("🔄 Starting token refresh process...");
 
   try {
     const response = await axios.post(
@@ -75,7 +74,6 @@ const refreshAuthToken = async () => {
     
     return token;
   } catch (error) {
-    console.log("❌ Refresh token failed:", error.message);
     Cookies.remove('token');
     localStorage.removeItem('token');
     

@@ -27,7 +27,6 @@ const ProfesoresTable = () => {
         throw new Error("La respuesta de la API no es válida");
       }
     } catch (err) {
-      console.error("Error fetching profesores:", err);
       setError("Error al cargar los profesores");
     }
   };
@@ -39,8 +38,6 @@ const ProfesoresTable = () => {
 
     for (const teacher of teachers) {
       try {
-        console.log(`Obteniendo cursos para profesor: ${teacher.name} (ID: ${teacher.id})`);
-        
         // Intentar obtener cursos del profesor
         const coursesResponse = await getCourseByTeacherId(teacher.id);
         

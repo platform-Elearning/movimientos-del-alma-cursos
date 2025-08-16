@@ -19,20 +19,15 @@ const VerAlumnosCurso = () => {
   // ✅ NUEVA FUNCIÓN: Obtener cantidad de módulos del curso
   const fetchCourseModules = async () => {
     try {
-      console.log(`Obteniendo módulos del curso ID: ${courseId}`);
-      
       const response = await getModulesByCourseID(courseId);
       
       if (response && response.data && Array.isArray(response.data)) {
         const moduleCount = response.data.length;
         setMaxModules(moduleCount);
-        console.log(`✅ Curso tiene ${moduleCount} módulos creados`);
       } else {
-        console.log("⚠️ No se encontraron módulos para este curso");
         setMaxModules(0);
       }
     } catch (err) {
-      console.error("Error al obtener módulos del curso:", err);
       // Si hay error, no bloquear la funcionalidad, solo usar 0 como máximo
       setMaxModules(0);
     }
@@ -56,11 +51,9 @@ const VerAlumnosCurso = () => {
     try {
       setLoading(true);
       setError(null);
-
-      console.log(`Obteniendo alumnos para curso ID: ${courseId}`);
       
       const response = await getStudentsByCourse(courseId);
-      
+
       if (response && response.data) {
         setAlumnos(Array.isArray(response.data) ? response.data : []);
       } else {

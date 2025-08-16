@@ -20,7 +20,6 @@ const ProfesoresMisCursos = () => {
         const decodedToken = AuthUtils.decodeToken(token);
         
         if (decodedToken && (decodedToken.role === 'teacher' || decodedToken.role === 'admin')) {
-            console.log('Redirigiendo al nuevo dashboard del teacher...');
             navigate('/profesores/dashboard');
         } else {
             navigate('/login');

@@ -9,9 +9,6 @@ const ModuleCard = ({ moduleName, lessons }) => {
   const location = useLocation();
   const { classItem } = location.state || {};
   
-  // Debug: log de los datos recibidos
-  console.log('ModuleCard recibió:', { moduleName, lessons });
-  
   const goToModule = (lesson) => {
     const classItem = {
       lessonNumber: lesson.lessonNumber,
@@ -21,7 +18,6 @@ const ModuleCard = ({ moduleName, lessons }) => {
       id: lesson.id
     };
     
-    console.log('Navegando a clase con datos:', classItem);
     
     navigate(
       `/alumnos/${alumnoId}/curso/${cursoId}/clase/${lesson.lessonNumber}`,
@@ -59,8 +55,6 @@ const ModuleCard = ({ moduleName, lessons }) => {
       <div className="module-card-lessons">
         <ul>
           {lessons.map((lesson, index) => {
-            // Debug: log de cada lección
-            console.log(`Lección ${index}:`, lesson);
             
             // Obtener título y descripción con fallbacks
             const lessonTitle = lesson.lessonTitle || lesson.title || `Clase ${index + 1}`;

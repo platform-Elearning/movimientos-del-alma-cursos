@@ -8,11 +8,6 @@ const Clase = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { classItem } = location.state || {}; // Obtener los datos de la clase seleccionada
-
-  console.log("location.state:", location.state);
-  console.log("classItem:", classItem);
-  console.log("🎥 URL del video:", classItem?.lessonUrl || classItem?.url); // ✅ AGREGADO: Debug de URL
-
   const embedUrl = getEmbedUrl(classItem?.lessonUrl || classItem?.url); // ✅ CORREGIDO: Soportar ambos nombres de propiedad
 
   if (!classItem) {
@@ -22,7 +17,6 @@ const Clase = () => {
       </p>
     );
   }
-  console.log(classItem);
 
   const goToCourse = (coursoId) => {
     navigate(`/alumnos/${alumnoId}/curso/${coursoId}`);
@@ -58,10 +52,7 @@ const Clase = () => {
 };
 
 const getEmbedUrl = (url) => {
-  console.log('🔗 getEmbedUrl recibió URL:', url);
-  
   if (!url) {
-    console.log('⚠️ No hay URL proporcionada');
     return ""; // Devuelve vacío si no hay URL
   }
 
@@ -69,24 +60,19 @@ const getEmbedUrl = (url) => {
   if (url.includes("youtube.com")) {
     // ✅ MEJORADO: Regex más robusta que maneja parámetros adicionales
     videoIdMatch = url.match(/[?&]v=([a-zA-Z0-9_-]{11})/);
-    console.log('🎥 YouTube URL estándar detectada, ID extraído:', videoIdMatch?.[1]);
   } else if (url.includes("youtu.be")) {
     // ✅ MEJORADO: Regex más robusta para URLs cortas
     videoIdMatch = url.match(/youtu.be\/([a-zA-Z0-9_-]{11})/);
-    console.log('🎥 YouTube URL corta detectada, ID extraído:', videoIdMatch?.[1]);
   } else {
     console.log('⚠️ URL no es de YouTube:', url);
   }
 
   // ✅ FALLBACK: Si no se encontró match, intentar extraer cualquier ID de 11 caracteres
   if (!videoIdMatch) {
-    console.log('🔄 Intentando extraer ID con método alternativo...');
     videoIdMatch = url.match(/([a-zA-Z0-9_-]{11})/);
-    console.log('🔍 ID alternativo encontrado:', videoIdMatch?.[1]);
   }
 
   const embedUrl = videoIdMatch ? `https://www.youtube.com/embed/${videoIdMatch[1]}` : "";
-  console.log('🎥 URL de embed generada:', embedUrl);
   
   return embedUrl;
 };

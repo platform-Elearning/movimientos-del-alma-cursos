@@ -24,8 +24,6 @@ const EditAlumno = ({ onUpdate }) => {
     navigate(`/admin/alumnos`);
   };
 
-  console.log("User:", user);
-
   // Pre-rellenar el formulario con los datos actuales del usuario
   useEffect(() => {
     if (user) {
@@ -68,7 +66,6 @@ const EditAlumno = ({ onUpdate }) => {
     if (!confirmed) return;
 
     try {
-      console.log("Borrando alumno", formData.user_id);
       await deleteAlumno(formData.user_id);
       setFormData({
         user_id: "",

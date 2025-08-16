@@ -2,7 +2,7 @@ import { instanceUsers } from "./axiosInstances";
 
 export const createAlumno = async (user) => {
   try {
-    const response = await instanceUsers.post("/users/createCompleteStudent");
+    const response = await instanceUsers.post("/users/createCompleteStudent", user);
     return response.data;
   } catch (error) {
     throw error;

@@ -189,8 +189,6 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         const handleTokenRefreshed = (event) => {
             const { token, user } = event.detail;
-            console.log("Token refreshed via event, updating user state");
-            
             setUserId(user.id);
             setUserRole(user.role);
             

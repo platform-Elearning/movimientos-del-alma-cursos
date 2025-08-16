@@ -25,8 +25,6 @@ const CourseManagement = () => {
           return;
         }
 
-        console.log("Cargando datos del curso:", courseId, "para profesor:", userId);
-
         // ✅ CORREGIDO: Pasar teacherId como segundo parámetro
         const response = await getCourseDetails(courseId, userId);
         if (response && response.data) {
@@ -34,7 +32,6 @@ const CourseManagement = () => {
         }
 
       } catch (error) {
-        console.error("Error al cargar datos del curso:", error);
         setError("Error al cargar los datos del curso");
       } finally {
         setIsLoading(false);

@@ -32,8 +32,6 @@ const EditProfesor = ({ onUpdate }) => {
     navigate(`/admin/profesores`);
   };
 
-  console.log("User:", user);
-
   // Cargar cursos disponibles
   useEffect(() => {
     const fetchCourses = async () => {
@@ -43,7 +41,6 @@ const EditProfesor = ({ onUpdate }) => {
           setCourses(coursesResponse.data);
         }
       } catch (error) {
-        console.error("Error al cargar los cursos:", error);
         setErrors(["Error al cargar los cursos disponibles"]);
       }
     };
@@ -75,7 +72,6 @@ const EditProfesor = ({ onUpdate }) => {
     setIsLoading(true);
     
     try {
-      console.log("Actualizando profesor con datos:", formData);
       await updateTeacher(formData);
       setSuccessMessage("Profesor actualizado con éxito");
       setErrors([]);
@@ -113,15 +109,12 @@ const EditProfesor = ({ onUpdate }) => {
     setIsLoading(true);
     try {
       const result = await assignCourseToTeacher(formData.id, formData.course_id);
-      console.log('✅ Asignación exitosa:', result);
       
       setSuccessMessage("Curso asignado exitosamente al profesor");
       setFormData({ ...formData, course_id: "" }); // Limpiar selección
       setErrors([]);
       if (onUpdate) onUpdate(); // Refrescar la tabla
     } catch (error) {
-      console.error('❌ Error al asignar curso:', error);
-      
       // Manejo mejorado de errores
       let errorMessage = "Error al asignar el curso";
       
@@ -148,13 +141,11 @@ const EditProfesor = ({ onUpdate }) => {
 
     setIsLoading(true);
     try {
-      console.log("Borrando profesor con ID:", formData.id);
       await deleteProfesor(formData.id);
       setSuccessMessage("Profesor eliminado con éxito");
       if (onUpdate) onUpdate();
       goToTeachers();
     } catch (error) {
-      console.error("Error al eliminar el profesor:", error);
       setErrors([
         error.response?.data?.message || "Error al eliminar el profesor",
       ]);

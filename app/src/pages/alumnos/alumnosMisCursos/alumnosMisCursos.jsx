@@ -21,7 +21,6 @@ const AlumnosMisCursos = () => {
         throw new Error("La respuesta de la API no tiene el formato esperado");
       }
     } catch (error) {
-      console.error("Error al obtener los cursos:", error);
       setError("Error al obtener los cursos");
     } finally {
       setLoading(false);

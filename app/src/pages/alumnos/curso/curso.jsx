@@ -23,22 +23,13 @@ const CourseDetails = () => {
   const fetchModules = async () => {
     // ✅ Salir si userRole no está definido aún
     if (!userRole) {
-      console.log('⏳ userRole no definido aún, esperando...');
       return;
     }
 
     try {
-      console.log(
-        "🔍 Obteniendo módulos para alumno:",
-        alumnoId,
-        "curso:",
-        cursoId
-      );
-      console.log("🔑 Rol del usuario:", userRole);
-
+  
       // Obtener información del curso
       const courseResponse = await getCoursesByStudentId(alumnoId);
-      console.log("📚 Cursos del estudiante COMPLETO:", courseResponse);
 
       // Buscar el curso específico
       const courseInfo = courseResponse.data?.find((course) => {
@@ -57,19 +48,11 @@ const CourseDetails = () => {
       let modulesData = [];
 
       if (userRole === "student") {
-        // Para estudiantes: SOLO usar la función filtrada del backend
-        console.log(
-          "👨‍🎓 Usuario es estudiante, obteniendo módulos filtrados..."
-        );
         const filteredResponse = await getModulesByAlumnoAndCurso(
           alumnoId,
           cursoId
         );
-        console.log(
-          "📝 Respuesta completa de módulos filtrados:",
-          filteredResponse
-        );
-
+       
         if (
           filteredResponse.success &&
           Array.isArray(filteredResponse.data) &&
@@ -144,9 +127,7 @@ const CourseDetails = () => {
         setModules(modulesData);
       }
 
-      console.log("🎯 Módulos finales establecidos:", modulesData);
     } catch (error) {
-      console.error("❌ Error al obtener los módulos:", error);
       if (error.response?.status === 401 || error.response?.status === 403) {
         logout();
       } else {
