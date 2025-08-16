@@ -60,13 +60,17 @@ const refreshAuthToken = async () => {
     const decoded = jwtDecode(token);
     console.log("✅ Token refreshed successfully, expires at:", new Date(decoded.exp * 1000));
     
-    // Guardar el nuevo token
-    Cookies.set('token', token, {
+    // Configuración dinámica de cookies según entorno
+    const isLocalhost = window.location.hostname === 'localhost';
+    const cookieConfig = {
       expires: new Date(decoded.exp * 1000),
-      secure: false,
-      sameSite: 'Lax',
+      secure: !isLocalhost,  // true para HTTPS (develop/prod), false para localhost
+      sameSite: isLocalhost ? 'Lax' : 'none', // Lax para localhost, none para cross-domain
       path: '/'
-    });
+    };
+    
+    // Guardar el nuevo token
+    Cookies.set('token', token, cookieConfig);
     localStorage.setItem('token', token);
     
     onRefreshed(token);
@@ -102,11 +106,10 @@ const isTokenExpiredError = (error) => {
   
   const { status, data } = error.response;
   
-  // Manejar diferentes tipos de errores de autenticación
   return (
     (status === 403 && data && data.error === "Forbidden" && data.expired === true) ||
-    (status === 401) || // También manejar 401 Unauthorized
-    (status === 403 && !data) // 403 sin datos específicos
+    (status === 401) || 
+    (status === 403 && !data) // ✅ CORREGIDO: Eliminada la 's' extra
   );
 };
 

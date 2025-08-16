@@ -53,13 +53,17 @@ export const AuthProvider = ({ children }) => {
             
             setIsAuthenticated(true);
             
-            // Guardar token
-            Cookies.set("token", token, {
+            // Configuración dinámica de cookies según entorno
+            const isLocalhost = window.location.hostname === 'localhost';
+            const cookieConfig = {
                 expires: new Date(dataDecoded.exp * 1000),
-                secure: false,
-                sameSite: 'Lax',
+                secure: !isLocalhost,  // true para HTTPS (develop/prod), false para localhost
+                sameSite: isLocalhost ? 'Lax' : 'none', // Lax para localhost, none para cross-domain
                 path: '/'
-            });
+            };
+            
+            // Guardar token
+            Cookies.set("token", token, cookieConfig);
             localStorage.setItem("token", token);
             
             return dataDecoded;
