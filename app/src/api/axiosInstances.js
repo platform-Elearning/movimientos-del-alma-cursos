@@ -122,7 +122,11 @@ const addAuthInterceptor = (instance) => {
     async (error) => {
       const originalRequest = error.config;
       
-      if (isTokenExpiredError(error) && !originalRequest._retry) {
+      // Excluir rutas de autenticación del auto-refresh
+      const authRoutes = ['/session/login', '/session/register', '/session/refresh-token'];
+      const isAuthRoute = authRoutes.some(route => originalRequest.url?.includes(route));
+      
+      if (isTokenExpiredError(error) && !originalRequest._retry && !isAuthRoute) {
         originalRequest._retry = true;
         
         try {
