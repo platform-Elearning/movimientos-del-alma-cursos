@@ -22,6 +22,17 @@ const getAuthToken = () => {
   return Cookies.get('token') || localStorage.getItem('token');
 };
 
+// ✅ Instancia especial SOLO para refresh token (sin interceptores)
+const refreshInstance = axios.create({
+  baseURL: `${import.meta.env.VITE_API_URL}`,
+  withCredentials: true, // CRÍTICO: Enviar cookies automáticamente
+  timeout: REFRESH_TIMEOUT,
+  headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+  }
+});
+
 const refreshAuthToken = async () => {
   if (isRefreshing) {
     return new Promise((resolve) => {
@@ -32,20 +43,13 @@ const refreshAuthToken = async () => {
   }
 
   isRefreshing = true;
+  console.log("🔄 Starting token refresh process...");
 
   try {
-    const response = await axios.post(
-      `${import.meta.env.VITE_API_URL}/session/refresh-token`,
-      {},
-      {
-        withCredentials: true,
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        timeout: REFRESH_TIMEOUT
-      }
-    );
+    console.log("Making refresh request to:", `${import.meta.env.VITE_API_URL}/session/refresh-token`);
+    
+    // ✅ Usar la instancia dedicada para refresh (CON cookies)
+    const response = await refreshInstance.post('/session/refresh-token', {});
 
     const { token } = response.data;
     
@@ -74,6 +78,11 @@ const refreshAuthToken = async () => {
     
     return token;
   } catch (error) {
+    console.log("❌ Refresh token failed:", error.message);
+    console.log("Error status:", error.response?.status);
+    console.log("Error data:", error.response?.data);
+    console.log("Request config:", error.config);
+    
     Cookies.remove('token');
     localStorage.removeItem('token');
     
@@ -94,12 +103,11 @@ const isTokenExpiredError = (error) => {
   
   const { status, data } = error.response;
   
+  // Manejar diferentes tipos de errores de autenticación
   return (
-    status === 403 &&
-    data &&
-    data.error === "Forbidden" &&
-    data.expired === true &&
-    typeof data.details === "string"
+    (status === 403 && data && data.error === "Forbidden" && data.expired === true) ||
+    (status === 401) || // También manejar 401 Unauthorized
+    (status === 403 && !data) // 403 sin datos específicos
   );
 };
 
@@ -124,15 +132,18 @@ const addAuthInterceptor = (instance) => {
       
       if (isTokenExpiredError(error) && !originalRequest._retry) {
         originalRequest._retry = true;
+        console.log("🔄 Token expired, attempting refresh...");
         
         try {
           const newToken = await refreshAuthToken();
           
           if (newToken) {
             originalRequest.headers.Authorization = `Bearer ${newToken}`;
+            console.log("✅ Retrying original request with new token");
             return instance(originalRequest);
           }
         } catch (refreshError) {
+          console.log("❌ Refresh failed, triggering logout");
           window.dispatchEvent(new CustomEvent('auth:token-expired', {
             detail: { error: refreshError }
           }));
@@ -147,7 +158,7 @@ const addAuthInterceptor = (instance) => {
   return instance;
 };
 
-// Configuración base
+// Configuración base para instancias principales
 const baseConfig = {
   withCredentials: true,
   timeout: REQUEST_TIMEOUT,
@@ -156,7 +167,7 @@ const baseConfig = {
   }
 };
 
-// Instancias de Axios
+// Instancias de Axios principales (CON interceptores)
 export const instance = addAuthInterceptor(
   axios.create({
     ...baseConfig,
