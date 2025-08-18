@@ -53,13 +53,17 @@ export const AuthProvider = ({ children }) => {
             
             setIsAuthenticated(true);
             
-            // Guardar token
-            Cookies.set("token", token, {
+            // Configuración dinámica de cookies según entorno
+            const isLocalhost = window.location.hostname === 'localhost';
+            const cookieConfig = {
                 expires: new Date(dataDecoded.exp * 1000),
-                secure: false,
-                sameSite: 'Lax',
+                secure: !isLocalhost,  // true para HTTPS (develop/prod), false para localhost
+                sameSite: isLocalhost ? 'Lax' : 'none', // Lax para localhost, none para cross-domain
                 path: '/'
-            });
+            };
+            
+            // Guardar token
+            Cookies.set("token", token, cookieConfig);
             localStorage.setItem("token", token);
             
             return dataDecoded;
@@ -113,66 +117,47 @@ export const AuthProvider = ({ children }) => {
 
     // Verificar autenticación al montar
     const checkLogin = async () => {
-        const token = Cookies.get("token") || localStorage.getItem("token");
+    const token = Cookies.get("token") || localStorage.getItem("token");
+    
+    if (!token) {
+      setIsAuthenticated(false);
+      return;
+    }
 
-        if (!token) {
-            // No hay access token, intentar refresh
-            try {
-                console.log("No access token found, attempting refresh...");
-                await attemptTokenRefresh();
-            } catch (error) {
-                console.log("No refresh token available or expired");
-                setIsAuthenticated(false);
-            }
-            return;
-        }
-
-        try {
-            const dataDecoded = jwtDecode(token);
-            const currentTime = Date.now() / 1000;
-            
-            // Si el token ha expirado, intentar refresh
-            if (dataDecoded.exp < currentTime) {
-                console.log("Access token expired, attempting refresh...");
-                try {
-                    await attemptTokenRefresh();
-                } catch (error) {
-                    console.log("Failed to refresh token on startup");
-                    clearUserState();
-                }
-                return;
-            }
-            
-            // Token válido, establecer usuario
-            setUserFromToken(token);
-            
-        } catch (err) {
-            console.log("Invalid token format, attempting refresh...");
-            try {
-                await attemptTokenRefresh();
-            } catch (error) {
-                console.log("Failed to refresh invalid token");
-                clearUserState();
-            }
-        }
-    };
+    try {
+      const dataDecoded = jwtDecode(token);
+      const currentTime = Date.now() / 1000;
+      
+      // Si el token ha expirado
+      if (dataDecoded.exp < currentTime) {
+        clearUserState();
+        return;
+      }
+      
+      // Token válido, establecer usuario
+      setUserFromToken(token);
+      
+    } catch (err) {
+      
+      clearUserState();
+    }
+  };
 
     // Función para intentar refresh token
     const attemptTokenRefresh = async () => {
-        try {
-            const response = await refreshTokenRequest();
-            if (response && response.token) {
-                const dataDecoded = setUserFromToken(response.token);
-                console.log("Token refreshed successfully on startup");
-                return dataDecoded;
-            } else {
-                throw new Error('No token received from refresh');
-            }
-        } catch (error) {
-            console.log("Refresh failed:", error.message);
-            clearUserState();
-            throw error;
+      try {
+        const response = await refreshTokenRequest();
+        if (response && response.token) {
+          const dataDecoded = setUserFromToken(response.token);
+          return dataDecoded;
+        } else {
+          throw new Error('No token received from refresh');
         }
+      } catch (error) {
+        
+        clearUserState();
+        throw error;
+      }
     };
 
     // Manejo de errores con temporizador
@@ -202,7 +187,6 @@ export const AuthProvider = ({ children }) => {
         };
 
         const handleTokenExpired = () => {
-            console.log("Token expired event received, clearing state");
             clearUserState();
         };
 

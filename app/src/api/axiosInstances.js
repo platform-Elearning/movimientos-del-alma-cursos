@@ -22,6 +22,17 @@ const getAuthToken = () => {
   return Cookies.get('token') || localStorage.getItem('token');
 };
 
+
+const refreshInstance = axios.create({
+  baseURL: `${import.meta.env.VITE_API_URL}`,
+  withCredentials: true, // 
+  timeout: REFRESH_TIMEOUT,
+  headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+  }
+});
+
 const refreshAuthToken = async () => {
   if (isRefreshing) {
     return new Promise((resolve) => {
@@ -32,20 +43,10 @@ const refreshAuthToken = async () => {
   }
 
   isRefreshing = true;
+  console.log("🔄 Starting token refresh process...");
 
   try {
-    const response = await axios.post(
-      `${import.meta.env.VITE_API_URL}/session/refresh-token`,
-      {},
-      {
-        withCredentials: true,
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        timeout: REFRESH_TIMEOUT
-      }
-    );
+    const response = await refreshInstance.post('/session/refresh-token', {});
 
     const { token } = response.data;
     
@@ -54,15 +55,18 @@ const refreshAuthToken = async () => {
     }
     
     const decoded = jwtDecode(token);
-    console.log("✅ Token refreshed successfully, expires at:", new Date(decoded.exp * 1000));
+    
+    // Configuración dinámica de cookies según entorno
+    const isLocalhost = window.location.hostname === 'localhost';
+    const cookieConfig = {
+      expires: new Date(decoded.exp * 1000),
+      secure: !isLocalhost,  // true para HTTPS (develop/prod), false para localhost
+      sameSite: isLocalhost ? 'Lax' : 'none', // Lax para localhost, none para cross-domain
+      path: '/'
+    };
     
     // Guardar el nuevo token
-    Cookies.set('token', token, {
-      expires: new Date(decoded.exp * 1000),
-      secure: false,
-      sameSite: 'Lax',
-      path: '/'
-    });
+    Cookies.set('token', token, cookieConfig);
     localStorage.setItem('token', token);
     
     onRefreshed(token);
@@ -88,18 +92,15 @@ const refreshAuthToken = async () => {
   }
 };
 
-// Verificar error específico del backend
 const isTokenExpiredError = (error) => {
   if (!error.response) return false;
   
   const { status, data } = error.response;
   
   return (
-    status === 403 &&
-    data &&
-    data.error === "Forbidden" &&
-    data.expired === true &&
-    typeof data.details === "string"
+    (status === 403 && data && data.error === "Forbidden" && data.expired === true) ||
+    (status === 401) || 
+    (status === 403 && !data)
   );
 };
 
@@ -147,7 +148,7 @@ const addAuthInterceptor = (instance) => {
   return instance;
 };
 
-// Configuración base
+// Configuración base para instancias principales
 const baseConfig = {
   withCredentials: true,
   timeout: REQUEST_TIMEOUT,
@@ -156,7 +157,7 @@ const baseConfig = {
   }
 };
 
-// Instancias de Axios
+// Instancias de Axios principales (CON interceptores)
 export const instance = addAuthInterceptor(
   axios.create({
     ...baseConfig,
