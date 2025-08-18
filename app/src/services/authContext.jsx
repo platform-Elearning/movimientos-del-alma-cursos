@@ -119,47 +119,18 @@ export const AuthProvider = ({ children }) => {
     const checkLogin = async () => {
     const token = Cookies.get("token") || localStorage.getItem("token");
     
-    // ❌ TEMPORALMENTE DESACTIVAR REFRESH EN DEVELOP
-    const isDevelop = window.location.hostname.includes('platform-dev') || window.location.hostname.includes('railway');
-    
     if (!token) {
-    if (isDevelop) {
-      console.log("No access token found in develop - refresh disabled");
-    setIsAuthenticated(false);
-    return;
-    }
-    
-      // Solo en local: intentar refresh
-      try {
-        console.log("No access token found, attempting refresh...");
-      await attemptTokenRefresh();
-    } catch (error) {
-      console.log("No refresh token available or expired");
       setIsAuthenticated(false);
-    }
-    return;
+      return;
     }
 
     try {
-    const dataDecoded = jwtDecode(token);
-    const currentTime = Date.now() / 1000;
-    
-    // Si el token ha expirado
-    if (dataDecoded.exp < currentTime) {
-      if (isDevelop) {
-        console.log("Access token expired in develop - clearing state");
-        clearUserState();
-        return;
-        }
+      const dataDecoded = jwtDecode(token);
+      const currentTime = Date.now() / 1000;
       
-      // Solo en local: intentar refresh
-    console.log("Access token expired, attempting refresh...");
-      try {
-      await attemptTokenRefresh();
-    } catch (error) {
-        console.log("Failed to refresh token on startup");
-          clearUserState();
-          }
+      // Si el token ha expirado
+      if (dataDecoded.exp < currentTime) {
+        clearUserState();
         return;
       }
       
@@ -167,20 +138,8 @@ export const AuthProvider = ({ children }) => {
       setUserFromToken(token);
       
     } catch (err) {
-      if (isDevelop) {
-        console.log("Invalid token format in develop - clearing state");
-        clearUserState();
-        return;
-      }
       
-      // Solo en local: intentar refresh
-      console.log("Invalid token format, attempting refresh...");
-      try {
-        await attemptTokenRefresh();
-      } catch (error) {
-        console.log("Failed to refresh invalid token");
-        clearUserState();
-      }
+      clearUserState();
     }
   };
 
@@ -190,13 +149,12 @@ export const AuthProvider = ({ children }) => {
         const response = await refreshTokenRequest();
         if (response && response.token) {
           const dataDecoded = setUserFromToken(response.token);
-          console.log("Token refreshed successfully on startup");
           return dataDecoded;
         } else {
           throw new Error('No token received from refresh');
         }
       } catch (error) {
-        console.log("Refresh failed:", error.message);
+        
         clearUserState();
         throw error;
       }
@@ -229,7 +187,6 @@ export const AuthProvider = ({ children }) => {
         };
 
         const handleTokenExpired = () => {
-            console.log("Token expired event received, clearing state");
             clearUserState();
         };
 

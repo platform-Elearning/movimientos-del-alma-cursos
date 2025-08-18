@@ -22,10 +22,10 @@ const getAuthToken = () => {
   return Cookies.get('token') || localStorage.getItem('token');
 };
 
-// ✅ Instancia especial SOLO para refresh token (sin interceptores)
+
 const refreshInstance = axios.create({
   baseURL: `${import.meta.env.VITE_API_URL}`,
-  withCredentials: true, // CRÍTICO: Enviar cookies automáticamente
+  withCredentials: true, // 
   timeout: REFRESH_TIMEOUT,
   headers: {
     'Content-Type': 'application/json',
@@ -46,9 +46,6 @@ const refreshAuthToken = async () => {
   console.log("🔄 Starting token refresh process...");
 
   try {
-    console.log("Making refresh request to:", `${import.meta.env.VITE_API_URL}/session/refresh-token`);
-    
-    // ✅ Usar la instancia dedicada para refresh (CON cookies)
     const response = await refreshInstance.post('/session/refresh-token', {});
 
     const { token } = response.data;
@@ -58,7 +55,6 @@ const refreshAuthToken = async () => {
     }
     
     const decoded = jwtDecode(token);
-    console.log("✅ Token refreshed successfully, expires at:", new Date(decoded.exp * 1000));
     
     // Configuración dinámica de cookies según entorno
     const isLocalhost = window.location.hostname === 'localhost';
@@ -82,10 +78,6 @@ const refreshAuthToken = async () => {
     
     return token;
   } catch (error) {
-    console.log("❌ Refresh token failed:", error.message);
-    console.log("Error status:", error.response?.status);
-    console.log("Error data:", error.response?.data);
-    
     Cookies.remove('token');
     localStorage.removeItem('token');
     
@@ -100,7 +92,6 @@ const refreshAuthToken = async () => {
   }
 };
 
-// Verificar error específico del backend
 const isTokenExpiredError = (error) => {
   if (!error.response) return false;
   
@@ -109,7 +100,7 @@ const isTokenExpiredError = (error) => {
   return (
     (status === 403 && data && data.error === "Forbidden" && data.expired === true) ||
     (status === 401) || 
-    (status === 403 && !data) // ✅ CORREGIDO: Eliminada la 's' extra
+    (status === 403 && !data)
   );
 };
 
@@ -132,23 +123,17 @@ const addAuthInterceptor = (instance) => {
     async (error) => {
       const originalRequest = error.config;
       
-      // ❌ DESACTIVAR REFRESH EN DEVELOP
-      const isDevelop = window.location.hostname.includes('platform-dev') || window.location.hostname.includes('railway');
-      
-      if (isTokenExpiredError(error) && !originalRequest._retry && !isDevelop) {
+      if (isTokenExpiredError(error) && !originalRequest._retry) {
         originalRequest._retry = true;
-        console.log("🔄 Token expired, attempting refresh...");
         
         try {
           const newToken = await refreshAuthToken();
           
           if (newToken) {
             originalRequest.headers.Authorization = `Bearer ${newToken}`;
-            console.log("✅ Retrying original request with new token");
             return instance(originalRequest);
           }
         } catch (refreshError) {
-          console.log("❌ Refresh failed, triggering logout");
           window.dispatchEvent(new CustomEvent('auth:token-expired', {
             detail: { error: refreshError }
           }));
