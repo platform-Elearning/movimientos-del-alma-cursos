@@ -14,15 +14,13 @@ const ModulesTable = () => {
   const fetchModules = async () => {
     try {
       const response = await getModulesByCourseID(cursoId); 
-      console.log(response);
-      if (response && Array.isArray(response.message)) {
-        setModules(response.message);
+      if (response && Array.isArray(response.data)) { // ✅ CORREGIDO: Cambiar message por data
+        setModules(response.data);
         setLoading(false);
       } else {
         throw new Error("La respuesta de la API no es un array válido");
       }
     } catch (err) {
-      console.error("Error al cargar los cursos:", err);
       setError("Error al cargar los cursos");
       setLoading(false);
     }

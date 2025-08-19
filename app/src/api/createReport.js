@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 export const createReport = async (data) => {
   try {
     const token = Cookies.get("token");
-    const response = await instanceReports.post("/create-report", data, {
+    const response = await instanceReports.post("/report-problem/create-report", data, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -18,13 +18,14 @@ export const createReport = async (data) => {
 export const getReports = async () => {
   try {
     const token = Cookies.get("token");
-    const response = await instanceReports.get("/get-reports", {
+    const response = await instanceReports.get("/report-problem/get-reports", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
     return response;
   } catch (error) {
+    console.error('Error al obtener reportes:', error);
     throw error;
   }
 };

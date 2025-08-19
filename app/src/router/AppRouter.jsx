@@ -19,6 +19,18 @@ import ModuleDetails from "../pages/alumnos/modulo/modulo";
 import AdminProfesores from "../pages/admin/adminProfesor/adminProfesor";
 import EditProfesor from "../pages/admin/adminProfesor/editProfesor/editProfesor";
 
+// ✅ Nueva importación para ver alumnos del curso
+import VerAlumnosCurso from "../pages/admin/adminCursos/verAlumnos/VerAlumnosCurso";
+
+// Teacher Dashboard Components
+import TeacherDashboard from "../pages/profesores/dashboard/TeacherDashboard";
+import CourseManagement from "../pages/profesores/courses/CourseManagement";
+import CourseDetailManagement from "../pages/profesores/courseDetail/CourseDetailManagement";
+import StudentsManagement from "../pages/profesores/students/StudentsManagement";
+import LibraryManagement from "../pages/profesores/library/LibraryManagement";
+import MessagesManagement from "../pages/profesores/messages/MessagesManagement";
+import SettingsManagement from "../pages/profesores/settings/SettingsManagement";
+
 const AppRouter = () => {
     return (
         <Routes>
@@ -36,6 +48,10 @@ const AppRouter = () => {
             <Route path="/admin/cursos" element={<AdminCourses></AdminCourses>}></Route>
             <Route path="/admin/editarCurso/:cursoId" element={<EditarCurso></EditarCurso>}></Route>
             <Route path="/admin/editarCurso/:cursoId/module/:moduleId" element={<EditLessons></EditLessons>}></Route>
+            
+            {/* ✅ Nueva ruta para ver alumnos de un curso */}
+            <Route path="/admin/cursos/alumnos/:courseId" element={<VerAlumnosCurso />} />
+            
             <Route path="/admin/profesores" element = {<AdminProfesores/>}></Route>
             <Route path="/admin/editarProfesor/:id" element={<EditProfesor/>}></Route>
             
@@ -45,9 +61,20 @@ const AppRouter = () => {
             <Route path="/alumnos/:alumnoId/curso/:cursoId/clase/:claseId" element={<Clase></Clase>}></Route>
 
             <Route path="/profesores/profesoresMisCursos/:id" element={<ProfesoresMisCursos></ProfesoresMisCursos>}></Route>
+            
+            {/* Teacher Dashboard Routes */}
+            <Route path="/profesores/dashboard" element={<TeacherDashboard />} />
+            <Route path="/profesores/curso/:courseId" element={<CourseManagement />} />
+            <Route path="/profesores/curso/:courseId/completo" element={<CourseDetailManagement />} />
+            <Route path="/profesores/curso/:courseId/modulos" element={<CourseDetailManagement />} />
+            <Route path="/profesores/curso/:courseId/estudiantes" element={<StudentsManagement />} />
+            <Route path="/profesores/mis-cursos" element={<CourseManagement />} />
+            <Route path="/profesores/estudiantes" element={<StudentsManagement />} />
+            <Route path="/profesores/biblioteca" element={<LibraryManagement />} />
+            <Route path="/profesores/mensajes" element={<MessagesManagement />} />
+            <Route path="/profesores/configuracion" element={<SettingsManagement />} />
         </Routes>
     )
 }
 
 export default AppRouter;
-

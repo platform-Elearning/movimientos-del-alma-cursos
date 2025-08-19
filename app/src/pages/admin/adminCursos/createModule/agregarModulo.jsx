@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { createModule } from "../../../../api/cursos"; // Importa la función que hará la petición a la API
-import "./agregarModulo.css"; // Archivo CSS para los estilos
+import { createModule } from "../../../../api/cursos";
+import "./agregarModulo.css";
 import { useParams, useNavigate } from "react-router-dom";
 import BackLink from "../../../../components/backLink/BackLink";
 
 const CreateModule = () => {
   const { cursoId } = useParams();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     course_id: cursoId,
     module_number: "",
@@ -15,46 +16,39 @@ const CreateModule = () => {
 
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-  const navigate =useNavigate();
   
-    const goToCourse = ()=> {
-    navigate(`/admin/cursos`);
-  }
+  const goToCourse = () => {
+    navigate('/admin/cursos');
+  };
 
-  // Manejar cambios en los inputs
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  // Manejar el envío del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage("");
     setError("");
 
-
     try {
-      console.log(formData)
       await createModule(formData);
       setMessage("Módulo creado exitosamente");
 
-      // Limpiar el formulario después de una creación exitosa
       setFormData({
-        course_id: "",
+        course_id: cursoId,
         module_number: "",
         name: "",
         description: "",
       });
     } catch (err) {
-      console.error("Error al crear el módulo:", err);
       setError("Error al crear el módulo");
     }
   };
 
   return (
     <div>
-      <BackLink title="Volver a Cursos"  onClick={()=> goToCourse()}/>
+      <BackLink title="Volver a Cursos" onClick={goToCourse} />
       <div className="create-module-container">
         <h2>Crear Nuevo Módulo</h2>
         <form onSubmit={handleSubmit} className="create-module-form">

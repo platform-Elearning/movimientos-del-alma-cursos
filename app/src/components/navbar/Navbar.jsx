@@ -42,7 +42,6 @@ const Navbar = () => {
   const navigateToPageAlumnnosMisCursos = () => {
     if (userId) {
       navigate(`/alumnos/miscursos/${userId}`);
-      console.log("Navigating to mis cursos with userId:", userId);
     } else {
       console.error("userId is null, cannot navigate");
     }

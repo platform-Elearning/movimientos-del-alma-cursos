@@ -8,11 +8,7 @@ const Clase = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { classItem } = location.state || {}; // Obtener los datos de la clase seleccionada
-
-  console.log("location.state:", location.state);
-  console.log("classItem:", classItem);
-
-  const embedUrl = getEmbedUrl(classItem?.lessonUrl);
+  const embedUrl = getEmbedUrl(classItem?.lessonUrl || classItem?.url); // ✅ CORREGIDO: Soportar ambos nombres de propiedad
 
   if (!classItem) {
     return (
@@ -21,7 +17,6 @@ const Clase = () => {
       </p>
     );
   }
-  console.log(classItem);
 
   const goToCourse = (coursoId) => {
     navigate(`/alumnos/${alumnoId}/curso/${coursoId}`);
@@ -57,16 +52,29 @@ const Clase = () => {
 };
 
 const getEmbedUrl = (url) => {
-  if (!url) return ""; // Devuelve vacío si no hay URL
+  if (!url) {
+    return ""; // Devuelve vacío si no hay URL
+  }
 
   let videoIdMatch;
   if (url.includes("youtube.com")) {
-    videoIdMatch = url.match(/v=([^&]+)/); // Extrae el ID del video de la URL
+    // ✅ MEJORADO: Regex más robusta que maneja parámetros adicionales
+    videoIdMatch = url.match(/[?&]v=([a-zA-Z0-9_-]{11})/);
   } else if (url.includes("youtu.be")) {
-    videoIdMatch = url.match(/youtu.be\/([^?]+)/); // Extrae el ID del video de la URL corta
+    // ✅ MEJORADO: Regex más robusta para URLs cortas
+    videoIdMatch = url.match(/youtu.be\/([a-zA-Z0-9_-]{11})/);
+  } else {
+    console.log('⚠️ URL no es de YouTube:', url);
   }
 
-  return videoIdMatch ? `https://www.youtube.com/embed/${videoIdMatch[1]}` : "";
+  // ✅ FALLBACK: Si no se encontró match, intentar extraer cualquier ID de 11 caracteres
+  if (!videoIdMatch) {
+    videoIdMatch = url.match(/([a-zA-Z0-9_-]{11})/);
+  }
+
+  const embedUrl = videoIdMatch ? `https://www.youtube.com/embed/${videoIdMatch[1]}` : "";
+  
+  return embedUrl;
 };
 
 export default Clase;

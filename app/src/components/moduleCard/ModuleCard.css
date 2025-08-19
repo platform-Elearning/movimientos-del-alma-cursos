@@ -1,4 +1,4 @@
-.module-card {
+.module-card-container {
     width: 1294px;
     height: auto;
     background-color: #252422;
@@ -9,8 +9,7 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-
-.head-container {
+.module-card-header {
     display: flex;
     width: min-content;
     flex-direction: column;
@@ -18,33 +17,29 @@
     padding: 16px;
     background-color: #252422;
     text-align: center;
-    
 }
 
-.head-container h2 {
-  margin: 30px;
-  font-size: 24px;
-  font-weight: bold;
-  text-transform: uppercase;
-  margin-bottom: 20px;
-  color: #ffffff;
-
-
+.module-card-header h2 {
+    margin: 30px;
+    font-size: 24px;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    color: #ffffff;
 }
 
-.head-container p{
+.module-card-header p {
     font-family: 16px;
     font-weight: 300px;
     color: #FFFFFF;
 }
 
-.card-lesson {
+.module-card-lessons {
     display: flex;
     align-items: center;        
 }
 
-
-.card-lesson ul {
+.module-card-lessons ul {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
@@ -54,7 +49,7 @@
     border-image: linear-gradient(180deg, #83711B, #FFBB80, #83711B) 1;
 }
 
-.card-text {
+.module-card-lesson-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -63,39 +58,64 @@
     font-size: 16px;
     margin: 8px;
     background-color: #e0e0e0;
-    border-radius: 15px
+    border-radius: 15px;
 }
 
-.card-text span {
+.module-card-lesson-item span {
     font-weight: bold;
 }
 
-.img-play{
+.module-card-play-button {
     padding: 15px;
     cursor: pointer;
 }
 
-.lesson-text{
+.module-card-lesson-content {
     padding-left: 10px;
 }
 
+.module-card-lesson-title {
+    font-weight: bold;
+    color: #252422;
+}
+
+.module-card-lesson-desc {
+    color: #666666;
+    font-weight: normal;
+    margin-left: 8px;
+}
+
+.module-card-btn-play {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.module-card-btn-play img {
+    width: 32px;
+    height: 32px;
+}
+
 @media (max-width: 1024px) {
-    .module-card {
+    .module-card-container {
         width: 100%;
         height: auto;
-    
     }
 
-    .head-container {
+    .module-card-header {
         padding: 12px;
     }
 
-    .head-container h2 {
+    .module-card-header h2 {
         font-size: 20px;
         margin: 20px;
     }
 
-    .card-text {
+    .module-card-lesson-item {
         width: 100%;
         height: auto;
         font-size: 14px;
@@ -104,23 +124,23 @@
 }
 
 @media (max-width: 768px) {
-    .module-card {
+    .module-card-container {
         width: 100%;
         height: auto;
         flex-direction: column;
         align-items: center;
     }
 
-    .head-container {
+    .module-card-header {
         padding: 8px;
     }
 
-    .head-container h2 {
+    .module-card-header h2 {
         font-size: 18px;
         margin: 15px;
     }
 
-    .card-text {
+    .module-card-lesson-item {
         width: 100%;
         height: auto;
         font-size: 12px;
@@ -129,26 +149,25 @@
 }
 
 @media (max-width: 480px) {
-    .module-card {
+    .module-card-container {
         width: 100%;
         height: auto;
         flex-direction: column;
     }
 
-    .head-container {
+    .module-card-header {
         padding: 4px;
     }
 
-    .head-container h2 {
+    .module-card-header h2 {
         font-size: 16px;
         margin: 10px;
     }
 
-    .card-text {
+    .module-card-lesson-item {
         width: 100%;
         height: auto;
         font-size: 10px;
         margin: 2px;
     }
-    
 }

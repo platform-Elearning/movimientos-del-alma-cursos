@@ -1,12 +1,54 @@
+.profesores-section {
+  margin: 20px 0;
+}
+
+.profesores-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding: 0 15px;
+}
+
+.profesores-header h3 {
+  margin: 0;
+  color: #333;
+  font-size: 1.4rem;
+}
+
+.refresh-button {
+  padding: 8px 16px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.refresh-button:hover:not(:disabled) {
+  background-color: #218838;
+  transform: translateY(-1px);
+}
+
+.refresh-button:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
 .profesores-table-container {
   overflow-x: auto;
-  margin: 20px auto; /* Centrado horizontalmente */
+  margin: 20px auto;
   border: 1px solid #ddd;
   border-radius: 8px;
-  max-width: 1200px; /* Limita el ancho máximo en pantallas grandes */
-  background-color: #ffffff; /* Fondo blanco para mayor contraste */
-  padding: 1rem; /* Espaciado interno */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+  max-width: 1200px;
+  background-color: #ffffff;
+  padding: 1rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .profesores-table {
@@ -47,9 +89,54 @@
 }
 
 .error-message {
-  color: red;
+  color: #dc3545;
   text-align: center;
   margin: 10px 0;
+  padding: 10px;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  border-radius: 4px;
+}
+
+/* Estilos para cursos */
+.course-cell {
+  max-width: 200px;
+  word-wrap: break-word;
+}
+
+.course-text {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.course-text.no-course {
+  background-color: #f8f9fa;
+  color: #6c757d;
+  border: 1px solid #dee2e6;
+}
+
+.course-text.has-course {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.loading-courses {
+  color: #ffc107;
+  font-style: italic;
+}
+
+.no-data {
+  text-align: center;
+  padding: 40px;
+  color: #6c757d;
+}
+
+.no-data p {
+  font-size: 1.1rem;
+  margin: 0;
 }
 
 /* Responsive styles */
@@ -57,7 +144,7 @@
   .profesores-table-container {
     margin: 15px auto;
     padding: 0.8rem;
-    max-width: 95%; /* Reduce el ancho máximo en tablets */
+    max-width: 95%;
   }
 
   .profesores-table th,
@@ -70,13 +157,31 @@
     padding: 5px 10px;
     font-size: 0.85rem;
   }
+
+  .course-cell {
+    max-width: 150px;
+  }
 }
 
 @media (max-width: 768px) {
+  .profesores-header {
+    flex-direction: column;
+    gap: 10px;
+    align-items: stretch;
+  }
+
+  .profesores-header h3 {
+    text-align: center;
+  }
+
+  .refresh-button {
+    align-self: center;
+  }
+
   .profesores-table-container {
     margin: 10px auto;
     padding: 0.8rem;
-    max-width: 100%; /* Ocupa todo el ancho disponible */
+    max-width: 100%;
   }
 
   .profesores-table th,
@@ -89,6 +194,10 @@
     padding: 4px 8px;
     font-size: 0.8rem;
   }
+
+  .course-cell {
+    max-width: 120px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -96,8 +205,8 @@
     border: none;
     margin: 10px auto;
     padding: 0.5rem;
-    max-width: 100%; /* Ocupa todo el ancho disponible */
-    box-shadow: none; /* Elimina la sombra para un diseño más limpio */
+    max-width: 100%;
+    box-shadow: none;
   }
 
   .profesores-table {
@@ -111,15 +220,17 @@
 
   .profesores-table tr {
     display: block;
-    margin-bottom: 10px;
-    border-bottom: 1px solid #ddd;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 10px;
   }
 
   .profesores-table td {
     display: flex;
     justify-content: space-between;
-    padding: 8px;
+    padding: 8px 0;
     font-size: 0.85rem;
+    border-bottom: 1px solid #eee;
   }
 
   .profesores-table td::before {
@@ -128,6 +239,14 @@
     text-transform: uppercase;
     margin-right: 10px;
     color: #333;
+    flex-shrink: 0;
+    width: 40%;
+  }
+
+  .course-text {
+    font-size: 0.8rem;
+    padding: 2px 6px;
+    text-align: right;
   }
 
   .edit-button {

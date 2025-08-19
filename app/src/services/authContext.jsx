@@ -1,5 +1,5 @@
 import { createContext, useState, useContext, useEffect } from "react";
-import { registerRequest, loginRequest, verifyTokenRequest } from "../api/auth.js";
+import { registerRequest, loginRequest, refreshTokenRequest, logoutRequest } from "../api/auth.js";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 
@@ -16,17 +16,72 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
     const [userId, setUserId] = useState(null);
     const [userRole, setUserRole] = useState(null);
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isAuthenticated, setIsAuthenticated] = useState(null);
     const [errors, setErrors] = useState([]);
     const [userNav, setUserNav] = useState(null);
+
+    // Función para limpiar el estado de usuario
+    const clearUserState = () => {
+        setUserId(null);
+        setUserRole(null);
+        setUserNav(null);
+        setIsAuthenticated(false);
+        Cookies.remove("token");
+        localStorage.removeItem("token");
+    };
+
+    // Función para establecer el estado del usuario desde el token
+    const setUserFromToken = (token) => {
+        try {
+            const dataDecoded = jwtDecode(token);
+            
+            // Verificar si el token ha expirado
+            const currentTime = Date.now() / 1000;
+            if (dataDecoded.exp < currentTime) {
+                clearUserState();
+                return null;
+            }
+            
+            setUserId(dataDecoded.id);
+            setUserRole(dataDecoded.role);
+            
+            if (dataDecoded.role === "admin") {
+                setUserNav("administrador");
+            } else {
+                setUserNav(dataDecoded.name);
+            }
+            
+            setIsAuthenticated(true);
+            
+            // Configuración dinámica de cookies según entorno
+            const isLocalhost = window.location.hostname === 'localhost';
+            const cookieConfig = {
+                expires: new Date(dataDecoded.exp * 1000),
+                secure: !isLocalhost,  // true para HTTPS (develop/prod), false para localhost
+                sameSite: isLocalhost ? 'Lax' : 'none', // Lax para localhost, none para cross-domain
+                path: '/'
+            };
+            
+            // Guardar token
+            Cookies.set("token", token, cookieConfig);
+            localStorage.setItem("token", token);
+            
+            return dataDecoded;
+        } catch (error) {
+            clearUserState();
+            throw error;
+        }
+    };
 
     // Función para registro
     const signup = async (user) => {
         try {
             const res = await registerRequest(user);
-            console.log(res);
+            return res;
         } catch (err) {
-            setErrors(err.response?.data || ["Error en el registro"]);
+            const message = err.response?.data?.message || err.message || "Error en el registro";
+            setErrors([message]);
+            throw err;
         }
     };
 
@@ -34,93 +89,135 @@ export const AuthProvider = ({ children }) => {
     const signin = async (user) => {
         try {
             const res = await loginRequest(user);
-            const dataDecoded = jwtDecode(res.token); // Decodifica el token
-            console.log(dataDecoded);
-            setUserId(dataDecoded.id);
-            setUserRole(dataDecoded.role);
-            if (dataDecoded.role === "admin") {
-                setUserNav("administrador");
+            const dataDecoded = setUserFromToken(res.token);
+            
+            if (dataDecoded) {
+                return res;
             } else {
-                setUserNav(dataDecoded.name);
+                throw new Error('Token inválido recibido del servidor');
             }
-            setIsAuthenticated(true);
-            Cookies.set("token", res.token); // Guarda el token en las cookies
-            return res;
         } catch (error) {
-            const message = error.response?.data?.message || "Error al iniciar sesión";
+            const message = error.response?.data?.message || error.message || "Error al iniciar sesión";
             setErrors([message]);
+            throw error;
         }
+    };
+
+
+    const logout = async () => {
+        try {
+            await logoutRequest();
+        } catch (error) {
+            // Continuar con logout local independientemente del resultado del servidor
+        } finally {
+            clearUserState();
+            window.dispatchEvent(new CustomEvent('auth:logout'));
+        }
+    };
+
+    // Verificar autenticación al montar
+    const checkLogin = async () => {
+    const token = Cookies.get("token") || localStorage.getItem("token");
+    
+    if (!token) {
+      setIsAuthenticated(false);
+      return;
+    }
+
+    try {
+      const dataDecoded = jwtDecode(token);
+      const currentTime = Date.now() / 1000;
+      
+      // Si el token ha expirado
+      if (dataDecoded.exp < currentTime) {
+        clearUserState();
+        return;
+      }
+      
+      // Token válido, establecer usuario
+      setUserFromToken(token);
+      
+    } catch (err) {
+      
+      clearUserState();
+    }
+  };
+
+    // Función para intentar refresh token
+    const attemptTokenRefresh = async () => {
+      try {
+        const response = await refreshTokenRequest();
+        if (response && response.token) {
+          const dataDecoded = setUserFromToken(response.token);
+          return dataDecoded;
+        } else {
+          throw new Error('No token received from refresh');
+        }
+      } catch (error) {
+        
+        clearUserState();
+        throw error;
+      }
     };
 
     // Manejo de errores con temporizador
     useEffect(() => {
         if (errors.length > 0) {
-            const timer = setTimeout(() => setErrors([]), 5000);
+            const timer = setTimeout(() => {
+                setErrors([]);
+            }, 5000);
             return () => clearTimeout(timer);
         }
     }, [errors]);
 
-    // Verificar autenticación al montar
-    const checkLogin = async () => {
-        const token = Cookies.get("token");
-
-        if (!token) {
-            setIsAuthenticated(false);
-            setUserId(null);
-            setUserRole(null);
-            return;
-        }
-
-        try {
-            const dataDecoded = jwtDecode(token); // Decodifica el token
-            console.log(dataDecoded);
-            setUserId(dataDecoded.id);
-            setUserRole(dataDecoded.role);
-            if (dataDecoded.role === "admin") {
+    // Solo escuchar eventos para manejar renovación y expiración
+    useEffect(() => {
+        const handleTokenRefreshed = (event) => {
+            const { token, user } = event.detail;
+            setUserId(user.id);
+            setUserRole(user.role);
+            
+            if (user.role === "admin") {
                 setUserNav("administrador");
             } else {
-                setUserNav(dataDecoded.name);
+                setUserNav(user.name);
             }
+            
             setIsAuthenticated(true);
-        } catch (err) {
-            console.error("Error al verificar el token:", err);
-            setIsAuthenticated(false);
-            setUserId(null);
-            setUserRole(null);
-        }
-    };
-
-    // Llamar a checkLogin en useEffect
-    useEffect(() => {
-        const verifyLogin = async () => {
-            await checkLogin();
         };
 
-        verifyLogin(); // Ejecuta la función
-    }, []);
+        const handleTokenExpired = () => {
+            clearUserState();
+        };
 
-    // Cerrar sesión
-    const logout = () => {
-        Cookies.remove("token"); // Elimina el token de las cookies
-        setUserNav(null);
-        setUserId(null);
-        setUserRole(null);
-        setIsAuthenticated(false);
-    };
+        // Escuchar eventos de renovación y expiración
+        window.addEventListener('auth:token-refreshed', handleTokenRefreshed);
+        window.addEventListener('auth:token-expired', handleTokenExpired);
+        window.addEventListener('auth:logout', handleTokenExpired);
+
+        // Verificar autenticación inicial
+        checkLogin();
+
+        return () => {
+            window.removeEventListener('auth:token-refreshed', handleTokenRefreshed);
+            window.removeEventListener('auth:token-expired', handleTokenExpired);
+            window.removeEventListener('auth:logout', handleTokenExpired);
+        };
+    }, []);
 
     return (
         <AuthContext.Provider
             value={{
                 signup,
                 signin,
+                logout,
                 userId,
                 userRole,
                 userNav,
                 setUserNav,
                 isAuthenticated,
                 errors,
-                logout,
-                checkLogin,
+                checkLogin
             }}
         >
             {children}
