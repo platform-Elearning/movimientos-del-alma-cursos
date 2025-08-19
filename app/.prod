@@ -1,9 +1,1 @@
-SECRETKEY=KJKSZPJ1
-PG_USER=postgres
-PG_PASSWORD=AZOgvRTSwtRcIOyFCLmaLwDdyxQuGath
-PG_DBNAME=railway
-PORT=5432
-SECRET_KEY=98998ab5509f01ae0fe2704ec0eab1b3eda43c59fbaadd48edc655101d3c6a03
-SERVER_PORT=8080
-HOST=postgres.railway.internal
-ORIGIN=https://platform.mda-ifi.com
+VITE_API_URL=https://movimientos-del-alma-backend-production.up.railway.app
