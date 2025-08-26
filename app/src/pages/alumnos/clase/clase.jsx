@@ -8,7 +8,6 @@ const Clase = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { classItem } = location.state || {}; // Obtener los datos de la clase seleccionada
-  const embedUrl = getEmbedUrl(classItem?.lessonUrl || classItem?.url); // ✅ CORREGIDO: Soportar ambos nombres de propiedad
 
   if (!classItem) {
     return (
@@ -22,6 +21,32 @@ const Clase = () => {
     navigate(`/alumnos/${alumnoId}/curso/${coursoId}`);
   };
 
+  // Determinar el tipo de contenido
+  const getContentType = () => {
+    const title = classItem.lessonTitle || classItem.name || '';
+    const description = classItem.lessonDescription || classItem.lessons || '';
+    const content = `${title} ${description}`.toLowerCase();
+    
+    if (content.includes('drive') || content.includes('pdf')) {
+      return 'drive';
+    } else if (content.includes('video') || content.includes('youtube')) {
+      return 'video';
+    }
+    return 'video'; // Por defecto
+  };
+
+  const contentType = getContentType();
+  const embedUrl = contentType === 'video' ? getEmbedUrl(classItem?.lessonUrl || classItem?.url) : null;
+
+  // Si es un drive, redirigir automáticamente
+  if (contentType === 'drive' && (classItem?.lessonUrl || classItem?.url)) {
+    window.open(classItem?.lessonUrl || classItem?.url, '_blank');
+    // Opcional: regresar automáticamente después de abrir el drive
+    setTimeout(() => {
+      goToCourse(cursoId);
+    }, 1000);
+  }
+
   return (
     <div className="class-details-container">
       <BackLink
@@ -29,22 +54,27 @@ const Clase = () => {
         onClick={() => goToCourse(cursoId)}
       />
       <h2>
-        {classItem.lessonTitle}: {classItem.lessonDescription}
+        {classItem.lessonTitle || classItem.name}: {classItem.lessonDescription || classItem.lessons}
       </h2>
 
       <div className="video-container">
-        {embedUrl ? (
+        {contentType === 'drive' ? (
+          <div className="drive-content">
+            <p>Este contenido se ha abierto en una nueva pestaña.</p>
+            <p>Si no se abrió automáticamente, <a href={classItem?.lessonUrl || classItem?.url} target="_blank" rel="noopener noreferrer">haz clic aquí</a>.</p>
+          </div>
+        ) : embedUrl ? (
           <iframe
             width="80%"
             height="480"
             src={embedUrl}
-            title={classItem.lessonTitle}
+            title={classItem.lessonTitle || classItem.name}
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
           ></iframe>
         ) : (
-          <p>No hay un video disponible para esta clase.</p>
+          <p>No hay contenido disponible para esta clase.</p>
         )}
       </div>
     </div>
