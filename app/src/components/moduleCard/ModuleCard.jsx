@@ -2,6 +2,7 @@ import React from 'react';
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import './ModuleCard.css';
 import btnPlay from "../../assets/botonPlay.png";
+import paperClip from "../../assets/paperClip.png";
 
 const ModuleCard = ({ moduleName, lessons }) => {
   const { alumnoId, cursoId } = useParams();
@@ -10,6 +11,17 @@ const ModuleCard = ({ moduleName, lessons }) => {
   const { classItem } = location.state || {};
   
   const goToModule = (lesson) => {
+    const lessonTitle = lesson.lessonTitle || lesson.title || '';
+    const lessonDescription = lesson.lessonDescription || lesson.description || '';
+    const content = `${lessonTitle} ${lessonDescription}`.toLowerCase();
+    
+    // Si es un drive, abrir en nueva pestaña
+    if (content.includes('drive') && lesson.url) {
+      window.open(lesson.url, '_blank');
+      return;
+    }
+    
+    // Para videos u otro contenido, navegar normalmente
     const classItem = {
       lessonNumber: lesson.lessonNumber,
       lessonTitle: lesson.lessonTitle,
@@ -18,13 +30,27 @@ const ModuleCard = ({ moduleName, lessons }) => {
       id: lesson.id
     };
     
-    
     navigate(
       `/alumnos/${alumnoId}/curso/${cursoId}/clase/${lesson.lessonNumber}`,
       {
         state: { classItem },
       }
     );
+  };
+
+  // Función para determinar el icono según el tipo de contenido
+  const getIcon = (lesson) => {
+    const lessonTitle = lesson.lessonTitle || lesson.title || '';
+    const lessonDescription = lesson.lessonDescription || lesson.description || '';
+    const content = `${lessonTitle} ${lessonDescription}`.toLowerCase();
+    
+    if (content.includes('video') || content.includes('youtube')) {
+      return <img src={btnPlay} alt="boton Play" />;
+    } else if (content.includes('drive') || content.includes('pdf')) {
+      return <img src={paperClip} alt="paperclip" />;
+    }
+    // Por defecto mostrar el botón play original
+    return <img src={btnPlay} alt="boton Play" />;
   };
 
   // Verificar si hay lecciones válidas
@@ -75,7 +101,7 @@ const ModuleCard = ({ moduleName, lessons }) => {
                     })}
                     className="module-card-btn-play"
                   >
-                    <img src={btnPlay} alt="boton Play" />
+                    {getIcon(lesson)}
                   </button>
                 </div>
               </li>
