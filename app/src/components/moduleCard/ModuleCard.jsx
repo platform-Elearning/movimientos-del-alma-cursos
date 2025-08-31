@@ -2,6 +2,7 @@ import React from 'react';
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import './ModuleCard.css';
 import btnPlay from "../../assets/botonPlay.png";
+import paperClip from "../../assets/paperClip.png";
 
 const ModuleCard = ({ moduleName, lessons }) => {
   const { alumnoId, cursoId } = useParams();
@@ -9,22 +10,45 @@ const ModuleCard = ({ moduleName, lessons }) => {
   const location = useLocation();
   const { classItem } = location.state || {};
   
+  const isYouTubeVideo = (lesson) => {
+    const lessonTitle = (lesson.lessonTitle || lesson.title || '').toLowerCase();
+    const lessonDescription = (lesson.lessonDescription || lesson.description || '').toLowerCase();
+    const url = (lesson.url || '').toLowerCase();
+    
+    return lessonTitle.includes('video') || lessonDescription.includes('video') || url.includes('youtube') || url.includes('youtu.be');
+  };
+
   const goToModule = (lesson) => {
-    const classItem = {
-      lessonNumber: lesson.lessonNumber,
-      lessonTitle: lesson.lessonTitle,
-      lessonDescription: lesson.lessonDescription,
-      lessonUrl: lesson.url,
-      id: lesson.id
-    };
-    
-    
-    navigate(
-      `/alumnos/${alumnoId}/curso/${cursoId}/clase/${lesson.lessonNumber}`,
-      {
-        state: { classItem },
+    if (isYouTubeVideo(lesson)) {
+      // Para videos, navegar a la página de la clase para verlos incrustados
+      const classItem = {
+        lessonNumber: lesson.lessonNumber,
+        lessonTitle: lesson.lessonTitle || lesson.title,
+        lessonDescription: lesson.lessonDescription || lesson.description,
+        lessonUrl: lesson.url,
+        id: lesson.id
+      };
+      
+      navigate(
+        `/alumnos/${alumnoId}/curso/${cursoId}/clase/${lesson.lessonNumber}`,
+        {
+          state: { classItem },
+        }
+      );
+    } else {
+      // Para cualquier otro contenido (PDF, Drive, etc.), abrir en una nueva pestaña
+      if (lesson.url) {
+        window.open(lesson.url, '_blank', 'noopener,noreferrer');
       }
-    );
+    }
+  };
+
+  // Función para determinar el icono según el tipo de contenido
+  const getIcon = (lesson) => {
+    if (isYouTubeVideo(lesson)) {
+      return <img src={btnPlay} alt="Ver video" />;
+    }
+    return <img src={paperClip} alt="Abrir material" />;
   };
 
   // Verificar si hay lecciones válidas
@@ -75,7 +99,7 @@ const ModuleCard = ({ moduleName, lessons }) => {
                     })}
                     className="module-card-btn-play"
                   >
-                    <img src={btnPlay} alt="boton Play" />
+                    {getIcon(lesson)}
                   </button>
                 </div>
               </li>
