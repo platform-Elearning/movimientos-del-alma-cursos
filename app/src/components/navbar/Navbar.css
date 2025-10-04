@@ -184,6 +184,14 @@ body {
     animation: slideDown 0.5s forwards;
   }
 
+  .navbar-links a {
+    color: #ffffff;
+  }
+
+  .navbar-links h5 {
+    color: #ffffff;
+  }
+
   @keyframes slideDown {
     to {
       opacity: 1;
