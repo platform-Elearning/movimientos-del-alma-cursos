@@ -5,6 +5,7 @@ import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
 import { MdEmail, MdLock, MdError } from "react-icons/md";
 import { useAuth } from "../../services/authContext";
 import missionVisionImg from "../../assets/missionVisionImg.png";
+import logo from "../../assets/logo2.png";
 
 const Login = () => {
   const {
@@ -59,6 +60,7 @@ const Login = () => {
       <div className="login-wrapper">
         <div className="form">
         <div className="form-header">
+          <img src={logo} alt="Logo" className="login-logo" />
           <h1 id="heading">Bienvenido</h1>
           <p className="subtitle">Inicia sesión en tu cuenta</p>
         </div>
