@@ -35,8 +35,7 @@ const AppRouter = () => {
     return (
         <Routes>
             <Route path="/" element={<Index></Index>}></Route>
-
-            <Route path="/login" element={<Login></Login>}></Route>
+            <Route path="/login" element={<Index></Index>}></Route>
             <Route path="/register" element={<Register></Register>}></Route>
             <Route path="/pageAuxiliar" element={<PageAuxiliar></PageAuxiliar>}></Route>
             <Route path="/OlvideContraseña" element={<OlvideContraseña></OlvideContraseña>}></Route>

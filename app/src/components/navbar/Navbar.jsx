@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Navbar.css";
-import logo from "../../assets/logo.png";
+import logo from "../../assets/logo2.png";
 import userImg from "../../assets/user.png";
 import logoutImg from "../../assets/logout.png";
 import { useAuth } from "../../services/authContext";
