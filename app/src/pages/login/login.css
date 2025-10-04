@@ -1,43 +1,294 @@
-.form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 1em;
-  background-color: #171717;
-  border-radius: 25px;
-  transition: 0.4s ease-in-out;
+/* Reset de scroll y espacios */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
 }
 
-.form:hover {
-  transform: scale(1.05);
-  border: 1px solid black;
+#root {
+  height: 100%;
+  overflow: hidden;
 }
 
-#heading {
-  text-align: center;
-  margin: 1.5em 0;
-  color: rgb(255, 255, 255);
-  font-size: 1.5em;
-}
-
-.field {
+/* Contenedor principal con gradiente animado */
+.login-container {
+  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5em;
-  border-radius: 25px;
-  padding: 0.6em;
-  border: none;
-  outline: none;
-  color: white;
-  background-color: #171717;
-  box-shadow: inset 2px 5px 10px rgb(5, 5, 5);
+  position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 30px 20px;
+}
+
+/* Wrapper para formulario e imagen lateral */
+.login-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 40px;
+  max-width: 1100px;
+  width: 100%;
+  padding-left: 180px;
+}
+
+/* Fondo con gradiente animado - Paleta suave y elegante */
+.login-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(-45deg, #0f172a, #1e293b, #334155, #1e293b);
+  background-size: 400% 400%;
+  animation: gradientAnimation 20s ease infinite;
+  z-index: -1;
+}
+
+.login-background::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
+              radial-gradient(circle at 80% 80%, rgba(14, 165, 233, 0.06) 0%, transparent 50%);
+  animation: pulseGlow 8s ease-in-out infinite;
+}
+
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Formulario con efecto glassmorphism mejorado */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 34px;
+  padding: 3em 2.5em;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4),
+              0 16px 64px 0 rgba(0, 0, 0, 0.3),
+              inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+  max-width: 480px;
+  width: 100%;
+  animation: slideIn 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+  transform: none;
+  transition: none;
+}
+
+.form:hover {
+  transform: none;
+  scale: none;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Panel lateral sutil con imagen */
+.side-image-panel {
+  flex: 1;
+  max-width: 450px;
+  height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.side-image-panel img {
+  width: 110%;
+  height: 110%;
+  object-fit: contain;
+  transition: filter 0.3s ease;
+}
+
+.side-image-panel:hover {
+  opacity: 0.4;
+}
+
+.side-image-panel:hover img {
+  filter: grayscale(0%) brightness(1);
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 0.25;
+    transform: translateX(0);
+  }
+}
+
+.form::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, #3b82f6, #60a5fa, #818cf8, #a78bfa);
+  border-radius: 24px;
+  z-index: -1;
+  opacity: 0.15;
+  animation: borderGlow 6s linear infinite;
+}
+
+@keyframes borderGlow {
+  0%, 100% {
+    filter: hue-rotate(0deg);
+  }
+  50% {
+    filter: hue-rotate(360deg);
+  }
+}
+
+/* Header del formulario mejorado */
+.form-header {
+  text-align: center;
+  margin-bottom: 1em;
+}
+
+.login-logo {
+  width: 120px;
+  height: auto;
+  margin-bottom: 1.5em;
+  opacity: 0.9;
+  animation: logoFadeIn 0.8s ease-out;
+}
+
+@keyframes logoFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 0.9;
+    transform: translateY(0);
+  }
+}
+
+#heading {
+  margin: 0 0 0.6em 0;
+  color: #fff;
+  font-size: 2.2em;
+  font-weight: 700;
+  background: linear-gradient(135deg, #60a5fa 0%, #818cf8 50%, #a78bfa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  animation: gradientShift 3s ease infinite;
+  background-size: 200% 200%;
+}
+
+@keyframes gradientShift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.subtitle {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 1em;
+  margin: 0;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+/* Campos de entrada mejorados */
+.field {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 1em 1.4em;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: 14px;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Separación específica entre campos consecutivos (email y contraseña) */
+.field + .field {
+  margin-top: 24px;
+}
+
+.field::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(96, 165, 250, 0.08) 100%);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.field:focus-within::before {
+  opacity: 1;
+}
+
+.field:focus-within {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(96, 165, 250, 0.5);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1),
+              0 4px 20px rgba(59, 130, 246, 0.15);
+  transform: translateY(-2px);
 }
 
 .input-icon {
-  height: 1.3em;
-  width: 1.3em;
-  fill: white;
+  font-size: 1.3em;
+  color: rgba(255, 255, 255, 0.6);
+  transition: all 0.3s ease;
+  min-width: 22px;
+  z-index: 1;
+}
+
+.field:focus-within .input-icon {
+  color: #60a5fa;
+  transform: scale(1.05);
 }
 
 .input-field {
@@ -45,90 +296,392 @@
   border: none;
   outline: none;
   width: 100%;
-  color: #d3d3d3;
+  color: #fff;
+  font-size: 1em;
+  font-weight: 400;
+  z-index: 1;
+  letter-spacing: 0.01em;
 }
 
-.form .btn {
-  display: flex;
-  justify-content: center;
-  flex-direction: row;
-  margin-top: 2.5em;
-  gap: 0.5em;
+.input-field::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+  transition: color 0.3s ease;
 }
 
-.button1, .button2, .btn3 {
-  padding: 0.5em 1.5em;
-  border-radius: 5px;
+.field:focus-within .input-field::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.eye-icon {
+  font-size: 1.2em;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  min-width: 22px;
+  z-index: 1;
+  padding: 4px;
+  border-radius: 6px;
+}
+
+.eye-icon:hover {
+  color: #60a5fa;
+  background: rgba(59, 130, 246, 0.12);
+  transform: scale(1.08);
+}
+
+/* Botón principal con gradiente suave */
+.button1 {
+  margin-top: 1.2em;
+  padding: 1em 2.2em;
   border: none;
-  outline: none;
-  transition: 0.4s ease-in-out;
-  background-color: #252525;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
   color: white;
+  font-size: 1.05em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(59, 130, 246, 0.25),
+              0 0 0 0 rgba(59, 130, 246, 0);
+  letter-spacing: 0.02em;
+}
+
+.button1::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
   width: 100%;
-  max-width: 200px;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+  transition: left 0.6s ease;
 }
 
+.button1::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  padding: 2px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), transparent);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  opacity: 0.5;
+}
+
+.button1:hover::before {
+  left: 100%;
+}
+
+.button1:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 25px rgba(59, 130, 246, 0.35),
+              0 0 0 4px rgba(59, 130, 246, 0.12);
+}
+
+.button1:active {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 15px rgba(59, 130, 246, 0.3);
+}
+
+/* Botón de contraseña olvidada mejorado */
 .btn3 {
-  margin: 10px;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.92em;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-decoration: none;
+  padding: 0.6em;
+  border-radius: 8px;
+  position: relative;
 }
 
-.button1:hover, .button2:hover, .button3:hover {
-  background-color: black;
+.btn3::after {
+  content: '';
+  position: absolute;
+  bottom: 0.4em;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 1.5px;
+  background: linear-gradient(90deg, transparent, #60a5fa, transparent);
+  transition: width 0.3s ease;
+}
+
+.btn3:hover {
+  color: #60a5fa;
+  background: rgba(59, 130, 246, 0.06);
+}
+
+.btn3:hover::after {
+  width: 85%;
+}
+
+/* Divisor mejorado */
+.divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 1.2em 0;
+  color: rgba(255, 255, 255, 0.5);
+  position: relative;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.2), transparent);
+}
+
+.divider::before {
+  margin-right: 1em;
+}
+
+.divider::after {
+  margin-left: 1em;
+}
+
+.divider span {
+  font-size: 0.88em;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+/* Botón secundario (registro) mejorado */
+.button2 {
+  padding: 1em 2.2em;
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.03);
   color: white;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  letter-spacing: 0.02em;
 }
 
-.button3:hover {
-  background-color: red;
+.button2::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(96, 165, 250, 0.08));
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.button2:hover::before {
+  opacity: 1;
+}
+
+.button2:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(96, 165, 250, 0.5);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 20px rgba(59, 130, 246, 0.2),
+              0 0 0 3px rgba(59, 130, 246, 0.08);
+}
+
+.button2:active {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 12px rgba(59, 130, 246, 0.15);
+}
+
+/* Mensajes de error mejorados */
+.error-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 1.2em;
+}
+
+.error-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 1em 1.2em;
+  background: rgba(255, 107, 107, 0.12);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 107, 107, 0.3);
+  border-left: 3px solid #ff6b6b;
+  border-radius: 12px;
+  animation: errorSlide 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.15);
+}
+
+@keyframes errorSlide {
+  from {
+    opacity: 0;
+    transform: translateX(-30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+.error-icon {
+  color: #ff8a8a;
+  font-size: 1.4em;
+  min-width: 22px;
+  animation: errorPulse 2s ease-in-out infinite;
+}
+
+@keyframes errorPulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
 }
 
 .error-text {
-color: #d3d3d3;
+  color: #ffd4d4;
+  margin: 0;
+  font-size: 0.92em;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+/* Responsive design para tablets y menores */
+@media (max-width: 1024px) {
+  .side-image-panel {
+    display: none;
+  }
+
+  .login-wrapper {
+    justify-content: center;
+  }
 }
 
 @media (max-width: 768px) {
+  .login-container {
+    padding: 25px 15px;
+  }
+
   .form {
-    padding: 1em 1em;
+    padding: 2.5em 2em;
+    max-width: 420px;
+    gap: 20px;
   }
 
   #heading {
-    font-size: 1.2em;
+    font-size: 2em;
+  }
+
+  .subtitle {
+    font-size: 0.95em;
   }
 
   .field {
-    padding: 0.5em;
+    padding: 0.95em 1.3em;
+    gap: 12px;
   }
 
-  .button1, .button2, .button3 {
-    padding: 0.5em 1em;
+  .input-icon {
+    font-size: 1.25em;
   }
 
-  .form .btn {
-    flex-direction: column;
-    gap: 1em;
+  .button1, .button2 {
+    padding: 0.95em 2em;
+    font-size: 1em;
+  }
+
+  .btn3 {
+    font-size: 0.9em;
   }
 }
 
+/* Responsive design para móviles */
 @media (max-width: 480px) {
-  #heading {
-    font-size: 1em;
-    margin: 1em 0;
+  .login-container {
+    padding: 20px 15px;
   }
 
   .form {
-    padding: 0.8em;
+    padding: 2em 1.5em;
+    gap: 18px;
+    border-radius: 20px;
   }
 
-  .field {
-    padding: 0.4em;
+  .form-header {
+    margin-bottom: 1.2em;
   }
 
-  .button1, .button2, .button3 {
-    padding: 0.5em;
+  #heading {
+    font-size: 1.8em;
+  }
+
+  .subtitle {
     font-size: 0.9em;
   }
 
-  .form .btn {
-    flex-direction: column;
-    gap: 1em;
+  .field {
+    padding: 0.9em 1.1em;
+    gap: 11px;
+    border-radius: 12px;
+  }
+
+  .input-icon {
+    font-size: 1.2em;
+  }
+
+  .input-field {
+    font-size: 0.98em;
+  }
+
+  .eye-icon {
+    font-size: 1.15em;
+  }
+
+  .button1 {
+    padding: 0.95em 1.8em;
+    font-size: 0.98em;
+    margin-top: 1em;
+  }
+
+  .button2 {
+    padding: 0.95em 1.8em;
+    font-size: 0.98em;
+  }
+
+  .btn3 {
+    font-size: 0.88em;
+    padding: 0.5em;
+  }
+
+  .divider {
+    margin: 1em 0;
+  }
+
+  .divider span {
+    font-size: 0.82em;
+  }
+
+  .error-item {
+    padding: 0.9em 1em;
+    gap: 10px;
+  }
+
+  .error-icon {
+    font-size: 1.2em;
+  }
+
+  .error-text {
+    font-size: 0.88em;
   }
 }

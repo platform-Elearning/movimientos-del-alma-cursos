@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import "./login.css";
 import { useNavigate } from "react-router-dom";
-import { AiFillEyeInvisible } from "react-icons/ai";
+import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
+import { MdEmail, MdLock, MdError } from "react-icons/md";
 import { useAuth } from "../../services/authContext";
+import missionVisionImg from "../../assets/missionVisionImg.png";
+import logo from "../../assets/logo2.png";
 
 const Login = () => {
   const {
@@ -52,20 +55,19 @@ const Login = () => {
   };
 
   return (
-    <div>
-      <div className="form" style={{ color: "white" }}>
-        <h1 id="heading">Login</h1>
+    <div className="login-container">
+      <div className="login-background"></div>
+      <div className="login-wrapper">
+        <div className="form">
+        <div className="form-header">
+          <img src={logo} alt="Logo" className="login-logo" />
+          <h1 id="heading">Bienvenido</h1>
+          <p className="subtitle">Inicia sesión en tu cuenta</p>
+        </div>
         <form onSubmit={handleSubmit}>
           {/* Campo de correo electrónico */}
           <div className="field">
-            <svg
-              className="input-icon"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-            >
-              {/* Icono de correo */}
-              <path d="M2.003 5.884l8 4.8a1 1 0 0 0 1.002 0l8-4.8A1 1 0 0 0 18 4H2a1 1 0 0 0-.997 1.884zM2 8.118v6.764A1 1 0 0 0 3.556 15l6.444-3.86 6.444 3.86A1 1 0 0 0 18 14.882V8.118L10 12 2 8.118z" />
-            </svg>
+            <MdEmail className="input-icon" />
             <input
               type="email"
               name="email"
@@ -74,48 +76,42 @@ const Login = () => {
               placeholder="Correo electrónico"
               className="input-field"
               autoComplete="username"
+              required
             />
           </div>
 
           {/* Campo de contraseña */}
           <div className="field">
-            <svg
-              className="input-icon"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-            >
-              {/* Icono de contraseña */}
-              <path d="M2 6a6 6 0 1112 0v2H2V6zm10-2v2H8V4h4zM4 8h8v2H4V8zM2 18a2 2 0 002 2h12a2 2 0 002-2V9H2v9zm4-2h4v2H6v-2z" />
-            </svg>
+            <MdLock className="input-icon" />
             <input
-              type={showPassword ? "text" : "password"} // Alterna el tipo de input
+              type={showPassword ? "text" : "password"}
               name="password"
-              value={formData.password} // Valor del estado
-              onChange={handleChange} // Actualiza el estado al cambiar
+              value={formData.password}
+              onChange={handleChange}
               placeholder="Contraseña"
               className="input-field"
-              autoComplete="password"
+              autoComplete="current-password"
+              required
             />
             {/* Icono para alternar visibilidad de la contraseña */}
-            <AiFillEyeInvisible
-              className="eye"
-              onClick={handleTogglePassword}
-            />
+            {showPassword ? (
+              <AiFillEye
+                className="eye-icon"
+                onClick={handleTogglePassword}
+              />
+            ) : (
+              <AiFillEyeInvisible
+                className="eye-icon"
+                onClick={handleTogglePassword}
+              />
+            )}
           </div>
 
           {/* Botones de acción */}
-          <div className="btn">
-            <button type="submit" className="button1">
-              Iniciar sesión
-            </button>
-            <button
-              type="button"
-              className="button2"
-              onClick={navigateToRegister}
-            >
-              Registrarse
-            </button>
-          </div>
+          <button type="submit" className="button1">
+            <span>Iniciar sesión</span>
+          </button>
+          
           <button
             type="button"
             className="btn3"
@@ -123,18 +119,37 @@ const Login = () => {
           >
             ¿Olvidaste tu contraseña?
           </button>
+          
+          <div className="divider">
+            <span>o</span>
+          </div>
+          
+          <button
+            type="button"
+            className="button2"
+            onClick={navigateToRegister}
+          >
+            <span>Crear cuenta nueva</span>
+          </button>
         </form>
 
         {/* Muestra los errores de inicio de sesión, si los hay */}
         {signinErrors && signinErrors.length > 0 && (
           <div className="error-messages">
             {signinErrors.map((error, index) => (
-              <p key={index} className="error-text">
-                {error}
-              </p>
+              <div key={index} className="error-item">
+                <MdError className="error-icon" />
+                <p className="error-text">{error}</p>
+              </div>
             ))}
           </div>
         )}
+        </div>
+        
+        {/* Panel lateral sutil con imagen */}
+        <div className="side-image-panel">
+          <img src={missionVisionImg} alt="Mission Vision" />
+        </div>
       </div>
     </div>
   );
