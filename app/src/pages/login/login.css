@@ -563,6 +563,7 @@ html, body {
 
   .login-wrapper {
     justify-content: center;
+    padding-left: 0;
   }
 }
 
