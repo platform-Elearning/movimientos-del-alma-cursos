@@ -13,6 +13,7 @@ const AdminProfesores = () => {
     name: "",
     lastname: "",
     email: "",
+    password: "",
   });
 
   const [errors, setErrors] = useState("");
@@ -56,6 +57,7 @@ const AdminProfesores = () => {
         name: "",
         lastname: "",
         email: "",
+        password: "",
       });
     } catch (error) {
       if (error.response?.status === 401) {
@@ -116,6 +118,18 @@ const AdminProfesores = () => {
             value={formData.email}
             onChange={handleChange}
             required
+            autoComplete="off"
+          />
+          
+          <label htmlFor="password">Contraseña:</label>
+          <input
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+            placeholder="Mínimo 6 caracteres"
+            autoComplete="new-password"
           />
 
           <button type="submit" disabled={isLoading}>
