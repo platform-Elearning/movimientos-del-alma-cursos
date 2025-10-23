@@ -13,6 +13,7 @@ const AdminAlumnos = () => {
     lastname: "",
     nationality: "",
     email: "",
+    password: "",
   });
 
   const [errors, setErrors] = useState("");
@@ -43,6 +44,7 @@ const AdminAlumnos = () => {
         lastname: "",
         nationality: "",
         email: "",
+        password: "",
       });
     } catch (error) {
       setErrors([error.response?.data?.message || "Error al crear el alumno"]);
@@ -118,6 +120,21 @@ const AdminAlumnos = () => {
               value={formData.email}
               onChange={handleChange}
               required
+              autoComplete="off"
+            />
+          </div>
+          
+          <div className="admin-alumnos-field">
+            <label htmlFor="password">Contraseña:</label>
+            <input
+              id="password"
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+              placeholder="Mínimo 6 caracteres"
+              autoComplete="new-password"
             />
           </div>
           
