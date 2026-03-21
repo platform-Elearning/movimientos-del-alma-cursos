@@ -9,9 +9,9 @@ export const createAlumno = async (user) => {
   }
 };
 
-export const getAlumnos = async () => {
+export const getAlumnos = async (page = 1, limit = 25) => {
   try {
-    const response = await instanceUsers.get("/users/getStudentsWithCourses");
+    const response = await instanceUsers.get(`/users/getStudentsWithCourses?page=${page}&limit=${limit}`);
     return response.data;
   } catch (error) {
     throw error;

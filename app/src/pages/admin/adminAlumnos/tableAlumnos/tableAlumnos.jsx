@@ -11,24 +11,40 @@ const AlumnosTable = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pagination, setPagination] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Función para traer los alumnos desde la API
-  const fetchAlumnos = async () => {
+  const fetchAlumnos = async (page = 1) => {
     try {
-      const response = await getAlumnos();
-      if (response && response.response && Array.isArray(response.response)) {
-        setAlumnos(response.response);
+      setIsLoading(true);
+      setError("");
+      const response = await getAlumnos(page, 25);
+      if (response && response.success && response.data && Array.isArray(response.data)) {
+        setAlumnos(response.data);
+        setPagination(response.pagination);
+        setCurrentPage(page);
       } else {
-        throw new Error("La respuesta de la API no es un array");
+        throw new Error("La respuesta de la API no es válida");
       }
     } catch (err) {
       setError("Error al cargar los alumnos");
+      console.error(err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchAlumnos();
+    fetchAlumnos(currentPage);
   }, []);
+
+  const handlePageChange = (newPage) => {
+    if (newPage >= 1 && newPage <= pagination?.totalPages) {
+      fetchAlumnos(newPage);
+    }
+  };
 
   const handleEdit = (alumno) => {
     navigate(`/admin/editarAlumno/${alumno.user_id}`, {
@@ -56,17 +72,19 @@ const AlumnosTable = () => {
   };
 
   return (
-    <div
-      className="alumnos-table-container"
-      ref={tableContainerRef}
-      onMouseDown={handleMouseDown}
-      onMouseLeave={handleMouseLeaveOrUp}
-      onMouseUp={handleMouseLeaveOrUp}
-      onMouseMove={handleMouseMove}
-      style={{ cursor: isDragging ? "grabbing" : "grab" }} // Cambio de cursor
-    >
+    <div className="alumnos-table-wrapper">
       {error && <p className="error-message">{error}</p>}
-      <table className="alumnos-table">
+      {isLoading && <p className="loading-message">Cargando alumnos...</p>}
+      <div
+        className="alumnos-table-container"
+        ref={tableContainerRef}
+        onMouseDown={handleMouseDown}
+        onMouseLeave={handleMouseLeaveOrUp}
+        onMouseUp={handleMouseLeaveOrUp}
+        onMouseMove={handleMouseMove}
+        style={{ cursor: isDragging ? "grabbing" : "grab" }}
+      >
+        <table className="alumnos-table">
         <thead>
           <tr>
             <th>ID</th>
@@ -124,6 +142,47 @@ const AlumnosTable = () => {
         </tbody>
       </table>
     </div>
+    
+    {pagination && (
+      <div className="pagination-controls">
+        <div className="pagination-info">
+          <span>Mostrando {alumnos.length} de {pagination.totalStudents} alumnos</span>
+          <span>Página {pagination.currentPage} de {pagination.totalPages}</span>
+        </div>
+        <div className="pagination-buttons">
+          <button
+            onClick={() => handlePageChange(1)}
+            disabled={!pagination.hasPreviousPage || isLoading}
+            className="pagination-btn"
+          >
+            ««
+          </button>
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={!pagination.hasPreviousPage || isLoading}
+            className="pagination-btn"
+          >
+            ‹ Anterior
+          </button>
+          <span className="page-number">Página {currentPage}</span>
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={!pagination.hasNextPage || isLoading}
+            className="pagination-btn"
+          >
+            Siguiente ›
+          </button>
+          <button
+            onClick={() => handlePageChange(pagination.totalPages)}
+            disabled={!pagination.hasNextPage || isLoading}
+            className="pagination-btn"
+          >
+            »»
+          </button>
+        </div>
+      </div>
+    )}
+  </div>
   );
 };
 
