@@ -17,13 +17,13 @@
   box-sizing: border-box;
 }
 .title-container {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #83711B 0%, #FFBB80 50%, #83711B 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 40px 20px;
   margin-bottom: 40px;
-  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 20px rgba(131, 113, 27, 0.3);
   position: relative;
   overflow: hidden;
 }
@@ -59,7 +59,7 @@
 }
 
 .loading-message {
-  color: #667eea;
+  color: #83711B;
   animation: pulse 1.5s ease-in-out infinite;
 }
 
