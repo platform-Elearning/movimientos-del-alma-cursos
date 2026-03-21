@@ -60,7 +60,7 @@ const ModuleCard = ({ moduleName, lessons }) => {
         </div>
         <div className="module-card-lessons">
           <ul>
-            <li className="module-card-lesson-item">
+            <li className="module-card-lesson-item module-card-lesson-empty">
               <div className="module-card-lesson-content">
                 <span className="module-card-lesson-title">No hay clases disponibles</span>
               </div>
@@ -85,22 +85,21 @@ const ModuleCard = ({ moduleName, lessons }) => {
             const lessonDescription = lesson.lessonDescription || lesson.description || 'Sin descripción';
             
             return (
-              <li className="module-card-lesson-item" key={lesson.id || index}>
+              <li 
+                className="module-card-lesson-item" 
+                key={lesson.id || index}
+                onClick={() => goToModule({
+                  ...lesson,
+                  lessonTitle,
+                  lessonDescription
+                })}
+              >
                 <div className="module-card-lesson-content">
                   <span className="module-card-lesson-title">{lessonTitle}:</span> 
                   <span className="module-card-lesson-desc">{lessonDescription}</span>
                 </div>
                 <div className="module-card-play-button">
-                  <button 
-                    onClick={() => goToModule({
-                      ...lesson,
-                      lessonTitle,
-                      lessonDescription
-                    })}
-                    className="module-card-btn-play"
-                  >
-                    {getIcon(lesson)}
-                  </button>
+                  {getIcon(lesson)}
                 </div>
               </li>
             );
