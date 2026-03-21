@@ -2,6 +2,8 @@
   min-height: 100vh;
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
   padding-bottom: 40px;
+  overflow-x: hidden;
+  width: 100%;
 }
 
 .card-container{
@@ -11,6 +13,8 @@
   padding: 0 40px;
   max-width: 1400px;
   margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
 }
 .title-container {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -74,7 +78,7 @@
 
 @media (max-width: 1024px) {
   .card-container {
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 25px;
     padding: 0 30px;
   }
@@ -96,16 +100,32 @@
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 430px) {
   .card-container {
-    padding: 0 15px;
+    padding: 0 12px;
+    gap: 18px;
   }
-
+  
   .cursos-title {
-    font-size: 1.75rem;
+    font-size: 1.85rem;
   }
   
   .title-container {
-    padding: 25px 15px;
+    padding: 28px 12px;
+  }
+}
+
+@media (max-width: 390px) {
+  .card-container {
+    padding: 0 10px;
+    gap: 15px;
+  }
+
+  .cursos-title {
+    font-size: 1.65rem;
+  }
+  
+  .title-container {
+    padding: 25px 10px;
   }
 }
