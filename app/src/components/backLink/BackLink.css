@@ -6,17 +6,17 @@
     font-weight: 600;
     color: #ffffff;
     text-decoration: none;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #83711B 0%, #FFBB80 100%);
     border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 4px 12px rgba(131, 113, 27, 0.3);
     transition: all 0.3s ease;
     margin: 20px 0;
 }
 
 .link:hover {
     transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    box-shadow: 0 6px 20px rgba(131, 113, 27, 0.4);
+    background: linear-gradient(135deg, #FFBB80 0%, #83711B 100%);
 }
 
 .link:active {
