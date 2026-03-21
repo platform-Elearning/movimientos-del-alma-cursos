@@ -1,63 +1,103 @@
 .alumnos-table-container {
-  overflow-x: auto;
-  margin: 20px auto; /* Centrado horizontalmente */
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  max-width: 1200px; /* Limita el ancho máximo en pantallas grandes */
-  background-color: #ffffff; /* Fondo blanco para mayor contraste */
-  padding: 1rem; /* Espaciado interno */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+  overflow-x: visible;
+  margin: 20px 0;
+  border: none;
+  border-radius: 12px;
+  width: 100%;
+  background: linear-gradient(to bottom, #ffffff, #f8f9fa);
+  padding: 1.5rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
 }
 
 .alumnos-table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   text-align: left;
+  overflow: hidden;
+  border-radius: 8px;
 }
 
 .alumnos-table th,
 .alumnos-table td {
-  padding: 12px;
-  border-bottom: 1px solid #ddd;
+  padding: 16px 12px;
+  border-bottom: 1px solid #e9ecef;
 }
 
 .alumnos-table th {
-  background-color: #f4f4f4;
-  font-weight: bold;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  color: #ffffff !important;
+  font-weight: 700;
   text-transform: uppercase;
   font-size: 0.95rem;
+  letter-spacing: 1px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.alumnos-table tr:hover {
-  background-color: #f9f9f9;
+.alumnos-table thead th {
+  color: #ffffff !important;
+}
+
+.alumnos-table tbody tr {
+  transition: all 0.3s ease;
+  background-color: #ffffff;
+}
+
+.alumnos-table tbody tr:nth-child(even) {
+  background-color: #f8f9fa;
+}
+
+.alumnos-table tbody tr:hover {
+  background-color: #e7f3ff;
+  transform: scale(1.01);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+  cursor: pointer;
 }
 
 .edit-button {
-  padding: 6px 12px;
-  background-color: #007bff;
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
 }
 
 .edit-button:hover {
-  background-color: #0056b3;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+.edit-button:active {
+  transform: translateY(0);
 }
 
 .error-message {
-  color: red;
+  color: #dc3545;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  border-radius: 8px;
+  padding: 12px 20px;
   text-align: center;
   margin: 10px 0;
+  font-weight: 500;
 }
 
 /* Responsive styles */
 @media (max-width: 1024px) {
   .alumnos-table-container {
-    margin: 15px auto;
+    margin: 15px 0;
     padding: 0.8rem;
-    max-width: 95%; /* Reduce el ancho máximo en tablets */
+    width: 100%;
   }
 
   .alumnos-table th,
@@ -74,9 +114,9 @@
 
 @media (max-width: 768px) {
   .alumnos-table-container {
-    margin: 10px auto;
+    margin: 10px 0;
     padding: 0.8rem;
-    max-width: 100%; /* Ocupa todo el ancho disponible */
+    width: 100%;
   }
 
   .alumnos-table th,
@@ -94,10 +134,11 @@
 @media (max-width: 480px) {
   .alumnos-table-container {
     border: none;
-    margin: 10px auto;
+    margin: 10px 0;
     padding: 0.5rem;
-    max-width: 100%; /* Ocupa todo el ancho disponible */
-    box-shadow: none; /* Elimina la sombra para un diseño más limpio */
+    width: 100%;
+    box-shadow: none;
+    overflow-x: auto;
   }
 
   .alumnos-table {
@@ -133,5 +174,132 @@
   .edit-button {
     padding: 4px 6px;
     font-size: 0.75rem;
+  }
+}
+
+/* Pagination styles */
+.alumnos-table-wrapper {
+  width: 100%;
+  margin: 0;
+  padding: 0 20px;
+}
+
+.pagination-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px 0;
+  padding: 20px 24px;
+  background: linear-gradient(to bottom, #ffffff, #f8f9fa);
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  width: 100%;
+}
+
+.pagination-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.9rem;
+  color: #4b5563;
+  font-weight: 500;
+}
+
+.pagination-info span:first-child {
+  color: #667eea;
+  font-weight: 600;
+}
+
+.pagination-buttons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pagination-btn {
+  padding: 10px 18px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(102, 126, 234, 0.3);
+}
+
+.pagination-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+.pagination-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.pagination-btn:disabled {
+  background: linear-gradient(135deg, #d1d5db 0%, #9ca3af 100%);
+  cursor: not-allowed;
+  opacity: 0.5;
+  box-shadow: none;
+}
+
+.page-number {
+  font-weight: 600;
+  color: #667eea;
+  padding: 0 12px;
+  font-size: 1rem;
+}
+
+.loading-message {
+  text-align: center;
+  color: #667eea;
+  font-size: 1rem;
+  margin: 10px 0;
+  font-weight: 500;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Responsive pagination */
+@media (max-width: 768px) {
+  .pagination-controls {
+    flex-direction: column;
+    gap: 15px;
+    padding: 10px;
+  }
+
+  .pagination-info {
+    text-align: center;
+    font-size: 0.85rem;
+  }
+
+  .pagination-buttons {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .pagination-btn {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .pagination-btn {
+    padding: 5px 10px;
+    font-size: 0.8rem;
+  }
+
+  .page-number {
+    font-size: 0.85rem;
   }
 }
