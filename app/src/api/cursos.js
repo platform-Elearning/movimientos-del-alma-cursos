@@ -185,4 +185,13 @@ export const deleteCourse = async (courseId) => {
   }
 };
 
-export default getCursos;
+export const getAllCoursesPublic = async () => {
+  try {
+    const response = await instanceCursos.get("/courses/getAllCoursesPublic");
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export default getAllCursos;

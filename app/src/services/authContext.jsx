@@ -97,7 +97,28 @@ export const AuthProvider = ({ children }) => {
                 throw new Error('Token inválido recibido del servidor');
             }
         } catch (error) {
-            const message = error.response?.data?.message || error.message || "Error al iniciar sesión";
+            let message = "Error al iniciar sesión";
+            
+            // Handle specific error cases
+            if (error.response) {
+                const status = error.response.status;
+                const serverMessage = error.response.data?.message;
+                
+                if (status === 403) {
+                    message = "Credenciales incorrectas. Verifica tu correo y contraseña.";
+                } else if (status === 401) {
+                    message = "Usuario o contraseña incorrectos.";
+                } else if (status === 404) {
+                    message = "Usuario no encontrado.";
+                } else if (status === 500) {
+                    message = "Error del servidor. Intenta nuevamente más tarde.";
+                } else if (serverMessage) {
+                    message = serverMessage;
+                }
+            } else if (error.message) {
+                message = error.message;
+            }
+            
             setErrors([message]);
             throw error;
         }

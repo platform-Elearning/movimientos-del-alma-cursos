@@ -11,7 +11,7 @@ const Card = ({ nombre, description, btnText, onClick }) => {
       <section className="card-info">
         <p className="card-description">{description}</p>
       </section>
-      <Button text={btnText} onClick={onClick} />
+      {btnText && <Button text={btnText} onClick={onClick} />}
     </div>
   );
 };

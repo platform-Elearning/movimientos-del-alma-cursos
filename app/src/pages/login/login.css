@@ -501,23 +501,24 @@ html, body {
 .error-messages {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-top: 1.2em;
+  gap: 15px;
+  margin-top: 1.5em;
 }
 
 .error-item {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 1em 1.2em;
-  background: rgba(255, 107, 107, 0.12);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 107, 107, 0.3);
-  border-left: 3px solid #ff6b6b;
+  gap: 15px;
+  padding: 1.2em 1.5em;
+  background: linear-gradient(135deg, rgba(220, 38, 38, 0.25) 0%, rgba(239, 68, 68, 0.2) 100%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 2px solid rgba(248, 113, 113, 0.6);
+  border-left: 5px solid #ef4444;
   border-radius: 12px;
-  animation: errorSlide 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.15);
+  animation: errorSlide 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), errorShake 0.5s ease-in-out;
+  box-shadow: 0 8px 24px rgba(220, 38, 38, 0.3),
+              0 0 0 1px rgba(248, 113, 113, 0.2);
 }
 
 @keyframes errorSlide {
@@ -531,28 +532,39 @@ html, body {
   }
 }
 
+@keyframes errorShake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
 .error-icon {
-  color: #ff8a8a;
-  font-size: 1.4em;
-  min-width: 22px;
-  animation: errorPulse 2s ease-in-out infinite;
+  color: #fca5a5;
+  font-size: 1.8em;
+  min-width: 28px;
+  animation: errorPulse 1.5s ease-in-out infinite;
+  filter: drop-shadow(0 2px 4px rgba(220, 38, 38, 0.4));
 }
 
 @keyframes errorPulse {
   0%, 100% {
     opacity: 1;
+    transform: scale(1);
   }
   50% {
-    opacity: 0.7;
+    opacity: 0.8;
+    transform: scale(1.1);
   }
 }
 
 .error-text {
-  color: #ffd4d4;
+  color: #fef2f2;
   margin: 0;
-  font-size: 0.92em;
+  font-size: 0.95rem;
   line-height: 1.5;
-  font-weight: 400;
+  font-weight: 600;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  word-break: break-word;
 }
 
 /* Responsive design para tablets y menores */
