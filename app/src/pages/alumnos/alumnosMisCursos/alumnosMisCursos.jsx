@@ -82,16 +82,16 @@ const AlumnosMisCursos = () => {
               className={`course-card-wrapper ${!isEnrolled ? 'locked' : ''}`}
             >
               {!isEnrolled && (
-                <div className="lock-overlay">
+                <div className="lock-overlay" onClick={handleLockedCourseClick}>
                   <div className="lock-icon">🔒</div>
                   <p className="lock-text">Desbloquea este curso</p>
                 </div>
               )}
               <Card
-                onClick={isEnrolled ? () => goToCourse(curso.id) : handleLockedCourseClick}
+                onClick={isEnrolled ? () => goToCourse(curso.id) : () => {}}
                 nombre={curso.name}
                 description={curso.description}
-                btnText={isEnrolled ? "IR AL MATERIAL" : "CONSULTAR"}
+                btnText={isEnrolled ? "IR AL MATERIAL" : ""}
               />
             </div>
           );
