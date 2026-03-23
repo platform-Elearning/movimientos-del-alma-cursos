@@ -1,9 +1,11 @@
 .ver-alumnos-container {
-  max-width: 1200px;
+  max-width: 100%;
+  width: 100%;
   margin: 0 auto;
   padding: 20px;
   background-color: #f8f9fa;
   min-height: 100vh;
+  box-sizing: border-box;
 }
 
 /* Loading State */
@@ -171,30 +173,42 @@
 
 /* Table Styles */
 .alumnos-table-container {
+  width: 100%;
   overflow-x: auto;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  -webkit-overflow-scrolling: touch;
 }
 
 .alumnos-table {
   width: 100%;
+  min-width: 800px;
   border-collapse: collapse;
 }
 
 .alumnos-table th {
-  background-color: #f8f9fa;
-  padding: 15px 12px;
+  background: linear-gradient(135deg, #83711B 0%, #FFBB80 50%, #83711B 100%);
+  color: #ffffff;
+  padding: 12px 10px;
   text-align: left;
-  font-weight: 600;
-  color: #495057;
+  font-weight: 700;
   border-bottom: 2px solid #dee2e6;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  white-space: nowrap;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .alumnos-table td {
-  padding: 15px 12px;
+  padding: 12px 10px;
   border-bottom: 1px solid #dee2e6;
   vertical-align: middle;
+  font-size: 0.9rem;
 }
 
 .alumnos-table tr:hover {

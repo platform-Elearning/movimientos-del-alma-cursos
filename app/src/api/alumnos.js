@@ -44,3 +44,12 @@ export const getCursosByAlumno = async (user) => {
     throw error;
   }
 };
+
+export const getStudentWithDni = async (identification_number) => {
+  try {
+    const response = await instanceUsers.get(`/users/getStudentWithDni/${identification_number}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

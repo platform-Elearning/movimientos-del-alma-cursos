@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import getCourses from "../../../../api/cursos";
 import AddStudentModal from "../createStudent/AddStudentModal";
+import UnenrollStudentModal from "../deleteStudent/UnenrollStudentModal";
 import { useNavigate } from "react-router-dom";
 import "./tablaCursos.css";
 
@@ -10,6 +11,7 @@ const CoursesTable = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [showUnenrollModal, setShowUnenrollModal] = useState(false);
   const [selectedCourseId, setSelectedCourseId] = useState(null);
 
   // Función para traer los cursos desde la API
@@ -40,6 +42,21 @@ const CoursesTable = () => {
   const closeModal = () => {
     setShowModal(false);
     setSelectedCourseId(null);
+  };
+
+  const handleDeleteStudentClick = (courseId) => {
+    setSelectedCourseId(courseId);
+    setShowUnenrollModal(true);
+  };
+
+  const closeUnenrollModal = () => {
+    setShowUnenrollModal(false);
+    setSelectedCourseId(null);
+  };
+
+  const handleUnenrollSuccess = () => {
+    // Optionally refresh the courses list or show a success message
+    fetchCourses();
   };
 
   const handleEditClick = (courseId) => {
@@ -91,6 +108,13 @@ const CoursesTable = () => {
                 >
                   Agregar Alumno
                 </button>
+                <button
+                  className="action-button delete-button"
+                  onClick={() => handleDeleteStudentClick(course.id)}
+                  title="Desinscribir alumno del curso"
+                >
+                  Eliminar Alumno
+                </button>
               </td>
             </tr>
           ))}
@@ -98,6 +122,13 @@ const CoursesTable = () => {
       </table>
 
       {showModal && <AddStudentModal courseId={selectedCourseId} onClose={closeModal} />}
+      {showUnenrollModal && (
+        <UnenrollStudentModal 
+          courseId={selectedCourseId} 
+          onClose={closeUnenrollModal}
+          onSuccess={handleUnenrollSuccess}
+        />
+      )}
     </div>
   );
 };
