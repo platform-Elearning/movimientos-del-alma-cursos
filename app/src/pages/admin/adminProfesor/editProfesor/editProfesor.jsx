@@ -6,7 +6,9 @@ import ValidateField from "../../../../components/form/validateField/ValidateFie
 import { 
   deleteProfesor, 
   updateTeacher, 
-  assignCourseToTeacher
+  assignCourseToTeacher,
+  getCourseByTeacherId,
+  unassignCourseFromTeacher
 } from "../../../../api/profesores";
 import { getCursos } from "../../../../api/cursos";
 
@@ -20,6 +22,8 @@ const EditProfesor = ({ onUpdate }) => {
   });
 
   const [courses, setCourses] = useState([]);
+  const [assignedCourses, setAssignedCourses] = useState([]);
+  const [loadingAssignedCourses, setLoadingAssignedCourses] = useState(false);
   const [errors, setErrors] = useState([]);
   const [successMessage, setSuccessMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -59,6 +63,30 @@ const EditProfesor = ({ onUpdate }) => {
         course_id: "",
       });
     }
+  }, [user]);
+
+  // Cargar cursos asignados al profesor
+  useEffect(() => {
+    const fetchAssignedCourses = async () => {
+      if (!user?.id) return;
+      
+      setLoadingAssignedCourses(true);
+      try {
+        const response = await getCourseByTeacherId(user.id);
+        if (response && response.success && response.data) {
+          setAssignedCourses(response.data);
+        } else {
+          setAssignedCourses([]);
+        }
+      } catch (error) {
+        console.error("No se pudieron cargar cursos asignados", error);
+        setAssignedCourses([]);
+      } finally {
+        setLoadingAssignedCourses(false);
+      }
+    };
+
+    fetchAssignedCourses();
   }, [user]);
 
   const handleChange = (e) => {
@@ -122,6 +150,40 @@ const EditProfesor = ({ onUpdate }) => {
         errorMessage = error.response.data.error;
       } else if (error.response?.data?.message) {
         errorMessage = error.response.data.message;
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
+      setErrors([errorMessage]);
+      setSuccessMessage("");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Función para desvincular curso
+  const handleUnassignCourse = async (courseId, courseName) => {
+    const confirmed = window.confirm(
+      `¿Está seguro que desea desvincular el curso "${courseName}" de este profesor?`
+    );
+    
+    if (!confirmed) return;
+
+    setIsLoading(true);
+    try {
+      await unassignCourseFromTeacher(formData.id, courseId);
+      
+      // Actualizar la lista de cursos asignados
+      setAssignedCourses(assignedCourses.filter(course => course.id !== courseId));
+      
+      setSuccessMessage("Curso desvinculado exitosamente");
+      setErrors([]);
+      if (onUpdate) onUpdate(); // Refrescar la tabla de profesores
+    } catch (error) {
+      let errorMessage = "Error al desvincular el curso";
+      
+      if (error.response?.data?.error) {
+        errorMessage = error.response.data.error;
       } else if (error.message) {
         errorMessage = error.message;
       }
@@ -258,6 +320,35 @@ const EditProfesor = ({ onUpdate }) => {
             ))}
           </div>
         )}
+
+        {/* Sección de Cursos Asignados */}
+        <div className="assigned-courses-section">
+          <h3>Cursos Asignados</h3>
+          {loadingAssignedCourses ? (
+            <p className="loading-message">⏳ Cargando cursos asignados...</p>
+          ) : assignedCourses.length === 0 ? (
+            <p className="no-courses-message">Este profesor no tiene cursos asignados</p>
+          ) : (
+            <ul className="assigned-courses-list">
+              {assignedCourses.map((course) => (
+                <li key={course.id} className="assigned-course-item">
+                  <div className="course-info">
+                    <h4>{course.name}</h4>
+                    {course.description && <p>{course.description}</p>}
+                  </div>
+                  <button
+                    type="button"
+                    className="unassign-course-btn"
+                    onClick={() => handleUnassignCourse(course.id, course.name)}
+                    disabled={isLoading}
+                  >
+                    Desvincular
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       </div>
     </div>
   );

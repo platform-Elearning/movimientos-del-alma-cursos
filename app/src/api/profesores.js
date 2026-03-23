@@ -164,3 +164,19 @@ export const getCourseDetails = async (courseId, teacherId) => {
     throw error;
   }
 };
+
+export const unassignCourseFromTeacher = async (teacherId, courseId) => {
+  try {
+    const unassignData = {
+      teacher_id: String(teacherId),
+      course_id: parseInt(courseId)
+    };
+
+    const response = await instanceCursos.delete("/courses/unassignCourseFromTeacher", {
+      data: unassignData
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

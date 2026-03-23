@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "./tableProfesor.css";
-import { getProfesores, getCourseByTeacherId } from "../../../../api/profesores";
+import { getProfesores, getCourseByTeacherId, deleteProfesor } from "../../../../api/profesores";
 
 const ProfesoresTable = () => {
   const navigate = useNavigate();
@@ -80,6 +80,35 @@ const ProfesoresTable = () => {
     });
   };
 
+  const handleDelete = async (profesor) => {
+    const profesorData = profesoresWithCourses.find(p => p.id === profesor.id);
+    const hasCourses = profesorData && profesorData.courses && profesorData.courses.length > 0;
+
+    if (hasCourses) {
+      alert("No se puede eliminar este profesor porque tiene cursos asignados. Por favor, desvincule todos los cursos primero.");
+      return;
+    }
+
+    const confirmDelete = window.confirm(
+      `¿Está seguro que desea eliminar al profesor ${profesor.name} ${profesor.lastname}?`
+    );
+
+    if (!confirmDelete) return;
+
+    try {
+      await deleteProfesor(profesor.id);
+      alert("Profesor eliminado exitosamente");
+      fetchProfesores(); // Refresh the list
+    } catch (error) {
+      console.error("Error al eliminar profesor:", error);
+      if (error.response?.data?.error) {
+        alert(`Error: ${error.response.data.error}`);
+      } else {
+        alert("Error al eliminar el profesor. Por favor, intente nuevamente.");
+      }
+    }
+  };
+
   const handleMouseDown = (e) => {
     setIsDragging(true);
     setStartX(e.pageX - tableContainerRef.current.offsetLeft);
@@ -98,22 +127,10 @@ const ProfesoresTable = () => {
     tableContainerRef.current.scrollLeft = scrollLeft - walk;
   };
 
-  // Función para refrescar los datos
-  const handleRefresh = () => {
-    fetchProfesores();
-  };
-
   return (
     <div className="profesores-section">
       <div className="profesores-header">
         <h3>Lista de Profesores</h3>
-        <button 
-          className="refresh-button"
-          onClick={handleRefresh}
-          disabled={loadingCourses}
-        >
-          {loadingCourses ? "🔄 Cargando..." : "🔄 Actualizar"}
-        </button>
       </div>
 
       <div
@@ -153,22 +170,39 @@ const ProfesoresTable = () => {
                   <td data-label="Curso Asignado" className="course-cell">
                     {loadingCourses ? (
                       <span className="loading-courses">⏳ Cargando...</span>
+                    ) : profesor.assignedCourses.length === 0 ? (
+                      <span className="course-text no-course">Sin asignar</span>
                     ) : (
-                      <span 
-                        className={`course-text ${profesor.assignedCourses.length === 0 ? 'no-course' : 'has-course'}`}
-                        title={profesor.coursesText}
-                      >
-                        {profesor.coursesText}
-                      </span>
+                      <ul className="courses-list">
+                        {profesor.assignedCourses.map((course, idx) => (
+                          <li key={idx} className="course-item">
+                            {course.name}
+                          </li>
+                        ))}
+                      </ul>
                     )}
                   </td>
                   <td data-label="Acciones">
-                    <button
-                      className="edit-button"
-                      onClick={() => handleEdit(profesor)}
-                    >
-                      Editar
-                    </button>
+                    <div className="action-buttons">
+                      <button
+                        className="edit-button"
+                        onClick={() => handleEdit(profesor)}
+                      >
+                        Editar
+                      </button>
+                      <button
+                        className="delete-button"
+                        onClick={() => handleDelete(profesor)}
+                        disabled={profesor.assignedCourses.length > 0}
+                        title={
+                          profesor.assignedCourses.length > 0
+                            ? "Desvincule todos los cursos antes de eliminar"
+                            : "Eliminar profesor"
+                        }
+                      >
+                        Eliminar
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))
@@ -186,12 +220,22 @@ const ProfesoresTable = () => {
                     <span className="loading-courses">⏳ Cargando cursos...</span>
                   </td>
                   <td data-label="Acciones">
-                    <button
-                      className="edit-button"
-                      onClick={() => handleEdit(profesor)}
-                    >
-                      Editar
-                    </button>
+                    <div className="action-buttons">
+                      <button
+                        className="edit-button"
+                        onClick={() => handleEdit(profesor)}
+                      >
+                        Editar
+                      </button>
+                      <button
+                        className="delete-button"
+                        onClick={() => handleDelete(profesor)}
+                        disabled={true}
+                        title="Cargando información de cursos..."
+                      >
+                        Eliminar
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))

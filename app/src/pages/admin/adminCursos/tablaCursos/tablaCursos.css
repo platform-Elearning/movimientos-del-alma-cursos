@@ -93,6 +93,15 @@
     background-color: #218838;
 }
 
+.delete-button {
+    background-color: #dc3545; /* Rojo */
+    color: #fff;
+}
+
+.delete-button:hover {
+    background-color: #c82333;
+}
+
 .action-button:active {
     transform: translateY(1px);
 }

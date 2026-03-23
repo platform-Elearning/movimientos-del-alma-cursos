@@ -158,4 +158,31 @@ export const registerStudentToCourse = async (enrollmentData) => {
   }
 };
 
+export const unenrollStudent = async (student_id, course_id) => {
+  try {
+    const response = await instanceEnrollments.delete("/enrollments/unenrollStudent", {
+      data: {
+        student_id: String(student_id), // Keep as string - student IDs can be alphanumeric
+        course_id: parseInt(course_id)
+      }
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const deleteCourse = async (courseId) => {
+  try {
+    const response = await instanceCursos.delete("/courses/deleteCourse", {
+      data: {
+        id: parseInt(courseId)
+      }
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export default getCursos;
