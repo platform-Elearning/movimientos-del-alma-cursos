@@ -172,4 +172,17 @@ export const unenrollStudent = async (student_id, course_id) => {
   }
 };
 
+export const deleteCourse = async (courseId) => {
+  try {
+    const response = await instanceCursos.delete("/courses/deleteCourse", {
+      data: {
+        id: parseInt(courseId)
+      }
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export default getCursos;
