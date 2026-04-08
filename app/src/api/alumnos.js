@@ -18,9 +18,9 @@ export const getAlumnos = async (page = 1, limit = 25) => {
   }
 };
 
-export const updateStudent = async (user_id) => {
+export const updateStudent = async (student) => {
   try {
-    const response = await instanceUsers.put("/users/updateStudent", user_id);
+    const response = await instanceUsers.put("/users/updateStudent", student);
     return response.data;
   } catch (error) {
     throw error;
