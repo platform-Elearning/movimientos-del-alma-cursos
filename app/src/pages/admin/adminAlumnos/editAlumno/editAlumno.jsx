@@ -31,7 +31,7 @@ const EditAlumno = ({ onUpdate }) => {
         user_id: user.user_id || "",
         email: user.email || "",
         name: user.name || "",
-        last_name: user.last_name || "",
+        lastname: user.last_name || "",
         nationality: user.nationality || "",
         cursos: user.cursos || [],
       });
@@ -114,12 +114,12 @@ const EditAlumno = ({ onUpdate }) => {
             />
           </div>
           <div className="edit-user-field">
-            <label htmlFor="last_name">Apellido:</label>
+            <label htmlFor="lastname">Apellido:</label>
             <input
-              id="last_name"
+              id="lastname"
               type="text"
-              name="last_name"
-              value={formData.last_name}
+              name="lastname"
+              value={formData.lastname}
               onChange={handleChange}
               required
             />
