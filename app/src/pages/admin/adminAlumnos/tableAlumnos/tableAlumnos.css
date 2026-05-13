@@ -1,46 +1,49 @@
-.alumnos-table-container {
+.alumnos-table-wrapper{
+  width: 100vw;
+  margin: 0px;
+  padding: 0px;
+}
+
+.alumnos-table-container-2 {
+  width: 95vw;
   overflow-x: visible;
-  margin: 20px 0;
   border: none;
-  border-radius: 12px;
-  width: 100%;
+  border-radius: 9px;
+  /*
   background: linear-gradient(to bottom, #ffffff, #f8f9fa);
-  padding: 1.5rem;
+  */
+  margin: auto;
+  padding: 0px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
 }
 
 .alumnos-table {
-  width: 100%;
   border-collapse: separate;
   border-spacing: 0;
   text-align: left;
   overflow: hidden;
-  border-radius: 8px;
+  border-radius: 9px;
+    margin: 0px;
+  padding: 0px;
 }
 
 .alumnos-table th,
 .alumnos-table td {
-  padding: 16px 12px;
   border-bottom: 1px solid #e9ecef;
 }
 
 .alumnos-table th {
   background: linear-gradient(135deg, #83711B 0%, #FFBB80 50%, #83711B 100%) !important;
-  color: #ffffff !important;
   font-weight: 700;
   text-transform: uppercase;
   font-size: 0.95rem;
   letter-spacing: 1px;
-  position: sticky;
   top: 0;
   z-index: 10;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.alumnos-table thead th {
-  color: #ffffff !important;
-}
 
 .alumnos-table tbody tr {
   transition: all 0.3s ease;
@@ -92,14 +95,15 @@
   font-weight: 500;
 }
 
-/* Responsive styles */
-@media (max-width: 1024px) {
-  .alumnos-table-container {
-    margin: 15px 0;
-    padding: 0.8rem;
-    width: 100%;
+/* Responsive styles ===========================*/
+@media (max-width: 1180px) {
+  .alumnos-table-container-2 {
+    width: 95vw;
   }
-
+  .alumnos-table{
+  display: block;
+  }
+  
   .alumnos-table th,
   .alumnos-table td {
     padding: 10px;
@@ -113,7 +117,7 @@
 }
 
 @media (max-width: 768px) {
-  .alumnos-table-container {
+  .alumnos-table-container-2 {
     margin: 10px 0;
     padding: 0.8rem;
     width: 100%;
@@ -129,10 +133,21 @@
     padding: 4px 8px;
     font-size: 0.8rem;
   }
+
+.alumnos-table tr {
+    display: block;
+    margin-bottom: 15px;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 15px;
+    background: white;
+    background-color: white;
+  }
+
 }
 
 @media (max-width: 480px) {
-  .alumnos-table-container {
+  .alumnos-table-container-2 {
     border: none;
     margin: 10px 0;
     padding: 0.5rem;
@@ -176,25 +191,20 @@
     font-size: 0.75rem;
   }
 }
-
-/* Pagination styles */
-.alumnos-table-wrapper {
-  width: 100%;
-  margin: 0;
-  padding: 0 20px;
-}
-
+/* Pagination styles ============================= */
+/* Pagination styles ============================= */
+/* Pagination styles ============================= */
 .pagination-controls {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 20px 0;
-  padding: 20px 24px;
+  margin: 32px auto;
+  padding: 20px 0px;
   background: linear-gradient(to bottom, #ffffff, #f8f9fa);
   border: none;
-  border-radius: 12px;
+  border-radius: 9px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-  width: 100%;
+  width: 95vw;
 }
 
 .pagination-info {
@@ -204,10 +214,14 @@
   font-size: 0.9rem;
   color: #4b5563;
   font-weight: 500;
+  margin: 0px 16px;
 }
 
 .pagination-info span:first-child {
   color: #83711B;
+  color:  #c08c44;
+
+ 
   font-weight: 600;
 }
 
@@ -215,6 +229,8 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  margin: 0px 16px;
+
 }
 
 .pagination-btn {
@@ -250,6 +266,7 @@
 .page-number {
   font-weight: 600;
   color: #83711B;
+  color:  #c08c44;
   padding: 0 12px;
   font-size: 1rem;
 }

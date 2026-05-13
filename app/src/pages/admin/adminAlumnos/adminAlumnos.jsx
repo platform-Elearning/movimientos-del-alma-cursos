@@ -53,7 +53,7 @@ const AdminAlumnos = () => {
   };
 
   return (
-    <div>
+    <div className="container-princ">
       <BackLink
         title="Volver a Página Principal"
         onClick={goToInicio}
@@ -138,7 +138,7 @@ const AdminAlumnos = () => {
             />
           </div>
           
-          <button type="submit" className="admin-alumnos-submit">
+          <button type="submit" className="admin-alumnos-submit2">
             Crear Alumno
           </button>
         </form>
