@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import AuthUtils from '../../../utils/authUtils';
-import { getStudentByCourseId } from '../../../api/profesores';
+import { getStudentByCourseId, markAsApproved,updateUrlCertificate} from '../../../api/profesores';
 import { getModulesByCourseID } from '../../../api/cursos';
 import BackLink from '../../../components/backLink/BackLink';
 import CardModuleTeacher from '../../../components/cardModuleTeacher/CardModuleTeacher';
@@ -17,6 +17,9 @@ const StudentsManagement = () => {
   const [error, setError] = useState('');
   const [totalModules, setTotalModules] = useState(0);
   const navigate = useNavigate();
+  const [approved, setApproved] = useState(false);
+  //const [url_certificate, setUrl_certificate] = useState('');
+
 
   useEffect(() => {
     if (!AuthUtils.checkAndCleanExpiredToken()) {
@@ -83,12 +86,15 @@ const StudentsManagement = () => {
             last_activity: student.last_activity || new Date().toISOString(),
             completed_lessons: modulesOwned,
             total_lessons: moduleCount,
-            status: student.status || 'active'
+            status: student.status || 'active',
+            approved: student.approved,
+            url_certificate: student.url_certificate,
+            id_enrollment: student.id_enrollment
           };
         });
         
         setStudents(mappedStudents);
-        console.log('✅ Estudiantes cargados con progreso real:', mappedStudents);
+       // console.log('✅ Estudiantes cargados con progreso real:', mappedStudents);
       } else {
         setStudents([]);
         setError('No hay estudiantes inscritos en este curso aún.');
@@ -144,6 +150,34 @@ const StudentsManagement = () => {
     setShowStudentDetails(true);
   };
 
+  // Función para aprobar ==========================0
+  // la idea es pasar el handleApproved
+  const handleApproved = (id) => {
+    markAsApproved(id, true)
+    setApproved(true);
+    loadStudentsData();
+    alert("El alumno esta aprobado")
+  };
+  // END Función para aprobar
+
+  // Función para aprobar ==========================0
+  // la idea es pasar el handleApproved
+  const handleNoApproved = (id) => {
+    markAsApproved(id, false)
+    setApproved(false);
+    loadStudentsData();
+    alert("El alumno no esta aprobado")
+  };
+  // END Función para aprobar
+  
+// Función para guardar el link
+  const handleSaveLink =  (id_enrollment, url_certificate) => {
+      updateUrlCertificate(id_enrollment, url_certificate);
+      loadStudentsData();
+
+  };
+// END Función para guardar el link
+
   if (isLoading) {
     return (
       <div className="students-management loading">
@@ -184,6 +218,8 @@ const StudentsManagement = () => {
       </div>
     );
   }
+
+
 
   return (
     <div className="students-management">
@@ -246,6 +282,11 @@ const StudentsManagement = () => {
                 onSendMessage={handleSendMessage}
                 getProgressColor={getProgressColor}
                 getStatusBadge={getStatusBadge}
+                approved={handleApproved}
+                noApproved={handleNoApproved}
+                updateUrl={handleSaveLink}
+
+
               />
             ))
           )}

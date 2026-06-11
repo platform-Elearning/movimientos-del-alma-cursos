@@ -47,30 +47,36 @@ const CreateCourse = () => {
   };
 
   return (
-    <div>
+    <div  className="container-princ"  >
       <BackLink title="Volver a Inicio" onClick={() => goToInicio()} />
       <div className="form-container">
-        <h2 className="form-title">Crear Nuevo Curso</h2>
+        <h1 className="form-title">Crear Nuevo Curso</h1>
         <form onSubmit={handleSubmit} className="course-form">
+          <div className="admin-cursos-field">
+
+          <label >Nombre del Curso:</label>
           <input
             type="text"
             name="name"
-            placeholder="Nombre del Curso"
             value={formData.name}
             onChange={handleChange}
             required
             ref={nameInputRef}
             className={error ? "input-error" : ""}
           />
+          </div>
+
+        <div className="admin-cursos-field">
+          <label >Descripción del Curso:</label>
           <input
             type="text"
             name="description"
-            placeholder="Descripción del Curso"
             value={formData.description}
             onChange={handleChange}
             required
           />
-          <button type="submit" className="submit-button" disabled={loading}>
+        </div>
+          <button type="submit" className="submit-button2" disabled={loading}>
             {loading ? "Creando..." : "Crear Curso"}
           </button>
           {error && <p className="error-message">{error}</p>}

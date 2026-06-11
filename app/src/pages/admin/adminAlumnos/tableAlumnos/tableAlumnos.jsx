@@ -73,10 +73,13 @@ const AlumnosTable = () => {
 
   return (
     <div className="alumnos-table-wrapper">
+            <div className="profesores-header">
+        <h3>Lista de Alumnos</h3>
+      </div>
       {error && <p className="error-message">{error}</p>}
       {isLoading && <p className="loading-message">Cargando alumnos...</p>}
       <div
-        className="alumnos-table-container"
+        className="alumnos-table-container-2"
         ref={tableContainerRef}
         onMouseDown={handleMouseDown}
         onMouseLeave={handleMouseLeaveOrUp}

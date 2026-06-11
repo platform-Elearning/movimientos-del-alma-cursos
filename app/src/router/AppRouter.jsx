@@ -18,6 +18,7 @@ import EditLessons from "../pages/admin/adminCursos/editLessons/editLessons";
 import ModuleDetails from "../pages/alumnos/modulo/modulo";
 import AdminProfesores from "../pages/admin/adminProfesor/adminProfesor";
 import EditProfesor from "../pages/admin/adminProfesor/editProfesor/editProfesor";
+import AlumnosMisCertificaciones from "../pages/alumnos/alumnosMisCertificaciones/alumnosMisCertificaciones";
 
 // ✅ Nueva importación para ver alumnos del curso
 import VerAlumnosCurso from "../pages/admin/adminCursos/verAlumnos/VerAlumnosCurso";
@@ -55,6 +56,8 @@ const AppRouter = () => {
             <Route path="/admin/editarProfesor/:id" element={<EditProfesor/>}></Route>
             
             <Route path="/alumnos/miscursos/:alumnoId" element={<AlumnosMisCursos />} />
+            <Route path="/alumnos/miscertificaciones/:alumnoId" element={<AlumnosMisCertificaciones />} />
+
             <Route path="/alumnos/:alumnoId/curso/:cursoId" element={<Curso></Curso>}></Route>
             <Route path="/alumnos/:alumnoId/curso/:cursoId/modulo/:moduleId" element={<ModuleDetails></ModuleDetails>}></Route>
             <Route path="/alumnos/:alumnoId/curso/:cursoId/clase/:claseId" element={<Clase></Clase>}></Route>

@@ -1,20 +1,42 @@
+/*variables*/
+:root{
+  --var-dorado-fuerte: #83711b;
+  --var-dorado-medio: #c08c44;
+  --var-dorado-suave: #ffd9a3;
+}
+
 /* Contenedor de la tabla */
 .table-container {
-    margin: 2rem auto;
-    padding: 1rem;
-    max-width: 1200px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  /*
+  
+  background-color: #f8f9fa;
+  */
+  min-height: 100vh;
+  box-sizing: border-box;
     overflow-x: auto; /* Habilita el desplazamiento horizontal */
+}
+.cursos-table-container{
+  width: 95vw;
+  overflow-x: auto;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  -webkit-overflow-scrolling: touch;
+  margin: auto;
 }
 
 /* Título de la tabla */
 .table-title {
-    text-align: center;
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-    color: #333;
+  margin: 12px 2.5vw;
+  padding: 25px;
+  background: linear-gradient(135deg, #83711B 0%, #FFBB80 50%, #83711B 100%);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(131, 113, 27, 0.3);
+  text-align: center;
+  color: #fff;
 }
 
 /* Tabla de cursos */
@@ -33,6 +55,7 @@
 
 .courses-table th {
     background-color: #007bff;
+    background-color: var(--var-dorado-medio);
     color: #fff;
     font-weight: bold;
 }
@@ -76,21 +99,27 @@
 }
 
 .view-button {
-    background-color: #007bff; /* Azul */
-    color: #fff;
+    border:  #c08c44 1px solid;
+    background-color: #fff; /* Azul */
+    color:   #c08c44;
+    font-weight: 700;
 }
 
 .view-button:hover {
-    background-color: #0056b3;
+    background-color: #fdfdfd;
+    
 }
 
 .add-button {
     background-color: #28a745; /* Verde */
+    background-color:  #c08c44; /* Azul */
     color: #fff;
+    font-weight:700 ;
 }
 
 .add-button:hover {
     background-color: #218838;
+    background-color:  #83711b; /* Azul */
 }
 
 .delete-button {

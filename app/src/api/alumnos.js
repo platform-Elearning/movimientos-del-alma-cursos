@@ -53,3 +53,12 @@ export const getStudentWithDni = async (identification_number) => {
     throw error;
   }
 };
+
+export const getEnrollmentsByAlumnoId = async (student_id) => {
+  try {
+    const response = await instanceUsers.get( `/enrollments/getAllEnrollmentsByStudentId/${student_id}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

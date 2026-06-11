@@ -74,6 +74,9 @@ const CoursesTable = () => {
   return (
     <div className="table-container">
       <h1 className="table-title">Lista de Cursos</h1>
+      <div className="cursos-table-container" >
+
+
       <table className="courses-table">
         <thead>
           <tr>
@@ -120,6 +123,7 @@ const CoursesTable = () => {
           ))}
         </tbody>
       </table>
+      </div>
 
       {showModal && <AddStudentModal courseId={selectedCourseId} onClose={closeModal} />}
       {showUnenrollModal && (

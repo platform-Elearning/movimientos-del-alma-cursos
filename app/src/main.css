@@ -10,3 +10,7 @@ body {
   font-optical-sizing: auto;
   font-style: normal;
 }
+
+button{
+  border-radius: 100px;
+}

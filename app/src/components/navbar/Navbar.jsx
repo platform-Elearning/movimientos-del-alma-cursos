@@ -46,6 +46,13 @@ const Navbar = () => {
       console.error("userId is null, cannot navigate");
     }
   };
+    const navigateToPageAlumnnosMisCertificaciones = () => {
+    if (userId) {
+      navigate(`/alumnos/miscertificaciones/${userId}`);
+    } else {
+      console.error("userId is null, cannot navigate");
+    }
+  };
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -111,7 +118,9 @@ const Navbar = () => {
         <ul className={`navbar-links ${isMenuOpen ? "open" : ""}`}>
           {userRole === "student" && (
             <li>
-              <a onClick={navigateToPageAlumnnosMisCursos}>Mis Formaciones</a>
+              <a className="alumno-a" onClick={navigateToPageAlumnnosMisCursos}>Mis Formaciones</a>
+              <a className="alumno-a" onClick={navigateToPageAlumnnosMisCertificaciones}>Mis Certificaciones</a>
+
             </li>
           )}
           <li>

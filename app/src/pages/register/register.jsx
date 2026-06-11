@@ -63,6 +63,7 @@ const Register = () => {
           <input
             type="text"
             name="identification_number"
+            className="input_camp"
             value={formData.identification_number}
             onChange={handleChange}
             required
@@ -75,7 +76,7 @@ const Register = () => {
             onChange={handleChange}
             required
           />
-          {error.name && <p className="error-message">{error.name}</p>}
+          {error.name && <p className="error-message2">{error.name}</p>}
           <label htmlFor="lastname">Apellido:</label>
           <input
             type="text"
@@ -84,7 +85,7 @@ const Register = () => {
             onChange={handleChange}
             required
           />
-          {error.lastname && <p className="error-message">{error.lastname}</p>}
+          {error.lastname && <p className="error-message2">{error.lastname}</p>}
           <label htmlFor="nationality">Pais de Origen:</label>
           <input
             id="email"
@@ -105,7 +106,7 @@ const Register = () => {
           <button type="submit">Registrar Estudiante</button>
         </form>
         {message && <p className="success-message">{message}</p>}
-        {error.general && <p className="error-message">{error.general}</p>}
+        {error.general && <p className="error-message2">{error.general}</p>}
       </div>
     </div>
   );
