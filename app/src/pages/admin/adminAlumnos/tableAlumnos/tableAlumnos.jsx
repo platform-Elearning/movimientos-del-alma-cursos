@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { getAlumnos } from "../../../../api/alumnos";
 import "./tableAlumnos.css";
@@ -14,13 +14,16 @@ const AlumnosTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pagination, setPagination] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const debounceTimerRef = useRef(null);
 
   // Función para traer los alumnos desde la API
-  const fetchAlumnos = async (page = 1) => {
+  const fetchAlumnos = async (page = 1, search = "") => {
     try {
       setIsLoading(true);
       setError("");
-      const response = await getAlumnos(page, 25);
+      const response = await getAlumnos(page, 25, search);
       if (response && response.success && response.data && Array.isArray(response.data)) {
         setAlumnos(response.data);
         setPagination(response.pagination);
@@ -37,12 +40,21 @@ const AlumnosTable = () => {
   };
 
   useEffect(() => {
-    fetchAlumnos(currentPage);
-  }, []);
+    fetchAlumnos(1, debouncedSearch);
+  }, [debouncedSearch]);
+
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setSearchQuery(value);
+    if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
+    debounceTimerRef.current = setTimeout(() => {
+      setDebouncedSearch(value);
+    }, 400);
+  };
 
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= pagination?.totalPages) {
-      fetchAlumnos(newPage);
+      fetchAlumnos(newPage, debouncedSearch);
     }
   };
 
@@ -73,10 +85,27 @@ const AlumnosTable = () => {
 
   return (
     <div className="alumnos-table-wrapper">
+      <div className="profesores-header">
+        <h3>Lista de Alumnos</h3>
+      </div>
+      <div className="alumnos-search-bar">
+        <input
+          type="text"
+          className="alumnos-search-input"
+          placeholder="Buscar por nombre, apellido, email, DNI o país..."
+          value={searchQuery}
+          onChange={handleSearchChange}
+        />
+        {searchQuery && pagination && (
+          <span className="alumnos-search-count">
+            {pagination.totalStudents} resultado{pagination.totalStudents !== 1 ? "s" : ""}
+          </span>
+        )}
+      </div>
       {error && <p className="error-message">{error}</p>}
       {isLoading && <p className="loading-message">Cargando alumnos...</p>}
       <div
-        className="alumnos-table-container"
+        className="alumnos-table-container-2"
         ref={tableContainerRef}
         onMouseDown={handleMouseDown}
         onMouseLeave={handleMouseLeaveOrUp}

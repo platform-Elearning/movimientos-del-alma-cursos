@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import emojiAlumno from "../../../assets/emoji-alumnos.png";
 import emojiProfesor from "../../../assets/emoji-profesores.png";
 import emojiCurso from "../../../assets/emoji-cursos.png";
-import ReportsList from "../../../components/reportProblem/ReportProblem";
+import emojiReporte from "../../../assets/work.png";
 
 const PanelAdmin = () => {
   const { isAuthenticated } = useAuth();
@@ -64,8 +64,14 @@ const PanelAdmin = () => {
           Cursos
         </button>
       </section>
-      <section>
-        <ReportsList></ReportsList>
+      <section className="btnContainer">
+        <img src={emojiReporte} alt="reporteLogo" />
+        <button
+          className="navigation-button"
+          onClick={() => handleNavigate("/admin/reportes")}
+        >
+          Reportes
+        </button>
       </section>
     </div>
   );

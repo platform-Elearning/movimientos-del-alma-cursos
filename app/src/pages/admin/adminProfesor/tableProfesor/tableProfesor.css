@@ -2,14 +2,16 @@
   width: 100%;
   max-width: 100%;
   margin: 0;
-  padding: 20px;
+  /*
+  
   background-color: #f8f9fa;
+  */
   min-height: 100vh;
   box-sizing: border-box;
 }
 
 .profesores-header {
-  margin-bottom: 25px;
+  margin: 12px 2.5vw;
   padding: 25px;
   background: linear-gradient(135deg, #83711B 0%, #FFBB80 50%, #83711B 100%);
   border-radius: 12px;
@@ -50,12 +52,13 @@
 }
 
 .profesores-table-container {
-  width: 100%;
+  width: 95vw;
   overflow-x: auto;
   background-color: #ffffff;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   -webkit-overflow-scrolling: touch;
+  margin: auto;
 }
 
 .profesores-table {

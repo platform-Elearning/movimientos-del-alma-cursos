@@ -21,8 +21,8 @@ const AlumnosMisCursos = () => {
       // Fetch all available courses
       const allCoursesData = await getAllCoursesPublic();
 
-      console.log('Enrolled courses data:', cursosData);
-      console.log('All courses data:', allCoursesData);
+      //console.log('Enrolled courses data:', cursosData);
+      //console.log('All courses data:', allCoursesData);
 
       if (cursosData.success && Array.isArray(cursosData.data)) {
         setCursos(cursosData.data);
@@ -93,6 +93,7 @@ const AlumnosMisCursos = () => {
                 description={curso.description}
                 btnText={isEnrolled ? "IR AL MATERIAL" : ""}
               />
+
             </div>
           );
         })}

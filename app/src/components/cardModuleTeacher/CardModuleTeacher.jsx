@@ -1,15 +1,28 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './CardModuleTeacher.css';
+import AuthUtils from '../../utils/authUtils';
+import { useNavigate, useParams } from 'react-router-dom';
+
+
 
 const CardModuleTeacher = ({ 
   student, 
   onViewProgress, 
   onSendMessage, 
-  getProgressColor, 
-  getStatusBadge 
-}) => {
+  getProgressColor,
+  getStatusBadge,
+  approved,
+  noApproved,
+  updateUrl,
+}
+
+) => {
+  const [url_certificate, setUrl_certificate] = useState(student.url_certificate ?? '');
+
   return (
+    <section className='card-main'>
     <div className="teacher-student-card">
+
       <div className="teacher-card-avatar">
         <img 
           src={`https://ui-avatars.com/api/?name=${encodeURIComponent(student.name)}&background=4CAF50&color=fff&size=60`}
@@ -74,6 +87,85 @@ const CardModuleTeacher = ({
         </button> */}
       </div>
     </div>
+
+  
+      {  /* PARTE DE CARD DE APROBACION */    }
+      <div className='card-main-2' >
+        <div className='card-main-2-sec'>
+          <div>
+            <h4 className='card-main-2-tit' >Condicion de aprobación:</h4>
+            {student.approved === true ? (<h4>Aprobado</h4>):(<h4>No Aprobado</h4>)}
+          </div>
+
+          <div>
+             {student.approved === true ? (
+
+               <button className="teacher-btn-aprov"
+               type='submit'
+               onClick={() => noApproved(student.id_enrollment)}
+               >Dar como No aprobado</button>
+              ):(
+                
+                <button className="teacher-btn-aprov" type='submit'
+                    onClick={() => approved(student.id_enrollment)}
+                >Dar como aprobado</button>
+              )}
+
+          </div>
+        </div>
+
+      {  /* PARTE DE CARD DE LINK */    }
+      {student.url_certificate === null ?
+       (// si el url es igual a null debemos cargarlo
+        
+        <form action="" className='card-main-2-sec2' onSubmit={(e) => e.preventDefault()} >
+          <div>
+              <label htmlFor="" className='form-cert-label'>Ingresar link al certificado: </label>
+              <input
+              value={url_certificate}
+              onChange={(e) => setUrl_certificate(e.target.value)}
+              type="text" className='input_url' placeholder='https://docs.google.com/document/d/bl...' />
+          </div>
+          <div>
+          <button className="teacher-btn-aprov"
+              type='submit'
+
+              onClick={() => updateUrl(student.id_enrollment,url_certificate)}>Guardar link</button>
+
+          </div>
+        </form>
+
+
+       ):(// si el url es diferente a null debemos mostrarlo y dar la opcion de editarlo
+          <div className='card-main-2-sec3' >
+            <h4 className='card-main-2-tit' >Link actual al documento:</h4>
+            <a href={student.url_certificate} target='_blank' >{student.url_certificate}</a>
+           <form action="" className='card-main-2-sec4' onSubmit={(e) => e.preventDefault()} >
+          <div >
+              <label htmlFor="" className='form-cert-label'>Ingresar nuevo link al certificado: </label>
+              <input
+              value={url_certificate}
+              onChange={(e) => setUrl_certificate(e.target.value)}
+              type="text" className='input_url' placeholder='https://docs.google.com/document/d/bl...' />
+          </div>
+          <div>
+          <button className="teacher-btn-aprov"
+              type='submit'
+
+              onClick={() => updateUrl(student.id_enrollment,url_certificate)}>Guardar nuevo link</button>
+
+          </div>
+        </form>
+
+          </div>
+
+
+)
+      }
+      </div>
+
+      
+    </section>
   );
 };
 

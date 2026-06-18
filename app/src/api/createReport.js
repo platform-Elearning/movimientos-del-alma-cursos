@@ -29,3 +29,37 @@ export const getReports = async () => {
     throw error;
   }
 };
+
+export const deleteReport = async (id) => {
+  try {
+    const token = Cookies.get("token");
+    const response = await instanceReports.delete(`/report-problem/delete-report/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error al eliminar reporte:', error);
+    throw error;
+  }
+};
+
+export const updateReportStatus = async (id, status) => {
+  try {
+    const token = Cookies.get("token");
+    const response = await instanceReports.patch(
+      `/report-problem/update-status/${id}`,
+      { status },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error al actualizar estado del reporte:', error);
+    throw error;
+  }
+};

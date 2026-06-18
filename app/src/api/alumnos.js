@@ -9,9 +9,11 @@ export const createAlumno = async (user) => {
   }
 };
 
-export const getAlumnos = async (page = 1, limit = 25) => {
+export const getAlumnos = async (page = 1, limit = 25, search = "") => {
   try {
-    const response = await instanceUsers.get(`/users/getStudentsWithCourses?page=${page}&limit=${limit}`);
+    const params = new URLSearchParams({ page, limit });
+    if (search) params.append("search", search);
+    const response = await instanceUsers.get(`/users/getStudentsWithCourses?${params.toString()}`);
     return response.data;
   } catch (error) {
     throw error;
@@ -48,6 +50,15 @@ export const getCursosByAlumno = async (user) => {
 export const getStudentWithDni = async (identification_number) => {
   try {
     const response = await instanceUsers.get(`/users/getStudentWithDni/${identification_number}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getEnrollmentsByAlumnoId = async (student_id) => {
+  try {
+    const response = await instanceUsers.get( `/enrollments/getAllEnrollmentsByStudentId/${student_id}`);
     return response.data;
   } catch (error) {
     throw error;

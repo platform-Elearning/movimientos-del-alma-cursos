@@ -80,8 +80,9 @@ const AdminProfesores = () => {
     <div>
       <BackLink title="Ir página de Inicio" onClick={goToInicio} />
       <div className="teacher-container">
-        <h2>Registro de Profesor</h2>
+        <h1>Registro de Profesor</h1>
         <form onSubmit={handleSubmit} className="teacher-form">
+          <div className="admin-teacher-field" >
           <label htmlFor="identification_number">Número Identificador:</label>
           <input
             type="text"
@@ -90,7 +91,9 @@ const AdminProfesores = () => {
             onChange={handleChange}
             required
           />
+          </div>
           
+             <div className="admin-teacher-field" >
           <label htmlFor="name">Nombre:</label>
           <input
             type="text"
@@ -100,7 +103,10 @@ const AdminProfesores = () => {
             required
           />
           {errors.name && <p className="error-message">{errors.name}</p>}
-          
+             </div>
+
+       <div className="admin-teacher-field" >
+
           <label htmlFor="lastname">Apellido:</label>
           <input
             type="text"
@@ -111,6 +117,12 @@ const AdminProfesores = () => {
           />
           {errors.lastname && <p className="error-message">{errors.lastname}</p>}
           
+
+       </div>
+
+
+          <div className="admin-teacher-field" >
+
           <label htmlFor="email">Email:</label>
           <input
             type="email"
@@ -120,7 +132,10 @@ const AdminProfesores = () => {
             required
             autoComplete="off"
           />
-          
+
+          </div>
+   <div className="admin-teacher-field" >
+
           <label htmlFor="password">Contraseña:</label>
           <input
             type="password"
@@ -131,6 +146,10 @@ const AdminProfesores = () => {
             placeholder="Mínimo 6 caracteres"
             autoComplete="new-password"
           />
+
+
+   </div>
+          
 
           <button type="submit" disabled={isLoading}>
             {isLoading ? "Registrando..." : "Registrar Profesor"}

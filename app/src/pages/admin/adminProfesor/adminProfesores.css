@@ -1,22 +1,45 @@
+/*variables*/
+:root{
+  --var-dorado-fuerte: #83711b;
+  --var-dorado-medio: #c08c44;
+  --var-dorado-suave: #ffd9a3;
+}
 .teacher-container {
-  width: 100%;
-  max-width: 400px;
+   max-width: 600px;
+  width: 90%;
   margin: 2rem auto;
-  padding: 1.5rem;
-  background-color: #f9f9f9;
-  border-radius: 8px;
+  padding: 20px;
+  /*
+  border: 1px solid #ccc;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  */
+  box-shadow: 0px 1px 20px var(--var-dorado-medio);
+  border: #c08c4480  1px solid;
+  border-radius: 10px;
+  background-color: #fff;
 }
 
-.teacher-container h2 {
+.teacher-container h1 {
   text-align: center;
-  margin-bottom: 1rem;
-  color: #333;
+  color: #222;
+  margin: 48px;
+  margin-bottom: 64px;
+  font-size: 26px;
+  font-weight: bold;
+  color: var(--var-dorado-medio);
 }
 
 .teacher-form {
   display: flex;
   flex-direction: column;
+  gap: 15px;
+}
+
+.admin-teacher-field{
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0px 16px;
 }
 
 .teacher-form input,
@@ -35,6 +58,7 @@
   transition: border-color 0.3s;
 }
 
+/*
 .teacher-form button {
   padding: 0.8rem;
   background-color: #007bff;
@@ -45,9 +69,29 @@
   cursor: pointer;
   transition: background-color 0.3s;
 }
+*/
+
+.teacher-form button {
+      padding: 0.8rem;
+    /*
+    background-color: #007bff;
+    */
+    background-color: #c08c44 ;
+    background-color: var(--var-dorado-medio);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.5s ease;
+    margin: 16px;
+    font-weight: bold;
+}
+
 
 .teacher-form button:hover {
-  background-color: #0056b3;
+    background-color: var(--var-dorado-fuerte) ;
+
 }
 
 .success-message {

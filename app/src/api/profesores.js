@@ -180,3 +180,29 @@ export const unassignCourseFromTeacher = async (teacherId, courseId) => {
     throw error;
   }
 };
+
+
+
+
+//  funcion para cambiar estado de aprobado de alumno
+export const markAsApproved = async (id_enrollment,valor) => {
+  try {
+    const response = await instanceCursos.put("users/updateApprovalEnrollment", {id_enrollment,valor});
+    return response.data;
+
+  } catch (error) {
+    throw error;
+  }
+};
+
+//  funcion para cambiar estado de aprobado de alumno
+export const updateUrlCertificate = async (id_enrollment,url) => {
+  console.log("llegue a profe.js")
+  try {
+    const response = await instanceCursos.put("users/updateUrlCertificate", {id_enrollment,url});
+    return response.data;
+
+  } catch (error) {
+    throw error;
+  }
+};

@@ -1,4 +1,12 @@
+/*variables*/
+:root{
+  --var-dorado-fuerte: #83711b;
+  --var-dorado-medio: #c08c44;
+  --var-dorado-suave: #ffd9a3;
+}
+
 /* Contenedor principal responsivo */
+
 .navigation-buttons-container {
   display: flex;
   flex-wrap: wrap;
@@ -17,16 +25,18 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border: 2px solid #252422;
-  border-radius: 20px;
-  background: #f8f9fa;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease, box-shadow 0.3s ease;
+  border: 1px solid #d1c9b0;
+  border-radius: 12px;
+  background-color: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.3s ease, background-color 0.5s ease;
 }
 
 .btnContainer:hover {
   transform: scale(1.05);
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  border: 1px solid #c08c44;
+  background-color: #fdf6ec;
 }
 
 /* Imagen dentro del card */
@@ -41,19 +51,34 @@
   padding: 0.75rem 1.5rem;
   font-size: 20px;
   font-weight: 500;
+  /*
   color: #fff;
   background: #252422;
-  border: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  color:  #c08c44;
+  border: #ffd9a3 2px solid;
+  */
+  color: #252422;
+  background: #fff;
+  border: 1px solid #d1c9b0;
   border-radius: 8px;
   cursor: pointer;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease, background 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.2s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+
+
 }
 
 .navigation-button:hover {
-  background: linear-gradient(45deg, #0056b3, #003f7f);
+/*
+background: linear-gradient(45deg, #0056b3, #003f7f);
+*/
+  color: #fff;
+  background-color: #c08c44;
+  border: #c08c44 1px solid;
+
   transform: translateY(-2px);
   box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+  
 }
 
 .navigation-button:active {
