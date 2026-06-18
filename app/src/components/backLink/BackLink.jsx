@@ -16,7 +16,6 @@ const BackLink = ({ title, onClick }) => {
       href="#"
       onClick={handleClick}
       title={title}
-      style={{ display: "flex", alignItems: "center" }}
     >
       <div className='icon'>
         <FaArrowLeft style={{ marginRight: "8px" }} />

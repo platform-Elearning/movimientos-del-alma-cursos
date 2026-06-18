@@ -1,12 +1,19 @@
 import { useState, useEffect } from "react";
-import { getReports } from "../../api/createReport.js";
+import { getReports, deleteReport, updateReportStatus } from "../../api/createReport.js";
 import "./ReportProblem.css";
+
+const STATUS_LABELS = {
+  pendiente: { label: "Pendiente", color: "#e67e22" },
+  "en revision": { label: "En revisión", color: "#2980b9" },
+  revisado: { label: "Revisado", color: "#27ae60" },
+};
 
 const ReportsList = () => {
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isUsingMockData, setIsUsingMockData] = useState(false);
+  const [actionLoading, setActionLoading] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -57,94 +64,126 @@ const ReportsList = () => {
     fetchData();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="card">
-        <section className="card-header">
-          <h2 className="card-title">Cargando reportes...</h2>
-        </section>
-        <section className="card-info">
-          <p>Por favor espera...</p>
-        </section>
-      </div>
-    );
-  }
+  const handleDelete = async (id) => {
+    if (!window.confirm("¿Estás seguro de que querés eliminar este reporte?")) return;
+    setActionLoading(id + "-delete");
+    try {
+      await deleteReport(id);
+      setReports((prev) => prev.filter((r) => r.id !== id));
+    } catch {
+      alert("Error al eliminar el reporte.");
+    } finally {
+      setActionLoading(null);
+    }
+  };
 
-  if (error) {
-    return (
-      <div className="card">
-        <section className="card-header">
-          <h2 className="card-title">Error</h2>
-        </section>
-        <section className="card-info">
-          <p style={{ color: "#ff3333" }}>{error}</p>
-        </section>
-      </div>
-    );
-  }
-
-  if (reports.length === 0) {
-    return (
-      <div className="card">
-        <section className="card-header">
-          <h2 className="card-title">Reportes</h2>
-        </section>
-        <section className="card-info">
-          <p>No hay reportes disponibles</p>
-        </section>
-      </div>
-    );
-  }
+  const handleStatusChange = async (id, status) => {
+    setActionLoading(id + "-" + status);
+    try {
+      await updateReportStatus(id, status);
+      setReports((prev) =>
+        prev.map((r) => (r.id === id ? { ...r, status } : r))
+      );
+    } catch (err) {
+      console.error("Error al actualizar el estado:", err?.response?.data || err?.message || err);
+      const msg = err?.response?.data?.error || err?.response?.data?.errorMessage || "Error al actualizar el estado.";
+      alert(msg);
+    } finally {
+      setActionLoading(null);
+    }
+  };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-      {isUsingMockData && (
-        <div className="card" style={{ backgroundColor: "#fff3cd", borderColor: "#ffeaa7" }}>
-          <section className="card-info" style={{ textAlign: "center", padding: "10px" }}>
-            <p style={{ color: "#856404", margin: 0 }}>
-              ⚠️ <strong>Modo de Prueba:</strong> Mostrando datos de ejemplo. 
-              El endpoint de reportes no está disponible en el backend.
-            </p>
-          </section>
-        </div>
-      )}
-      {reports.map((report, index) => (
-        <div key={index} className="card">
-          {" "}
-          {/* Usamos el índice como key ya que no hay id */}
-          <section className="card-header">
-            <h2 className="card-title">Reporte #{index + 1}</h2>{" "}
-            {/* Mostramos el índice + 1 como número de reporte */}
-          </section>
-          <section
-            className="card-info"
-            style={{ textAlign: "left", padding: "15px" }}
-          >
-            <div style={{ marginBottom: "10px" }}>
-              <strong>Email:</strong> {report.email}{" "}
-              {/* Mostramos el email en lugar de user_id */}
+    <div className="reports-page">
+      <div className="reports-page-header">
+        <h2 className="reports-page-title">Reportes</h2>
+        {!loading && !error && (
+          <span className="reports-count">
+            {reports.length} {reports.length === 1 ? "reporte" : "reportes"}
+          </span>
+        )}
+      </div>
+
+      <div className="reports-page-body">
+        {loading && (
+          <div className="reports-status">
+            <div className="loading-spinner"></div>
+            <p>Cargando reportes...</p>
+          </div>
+        )}
+
+        {error && (
+          <div className="reports-status">
+            <p className="error-message">{error}</p>
+          </div>
+        )}
+
+        {!loading && !error && reports.length === 0 && (
+          <div className="reports-status">
+            <p className="empty-state">No hay reportes disponibles</p>
+          </div>
+        )}
+
+        {!loading && !error && isUsingMockData && (
+          <div className="reports-mock-banner">
+            <strong>Modo de Prueba:</strong> Mostrando datos de ejemplo. El
+            endpoint de reportes no está disponible en el backend.
+          </div>
+        )}
+
+        {!loading && !error && reports.map((report, index) => {
+          const statusInfo = STATUS_LABELS[report.status] || STATUS_LABELS["pendiente"];
+          return (
+            <div key={report.id ?? index} className="report-item">
+              <div className="report-item-header">
+                <span className="report-item-number">#{index + 1}</span>
+                <span
+                  className="report-item-status"
+                  style={{ backgroundColor: statusInfo.color }}
+                >
+                  {statusInfo.label}
+                </span>
+                <span className="report-item-date">
+                  {new Date(report.created_at).toLocaleDateString()} —{" "}
+                  {new Date(report.created_at).toLocaleTimeString()}
+                </span>
+              </div>
+              <div className="report-item-body">
+                <div className="report-item-email">
+                  <strong>Email:</strong> {report.email}
+                </div>
+                <div className="report-item-description">
+                  <strong>Descripción:</strong>
+                  <p>{report.description}</p>
+                </div>
+                <div className="report-item-actions">
+                  <button
+                    className="report-btn report-btn--revision"
+                    disabled={report.status === "en revision" || actionLoading !== null}
+                    onClick={() => handleStatusChange(report.id, "en revision")}
+                  >
+                    {actionLoading === report.id + "-en revision" ? "..." : "En revisión"}
+                  </button>
+                  <button
+                    className="report-btn report-btn--revisado"
+                    disabled={report.status === "revisado" || actionLoading !== null}
+                    onClick={() => handleStatusChange(report.id, "revisado")}
+                  >
+                    {actionLoading === report.id + "-revisado" ? "..." : "Revisado"}
+                  </button>
+                  <button
+                    className="report-btn report-btn--delete"
+                    disabled={actionLoading !== null}
+                    onClick={() => handleDelete(report.id)}
+                  >
+                    {actionLoading === report.id + "-delete" ? "..." : "Eliminar"}
+                  </button>
+                </div>
+              </div>
             </div>
-            <div style={{ marginBottom: "10px" }}>
-              <strong>Fecha:</strong>{" "}
-              {new Date(report.created_at).toLocaleDateString()} -{" "}
-              {new Date(report.created_at).toLocaleTimeString()}
-            </div>
-            <div
-              style={{
-                backgroundColor: "#f8f9fa",
-                padding: "10px",
-                borderRadius: "5px",
-                borderLeft: "3px solid #83711B",
-              }}
-            >
-              <strong>Descripción:</strong>
-              <p style={{ marginTop: "5px", whiteSpace: "pre-wrap" }}>
-                {report.description}
-              </p>
-            </div>
-          </section>
-        </div>
-      ))}
+          );
+        })}
+      </div>
     </div>
   );
 };

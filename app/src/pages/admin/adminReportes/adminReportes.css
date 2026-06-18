@@ -1,0 +1,12 @@
+.admin-reportes-wrapper {
+  width: 100vw;
+  min-height: 100vh;
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+.admin-reportes-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 2rem auto 0;
+}

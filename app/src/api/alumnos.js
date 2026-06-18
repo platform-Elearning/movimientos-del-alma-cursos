@@ -9,9 +9,11 @@ export const createAlumno = async (user) => {
   }
 };
 
-export const getAlumnos = async (page = 1, limit = 25) => {
+export const getAlumnos = async (page = 1, limit = 25, search = "") => {
   try {
-    const response = await instanceUsers.get(`/users/getStudentsWithCourses?page=${page}&limit=${limit}`);
+    const params = new URLSearchParams({ page, limit });
+    if (search) params.append("search", search);
+    const response = await instanceUsers.get(`/users/getStudentsWithCourses?${params.toString()}`);
     return response.data;
   } catch (error) {
     throw error;
