@@ -4,11 +4,23 @@ import logo from "../../assets/logo2.png";
 import userImg from "../../assets/user.png";
 import logoutImg from "../../assets/logout.png";
 import { useAuth } from "../../services/authContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { createReport } from "../../api/createReport"; // Importar la función para enviar reportes
+
+const PUBLIC_ROUTES = new Set([
+  "/",
+  "/login",
+  "/register",
+  "/pageAuxiliar",
+  "/OlvideContraseña",
+  "/OlvideContrase%C3%B1a",
+  "/verify-code",
+  "/reset-password",
+]);
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { logout, userNav, isAuthenticated, checkLogin, userId, userRole } =
     useAuth();
 
@@ -16,6 +28,7 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [reportText, setReportText] = useState("");
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
   useEffect(() => {
     const verifyLoginAndFetchCursos = async () => {
@@ -27,17 +40,12 @@ const Navbar = () => {
   }, [checkLogin]);
 
   useEffect(() => {
-    if (
-      !loading &&
-      !isAuthenticated &&
-      window.location.pathname !== "/pageAuxiliar" &&
-      window.location.pathname !== "/login" &&
-      window.location.pathname !== "/register" &&
-      window.location.pathname !== "/changepassword"
-    ) {
+    const decoded = decodeURIComponent(location.pathname);
+    const isPublic = PUBLIC_ROUTES.has(location.pathname) || PUBLIC_ROUTES.has(decoded);
+    if (!loading && !isAuthenticated && !isPublic) {
       navigate("/");
     }
-  }, [isAuthenticated, loading, navigate]);
+  }, [isAuthenticated, loading, navigate, location.pathname]);
 
   const navigateToPageAlumnnosMisCursos = () => {
     if (userId) {
@@ -128,9 +136,16 @@ const Navbar = () => {
               Reportar Problema
             </button>
           </li>
-          <li className="user-section">
+          <li className="user-section" onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}>
             <img src={userImg} alt="User" className="user-icon" />
             <h5 className="username">{userNav}</h5>
+            {isUserMenuOpen && (
+              <div className="user-dropdown">
+                <button className="user-dropdown-item" onClick={() => navigate("/changePassword")}>
+                  🔒 Cambiar contraseña
+                </button>
+              </div>
+            )}
           </li>
           <li className="logout-section">
             <img
