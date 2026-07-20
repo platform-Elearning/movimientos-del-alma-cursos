@@ -9,6 +9,8 @@ import Clase from "../pages/alumnos/clase/clase";
 import ProfesoresMisCursos from "../pages/profesores/profesoresMisCursos/profesoresMisCursos";
 import PanelAdmin from "../pages/admin/panelAdmin/panelAdmin";
 import OlvideContraseña from "../pages/olvideContraseña/olvideContraseña";
+import VerifyCode from "../pages/verifyCode/VerifyCode";
+import ResetPassword from "../pages/resetPassword/ResetPassword";
 import AdminAlumnos from "../pages/admin/adminAlumnos/adminAlumnos";
 import EditAlumno from "../pages/admin/adminAlumnos/editAlumno/editAlumno";
 import AdminCourses from "../pages/admin/adminCursos/adminCourses";
@@ -42,6 +44,8 @@ const AppRouter = () => {
             <Route path="/pageAuxiliar" element={<PageAuxiliar></PageAuxiliar>}></Route>
             <Route path="/OlvideContraseña" element={<OlvideContraseña></OlvideContraseña>}></Route>
             <Route path="/changePassword" element={<ChangePassword></ChangePassword>}></Route>
+            <Route path="/verify-code" element={<VerifyCode></VerifyCode>}></Route>
+            <Route path="/reset-password" element={<ResetPassword></ResetPassword>}></Route>
 
             <Route path="/admin" element={<PanelAdmin></PanelAdmin>}></Route>
             <Route path="/admin/alumnos" element={<AdminAlumnos></AdminAlumnos>}></Route>

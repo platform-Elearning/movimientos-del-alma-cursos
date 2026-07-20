@@ -458,10 +458,10 @@ html, body {
 /* Botón secundario (registro) mejorado */
 .button2 {
   padding: 1em 2.2em;
-  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  border: 1.5px solid rgba(96, 165, 250, 0.6);
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.03);
-  color: white;
+  background: rgba(59, 130, 246, 0.12);
+  color: #93c5fd;
   font-size: 1em;
   font-weight: 600;
   cursor: pointer;
@@ -475,7 +475,7 @@ html, body {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(96, 165, 250, 0.08));
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(96, 165, 250, 0.15));
   opacity: 0;
   transition: opacity 0.35s ease;
 }
@@ -485,16 +485,17 @@ html, body {
 }
 
 .button2:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(96, 165, 250, 0.5);
+  background: rgba(59, 130, 246, 0.22);
+  border-color: rgba(96, 165, 250, 0.85);
+  color: #fff;
   transform: translateY(-3px);
-  box-shadow: 0 4px 20px rgba(59, 130, 246, 0.2),
-              0 0 0 3px rgba(59, 130, 246, 0.08);
+  box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3),
+              0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
 .button2:active {
   transform: translateY(-1px);
-  box-shadow: 0 2px 12px rgba(59, 130, 246, 0.15);
+  box-shadow: 0 2px 12px rgba(59, 130, 246, 0.2);
 }
 
 /* Mensajes de error mejorados */

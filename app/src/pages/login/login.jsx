@@ -22,7 +22,7 @@ const Login = () => {
   };
 
   const navigateToPageAuxiliar = () => {
-    navigate("/pageAuxiliar");
+    navigate("/OlvideContraseña");
   };
 
   const [formData, setFormData] = useState({ email: "", password: "" });
