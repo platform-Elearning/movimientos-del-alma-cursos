@@ -133,6 +133,7 @@ export const AuthProvider = ({ children }) => {
         } finally {
             clearUserState();
             window.dispatchEvent(new CustomEvent('auth:logout'));
+            window.location.href = '/';
         }
     };
 

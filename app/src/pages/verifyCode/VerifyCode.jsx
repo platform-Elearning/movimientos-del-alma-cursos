@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { registerWithCode, requestRegisterCode } from "../../api/auth";
+import { useAuth } from "../../services/authContext";
 import "./verifyCode.css";
 
 const VerifyCode = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { signin } = useAuth();
   const registrationData = location.state;
 
   const [code, setCode] = useState("");
@@ -90,8 +92,17 @@ const VerifyCode = () => {
         lastname: registrationData.lastname,
         nationality: registrationData.nationality,
       });
-      setSuccess("Registro exitoso. Redirigiendo al login...");
-      setTimeout(() => navigate("/login"), 1500);
+      setSuccess("Registro exitoso. Iniciando sesión...");
+      const res = await signin({ email: registrationData.email, password });
+      if (res?.token) {
+        const { jwtDecode } = await import("jwt-decode");
+        const decoded = jwtDecode(res.token);
+        if (decoded.role === "student") {
+          navigate(`/alumnos/miscursos/${decoded.id}`);
+        } else {
+          navigate("/");
+        }
+      }
     } catch (err) {
       const message =
         err.response?.data?.error ||

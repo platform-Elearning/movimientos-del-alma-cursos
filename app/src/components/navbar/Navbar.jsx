@@ -14,8 +14,6 @@ const PUBLIC_ROUTES = new Set([
   "/pageAuxiliar",
   "/OlvideContraseña",
   "/OlvideContrase%C3%B1a",
-  "/changePassword",
-  "/changepassword",
   "/verify-code",
   "/reset-password",
 ]);
@@ -30,6 +28,7 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [reportText, setReportText] = useState("");
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
   useEffect(() => {
     const verifyLoginAndFetchCursos = async () => {
@@ -137,9 +136,16 @@ const Navbar = () => {
               Reportar Problema
             </button>
           </li>
-          <li className="user-section">
+          <li className="user-section" onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}>
             <img src={userImg} alt="User" className="user-icon" />
             <h5 className="username">{userNav}</h5>
+            {isUserMenuOpen && (
+              <div className="user-dropdown">
+                <button className="user-dropdown-item" onClick={() => navigate("/changePassword")}>
+                  🔒 Cambiar contraseña
+                </button>
+              </div>
+            )}
           </li>
           <li className="logout-section">
             <img
