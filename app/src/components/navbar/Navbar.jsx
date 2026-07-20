@@ -4,11 +4,25 @@ import logo from "../../assets/logo2.png";
 import userImg from "../../assets/user.png";
 import logoutImg from "../../assets/logout.png";
 import { useAuth } from "../../services/authContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { createReport } from "../../api/createReport"; // Importar la función para enviar reportes
+
+const PUBLIC_ROUTES = new Set([
+  "/",
+  "/login",
+  "/register",
+  "/pageAuxiliar",
+  "/OlvideContraseña",
+  "/OlvideContrase%C3%B1a",
+  "/changePassword",
+  "/changepassword",
+  "/verify-code",
+  "/reset-password",
+]);
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { logout, userNav, isAuthenticated, checkLogin, userId, userRole } =
     useAuth();
 
@@ -27,17 +41,12 @@ const Navbar = () => {
   }, [checkLogin]);
 
   useEffect(() => {
-    if (
-      !loading &&
-      !isAuthenticated &&
-      window.location.pathname !== "/pageAuxiliar" &&
-      window.location.pathname !== "/login" &&
-      window.location.pathname !== "/register" &&
-      window.location.pathname !== "/changepassword"
-    ) {
+    const decoded = decodeURIComponent(location.pathname);
+    const isPublic = PUBLIC_ROUTES.has(location.pathname) || PUBLIC_ROUTES.has(decoded);
+    if (!loading && !isAuthenticated && !isPublic) {
       navigate("/");
     }
-  }, [isAuthenticated, loading, navigate]);
+  }, [isAuthenticated, loading, navigate, location.pathname]);
 
   const navigateToPageAlumnnosMisCursos = () => {
     if (userId) {

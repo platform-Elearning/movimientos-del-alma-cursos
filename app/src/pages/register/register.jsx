@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { createAlumno } from "../../api/alumnos";
+import React, { useState } from "react";
+import { requestRegisterCode } from "../../api/auth";
 import "./register.css";
 
 import ValidateField from "../../components/form/validateField/ValidateField";
-import CountryOption from "../../components/form/CountryOption";
 import BackLink from "../../components/backLink/BackLink";
+import CountrySelect from "../../components/countrySelect/CountrySelect";
 import { useNavigate } from "react-router-dom";
 
 const Register = () => {
@@ -18,9 +18,10 @@ const Register = () => {
 
   const [message, setMessage] = useState("");
   const [error, setError] = useState({});
+  const [loading, setLoading] = useState(false);
   const navigate=useNavigate();
     const goToInicio = () => {
-      navigate(`/admin/`);
+      navigate(`/login`);
     };
 
 
@@ -36,21 +37,19 @@ const Register = () => {
     setError({});
 
     try {
-      await createAlumno(formData);
-      setMessage("Estudiante registrado exitosamente");
-      setFormData({
-        identification_number: "",
-        name: "",
-        lastname: "",
-        nationality: "",
-        email: "",
-      });
-
-      // Mostrar alerta con el mensaje de confirmación
-      alert("Te llegó un correo con la contraseña. Haz click para confirmar.");
+      setLoading(true);
+      await requestRegisterCode(formData.email);
+      setMessage("Código enviado. Revisa tu correo.");
+      navigate("/verify-code", { state: formData });
     } catch (err) {
-      setError({ general: "Error al registrar el estudiante" });
-    } 
+      const errorMsg =
+        err.response?.data?.error ||
+        err.response?.data?.message ||
+        "Error al enviar el código de verificación";
+      setError({ general: errorMsg });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -59,7 +58,7 @@ const Register = () => {
       <div className="register-container">
         <h2>Registro de Estudiante</h2>
         <form onSubmit={handleSubmit} className="register-form">
-          <label htmlFor="identification_number">Número Identificador:</label>
+          <label htmlFor="identification_number">Número de Documento:</label>
           <input
             type="text"
             name="identification_number"
@@ -86,7 +85,15 @@ const Register = () => {
             required
           />
           {error.lastname && <p className="error-message2">{error.lastname}</p>}
-          <label htmlFor="nationality">Pais de Origen:</label>
+          <label htmlFor="nationality">País de Origen:</label>
+          <CountrySelect
+            name="nationality"
+            value={formData.nationality}
+            onChange={handleChange}
+            required
+          />
+          {error.nationality && <p className="error-message2">{error.nationality}</p>}
+          <label htmlFor="email">Email:</label>
           <input
             id="email"
             type="email"
@@ -95,18 +102,16 @@ const Register = () => {
             onChange={handleChange}
             required
           />
-          <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-          <button type="submit">Registrar Estudiante</button>
+          {error.general && (
+            <div className="register-error-box">
+              <span>&#9888;</span> {error.general}
+            </div>
+          )}
+          <button type="submit" disabled={loading}>
+            {loading ? "Enviando código..." : "Registrar Estudiante"}
+          </button>
         </form>
         {message && <p className="success-message">{message}</p>}
-        {error.general && <p className="error-message2">{error.general}</p>}
       </div>
     </div>
   );

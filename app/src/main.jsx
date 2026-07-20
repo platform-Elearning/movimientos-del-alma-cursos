@@ -9,8 +9,9 @@ const App = () => {
   const location = useLocation();
   
   // Rutas donde NO queremos mostrar el navbar
-  const authRoutes = ['/', '/login', '/register', '/pageAuxiliar', '/OlvideContraseña', '/changePassword'];
-  const hideNavbar = authRoutes.some(route => location.pathname === route);
+  const authRoutes = ['/', '/login', '/register', '/pageAuxiliar', '/OlvideContrase%C3%B1a', '/OlvideContraseña', '/changePassword', '/verify-code', '/reset-password'];
+  const decodedPath = decodeURIComponent(location.pathname);
+  const hideNavbar = authRoutes.some(route => decodedPath === decodeURIComponent(route));
 
   console.log('Current path:', location.pathname, 'Hide navbar:', hideNavbar);
 

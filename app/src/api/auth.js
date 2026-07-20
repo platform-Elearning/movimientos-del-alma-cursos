@@ -10,6 +10,42 @@ export const registerRequest = async (user) => {
   }
 };
 
+export const requestRegisterCode = async (email) => {
+  try {
+    const response = await instanceUsers.post("/register/request-code", { email });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const registerWithCode = async (data) => {
+  try {
+    const response = await instanceUsers.post("/register", data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const requestPasswordReset = async (email) => {
+  try {
+    const response = await instanceUsers.post("/password/request-reset", { email });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const resetPasswordWithCode = async (data) => {
+  try {
+    const response = await instanceUsers.post("/password/reset", data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const loginRequest = async (user) => {
   try {
     const response = await instanceUsers.post("/session/login", user);
