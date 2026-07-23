@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { MdError, MdLock, MdPassword, MdPin } from "react-icons/md";
 import { registerWithCode, requestRegisterCode } from "../../api/auth";
 import { useAuth } from "../../services/authContext";
+import logo from "../../assets/logo2.png";
 import "./verifyCode.css";
 
 const VerifyCode = () => {
@@ -115,53 +117,85 @@ const VerifyCode = () => {
   };
 
   return (
-    <div className="verify-code-container">
-      <h2>Verificar Código</h2>
-      <p>Introduce el código de 6 dígitos que recibiste por correo.</p>
-      <form onSubmit={handleSubmit} className="verify-code-form">
-        <label htmlFor="code">Código</label>
-        <input
-          id="code"
-          type="text"
-          inputMode="numeric"
-          maxLength={6}
-          value={code}
-          onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
-          required
-        />
+    <div className="verify-code-page-container">
+      <div className="verify-code-wrapper">
+        <div className="verify-code-card">
+          <div className="verify-code-header">
+            <img src={logo} alt="Logo" className="verify-code-logo" />
+            <h1>Verificar código</h1>
+            <p>Introduce el código de 6 dígitos que recibiste por correo.</p>
+          </div>
 
-        <label htmlFor="password">Contraseña</label>
-        <input
-          id="password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+          <form onSubmit={handleSubmit} className="verify-code-form">
+            <div className="verify-code-field">
+              <MdPin className="verify-code-input-icon" />
+              <input
+                id="code"
+                type="text"
+                inputMode="numeric"
+                maxLength={6}
+                value={code}
+                onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
+                placeholder="Código de verificación"
+                className="verify-code-input"
+                required
+              />
+            </div>
 
-        <label htmlFor="confirmPassword">Confirmar Contraseña</label>
-        <input
-          id="confirmPassword"
-          type="password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          required
-        />
+            <div className="verify-code-field">
+              <MdLock className="verify-code-input-icon" />
+              <input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Contraseña"
+                className="verify-code-input"
+                required
+              />
+            </div>
 
-        <button type="submit" disabled={loading}>
-          {loading ? "Verificando..." : "Completar Registro"}
-        </button>
-      </form>
-      {success && <p className="success-message">{success}</p>}
-      {error && <p className="error-message">{error}</p>}
-      <div className="resend-section">
-        {countdown > 0 ? (
-          <p className="countdown-text">Podés reenviar el código en {countdown}s</p>
-        ) : (
-          <button className="resend-button" onClick={handleResend} disabled={resending}>
-            {resending ? "Reenviando..." : "Reenviar código"}
-          </button>
-        )}
+            <div className="verify-code-field">
+              <MdPassword className="verify-code-input-icon" />
+              <input
+                id="confirmPassword"
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Confirmar contraseña"
+                className="verify-code-input"
+                required
+              />
+            </div>
+
+            <button type="submit" className="verify-code-submit" disabled={loading}>
+              <span>{loading ? "Verificando..." : "Completar registro"}</span>
+            </button>
+          </form>
+
+          {error && (
+            <div className="verify-code-error-message">
+              <MdError className="verify-code-error-icon" />
+              <p>{error}</p>
+            </div>
+          )}
+          {success && <p className="verify-code-success-message">{success}</p>}
+
+          <div className="verify-code-resend-section">
+            {countdown > 0 ? (
+              <p>Podés reenviar el código en {countdown}s</p>
+            ) : (
+              <button
+                type="button"
+                className="verify-code-resend-button"
+                onClick={handleResend}
+                disabled={resending}
+              >
+                {resending ? "Reenviando..." : "Reenviar código"}
+              </button>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
