@@ -35,9 +35,10 @@ export const AuthProvider = ({ children }) => {
         try {
             const dataDecoded = jwtDecode(token);
             
-            // Verificar si el token ha expirado
+            // Verificar si el token ha expirado (con margen de 5 min por clock skew)
             const currentTime = Date.now() / 1000;
-            if (dataDecoded.exp < currentTime) {
+            const CLOCK_SKEW_TOLERANCE = 300;
+            if (dataDecoded.exp < currentTime - CLOCK_SKEW_TOLERANCE) {
                 clearUserState();
                 return null;
             }
@@ -150,8 +151,9 @@ export const AuthProvider = ({ children }) => {
       const dataDecoded = jwtDecode(token);
       const currentTime = Date.now() / 1000;
       
-      // Si el token ha expirado
-      if (dataDecoded.exp < currentTime) {
+      // Si el token ha expirado (con margen de 5 min por clock skew)
+      const CLOCK_SKEW_TOLERANCE = 300;
+      if (dataDecoded.exp < currentTime - CLOCK_SKEW_TOLERANCE) {
         clearUserState();
         return;
       }
