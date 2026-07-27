@@ -469,6 +469,7 @@ html, body {
   position: relative;
   overflow: hidden;
   letter-spacing: 0.02em;
+  margin-bottom:24px;
 }
 
 .button2::before {
@@ -482,6 +483,10 @@ html, body {
 
 .button2:hover::before {
   opacity: 1;
+}
+
+.button-container button{
+  margin: 8px;
 }
 
 .button2:hover {

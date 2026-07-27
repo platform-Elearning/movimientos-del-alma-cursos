@@ -55,9 +55,10 @@
 }
 
 .verify-code-header h1 {
-  margin: 0 0 0.6em;
+  margin:32px;
+  margin-bottom: 52px;
   color: #fff;
-  font-size: 2.2em;
+  font-size: 24px;
   font-weight: 700;
   letter-spacing: -0.02em;
   line-height: 1.2;
@@ -87,7 +88,7 @@
   align-items: center;
   justify-content: center;
   gap: 0.5em;
-  padding: 0.6em;
+  padding: 0.85em 1.3em;
   overflow: hidden;
   position: relative;
   border: none;
@@ -102,6 +103,16 @@
   margin-top: 24px;
 }
 
+.button-container-v {
+  padding: 8px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  margin-top: 24px;
+  margin-bottom: -16px;
+}
+
 .verify-code-input-icon {
   z-index: 1;
   width: 1.3em;
@@ -109,15 +120,19 @@
   min-width: 1.3em;
   color: #fff;
   fill: #fff;
+  margin-left: -8px;
 }
 
 .verify-code-input {
-  z-index: 1;
   width: 100%;
   outline: none;
   border: none;
   background: none;
   color: #d3d3d3;
+  font-size: 1em;
+  font-weight: 400;
+  z-index: 1;
+  letter-spacing: 0.01em;
 }
 
 .verify-code-submit {
@@ -211,7 +226,8 @@
 }
 
 .verify-code-resend-button {
-  padding: 0.6em;
+  padding: 12px 40px;
+  border: #000 1px solid;
   border: none;
   border-radius: 8px;
   background: none;

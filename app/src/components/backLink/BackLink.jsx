@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { FaArrowLeft } from 'react-icons/fa';
 import './BackLink.css'
