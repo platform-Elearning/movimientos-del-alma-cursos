@@ -19,6 +19,8 @@ const EditProfesor = ({ onUpdate }) => {
     name: "",
     lastname: "",
     course_id: "",
+    description_teacher: "",
+    url_avatar:""
   });
 
   const [courses, setCourses] = useState([]);
@@ -54,13 +56,18 @@ const EditProfesor = ({ onUpdate }) => {
 
   // Pre-rellenar el formulario con los datos del profesor
   useEffect(() => {
+
     if (user) {
+      console.log("hola",user)
       setFormData({
         id: user.id || "",
         email: user.email || "",
         name: user.name || "",
         lastname: user.lastname || "",
         course_id: "",
+        description_teacher: user.description_teacher ||"",
+        url_avatar: user.url_avatar ||""
+
       });
     }
   }, [user]);
@@ -262,6 +269,31 @@ const EditProfesor = ({ onUpdate }) => {
               disabled={isLoading}
             />
           </div>
+          <div className="edit-user-field">
+            <label htmlFor="description_teacher">Descripción del profesor:</label>
+            <input
+              id="description_teacher"
+              type="text"
+              name="description_teacher"
+              value={formData.description_teacher}
+              onChange={handleChange}
+              required
+              disabled={isLoading}
+            />
+          </div>
+            <div className="edit-user-field">
+            <label htmlFor="url_avatar">Url de imagen de perfil:</label>
+            <input
+              id="url_avatar"
+              type="text"
+              name="url_avatar"
+              value={formData.url_avatar}
+              onChange={handleChange}
+              required
+              disabled={isLoading}
+            />
+          </div>
+
 
           <div className="edit-user-field">
             <label htmlFor="course_id">Asignar Curso:</label>

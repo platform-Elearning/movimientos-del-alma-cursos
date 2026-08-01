@@ -1,6 +1,7 @@
 import { instanceUsers, instanceCursos, instanceEnrollments } from "./axiosInstances";
 
 export const createProfesor = async (user) => {
+  console.log(user)
   try {
     const response = await instanceUsers.post(
       "/users/createCompleteTeacher",
@@ -21,6 +22,17 @@ export const getProfesores = async (user) => {
   }
 };
 
+export const getProfesoreByCourseId = async (course_id) => {
+
+  try {
+    const response = await instanceUsers.get(`/users/getTeacherByCourseId/${course_id}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
 export const updateTeacher = async (userData) => {
   try {
     const response = await instanceUsers.put("/users/updateTeacher", userData);
@@ -29,6 +41,27 @@ export const updateTeacher = async (userData) => {
     throw error;
   }
 };
+
+export const update_description = async (userData) => {
+  try {
+    const response = await instanceUsers.put("/users/updateDescription", userData);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+
+export const update_description_for_teacher = async (userData) => {
+  try {
+    const response = await instanceUsers.put("/users/updateDescriptionTeacher", userData);
+    console.log("estoy en profes")
+    console.log(response.data)
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
 
 export const deleteProfesor = async (id) => {
   try {

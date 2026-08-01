@@ -7,9 +7,12 @@ import {
   getModulesByCourseID,
   getLessonsByModuleIdAndCourseId,
 } from "../../../api/cursos";
+import { getProfesoreByCourseId } from "../../../api/profesores";
 import { useAuth } from "../../../services/authContext";
 import ModuleCard from "../../../components/moduleCard/ModuleCard";
 import BackLink from "../../../components/backLink/BackLink";
+import imgProf from "../../../assets/emoji-profesores.png";
+import { use } from "react";
 
 const CourseDetails = () => {
   const { cursoId, alumnoId } = useParams();
@@ -17,8 +20,28 @@ const CourseDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [course, setCourse] = useState();
+  const [profesor, setProfesor] = useState(null);
   const navigate = useNavigate();
   const { userRole, logout } = useAuth();
+
+  const getProfesorByCourse = async (courseId) => {
+    try {
+      const response = await getProfesoreByCourseId(courseId);
+      console.log(response.data[0]);
+      if (response.success && response.data) {
+        setProfesor(response.data[0]);
+      } else {
+        console.error("Error al obtener el profesor:", response);
+      }
+    } catch (error) {
+      console.error("Error al obtener el profesor:", error);
+    }
+  };
+  useEffect(() => {
+    if (cursoId) {
+      getProfesorByCourse(cursoId);
+    }
+  }, [cursoId]);  
 
   const fetchModules = async () => {
     // ✅ Salir si userRole no está definido aún
@@ -161,10 +184,29 @@ const CourseDetails = () => {
             onClick={() => goToFormation(alumnoId)}
           />
         </div>
-        <h2 className="course-title">
-          {course?.courseName || "Cargando curso..."}
-        </h2>
 
+      {profesor.description_teacher ? (
+        <div className="tit-cont">
+          <div className="tit-cont-img">
+          <img src={imgProf} alt="Profesor" className="img-prof"/>
+
+          </div>
+          <div className="tit-cont-prof">
+            <h4>Nombre Profesor: {profesor.name}</h4>
+            <p>{profesor.description_teacher}</p>
+          </div>
+          <div className="tit-cont-curso">
+            <h4>Curso: {course.courseName}</h4>
+            <p>{course.courseDescription}</p>
+          </div>
+        </div>
+      ):(
+
+        <h3 className="course-title">
+          {course?.courseName || "Cargando curso..."}
+        </h3>
+      )
+      }
         {modules.length > 0 ? (
           <div className="modules-grid">
             {modules.map((module) => (

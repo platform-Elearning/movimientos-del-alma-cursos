@@ -14,6 +14,8 @@ const AdminProfesores = () => {
     lastname: "",
     email: "",
     password: "",
+    description_teacher: "",
+    url_avatar:"",
   });
 
   const [errors, setErrors] = useState("");
@@ -51,6 +53,7 @@ const AdminProfesores = () => {
     
     try {
       await createProfesor(formData);
+      console.log("adsd", formData)
       setSuccessMessage("Profesor creado con éxito");
       setFormData({
         identification_number: "",
@@ -58,6 +61,9 @@ const AdminProfesores = () => {
         lastname: "",
         email: "",
         password: "",
+        description_teacher: "",
+        url_avatar:"",
+
       });
     } catch (error) {
       if (error.response?.status === 401) {
@@ -93,7 +99,7 @@ const AdminProfesores = () => {
           />
           </div>
           
-             <div className="admin-teacher-field" >
+          <div className="admin-teacher-field" >
           <label htmlFor="name">Nombre:</label>
           <input
             type="text"
@@ -103,7 +109,7 @@ const AdminProfesores = () => {
             required
           />
           {errors.name && <p className="error-message">{errors.name}</p>}
-             </div>
+          </div>
 
        <div className="admin-teacher-field" >
 
@@ -135,7 +141,6 @@ const AdminProfesores = () => {
 
           </div>
    <div className="admin-teacher-field" >
-
           <label htmlFor="password">Contraseña:</label>
           <input
             type="password"
@@ -146,10 +151,27 @@ const AdminProfesores = () => {
             placeholder="Mínimo 6 caracteres"
             autoComplete="new-password"
           />
-
-
    </div>
-          
+   <div className="admin-teacher-field" >
+          <label htmlFor="description_teacher">Descripción del Docente:</label>
+          <textarea
+            name="description_teacher"
+            value={formData.description_teacher}
+            onChange={handleChange}
+            required
+          />
+   </div>
+
+   <div className="admin-teacher-field" >
+          <label htmlFor="url_avatar">Url de la imagen de perfil:</label>
+          <input
+            name="url_avatar"
+            value={formData.url_avatar}
+            onChange={handleChange}
+            required
+          />
+   </div>
+ 
 
           <button type="submit" disabled={isLoading}>
             {isLoading ? "Registrando..." : "Registrar Profesor"}

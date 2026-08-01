@@ -22,6 +22,7 @@ import AdminProfesores from "../pages/admin/adminProfesor/adminProfesor";
 import EditProfesor from "../pages/admin/adminProfesor/editProfesor/editProfesor";
 import AlumnosMisCertificaciones from "../pages/alumnos/alumnosMisCertificaciones/alumnosMisCertificaciones";
 import AdminReportes from "../pages/admin/adminReportes/adminReportes";
+import ChangeDescription from "../pages/changeDescription/changeDescription";
 
 // ✅ Nueva importación para ver alumnos del curso
 import VerAlumnosCurso from "../pages/admin/adminCursos/verAlumnos/VerAlumnosCurso";
@@ -46,6 +47,8 @@ const AppRouter = () => {
             <Route path="/changePassword" element={<ChangePassword></ChangePassword>}></Route>
             <Route path="/verify-code" element={<VerifyCode></VerifyCode>}></Route>
             <Route path="/reset-password" element={<ResetPassword></ResetPassword>}></Route>
+            <Route path="/change-description" element={<ChangeDescription></ChangeDescription>}></Route>
+
 
             <Route path="/admin" element={<PanelAdmin></PanelAdmin>}></Route>
             <Route path="/admin/alumnos" element={<AdminAlumnos></AdminAlumnos>}></Route>

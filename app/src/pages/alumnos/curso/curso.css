@@ -1,4 +1,18 @@
 /* === CURSO DETAILS - SIN INTERFERENCIAS CON MODULE CARD === */
+p{
+  color:#000;  
+  margin-top:0px ;
+  padding: 0px 8px;
+
+}
+h4{
+  font-size: 16px;
+  color: #000!important;
+  margin:0px ;
+  margin-top:12px ;
+
+  padding: 8px;
+}
 .course-details-container {
   min-height: 100vh;
   padding: 0;
@@ -19,6 +33,54 @@
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   letter-spacing: 0.5px;
   box-shadow: 0 4px 20px rgba(131, 113, 27, 0.3);
+}
+.tit-cont {
+  display: flex;
+  background-color: #fff;
+  justify-content: space-around;
+  align-items: start;
+  border-radius: 16px;
+  padding: 16px;
+  margin: 16px;
+  height: 200px;
+}
+
+.tit-cont-img {
+  height: 180px;
+  width: 10%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.img-prof {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+
+}
+
+.tit-cont-prof {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  width: 30%;
+  height: 170px;
+  padding:  16px;
+  border: #83711B 1px solid;
+  border-radius:14px ;
+}
+
+.tit-cont-curso {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  width: 50%;
+  border: #83711B 1px solid;
+
+  border-radius:14px ;
+  color: #fff;
+  height: 170px;
+  padding:  16px;
 }
 
 .course-title span {
