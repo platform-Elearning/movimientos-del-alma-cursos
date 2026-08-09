@@ -1,7 +1,16 @@
-import React from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import "./clase.css";
 import BackLink from "../../../components/backLink/BackLink";
+import {
+  getCommentsByLessonId,
+  createComment,
+  createCommentReply,
+  getCommentsRepliesByCommentId,
+} from "../../../api/comments";
+import { useAuth } from "../../../services/authContext";
+import { jwtDecode } from "jwt-decode";
+import Cookies from "js-cookie";
 
 const getEmbedUrl = (url) => {
   if (!url) {
@@ -42,6 +51,162 @@ const Clase = () => {
   const { classItem } = location.state || {};
   const content = getEmbedUrl(classItem?.lessonUrl || classItem?.url);
 
+  const { userId, userName, userLastname } = useAuth();
+  const token = Cookies.get("token") || localStorage.getItem("token");
+  const userEmail = useMemo(() => {
+    try {
+      return token ? jwtDecode(token).email || "" : "";
+    } catch {
+      return "";
+    }
+  }, [token]);
+
+  const [comments, setComments] = useState([]);
+  const [loadingComments, setLoadingComments] = useState(false);
+  const [commentsError, setCommentsError] = useState(null);
+  const [newComment, setNewComment] = useState("");
+  const [sendingComment, setSendingComment] = useState(false);
+  const [sendError, setSendError] = useState(null);
+
+  const [replies, setReplies] = useState({});
+  const [loadingReplies, setLoadingReplies] = useState({});
+  const [repliesError, setRepliesError] = useState({});
+  const [openReplyFor, setOpenReplyFor] = useState({});
+  const [newReplyText, setNewReplyText] = useState({});
+  const [sendingReply, setSendingReply] = useState({});
+  const [replySendError, setReplySendError] = useState({});
+
+
+  const loadComments = useCallback(async () => {
+    if (!classItem?.id) return;
+
+    setLoadingComments(true);
+    setCommentsError(null);
+    try {
+      const data = await getCommentsByLessonId(classItem.id);
+
+      let commentsArray = [];
+      if (Array.isArray(data)) {
+        commentsArray = data;
+      } else if (data && Array.isArray(data.comments)) {
+        commentsArray = data.comments;
+      } else if (data && Array.isArray(data.data)) {
+        commentsArray = data.data;
+      } else if (data && typeof data === "object" && data.comment) {
+        // Si el backend devuelve un solo comentario como objeto
+        commentsArray = [data];
+      }
+
+      setComments(commentsArray);
+    } catch (error) {
+      const status = error?.response?.status;
+      const message = error?.response?.data?.message || error?.message || "Error desconocido";
+      setCommentsError(`No se pudieron cargar los comentarios${status ? ` (${status})` : ""}: ${message}`);
+    } finally {
+      setLoadingComments(false);
+    }
+  }, [classItem?.id]);
+
+  useEffect(() => {
+    loadComments();
+  }, [loadComments]);
+
+  const handleSubmitComment = async (e) => {
+    e.preventDefault();
+    if (!newComment.trim() || !classItem?.id || !userId) return;
+
+    setSendingComment(true);
+    setSendError(null);
+    try {
+      const commentData = {
+        lesson_id: classItem.id,
+        user_id: userId,
+        nombre: userName || "",
+        apellido: userLastname || "",
+        email: userEmail || "",
+        comment: newComment.trim(),
+      };
+      await createComment(commentData);
+      setNewComment("");
+      await loadComments();
+    } catch (error) {
+      const status = error?.response?.status;
+      const message = error?.response?.data?.message || error?.message || "Error desconocido";
+      setSendError(`No se pudo enviar el comentario${status ? ` (${status})` : ""}: ${message}`);
+    } finally {
+      setSendingComment(false);
+    }
+  };
+
+  const loadRepliesForComment = useCallback(async (commentId) => {
+    setLoadingReplies((prev) => ({ ...prev, [commentId]: true }));
+    setRepliesError((prev) => ({ ...prev, [commentId]: null }));
+    try {
+      const data = await getCommentsRepliesByCommentId(commentId);
+
+      let repliesArray = [];
+      if (Array.isArray(data)) {
+        repliesArray = data;
+      } else if (data && Array.isArray(data.data)) {
+        repliesArray = data.data;
+      } else if (data && Array.isArray(data.replies)) {
+        repliesArray = data.replies;
+      } else if (data && typeof data === "object" && (data.reply || data.comment)) {
+        repliesArray = [data];
+      }
+
+      setReplies((prev) => ({ ...prev, [commentId]: repliesArray }));
+    } catch (error) {
+      const status = error?.response?.status;
+      const message = error?.response?.data?.message || error?.message || "Error desconocido";
+      setRepliesError((prev) => ({
+        ...prev,
+        [commentId]: `No se pudieron cargar las respuestas${status ? ` (${status})` : ""}: ${message}`,
+      }));
+    } finally {
+      setLoadingReplies((prev) => ({ ...prev, [commentId]: false }));
+    }
+  }, []);
+
+  const toggleReplyBox = (commentId) => {
+    setOpenReplyFor((prev) => {
+      const isOpen = !prev[commentId];
+      if (isOpen && !replies[commentId]) {
+        loadRepliesForComment(commentId);
+      }
+      return { ...prev, [commentId]: isOpen };
+    });
+  };
+
+  const handleSubmitReply = async (e, commentId) => {
+    e.preventDefault();
+    const text = (newReplyText[commentId] || "").trim();
+    if (!text || !userId) return;
+
+    setSendingReply((prev) => ({ ...prev, [commentId]: true }));
+    setReplySendError((prev) => ({ ...prev, [commentId]: null }));
+    try {
+      const replyData = {
+        comment_id: commentId,
+        reply: text,
+        nombre: userName || "",
+        apellido: userLastname || "",
+      };
+      await createCommentReply(replyData);
+      setNewReplyText((prev) => ({ ...prev, [commentId]: "" }));
+      await loadRepliesForComment(commentId);
+    } catch (error) {
+      const status = error?.response?.status;
+      const message = error?.response?.data?.message || error?.message || "Error desconocido";
+      setReplySendError((prev) => ({
+        ...prev,
+        [commentId]: `No se pudo enviar la respuesta${status ? ` (${status})` : ""}: ${message}`,
+      }));
+    } finally {
+      setSendingReply((prev) => ({ ...prev, [commentId]: false }));
+    }
+  };
+
   if (!classItem) {
     return (
       <p>
@@ -52,6 +217,18 @@ const Clase = () => {
 
   const goToCourse = () => {
     navigate(`/alumnos/${alumnoId}/curso/${cursoId}`);
+  };
+
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    return isNaN(date) ? "" : date.toLocaleString("es-AR", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
   };
 
   const renderContent = () => {
@@ -88,6 +265,134 @@ const Clase = () => {
 
       <div className="video-container">
         {content.url ? renderContent() : <p>No hay contenido disponible para esta clase.</p>}
+      </div>
+
+      <div className="comments-section">
+        <h3 className="comments-title">Comentarios</h3>
+
+        {loadingComments && <p>Cargando comentarios...</p>}
+
+        {commentsError && <p className="comments-error">{commentsError}</p>}
+
+        <form className="comment-form" onSubmit={handleSubmitComment}>
+          <textarea
+            className="comment-input"
+            rows="3"
+            placeholder="Escribí tu comentario..."
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+            disabled={sendingComment}
+            required
+          />
+          <button
+            className="comment-submit"
+            type="submit"
+            disabled={!newComment.trim() || sendingComment || !userId}
+          >
+            {sendingComment ? "Enviando..." : "Enviar comentario"}
+          </button>
+          {sendError && <p className="send-error">{sendError}</p>}
+        </form>
+
+        {!loadingComments && !commentsError && comments.length === 0 && (
+          <p className="no-comments">No hay comentarios aún.</p>
+        )}
+
+        {!loadingComments && comments.length > 0 && (
+          <ul className="comments-list">
+            {comments.map((comment, index) => {
+              const commentId = comment.id ?? comment._id ?? comment.comment_id;
+              const isReplyOpen = !!openReplyFor[commentId];
+              const commentReplies = replies[commentId] || [];
+
+              return (
+                <li key={commentId || `comment-${index}`} className="comment-item">
+                  <div className="comment-header">
+                    <span className="comment-author">
+                      {`${comment.nombre || ""} ${comment.apellido || ""}`.trim() || comment.email || "Usuario"}
+                    </span>
+                    <span className="comment-date">{formatDate(comment.created_at)}</span>
+                  </div>
+                  <p className="comment-text">{comment.comment}</p>
+
+                  {commentId && (
+                    <button
+                      type="button"
+                      className="reply-toggle"
+                      onClick={() => toggleReplyBox(commentId)}
+                    >
+                      {isReplyOpen ? "Ocultar respuestas" : "Responder"}
+                    </button>
+                  )}
+
+                  {commentId && isReplyOpen && (
+                    <div className="replies-section">
+                      {loadingReplies[commentId] && <p>Cargando respuestas...</p>}
+
+                      {repliesError[commentId] && (
+                        <p className="comments-error">{repliesError[commentId]}</p>
+                      )}
+
+                      {!loadingReplies[commentId] && commentReplies.length === 0 && !repliesError[commentId] && (
+                        <p className="no-comments">Sin respuestas aún.</p>
+                      )}
+
+                      {commentReplies.length > 0 && (
+                        <ul className="replies-list">
+                          {commentReplies.map((reply, replyIndex) => (
+                            <li
+                              key={reply.id || reply._id || `reply-${commentId}-${replyIndex}`}
+                              className="reply-item"
+                            >
+                              <div className="comment-header">
+                                <span className="comment-author">
+                                  {`${reply.nombre || ""} ${reply.apellido || ""}`.trim() || reply.email || "Usuario"}
+                                </span>
+                                <span className="comment-date">{formatDate(reply.created_at)}</span>
+                              </div>
+                              <p className="comment-text">{reply.reply}</p>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+
+                      <form
+                        className="reply-form"
+                        onSubmit={(e) => handleSubmitReply(e, commentId)}
+                      >
+                        <textarea
+                          className="comment-input reply-input"
+                          rows="2"
+                          placeholder="Escribí una respuesta..."
+                          value={newReplyText[commentId] || ""}
+                          onChange={(e) =>
+                            setNewReplyText((prev) => ({ ...prev, [commentId]: e.target.value }))
+                          }
+                          disabled={sendingReply[commentId]}
+                          required
+                        />
+                        <button
+                          className="comment-submit reply-submit"
+                          type="submit"
+                          disabled={
+                            !(newReplyText[commentId] || "").trim() ||
+                            sendingReply[commentId] ||
+                            !userId
+                          }
+                        >
+                          {sendingReply[commentId] ? "Enviando..." : "Responder"}
+                        </button>
+                        {replySendError[commentId] && (
+                          <p className="send-error">{replySendError[commentId]}</p>
+                        )}
+                      </form>
+                    </div>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        )}
       </div>
     </div>
   );

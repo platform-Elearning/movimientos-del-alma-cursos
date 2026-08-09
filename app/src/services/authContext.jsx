@@ -19,12 +19,16 @@ export const AuthProvider = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(null);
     const [errors, setErrors] = useState([]);
     const [userNav, setUserNav] = useState(null);
+    const [userName, setUserName] = useState(null);
+    const [userLastname, setUserLastname] = useState(null);
 
     // Función para limpiar el estado de usuario
     const clearUserState = () => {
         setUserId(null);
         setUserRole(null);
         setUserNav(null);
+        setUserName(null);
+        setUserLastname(null);
         setIsAuthenticated(false);
         Cookies.remove("token");
         localStorage.removeItem("token");
@@ -45,6 +49,8 @@ export const AuthProvider = ({ children }) => {
             
             setUserId(dataDecoded.id);
             setUserRole(dataDecoded.role);
+            setUserName(dataDecoded.name || "");
+            setUserLastname(dataDecoded.lastname || dataDecoded.last_name || "");
             
             if (dataDecoded.role === "admin") {
                 setUserNav("administrador");
@@ -197,9 +203,11 @@ export const AuthProvider = ({ children }) => {
     // Solo escuchar eventos para manejar renovación y expiración
     useEffect(() => {
         const handleTokenRefreshed = (event) => {
-            const { token, user } = event.detail;
+            const { user } = event.detail;
             setUserId(user.id);
             setUserRole(user.role);
+            setUserName(user.name || "");
+            setUserLastname(user.lastname || user.last_name || "");
             
             if (user.role === "admin") {
                 setUserNav("administrador");
@@ -239,6 +247,8 @@ export const AuthProvider = ({ children }) => {
                 userRole,
                 userNav,
                 setUserNav,
+                userName,
+                userLastname,
                 isAuthenticated,
                 errors,
                 checkLogin
