@@ -5,8 +5,12 @@ import BackLink from "../../../components/backLink/BackLink";
 import {
   getCommentsByLessonId,
   createComment,
+  updateComment,
+  deleteComment,
   createCommentReply,
   getCommentsRepliesByCommentId,
+  updateCommentReply,
+  deleteCommentReply,
 } from "../../../api/comments";
 import { useAuth } from "../../../services/authContext";
 import { jwtDecode } from "jwt-decode";
@@ -68,6 +72,13 @@ const Clase = () => {
   const [sendingComment, setSendingComment] = useState(false);
   const [sendError, setSendError] = useState(null);
 
+  const [editingCommentId, setEditingCommentId] = useState(null);
+  const [editCommentText, setEditCommentText] = useState("");
+  const [savingCommentId, setSavingCommentId] = useState(null);
+  const [editError, setEditError] = useState(null);
+  const [deletingCommentId, setDeletingCommentId] = useState(null);
+  const [deleteErrors, setDeleteErrors] = useState({});
+
   const [replies, setReplies] = useState({});
   const [loadingReplies, setLoadingReplies] = useState({});
   const [repliesError, setRepliesError] = useState({});
@@ -75,6 +86,13 @@ const Clase = () => {
   const [newReplyText, setNewReplyText] = useState({});
   const [sendingReply, setSendingReply] = useState({});
   const [replySendError, setReplySendError] = useState({});
+
+  const [editingReplyId, setEditingReplyId] = useState(null);
+  const [editReplyText, setEditReplyText] = useState("");
+  const [savingReplyId, setSavingReplyId] = useState(null);
+  const [replyEditError, setReplyEditError] = useState(null);
+  const [deletingReplyId, setDeletingReplyId] = useState(null);
+  const [replyDeleteErrors, setReplyDeleteErrors] = useState({});
 
 
   const loadComments = useCallback(async () => {
@@ -135,6 +153,58 @@ const Clase = () => {
       setSendError(`No se pudo enviar el comentario${status ? ` (${status})` : ""}: ${message}`);
     } finally {
       setSendingComment(false);
+    }
+  };
+
+  const handleStartEditComment = (comment, commentId) => {
+    setEditingCommentId(commentId);
+    setEditCommentText(comment.comment || "");
+    setEditError(null);
+  };
+
+  const handleCancelEditComment = () => {
+    setEditingCommentId(null);
+    setEditCommentText("");
+    setEditError(null);
+  };
+
+  const handleSaveEditComment = async (commentId) => {
+    const text = editCommentText.trim();
+    if (!text) return;
+
+    setSavingCommentId(commentId);
+    setEditError(null);
+    try {
+      await updateComment(commentId, text);
+      setEditingCommentId(null);
+      setEditCommentText("");
+      await loadComments();
+    } catch (error) {
+      const status = error?.response?.status;
+      const message = error?.response?.data?.message || error?.message || "Error desconocido";
+      setEditError(`No se pudo editar el comentario${status ? ` (${status})` : ""}: ${message}`);
+    } finally {
+      setSavingCommentId(null);
+    }
+  };
+
+  const handleDeleteComment = async (commentId) => {
+    if (!window.confirm("¿Seguro que querés eliminar este comentario?")) return;
+
+    setDeletingCommentId(commentId);
+    setDeleteErrors((prev) => ({ ...prev, [commentId]: null }));
+    try {
+      await deleteComment(commentId);
+      await loadComments();
+    } catch (error) {
+      const status = error?.response?.status;
+      const message = error?.response?.data?.message || error?.message || "Error desconocido";
+      setDeleteErrors((prev) => ({
+        ...prev,
+        [commentId]: `No se pudo eliminar el comentario${status ? ` (${status})` : ""}: ${message}`,
+      }));
+    } finally {
+      setDeletingCommentId(null);
     }
   };
 
@@ -204,6 +274,58 @@ const Clase = () => {
       }));
     } finally {
       setSendingReply((prev) => ({ ...prev, [commentId]: false }));
+    }
+  };
+
+  const handleStartEditReply = (reply, replyId) => {
+    setEditingReplyId(replyId);
+    setEditReplyText(reply.reply || "");
+    setReplyEditError(null);
+  };
+
+  const handleCancelEditReply = () => {
+    setEditingReplyId(null);
+    setEditReplyText("");
+    setReplyEditError(null);
+  };
+
+  const handleSaveEditReply = async (replyId, commentId) => {
+    const text = editReplyText.trim();
+    if (!text) return;
+
+    setSavingReplyId(replyId);
+    setReplyEditError(null);
+    try {
+      await updateCommentReply(replyId, text);
+      setEditingReplyId(null);
+      setEditReplyText("");
+      await loadRepliesForComment(commentId);
+    } catch (error) {
+      const status = error?.response?.status;
+      const message = error?.response?.data?.message || error?.message || "Error desconocido";
+      setReplyEditError(`No se pudo editar la respuesta${status ? ` (${status})` : ""}: ${message}`);
+    } finally {
+      setSavingReplyId(null);
+    }
+  };
+
+  const handleDeleteReply = async (replyId, commentId) => {
+    if (!window.confirm("¿Seguro que querés eliminar esta respuesta?")) return;
+
+    setDeletingReplyId(replyId);
+    setReplyDeleteErrors((prev) => ({ ...prev, [replyId]: null }));
+    try {
+      await deleteCommentReply(replyId);
+      await loadRepliesForComment(commentId);
+    } catch (error) {
+      const status = error?.response?.status;
+      const message = error?.response?.data?.message || error?.message || "Error desconocido";
+      setReplyDeleteErrors((prev) => ({
+        ...prev,
+        [replyId]: `No se pudo eliminar la respuesta${status ? ` (${status})` : ""}: ${message}`,
+      }));
+    } finally {
+      setDeletingReplyId(null);
     }
   };
 
@@ -304,6 +426,8 @@ const Clase = () => {
               const commentId = comment.id ?? comment._id ?? comment.comment_id;
               const isReplyOpen = !!openReplyFor[commentId];
               const commentReplies = replies[commentId] || [];
+              const isOwnComment = userId && String(comment.user_id) === String(userId);
+              const isEditing = editingCommentId === commentId;
 
               return (
                 <li key={commentId || `comment-${index}`} className="comment-item">
@@ -313,7 +437,63 @@ const Clase = () => {
                     </span>
                     <span className="comment-date">{formatDate(comment.created_at)}</span>
                   </div>
-                  <p className="comment-text">{comment.comment}</p>
+
+                  {isEditing ? (
+                    <div className="edit-form">
+                      <textarea
+                        className="comment-input"
+                        rows="3"
+                        value={editCommentText}
+                        onChange={(e) => setEditCommentText(e.target.value)}
+                        disabled={savingCommentId === commentId}
+                      />
+                      <div className="edit-actions">
+                        <button
+                          type="button"
+                          className="comment-submit"
+                          onClick={() => handleSaveEditComment(commentId)}
+                          disabled={!editCommentText.trim() || savingCommentId === commentId}
+                        >
+                          {savingCommentId === commentId ? "Guardando..." : "Guardar"}
+                        </button>
+                        <button
+                          type="button"
+                          className="cancel-button"
+                          onClick={handleCancelEditComment}
+                          disabled={savingCommentId === commentId}
+                        >
+                          Cancelar
+                        </button>
+                      </div>
+                      {editError && <p className="send-error">{editError}</p>}
+                    </div>
+                  ) : (
+                    <p className="comment-text">{comment.comment}</p>
+                  )}
+
+                  {isOwnComment && !isEditing && (
+                    <div className="comment-actions">
+                      <button
+                        type="button"
+                        className="comment-action-button"
+                        onClick={() => handleStartEditComment(comment, commentId)}
+                      >
+                        Editar
+                      </button>
+                      <button
+                        type="button"
+                        className="comment-action-button delete"
+                        onClick={() => handleDeleteComment(commentId)}
+                        disabled={deletingCommentId === commentId}
+                      >
+                        {deletingCommentId === commentId ? "Eliminando..." : "Eliminar"}
+                      </button>
+                    </div>
+                  )}
+
+                  {deleteErrors[commentId] && (
+                    <p className="send-error">{deleteErrors[commentId]}</p>
+                  )}
 
                   {commentId && (
                     <button
@@ -339,20 +519,82 @@ const Clase = () => {
 
                       {commentReplies.length > 0 && (
                         <ul className="replies-list">
-                          {commentReplies.map((reply, replyIndex) => (
-                            <li
-                              key={reply.id || reply._id || `reply-${commentId}-${replyIndex}`}
-                              className="reply-item"
-                            >
-                              <div className="comment-header">
-                                <span className="comment-author">
-                                  {`${reply.nombre || ""} ${reply.apellido || ""}`.trim() || reply.email || "Usuario"}
-                                </span>
-                                <span className="comment-date">{formatDate(reply.created_at)}</span>
-                              </div>
-                              <p className="comment-text">{reply.reply}</p>
-                            </li>
-                          ))}
+                          {commentReplies.map((reply, replyIndex) => {
+                            const replyId = reply.id ?? reply._id;
+                            const isOwnReply = userId && String(reply.user_id) === String(userId);
+                            const isEditingReply = editingReplyId === replyId;
+
+                            return (
+                              <li
+                                key={replyId || `reply-${commentId}-${replyIndex}`}
+                                className="reply-item"
+                              >
+                                <div className="comment-header">
+                                  <span className="comment-author">
+                                    {`${reply.nombre || ""} ${reply.apellido || ""}`.trim() || reply.email || "Usuario"}
+                                  </span>
+                                  <span className="comment-date">{formatDate(reply.created_at)}</span>
+                                </div>
+
+                                {isEditingReply ? (
+                                  <div className="edit-form">
+                                    <textarea
+                                      className="comment-input reply-input"
+                                      rows="2"
+                                      value={editReplyText}
+                                      onChange={(e) => setEditReplyText(e.target.value)}
+                                      disabled={savingReplyId === replyId}
+                                    />
+                                    <div className="edit-actions">
+                                      <button
+                                        type="button"
+                                        className="comment-submit reply-submit"
+                                        onClick={() => handleSaveEditReply(replyId, commentId)}
+                                        disabled={!editReplyText.trim() || savingReplyId === replyId}
+                                      >
+                                        {savingReplyId === replyId ? "Guardando..." : "Guardar"}
+                                      </button>
+                                      <button
+                                        type="button"
+                                        className="cancel-button"
+                                        onClick={handleCancelEditReply}
+                                        disabled={savingReplyId === replyId}
+                                      >
+                                        Cancelar
+                                      </button>
+                                    </div>
+                                    {replyEditError && <p className="send-error">{replyEditError}</p>}
+                                  </div>
+                                ) : (
+                                  <p className="comment-text">{reply.reply}</p>
+                                )}
+
+                                {isOwnReply && !isEditingReply && replyId && (
+                                  <div className="comment-actions">
+                                    <button
+                                      type="button"
+                                      className="comment-action-button"
+                                      onClick={() => handleStartEditReply(reply, replyId)}
+                                    >
+                                      Editar
+                                    </button>
+                                    <button
+                                      type="button"
+                                      className="comment-action-button delete"
+                                      onClick={() => handleDeleteReply(replyId, commentId)}
+                                      disabled={deletingReplyId === replyId}
+                                    >
+                                      {deletingReplyId === replyId ? "Eliminando..." : "Eliminar"}
+                                    </button>
+                                  </div>
+                                )}
+
+                                {replyId && replyDeleteErrors[replyId] && (
+                                  <p className="send-error">{replyDeleteErrors[replyId]}</p>
+                                )}
+                              </li>
+                            );
+                          })}
                         </ul>
                       )}
 

@@ -180,6 +180,61 @@
   margin: 0;
 }
 
+.comment-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.comment-action-button {
+  background: none;
+  border: none;
+  color: #1a73e8;
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 0;
+}
+
+.comment-action-button:hover {
+  text-decoration: underline;
+}
+
+.comment-action-button.delete {
+  color: #d32f2f;
+}
+
+.comment-action-button:disabled {
+  color: #999;
+  cursor: not-allowed;
+  text-decoration: none;
+}
+
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 8px 0;
+}
+
+.edit-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.cancel-button {
+  padding: 10px 20px;
+  background-color: #eee;
+  color: #333;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.cancel-button:hover:not(:disabled) {
+  background-color: #ddd;
+}
+
 .reply-toggle {
   margin-top: 8px;
   background: none;
