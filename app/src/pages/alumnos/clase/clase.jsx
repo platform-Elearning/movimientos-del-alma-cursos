@@ -49,13 +49,13 @@ const getEmbedUrl = (url) => {
 };
 
 const Clase = () => {
-  const { alumnoId, cursoId } = useParams();
+  useParams();
   const navigate = useNavigate();
   const location = useLocation();
   const { classItem } = location.state || {};
   const content = getEmbedUrl(classItem?.lessonUrl || classItem?.url);
-
   const { userId, userName, userLastname } = useAuth();
+
   const token = Cookies.get("token") || localStorage.getItem("token");
   const userEmail = useMemo(() => {
     try {
@@ -128,11 +128,11 @@ const Clase = () => {
   useEffect(() => {
     loadComments();
   }, [loadComments]);
-
+////////////////////////////////////////////
+//////////////////////////////////////////
   const handleSubmitComment = async (e) => {
     e.preventDefault();
     if (!newComment.trim() || !classItem?.id || !userId) return;
-
     setSendingComment(true);
     setSendError(null);
     try {
@@ -338,7 +338,7 @@ const Clase = () => {
   }
 
   const goToCourse = () => {
-    navigate(`/alumnos/${alumnoId}/curso/${cursoId}`);
+    navigate(-1);
   };
 
   const formatDate = (dateString) => {
