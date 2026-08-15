@@ -32,7 +32,14 @@ export const getProfesoreByCourseId = async (course_id) => {
   }
 };
 
-
+export const getProfesorById = async (id) => {
+  try {
+    const response = await instanceUsers.get(`/users/getTeacherById/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 export const updateTeacher = async (userData) => {
   try {
     const response = await instanceUsers.put("/users/updateTeacher", userData);
