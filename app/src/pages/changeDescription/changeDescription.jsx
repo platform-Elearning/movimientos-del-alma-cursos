@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthUtils from "../../utils/authUtils";
-import { update_description_for_teacher } from "../../api/profesores";
+import { update_description_for_teacher, getProfesorById } from "../../api/profesores";
 import "./changeDescription.css";
 
 const ChangeDescription = () => {
@@ -14,6 +14,7 @@ const ChangeDescription = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingProfile, setIsLoadingProfile] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,8 +26,31 @@ const ChangeDescription = () => {
     const decoded = AuthUtils.decodeToken(token);
     if (decoded && decoded.id) {
       setFormData((prev) => ({ ...prev, id: decoded.id }));
+      loadProfesorData(decoded.id);
     }
   }, [navigate]);
+
+  const loadProfesorData = async (teacherId) => {
+    setIsLoadingProfile(true);
+    try {
+      const response = await getProfesorById(teacherId);
+      const profesor = Array.isArray(response?.data)
+        ? response.data[0]
+        : response?.data;
+
+      if (profesor) {
+        setFormData((prev) => ({
+          ...prev,
+          description_teacher: profesor.description_teacher || "",
+          url_avatar: profesor.url_avatar || "",
+        }));
+      }
+    } catch (err) {
+      setError(err.message || "Error al cargar los datos del profesor.");
+    } finally {
+      setIsLoadingProfile(false);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -90,10 +114,11 @@ const ChangeDescription = () => {
         <button
           type="submit"
           className="submit-button"
-          disabled={isLoading || !formData.id}
+          disabled={isLoading || isLoadingProfile || !formData.id}
         >
           {isLoading ? "Actualizando..." : "Actualizar Descripción"}
         </button>
+        {isLoadingProfile && <p>Cargando datos actuales...</p>}
         {error && <p className="error-message">{error}</p>}
         {success && <p className="success-message">{success}</p>}
       </form>

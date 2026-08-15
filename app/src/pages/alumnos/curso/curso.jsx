@@ -7,12 +7,28 @@ import {
   getModulesByCourseID,
   getLessonsByModuleIdAndCourseId,
 } from "../../../api/cursos";
-import { getProfesoreByCourseId } from "../../../api/profesores";
+import { getProfesoreByCourseId, getProfesorById } from "../../../api/profesores";
 import { useAuth } from "../../../services/authContext";
 import ModuleCard from "../../../components/moduleCard/ModuleCard";
 import BackLink from "../../../components/backLink/BackLink";
 import imgProf from "../../../assets/emoji-profesores.png";
 import { use } from "react";
+
+function obtenerLinkDirecto(urlOriginal) {
+  try {
+    // Detecta el ID sin importar si el link termina en /view, ?usp=sharing, etc.
+    const match = urlOriginal.match(/[-\w]{25,}/);
+    if (match && match[0]) {
+      const id = match[0];
+      // Retorna el formato thumbnail que no falla
+      return `https://drive.google.com/thumbnail?id=${id}`;
+    }
+    return urlOriginal;
+  } catch (error) {
+    return urlOriginal;
+  }
+}
+
 
 const CourseDetails = () => {
   const { cursoId, alumnoId } = useParams();
@@ -27,11 +43,8 @@ const CourseDetails = () => {
   const getProfesorByCourse = async (courseId) => {
     try {
       const response = await getProfesoreByCourseId(courseId);
-      console.log(response.data[0]);
       if (response.success && response.data) {
         setProfesor(response.data[0]);
-      } else {
-        console.error("Error al obtener el profesor:", response);
       }
     } catch (error) {
       console.error("Error al obtener el profesor:", error);
@@ -188,8 +201,12 @@ const CourseDetails = () => {
       {profesor.description_teacher ? (
         <div className="tit-cont">
           <div className="tit-cont-img">
-          <img src={imgProf} alt="Profesor" className="img-prof"/>
-
+          <img 
+        src={profesor.url_avatar ? obtenerLinkDirecto(profesor.url_avatar) : imgProf} 
+        alt="Foto del profesor" 
+        style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px' }}
+      />
+          
           </div>
           <div className="tit-cont-prof">
             <h4>Nombre Profesor: {profesor.name}</h4>
