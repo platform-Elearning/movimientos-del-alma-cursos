@@ -108,6 +108,8 @@ const Login = () => {
           </div>
 
           {/* Botones de acción */}
+          <div className="button-container" >
+
           <button type="submit" className="button1">
             <span>Iniciar sesión</span>
           </button>
@@ -119,6 +121,8 @@ const Login = () => {
           >
             ¿Olvidaste tu contraseña?
           </button>
+
+          </div>
           
           <div className="divider">
             <span>o</span>

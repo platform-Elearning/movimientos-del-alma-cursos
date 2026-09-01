@@ -167,21 +167,12 @@ const VerifyCode = () => {
                 required
               />
             </div>
-
-            <button type="submit" className="verify-code-submit" disabled={loading}>
+            <div className="button-container-v">
+            <button type="submit" className="button1" disabled={loading}>
               <span>{loading ? "Verificando..." : "Completar registro"}</span>
             </button>
-          </form>
 
-          {error && (
-            <div className="verify-code-error-message">
-              <MdError className="verify-code-error-icon" />
-              <p>{error}</p>
-            </div>
-          )}
-          {success && <p className="verify-code-success-message">{success}</p>}
-
-          <div className="verify-code-resend-section">
+            <div className="verify-code-resend-section">
             {countdown > 0 ? (
               <p>Podés reenviar el código en {countdown}s</p>
             ) : (
@@ -195,6 +186,18 @@ const VerifyCode = () => {
               </button>
             )}
           </div>
+            </div>
+          </form>
+
+          {error && (
+            <div className="verify-code-error-message">
+              <MdError className="verify-code-error-icon" />
+              <p>{error}</p>
+            </div>
+          )}
+          {success && <p className="verify-code-success-message">{success}</p>}
+
+
         </div>
       </div>
     </div>

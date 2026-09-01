@@ -118,6 +118,21 @@ const CourseDetailManagement = () => {
     navigate(`/profesores/curso/${courseId}/estudiantes`);
   };
 
+  const handleViewLesson = (lesson) => {
+    const classItem = {
+      id: lesson.id,
+      lessonNumber: lesson.lesson_number || lesson.lessonNumber,
+      lessonTitle: lesson.title || lesson.lessonTitle,
+      lessonDescription: lesson.description || lesson.lessonDescription,
+      lessonUrl: lesson.url,
+    };
+
+    navigate(
+      `/alumnos/${userId}/curso/${courseId}/clase/${classItem.lessonNumber || classItem.id}`,
+      { state: { classItem } }
+    );
+  };
+
   const handleModuleClick = (module) => {
     setSelectedModule(module);
     setCurrentView('lessons');
@@ -467,16 +482,24 @@ const CourseDetailManagement = () => {
                     <div className="lesson-header">
                       <h4 className="lesson-title">{lesson.title}</h4>
                       <div className="lesson-actions">
-                        <a 
-                          href={lesson.url} 
-                          target="_blank" 
-                          rel="noopener noreferrer"
+                        <button
+                          type="button"
                           className="btn-view"
-                          title="Ver video"
+                          onClick={() => handleViewLesson(lesson)}
+                          title="Ver clase"
                         >
                           ▶️
+                        </button>
+                        <a
+                          href={lesson.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="btn-view"
+                          title="Abrir video en pestaña"
+                        >
+                          🔗
                         </a>
-                        <button 
+                        <button
                           className="btn-delete"
                           onClick={() => handleDeleteLesson(lesson.id)}
                           title="Eliminar lección"

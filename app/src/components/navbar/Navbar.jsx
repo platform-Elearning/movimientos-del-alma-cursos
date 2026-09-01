@@ -141,9 +141,26 @@ const Navbar = () => {
             <h5 className="username">{userNav}</h5>
             {isUserMenuOpen && (
               <div className="user-dropdown">
-                <button className="user-dropdown-item" onClick={() => navigate("/changePassword")}>
-                  🔒 Cambiar contraseña
-                </button>
+                {userRole === "student" && (
+                  <button className="user-dropdown-item" onClick={() => navigate("/changePassword")}>
+                    🔒 Cambiar contraseña
+                  </button>
+                )}
+
+                {userRole === "teacher" && (
+                  <div>
+                  <button className="user-dropdown-item" onClick={() => navigate("/changePassword")}>
+                    Cambiar contraseña
+                  </button>
+
+                  <button className="user-dropdown-item" onClick={() => navigate(`/change-description`)}>
+                    Cambiar Descripcion
+                  </button>
+                  </div> 
+                  
+                )}                
+
+
               </div>
             )}
           </li>

@@ -135,15 +135,12 @@ const Register = () => {
                 required
               />
             </div>
-            <div>
-
+            <div className="button-container">
             <button type="submit" className="button1" disabled={loading}>
               <span>{loading ? "Enviando código..." : "Registrar Estudiante"}</span>
             </button>
-            <BackLink title="Ir pagina de Inicio" onClick={() => goToInicio()} />
+            <BackLink className="backlink" title="Ir pagina de Inicio" onClick={() => goToInicio()} />
 
-
-  
             </div>
 
 
