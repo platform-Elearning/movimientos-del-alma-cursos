@@ -1,1 +1,2 @@
 VITE_API_URL=https://movimientos-del-alma-backend-develop.up.railway.app
+VITE_VERIFY_BASE_URL=https://dev.mda-ifi.com
