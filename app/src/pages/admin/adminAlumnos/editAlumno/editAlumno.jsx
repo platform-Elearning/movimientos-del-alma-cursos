@@ -12,6 +12,8 @@ const EditAlumno = ({ onUpdate }) => {
     name: "",
     lastname: "",
     nationality: "",
+    telefono: "",
+    activo: true,
   });
 
   const [errors, setErrors] = useState([]);
@@ -33,15 +35,18 @@ const EditAlumno = ({ onUpdate }) => {
         name: user.name || "",
         lastname: user.last_name || "",
         nationality: user.nationality || "",
+        telefono: user.telefono || "",
+        activo: user.activo !== undefined ? user.activo : true,
         cursos: user.cursos || [],
       });
     }
   }, [user]);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-    ValidateField(name, value, errors, setErrors);
+    const { name, value, type, checked } = e.target;
+    const newValue = type === "checkbox" ? checked : value;
+    setFormData({ ...formData, [name]: newValue });
+    ValidateField(name, newValue, errors, setErrors);
   };
 
   const handleSubmit = async (e) => {
@@ -73,6 +78,8 @@ const EditAlumno = ({ onUpdate }) => {
         name: "",
         last_name: "",
         nationality: "",
+        telefono: "",
+        activo: true,
       });
       setSuccessMessage("Alumno eliminado con éxito");
       if (onUpdate) onUpdate();
@@ -134,6 +141,29 @@ const EditAlumno = ({ onUpdate }) => {
               onChange={handleChange}
               required
             />
+          </div>
+            <div className="edit-user-field">
+            <label htmlFor="telefono">Teléfono:</label>
+            <input
+              id="telefono"
+              type="text"
+              name="telefono"
+              value={formData.telefono}
+              onChange={handleChange}
+              required  
+            />
+          </div>
+          <div className="edit-user-field edit-user-field-checkbox">
+            <label htmlFor="activo">
+              <input
+                id="activo"
+                type="checkbox"
+                name="activo"
+                checked={formData.activo}
+                onChange={handleChange}
+              />
+              Activo
+            </label>
           </div>
           <button type="submit" className="edit-user-submit">
             Guardar Cambios
