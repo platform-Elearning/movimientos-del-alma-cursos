@@ -128,7 +128,9 @@ export const getCourseCompleteByTeacherId = async (teacherId) => {
 export const getStudentByCourseId = async (courseId) => {
   try {
     const response = await instanceUsers.get(`/users/getStudentsByCourseId?courseId=${courseId}`);
+    console.log(response.data)
     return response.data;
+
   } catch (error) {
     throw error;
   }

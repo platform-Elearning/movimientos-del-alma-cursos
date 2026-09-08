@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import AuthUtils from '../../../utils/authUtils';
 import { getStudentByCourseId, markAsApproved,updateUrlCertificate} from '../../../api/profesores';
@@ -63,7 +63,6 @@ const StudentsManagement = () => {
       const moduleCount = await getCourseModules();
       
       console.log('🔍 Cargando estudiantes para el curso:', courseId);
-      
       const response = await getStudentByCourseId(courseId);
       
       if (response && response.success && response.data) {
@@ -89,7 +88,8 @@ const StudentsManagement = () => {
             status: student.status || 'active',
             approved: student.approved,
             url_certificate: student.url_certificate,
-            id_enrollment: student.id_enrollment
+            id_enrollment: student.id_enrollment,
+            activo: student.activo,
           };
         });
         
@@ -135,9 +135,10 @@ const StudentsManagement = () => {
     return '#f44336';
   };
 
-  const getStatusBadge = (status) => {
-    return status === 'active' ? 
-      <span className="status-badge active">Activo</span> :
+  const getStatusBadge = (activo) => {
+    console.log(activo,"asdasdsdx")
+    return activo === true ? 
+      <span className="status-badge active">Activo </span> :
       <span className="status-badge inactive">Inactivo</span>;
   };
 

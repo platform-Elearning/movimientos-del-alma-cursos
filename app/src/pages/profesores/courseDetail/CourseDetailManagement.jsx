@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "./CourseDetailManagement.css";
 import BackLink from "../../../components/backLink/BackLink";
@@ -9,7 +9,8 @@ import {
   createCourseModule, 
   deleteCourseModule,
   createLesson,
-  deleteLesson
+  deleteLesson,
+  updateCourseDescription
 } from "../../../api/cursos";
 
 const CourseDetailManagement = () => {
@@ -22,6 +23,8 @@ const CourseDetailManagement = () => {
   const [error, setError] = useState("");
   const [currentView, setCurrentView] = useState('modules');
   const [selectedModule, setSelectedModule] = useState(null);
+  const [isEditingDescription, setIsEditingDescription] = useState(false);
+  const [descriptionText, setDescriptionText] = useState('');
   const [showModuleForm, setShowModuleForm] = useState(false);
   const [showLessonForm, setShowLessonForm] = useState(false);
   const [moduleFormData, setModuleFormData] = useState({
@@ -59,6 +62,7 @@ const CourseDetailManagement = () => {
         
         if (courseData) {
           setCourseCompleteData(courseData);
+          setDescriptionText(courseData.description || '');
         } else {
           setError("No se encontró información del curso");
         }
@@ -73,6 +77,31 @@ const CourseDetailManagement = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleUpdateDescription = async (e) => {
+    e.preventDefault();
+    try {
+      await updateCourseDescription(parseInt(courseId), descriptionText);
+      setCourseCompleteData(prev => ({
+        ...prev,
+        description: descriptionText
+      }));
+      setIsEditingDescription(false);
+      setError('');
+    } catch (error) {
+      if (error.response?.status === 401 || error.response?.status === 403) {
+        logout();
+      } else {
+        setError('Error al actualizar la descripción del curso');
+      }
+    }
+  };
+
+  const handleCancelDescription = () => {
+    setDescriptionText(courseCompleteData?.description || '');
+    setIsEditingDescription(false);
+    setError('');
   };
 
   const handleBackClick = () => {
@@ -271,7 +300,42 @@ const CourseDetailManagement = () => {
       
       <div className="course-header">
         <h1 className="course-title">{courseCompleteData.name}</h1>
-        <p className="course-description">{courseCompleteData.description}</p>
+        {isEditingDescription ? (
+          <form onSubmit={handleUpdateDescription} className="course-description-form">
+            <textarea
+              className="course-description-input"
+              value={descriptionText}
+              onChange={(e) => setDescriptionText(e.target.value)}
+              placeholder="Descripción del curso"
+              rows={3}
+            />
+            <div className="course-description-actions">
+              <button type="submit" className="btn-primary btn-save">
+                Guardar
+              </button>
+              <button
+                type="button"
+                className="btn-secondary btn-cancel"
+                onClick={handleCancelDescription}
+              >
+                Cancelar
+              </button>
+            </div>
+          </form>
+        ) : (
+          <div className="course-description-wrapper">
+            <p className="course-description">
+              {courseCompleteData.description || "Sin descripción"}
+            </p>
+            <button
+              type="button"
+              className="btn-edit-description"
+              onClick={() => setIsEditingDescription(true)}
+            >
+              Editar descripción
+            </button>
+          </div>
+        )}
       </div>
 
       {error && (
