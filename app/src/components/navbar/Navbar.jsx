@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import "./Navbar.css";
 import logo from "../../assets/logo2.png";
 import userImg from "../../assets/user.png";
@@ -6,6 +6,10 @@ import logoutImg from "../../assets/logout.png";
 import { useAuth } from "../../services/authContext";
 import { useNavigate, useLocation } from "react-router-dom";
 import { createReport } from "../../api/createReport"; // Importar la función para enviar reportes
+import {
+  getNotificationByTeacherId,
+  markNotificationAsViewed,
+} from "../../api/profesores";
 
 const PUBLIC_ROUTES = new Set([
   "/",
@@ -29,6 +33,10 @@ const Navbar = () => {
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [reportText, setReportText] = useState("");
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [notifications, setNotifications] = useState([]);
+  const [isNotifOpen, setIsNotifOpen] = useState(false);
+  const [loadingNotif, setLoadingNotif] = useState(false);
+  const notifRef = useRef(null);
 
   useEffect(() => {
     const verifyLoginAndFetchCursos = async () => {
@@ -38,6 +46,76 @@ const Navbar = () => {
 
     verifyLoginAndFetchCursos();
   }, [checkLogin]);
+
+  const normalizeNotifications = (data) => {
+    if (!data) return [];
+    if (Array.isArray(data)) return data;
+    if (Array.isArray(data.data)) return data.data;
+    if (Array.isArray(data.notifications)) return data.notifications;
+    return [];
+  };
+
+  const loadNotifications = useCallback(async () => {
+    if (userRole !== "teacher" || !userId) return;
+    try {
+      setLoadingNotif(true);
+      const data = await getNotificationByTeacherId(userId);
+      setNotifications(normalizeNotifications(data));
+    } catch (error) {
+      console.error("Error cargando notificaciones:", error);
+    } finally {
+      setLoadingNotif(false);
+    }
+  }, [userId, userRole]);
+
+  useEffect(() => {
+    if (!loading && userRole === "teacher" && userId) {
+      loadNotifications();
+    }
+  }, [loading, userRole, userId, loadNotifications]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (notifRef.current && !notifRef.current.contains(event.target)) {
+        setIsNotifOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const unreadCount = notifications.filter((n) => n.view_notification === false).length;
+
+  const handleNotificationClick = async (notification) => {
+      try {
+        await markNotificationAsViewed(notification.id);
+        setNotifications((prev) =>
+          prev.map((n) =>
+            n.id === notification.id ? { ...n, view_notification: true } : n
+          )
+        );
+      } catch (error) {
+        console.error("Error marcando notificación como vista:", error);
+      }
+    
+
+    const classItem = {
+      id: notification.lesson_id,
+      lessonNumber: notification.lesson_number || notification.lesson_id,
+      lessonTitle: notification.lesson_title || `Clase ${notification.lesson_id}`,
+      lessonDescription: notification.lesson_description || "",
+      lessonUrl: notification.lesson_url || notification.url || "",
+    };
+
+    if (notification.course_id && classItem.id) {
+      navigate(
+        `/alumnos/${userId}/curso/${notification.course_id}/clase/${classItem.id}`,
+        { state: { classItem } }
+      );
+    }
+
+    setIsNotifOpen(false);
+  };
 
   useEffect(() => {
     const decoded = decodeURIComponent(location.pathname);
@@ -136,6 +214,89 @@ const Navbar = () => {
               Reportar Problema
             </button>
           </li>
+          {userRole === "teacher" && (
+            <li className="notification-section" ref={notifRef}>
+              <button
+                className="notification-button"
+                onClick={() => {
+                  setIsNotifOpen(!isNotifOpen);
+                  if (!isNotifOpen) loadNotifications();
+                }}
+                aria-label="Notificaciones"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                  <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                </svg>
+                {unreadCount > 0 && (
+                  <span className="notification-badge">{unreadCount}</span>
+                )}
+              </button>
+              {isNotifOpen && (
+                <div className="notification-dropdown">
+                  <div className="notification-header">
+                    <h4>Notificaciones</h4>
+                    {unreadCount > 0 && (
+                      <span className="notification-count">
+                        {unreadCount} sin leer
+                      </span>
+                    )}
+                  </div>
+                  {loadingNotif ? (
+                    <p className="notification-loading">Cargando...</p>
+                  ) : notifications.length === 0 ? (
+                    <p className="notification-empty">No hay notificaciones</p>
+                  ) : (
+                    <ul className="notification-list">
+                      {notifications.map((notification) => (
+                        <li
+                          key={notification.id}
+                          className={`notification-item ${
+                            notification.view_notifications ? "viewed" : "unread"
+                          }`}
+                          onClick={() => handleNotificationClick(notification)}
+                        >
+                          <div className="notification-dot"></div>
+                          <div className="notification-content">
+                            <p className="notification-message">
+                              {notification.student_name || notification.studentName || "Un alumno"}:
+                              {" "}
+                              {notification.comment || notification.message || notification.content || "Nuevo mensaje"}
+                            </p>
+                            <p className="notification-meta">
+                              {notification.course_name || notification.courseName || `Curso ${notification.course_id}`}
+                              {" · "}
+                              {notification.lesson_title || notification.lessonTitle || `Clase ${notification.lesson_id}`}
+                            </p>
+                            {notification.created_at && (
+                              <p className="notification-time">
+                                {new Date(notification.created_at).toLocaleString("es-ES", {
+                                  day: "2-digit",
+                                  month: "2-digit",
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                })}
+                              </p>
+                            )}
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              )}
+            </li>
+          )}
           <li className="user-section" onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}>
             <img src={userImg} alt="User" className="user-icon" />
             <h5 className="username">{userNav}</h5>

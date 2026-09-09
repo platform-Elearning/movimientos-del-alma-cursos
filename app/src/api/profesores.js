@@ -128,7 +128,9 @@ export const getCourseCompleteByTeacherId = async (teacherId) => {
 export const getStudentByCourseId = async (courseId) => {
   try {
     const response = await instanceUsers.get(`/users/getStudentsByCourseId?courseId=${courseId}`);
+    console.log(response.data)
     return response.data;
+
   } catch (error) {
     throw error;
   }
@@ -237,7 +239,6 @@ export const markAsApproved = async (id_enrollment,valor) => {
 
 //  funcion para cambiar estado de aprobado de alumno
 export const updateUrlCertificate = async (id_enrollment,url) => {
-  console.log("llegue a profe.js")
   try {
     const response = await instanceCursos.put("users/updateUrlCertificate", {id_enrollment,url});
     return response.data;
@@ -246,3 +247,25 @@ export const updateUrlCertificate = async (id_enrollment,url) => {
     throw error;
   }
 };
+
+//  funcion para cambiar estado de aprobado de alumno
+export const getNotificationByTeacherId = async (id_teacher) => {
+  try {
+    const response = await instanceCursos.get(`lesson-comments/notifications/${id_teacher}`);
+    return response.data;
+
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const markNotificationAsViewed = async (id) => {
+  try {
+    const response = await instanceCursos.patch(`/lesson-comments/mark-notification-as-viewed/${id}`);
+    return response.data;
+
+  } catch (error) {
+    throw error;
+  }
+};
+

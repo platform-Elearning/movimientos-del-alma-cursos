@@ -34,7 +34,7 @@ const CardModuleTeacher = ({
         <div className="teacher-card-main-info">
           <h3 className="teacher-card-name">{student.name}</h3>
           <p className="teacher-card-email">{student.email}</p>
-          <p className="teacher-card-id">ID: {student.identification_number}</p>
+          <p className="teacher-card-id">ID: {student.identification_number}</p>      
         </div>
         
         <div className="teacher-card-course-info">
@@ -67,7 +67,7 @@ const CardModuleTeacher = ({
       </div>
       
       <div className="teacher-card-status">
-        {getStatusBadge(student.status)}
+        {getStatusBadge(student.activo)}
       </div>
       
       <div className="teacher-card-actions">

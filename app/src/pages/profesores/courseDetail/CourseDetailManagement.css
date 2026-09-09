@@ -116,6 +116,113 @@
   font-weight: 400;
 }
 
+.course-description-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.btn-edit-description {
+  background: #ffffff;
+  color: #6366f1;
+  border: 1px solid #e0e7ff;
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-edit-description:hover {
+  background: #eef2ff;
+  border-color: #c7d2fe;
+  transform: translateY(-1px);
+}
+
+.course-description-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.course-description-input {
+  width: 100%;
+  max-width: 1100px;
+  padding: 18px 22px;
+  border: 1px solid #d1d5db;
+  border-radius: 14px;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  font-family: inherit;
+  color: #374151;
+  background: #fafbfc;
+  resize: vertical;
+  min-height: 140px;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+}
+
+@media (min-width: 1024px) {
+  .course-description-input {
+    min-height: 180px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .course-description-input {
+    max-width: 1300px;
+  }
+}
+
+.course-description-input:focus {
+  outline: none;
+  border-color: #10b981;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+.course-description-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.course-description-actions .btn-save,
+.course-description-actions .btn-cancel {
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.course-description-actions .btn-save {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  border: none;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);
+}
+
+.course-description-actions .btn-save:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+}
+
+.course-description-actions .btn-cancel {
+  background: #f3f4f6;
+  color: #374151;
+  border: none;
+}
+
+.course-description-actions .btn-cancel:hover {
+  background: #e5e7eb;
+  transform: translateY(-1px);
+}
+
 .error-message {
   background-color: #fef2f2;
   color: #dc2626;
