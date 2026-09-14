@@ -1,9 +1,4 @@
 /*variables*/
-:root{
-  --var-dorado-fuerte: #83711b;
-  --var-dorado-medio: #c08c44;
-  --var-dorado-suave: #ffd9a3;
-}
 .link {
     display: inline-flex;
     align-items: center;
@@ -12,7 +7,7 @@
     font-weight: 500;
     color: #252422;
     text-decoration: none;
-    border: 1px solid #c08c4450;
+    border: 1px solid var(--borde-dorado-tenue);
     border-radius: 8px;
     transition: all 0.2s ease;
     margin: 1.2rem 0;
@@ -23,7 +18,7 @@
     transform: translateY(-2px);
     box-shadow: 0px 3px 12px rgba(0, 0, 0, 0.1);
     color: #252422;
-    border: 1px solid #c08c4490;
+    border: 1px solid var(--borde-dorado-marcado);
     opacity: 1;
 }
 

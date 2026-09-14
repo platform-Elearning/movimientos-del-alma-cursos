@@ -26,7 +26,7 @@
 }
 
 .alumnos-search-input:focus {
-  border-color: #c08c4490;
+  border-color: var(--borde-dorado-marcado);
   box-shadow: 0 0 0 3px rgba(192, 140, 68, 0.12);
 }
 
@@ -36,7 +36,7 @@
 
 .alumnos-search-count {
   font-size: 13px;
-  color: #c08c44;
+  color: var(--var-dorado-medio);
   font-weight: 500;
   white-space: nowrap;
 }
@@ -70,7 +70,7 @@
 }
 
 .alumnos-table th {
-  background: linear-gradient(135deg, #83711B 0%, #FFBB80 50%, #83711B 100%) !important;
+  background: linear-gradient(135deg, var(--var-dorado-fuerte) 0%, var(--dorado-claro) 50%, var(--var-dorado-fuerte) 100%) !important;
   font-weight: 700;
   text-transform: uppercase;
   font-size: 0.95rem;
@@ -100,7 +100,7 @@
 
 .edit-button {
   padding: 8px 16px;
-  background: linear-gradient(135deg, #83711B 0%, #FFBB80 100%);
+  background: linear-gradient(135deg, var(--var-dorado-fuerte) 0%, var(--dorado-claro) 100%);
   color: white;
   border: none;
   border-radius: 6px;
@@ -114,7 +114,7 @@
 .edit-button:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(131, 113, 27, 0.4);
-  background: linear-gradient(135deg, #FFBB80 0%, #83711B 100%);
+  background: linear-gradient(135deg, var(--dorado-claro) 0%, var(--var-dorado-fuerte) 100%);
 }
 
 .edit-button:active {
@@ -255,8 +255,8 @@
 }
 
 .pagination-info span:first-child {
-  color: #83711B;
-  color:  #c08c44;
+  color: var(--var-dorado-fuerte);
+  color:  var(--var-dorado-medio);
 
  
   font-weight: 600;
@@ -272,7 +272,7 @@
 
 .pagination-btn {
   padding: 10px 18px;
-  background: linear-gradient(135deg, #83711B 0%, #FFBB80 100%);
+  background: linear-gradient(135deg, var(--var-dorado-fuerte) 0%, var(--dorado-claro) 100%);
   color: white;
   border: none;
   border-radius: 8px;
@@ -286,7 +286,7 @@
 .pagination-btn:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(131, 113, 27, 0.4);
-  background: linear-gradient(135deg, #FFBB80 0%, #83711B 100%);
+  background: linear-gradient(135deg, var(--dorado-claro) 0%, var(--var-dorado-fuerte) 100%);
 }
 
 .pagination-btn:active:not(:disabled) {
@@ -302,15 +302,15 @@
 
 .page-number {
   font-weight: 600;
-  color: #83711B;
-  color:  #c08c44;
+  color: var(--var-dorado-fuerte);
+  color:  var(--var-dorado-medio);
   padding: 0 12px;
   font-size: 1rem;
 }
 
 .loading-message {
   text-align: center;
-  color: #83711B;
+  color: var(--var-dorado-fuerte);
   font-size: 1rem;
   margin: 10px 0;
   font-weight: 500;
@@ -357,3 +357,21 @@
     font-size: 0.85rem;
   }
 }
+
+/* Estado de la alumna: el color y el texto dicen lo mismo, para no depender
+   solo del color. Es un boton porque se cambia con un click desde la tabla. */
+.estado-toggle {
+  font: inherit;
+  font-size: 0.85rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: filter 0.15s ease;
+}
+.estado-toggle:hover:not(:disabled) { filter: brightness(0.94); }
+.estado-toggle:disabled { opacity: 0.6; cursor: progress; }
+.estado-toggle:focus-visible { outline: 2px solid #1f4e79; outline-offset: 2px; }
+.estado-activo { background: #e5f2eb; color: #1f6b4a; border-color: #bcdccb; }
+.estado-inactivo { background: #f1efec; color: #6b6560; border-color: #dcd8d2; }

@@ -70,6 +70,10 @@ const AppRouter = () => {
             <Route path="/alumnos/:alumnoId/curso/:cursoId" element={<Curso></Curso>}></Route>
             <Route path="/alumnos/:alumnoId/curso/:cursoId/modulo/:moduleId" element={<ModuleDetails></ModuleDetails>}></Route>
             <Route path="/alumnos/:alumnoId/curso/:cursoId/clase/:claseId" element={<Clase></Clase>}></Route>
+            {/* modulo.jsx navega con el modulo en el medio; sin esta ruta el
+                click en una clase desde un modulo no matchea nada y la pantalla
+                queda vacia. */}
+            <Route path="/alumnos/:alumnoId/curso/:cursoId/modulo/:moduleId/clase/:claseId" element={<Clase></Clase>}></Route>
 
             <Route path="/profesores/profesoresMisCursos/:id" element={<ProfesoresMisCursos></ProfesoresMisCursos>}></Route>
             

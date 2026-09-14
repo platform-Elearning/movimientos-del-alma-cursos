@@ -30,7 +30,7 @@
   bottom: 0px !important;
   border-radius: 25px !important;
   padding: 2px !important;
-  background: linear-gradient(135deg, #10b981, #6366f1, #10b981) !important;
+  background: linear-gradient(135deg, var(--exito), #6366f1, var(--exito)) !important;
   background-size: 200% 200% !important;
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0) !important;
   mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0) !important;
@@ -70,7 +70,7 @@
 }
 
 .teacher-module-badge {
-  background: linear-gradient(135deg, #10b981, #059669) !important;
+  background: linear-gradient(135deg, var(--exito), #059669) !important;
   color: #ffffff !important;
   padding: 12px 20px !important;
   border-radius: 16px !important;
@@ -234,8 +234,8 @@
 }
 
 .teacher-btn-view:hover {
-  background: linear-gradient(135deg, #10b981, #059669) !important;
-  border-color: #10b981 !important;
+  background: linear-gradient(135deg, var(--exito), #059669) !important;
+  border-color: var(--exito) !important;
   transform: translateY(-2px) !important;
   box-shadow: 0 6px 16px rgba(16, 185, 129, 0.3) !important;
 }

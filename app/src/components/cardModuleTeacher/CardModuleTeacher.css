@@ -14,7 +14,7 @@
  .card-main-2{
     width:90% !important;
     max-width: 1294px !important;
-    background-color:  #10b981;
+    background-color:  var(--exito);
     padding: 24px;
     margin: -24px auto 0px auto;
     border-radius: 0px 0px 24px 24px;
@@ -106,7 +106,7 @@
     bottom: 0 !important;
     border-radius: 25px !important;
     padding: 2px !important;
-    background: linear-gradient(135deg, #10b981, #3b82f6, #6366f1, #8b5cf6) !important;
+    background: linear-gradient(135deg, var(--exito), #3b82f6, #6366f1, #8b5cf6) !important;
     background-size: 200% 200% !important;
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0) !important;
     mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0) !important;
@@ -150,7 +150,7 @@
     width: 75px !important;
     height: 75px !important;
     border-radius: 50% !important;
-    background: linear-gradient(135deg, #10b981, #3b82f6) !important;
+    background: linear-gradient(135deg, var(--exito), #3b82f6) !important;
     z-index: -1 !important;
     animation: avatar-glow 3s ease-in-out infinite !important;
 }
@@ -283,7 +283,7 @@
     height: 100% !important;
     transition: width 0.3s ease !important;
     border-radius: 5px !important;
-    background: linear-gradient(90deg, #10b981, #3b82f6) !important;
+    background: linear-gradient(90deg, var(--exito), #3b82f6) !important;
     box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3) !important;
 }
 
@@ -312,7 +312,7 @@
 }
 
 .teacher-card-status .status-badge.active {
-    background: linear-gradient(135deg, #10b981, #059669) !important;
+    background: linear-gradient(135deg, var(--exito), #059669) !important;
     color: white !important;
     box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3) !important;
 }
@@ -349,7 +349,7 @@
 }
 
 .teacher-btn-primary {
-    background: linear-gradient(135deg, #10b981, #059669) !important;
+    background: linear-gradient(135deg, var(--exito), #059669) !important;
     color: white !important;
     box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3) !important;
 }

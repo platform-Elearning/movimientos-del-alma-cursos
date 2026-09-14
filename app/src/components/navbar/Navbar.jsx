@@ -10,6 +10,10 @@ import {
   getNotificationByTeacherId,
   markNotificationAsViewed,
 } from "../../api/profesores";
+import {
+  getNotificationByStudentId,
+  markReplyNotificationAsViewed,
+} from "../../api/alumnos";
 
 const PUBLIC_ROUTES = new Set([
   "/",
@@ -55,11 +59,16 @@ const Navbar = () => {
     return [];
   };
 
+  const tieneNotificaciones = userRole === "teacher" || userRole === "student";
+
   const loadNotifications = useCallback(async () => {
-    if (userRole !== "teacher" || !userId) return;
+    if (!userId || (userRole !== "teacher" && userRole !== "student")) return;
     try {
       setLoadingNotif(true);
-      const data = await getNotificationByTeacherId(userId);
+      const data =
+        userRole === "teacher"
+          ? await getNotificationByTeacherId(userId)
+          : await getNotificationByStudentId(userId);
       setNotifications(normalizeNotifications(data));
     } catch (error) {
       console.error("Error cargando notificaciones:", error);
@@ -69,7 +78,7 @@ const Navbar = () => {
   }, [userId, userRole]);
 
   useEffect(() => {
-    if (!loading && userRole === "teacher" && userId) {
+    if (!loading && (userRole === "teacher" || userRole === "student") && userId) {
       loadNotifications();
     }
   }, [loading, userRole, userId, loadNotifications]);
@@ -88,7 +97,11 @@ const Navbar = () => {
 
   const handleNotificationClick = async (notification) => {
       try {
-        await markNotificationAsViewed(notification.id);
+        if (userRole === "teacher") {
+          await markNotificationAsViewed(notification.id);
+        } else {
+          await markReplyNotificationAsViewed(notification.id);
+        }
         setNotifications((prev) =>
           prev.map((n) =>
             n.id === notification.id ? { ...n, view_notification: true } : n
@@ -108,8 +121,12 @@ const Navbar = () => {
     };
 
     if (notification.course_id && classItem.id) {
+      const destinatario = userRole === "teacher" ? notification.user_id : userId;
+      const base = `/alumnos/${destinatario}/curso/${notification.course_id}`;
       navigate(
-        `/alumnos/${userId}/curso/${notification.course_id}/clase/${classItem.id}`,
+        notification.module_id
+          ? `${base}/modulo/${notification.module_id}/clase/${classItem.id}`
+          : `${base}/clase/${classItem.id}`,
         { state: { classItem } }
       );
     }
@@ -214,7 +231,7 @@ const Navbar = () => {
               Reportar Problema
             </button>
           </li>
-          {userRole === "teacher" && (
+          {tieneNotificaciones && (
             <li className="notification-section" ref={notifRef}>
               <button
                 className="notification-button"
@@ -269,9 +286,13 @@ const Navbar = () => {
                           <div className="notification-dot"></div>
                           <div className="notification-content">
                             <p className="notification-message">
-                              {notification.student_name || notification.studentName || "Un alumno"}:
-                              {" "}
-                              {notification.comment || notification.message || notification.content || "Nuevo mensaje"}
+                              {userRole === "teacher"
+                                ? `${notification.nombre || notification.student_name || "Un alumno"} ${notification.apellido || ""}`.trim()
+                                : `${notification.nombre || "Tu profesora"} ${notification.apellido || ""}`.trim()}
+                              {": "}
+                              {userRole === "teacher"
+                                ? notification.comment || notification.message || "Nuevo mensaje"
+                                : notification.reply || "Respondió tu consulta"}
                             </p>
                             <p className="notification-meta">
                               {notification.course_name || notification.courseName || `Curso ${notification.course_id}`}

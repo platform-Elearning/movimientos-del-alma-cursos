@@ -53,7 +53,7 @@
 }
 
 .btn-primary {
-  background: #83711B; /* Color dorado de la plataforma */
+  background: var(--var-dorado-fuerte); /* Color dorado de la plataforma */
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;
@@ -126,7 +126,7 @@
   bottom: 0px;
   border-radius: 20px;
   padding: 2px;
-  background: linear-gradient(90deg, #83711B, #FFBB80, #83711B);
+  background: linear-gradient(90deg, var(--var-dorado-fuerte), var(--dorado-claro), var(--var-dorado-fuerte));
   -webkit-mask:
     linear-gradient(#fff 0 0) content-box,
     linear-gradient(#fff 0 0);
@@ -166,7 +166,7 @@
 
 .search-input:focus {
   outline: none;
-  border-color: #83711B; /* Color dorado de la plataforma */
+  border-color: var(--var-dorado-fuerte); /* Color dorado de la plataforma */
   box-shadow: 0 0 0 2px rgba(131, 113, 27, 0.2);
 }
 
@@ -211,7 +211,7 @@
 
 .conversation-item.active {
   background: rgba(131, 113, 27, 0.1); /* Dorado suave */
-  border-right: 4px solid #83711B;
+  border-right: 4px solid var(--var-dorado-fuerte);
 }
 
 .conversation-avatar {
@@ -301,7 +301,7 @@
   bottom: 0px;
   border-radius: 20px;
   padding: 2px;
-  background: linear-gradient(90deg, #83711B, #FFBB80, #83711B);
+  background: linear-gradient(90deg, var(--var-dorado-fuerte), var(--dorado-claro), var(--var-dorado-fuerte));
   -webkit-mask:
     linear-gradient(#fff 0 0) content-box,
     linear-gradient(#fff 0 0);
@@ -376,7 +376,7 @@
 }
 
 .message.sent .message-content {
-  background: #83711B; /* Color dorado de la plataforma */
+  background: var(--var-dorado-fuerte); /* Color dorado de la plataforma */
   color: white;
 }
 
@@ -423,12 +423,12 @@
 
 .input-wrapper textarea:focus {
   outline: none;
-  border-color: #83711B; /* Color dorado */
+  border-color: var(--var-dorado-fuerte); /* Color dorado */
   box-shadow: 0 0 0 2px rgba(131, 113, 27, 0.2);
 }
 
 .send-btn {
-  background: #83711B; /* Color dorado */
+  background: var(--var-dorado-fuerte); /* Color dorado */
   color: white;
   border: none;
   border-radius: 50%;
@@ -590,7 +590,7 @@
 .student-select:focus,
 .message-textarea:focus {
   outline: none;
-  border-color: #83711B; /* Color dorado */
+  border-color: var(--var-dorado-fuerte); /* Color dorado */
   box-shadow: 0 0 0 2px rgba(131, 113, 27, 0.2);
 }
 

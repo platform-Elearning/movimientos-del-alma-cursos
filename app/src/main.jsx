@@ -1,8 +1,10 @@
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, useLocation } from "react-router-dom";
 import AppRouter from "./router/AppRouter.jsx";
+import "./tokens.css";
 import "./main.css";
 import Navbar from "./components/navbar/Navbar.jsx";
+import BotonAyuda from "./components/tour/BotonAyuda.jsx";
 import { AuthProvider } from "./services/authContext.jsx";
 
 const App = () => {
@@ -18,6 +20,7 @@ const App = () => {
   return (
     <>
       {!hideNavbar && <Navbar />}
+      {!hideNavbar && <BotonAyuda />}
       <AppRouter />
     </>
   );

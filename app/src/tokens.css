@@ -1,0 +1,42 @@
+/* Tokens de diseño — única fuente de la paleta.
+ *
+ * Se carga antes que cualquier otro estilo (ver main.jsx). Los valores salen de
+ * los colores que ya usaba el proyecto: esto no cambia cómo se ve nada, saca la
+ * paleta de estar repetida en 54 archivos.
+ *
+ * Los tres --var-dorado-* conservan ese nombre porque ya se usan en el código.
+ */
+:root {
+  /* Identidad */
+  --var-dorado-suave: #ffd9a3;
+  --var-dorado-medio: #c08c44;
+  --var-dorado-fuerte: #83711b;
+  --dorado-claro: #ffbb80;
+
+  /* Superficies */
+  --superficie: #ffffff;
+  --superficie-alt: #f7f7f5;
+
+  /* Texto */
+  --texto: #333333;
+  --texto-suave: #666666;
+
+  /* Bordes dorados: el mismo dorado medio con transparencia. Se declaran con
+     el valor literal para no alterar el color resultante. */
+  --borde-dorado-tenue: #c08c4450;
+  --borde-dorado: #c08c4480;
+  --borde-dorado-marcado: #c08c4490;
+
+  /* Bordes */
+  --borde: #dddddd;
+  --borde-suave: #cccccc;
+
+  /* Estado. Ver nota al pie sobre los dos verdes. */
+  --exito: #4caf50;
+  --info: #007bff;
+
+  /* Medidas */
+  --radio: 8px;
+  --radio-pill: 999px;
+}
+

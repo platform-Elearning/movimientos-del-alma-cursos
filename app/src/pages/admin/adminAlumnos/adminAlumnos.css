@@ -1,9 +1,4 @@
 /*variables*/
-:root{
-  --var-dorado-fuerte: #83711b;
-  --var-dorado-medio: #c08c44;
-  --var-dorado-suave: #ffd9a3;
-}
 .container-princ{
   width: 100vw;
 }
@@ -19,7 +14,7 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   */
   box-shadow: 0px 1px 20px var(--var-dorado-medio);
-  border: #c08c4480  1px solid;
+  border: var(--borde-dorado)  1px solid;
   border-radius: 10px;
   background-color: #fff;
 }
@@ -95,7 +90,7 @@
     /*
     background-color: #007bff;
     */
-    background-color: #c08c44 ;
+    background-color: var(--var-dorado-medio) ;
     background-color: var(--var-dorado-medio);
     color: white;
     border: none;

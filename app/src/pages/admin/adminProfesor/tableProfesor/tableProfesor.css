@@ -13,7 +13,7 @@
 .profesores-header {
   margin: 12px 2.5vw;
   padding: 25px;
-  background: linear-gradient(135deg, #83711B 0%, #FFBB80 50%, #83711B 100%);
+  background: linear-gradient(135deg, var(--var-dorado-fuerte) 0%, var(--dorado-claro) 50%, var(--var-dorado-fuerte) 100%);
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(131, 113, 27, 0.3);
   text-align: center;
@@ -29,7 +29,7 @@
 
 .refresh-button {
   padding: 8px 16px;
-  background-color: #83711B;
+  background-color: var(--var-dorado-fuerte);
   color: white;
   border: none;
   border-radius: 6px;
@@ -42,7 +42,7 @@
 }
 
 .refresh-button:hover:not(:disabled) {
-  background-color: #FFBB80;
+  background-color: var(--dorado-claro);
   transform: translateY(-1px);
 }
 
@@ -75,7 +75,7 @@
 }
 
 .profesores-table th {
-  background: linear-gradient(135deg, #83711B 0%, #FFBB80 50%, #83711B 100%);
+  background: linear-gradient(135deg, var(--var-dorado-fuerte) 0%, var(--dorado-claro) 50%, var(--var-dorado-fuerte) 100%);
   color: #ffffff;
   font-weight: 700;
   text-transform: uppercase;
@@ -106,7 +106,7 @@
 
 .edit-button {
   padding: 8px 16px;
-  background: linear-gradient(135deg, #83711B 0%, #FFBB80 100%);
+  background: linear-gradient(135deg, var(--var-dorado-fuerte) 0%, var(--dorado-claro) 100%);
   color: white;
   border: none;
   border-radius: 6px;
@@ -120,7 +120,7 @@
 }
 
 .edit-button:hover {
-  background: linear-gradient(135deg, #FFBB80 0%, #83711B 100%);
+  background: linear-gradient(135deg, var(--dorado-claro) 0%, var(--var-dorado-fuerte) 100%);
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(131, 113, 27, 0.4);
 }
@@ -194,7 +194,7 @@
 }
 
 .course-item {
-  background: linear-gradient(135deg, #83711B 0%, #FFBB80 100%);
+  background: linear-gradient(135deg, var(--var-dorado-fuerte) 0%, var(--dorado-claro) 100%);
   color: #ffffff;
   padding: 6px 12px;
   border-radius: 6px;

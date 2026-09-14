@@ -1,5 +1,5 @@
 .title-container {
-  background: linear-gradient(135deg, #83711B 0%, #FFBB80 50%, #83711B 100%);
+  background: linear-gradient(135deg, var(--var-dorado-fuerte) 0%, var(--dorado-claro) 50%, var(--var-dorado-fuerte) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -34,7 +34,7 @@
 
 .cont{
   background-color: #fff;
-  border:  #83711B 1px solid; 
+  border:  var(--var-dorado-fuerte) 1px solid; 
   border-radius: 16px;
   margin: 24px;
   padding: 0px;
