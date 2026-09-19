@@ -12,22 +12,9 @@ import { useAuth } from "../../../services/authContext";
 import ModuleCard from "../../../components/moduleCard/ModuleCard";
 import BackLink from "../../../components/backLink/BackLink";
 import imgProf from "../../../assets/emoji-profesores.png";
+import { obtenerLinkDirecto } from "../../../utils/drive";
 import { use } from "react";
 
-function obtenerLinkDirecto(urlOriginal) {
-  try {
-    // Detecta el ID sin importar si el link termina en /view, ?usp=sharing, etc.
-    const match = urlOriginal.match(/[-\w]{25,}/);
-    if (match && match[0]) {
-      const id = match[0];
-      // Retorna el formato thumbnail que no falla
-      return `https://drive.google.com/thumbnail?id=${id}`;
-    }
-    return urlOriginal;
-  } catch (error) {
-    return urlOriginal;
-  }
-}
 
 
 const CourseDetails = () => {

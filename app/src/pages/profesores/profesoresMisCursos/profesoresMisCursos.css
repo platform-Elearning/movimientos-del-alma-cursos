@@ -5,7 +5,7 @@
   padding-left: 2em;
   padding-right: 2em;
   padding-bottom: 0.4em;
-  background-color: #171717;
+  background-color: var(--tinta);
   border-radius: 25px;
   transition: 0.4s ease-in-out;
 }
@@ -32,7 +32,7 @@
   border: none;
   outline: none;
   color: white;
-  background-color: #171717;
+  background-color: var(--tinta);
   box-shadow: inset 2px 5px 10px rgb(5, 5, 5);
 }
 
@@ -47,7 +47,7 @@
   border: none;
   outline: none;
   width: 100%;
-  color: #d3d3d3;
+  color: var(--borde-suave);
 }
 
 .form .btn {
@@ -63,7 +63,7 @@
   border: none;
   outline: none;
   transition: 0.4s ease-in-out;
-  background-color: #252525;
+  background-color: var(--tinta);
   color: white;
   margin-top: 0px;
 }
@@ -81,7 +81,7 @@
   border: none;
   outline: none;
   transition: 0.4s ease-in-out;
-  background-color: #252525;
+  background-color: var(--tinta);
   color: white;
 }
 
@@ -97,7 +97,7 @@
   border: none;
   outline: none;
   transition: 0.4s ease-in-out;
-  background-color: #252525;
+  background-color: var(--tinta);
   color: white;
 }
 

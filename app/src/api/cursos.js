@@ -194,4 +194,16 @@ export const getAllCoursesPublic = async () => {
   }
 };
 
+export const updateCourseDescription = async (id, description) => {
+  try {
+    const response = await instanceCursos.put("/courses/updateCourseDescription", {
+      course_id: id,
+      description,
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export default getAllCursos;

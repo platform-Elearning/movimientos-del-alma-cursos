@@ -14,6 +14,7 @@ const AdminAlumnos = () => {
     nationality: "",
     email: "",
     password: "",
+    telefono: "",
   });
 
   const [errors, setErrors] = useState("");
@@ -45,6 +46,7 @@ const AdminAlumnos = () => {
         nationality: "",
         email: "",
         password: "",
+        telefono: "",
       });
     } catch (error) {
       setErrors([error.response?.data?.message || "Error al crear el alumno"]);
@@ -123,7 +125,18 @@ const AdminAlumnos = () => {
               autoComplete="off"
             />
           </div>
-          
+            <div className="admin-alumnos-field">
+            <label htmlFor="telefono">Teléfono:</label>
+            <input
+              id="telefono"
+              type="text"
+              name="telefono"
+              value={formData.telefono}
+              onChange={handleChange}
+              required
+              autoComplete="off"
+            />
+          </div>
           <div className="admin-alumnos-field">
             <label htmlFor="password">Contraseña:</label>
             <input

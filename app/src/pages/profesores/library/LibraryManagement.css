@@ -1,7 +1,7 @@
 /* Library Management Styles */
 .library-management {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--var-dorado-medio) 0%, var(--var-dorado-fuerte) 100%);
   padding: 2rem;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
@@ -60,7 +60,7 @@
 .course-select {
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--borde);
   border-radius: 8px;
   font-size: 1rem;
   background: white;
@@ -70,12 +70,12 @@
 
 .course-select:focus {
   outline: none;
-  border-color: #4CAF50;
+  border-color: var(--var-dorado-medio);
   box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
 }
 
 .btn-primary {
-  background: #4CAF50;
+  background: var(--var-dorado-medio);
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;
@@ -87,19 +87,19 @@
 }
 
 .btn-primary:hover {
-  background: #45a049;
+  background: var(--var-dorado-medio);
   transform: translateY(-2px);
 }
 
 .btn-primary:disabled {
-  background: #ccc;
+  background: var(--borde-suave);
   cursor: not-allowed;
   transform: none;
 }
 
 .btn-secondary {
-  background: #f0f0f0;
-  color: #333;
+  background: var(--superficie-sutil);
+  color: var(--texto);
   border: none;
   padding: 0.75rem 1.5rem;
   border-radius: 8px;
@@ -110,13 +110,13 @@
 }
 
 .btn-secondary:hover {
-  background: #e0e0e0;
+  background: var(--borde);
 }
 
 /* Drop Zone */
 .drop-zone {
   background: rgba(255, 255, 255, 0.95);
-  border: 2px dashed #ddd;
+  border: 2px dashed var(--borde);
   border-radius: 16px;
   padding: 3rem;
   margin-bottom: 2rem;
@@ -128,7 +128,7 @@
 
 .drop-zone:hover,
 .drop-zone.drag-over {
-  border-color: #4CAF50;
+  border-color: var(--var-dorado-medio);
   background: rgba(76, 175, 80, 0.05);
   transform: translateY(-2px);
 }
@@ -147,12 +147,12 @@
 .drop-zone p {
   font-size: 1.2rem;
   font-weight: 500;
-  color: #333;
+  color: var(--texto);
   margin: 0 0 0.5rem 0;
 }
 
 .drop-hint {
-  color: #666;
+  color: var(--texto-suave);
   font-size: 0.9rem;
 }
 
@@ -173,12 +173,12 @@
 }
 
 .no-files h3 {
-  color: #333;
+  color: var(--texto);
   margin-bottom: 1rem;
 }
 
 .no-files p {
-  color: #666;
+  color: var(--texto-suave);
   margin: 0;
 }
 
@@ -242,12 +242,12 @@
 
 .share-btn.shared {
   background: rgba(76, 175, 80, 0.1);
-  color: #4CAF50;
+  color: var(--var-dorado-medio);
 }
 
 .share-btn.not-shared {
-  background: rgba(156, 39, 176, 0.1);
-  color: #9C27B0;
+  background: rgba(192, 140, 68, 0.1);
+  color: var(--var-dorado-fuerte);
 }
 
 .delete-btn {
@@ -264,14 +264,14 @@
 }
 
 .file-content h3 {
-  color: #333;
+  color: var(--texto);
   margin: 0 0 0.5rem 0;
   font-size: 1.2rem;
   font-weight: 600;
 }
 
 .file-description {
-  color: #666;
+  color: var(--texto-suave);
   margin: 0 0 1rem 0;
   font-size: 0.9rem;
   line-height: 1.4;
@@ -294,14 +294,14 @@
 
 .file-course {
   background: rgba(76, 175, 80, 0.1);
-  color: #4CAF50;
+  color: var(--var-dorado-medio);
 }
 
 .file-stats {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: #888;
+  color: var(--texto-suave);
   font-size: 0.8rem;
 }
 
@@ -323,23 +323,23 @@
 }
 
 .btn-download {
-  background: #4CAF50;
+  background: var(--var-dorado-medio);
   color: white;
 }
 
 .btn-download:hover {
-  background: #45a049;
+  background: var(--var-dorado-medio);
   transform: translateY(-2px);
 }
 
 .btn-preview {
-  background: rgba(33, 150, 243, 0.1);
-  color: #2196F3;
-  border: 1px solid rgba(33, 150, 243, 0.3);
+  background: rgba(192, 140, 68, 0.1);
+  color: var(--var-dorado-medio);
+  border: 1px solid rgba(192, 140, 68, 0.3);
 }
 
 .btn-preview:hover {
-  background: rgba(33, 150, 243, 0.2);
+  background: rgba(192, 140, 68, 0.2);
   transform: translateY(-2px);
 }
 
@@ -381,7 +381,7 @@
 
 .modal-header h3 {
   margin: 0;
-  color: #333;
+  color: var(--texto);
   font-size: 1.25rem;
   font-weight: 600;
 }
@@ -391,7 +391,7 @@
   border: none;
   font-size: 1.5rem;
   cursor: pointer;
-  color: #666;
+  color: var(--texto-suave);
   padding: 0;
   width: 32px;
   height: 32px;
@@ -404,7 +404,7 @@
 
 .close-btn:hover {
   background: rgba(0, 0, 0, 0.1);
-  color: #333;
+  color: var(--texto);
 }
 
 .modal-body {
@@ -428,7 +428,7 @@
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 500;
-  color: #333;
+  color: var(--texto);
 }
 
 .form-group input,
@@ -436,7 +436,7 @@
 .form-group select {
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--borde);
   border-radius: 8px;
   font-size: 1rem;
   transition: border-color 0.3s ease;
@@ -447,7 +447,7 @@
 .form-group textarea:focus,
 .form-group select:focus {
   outline: none;
-  border-color: #4CAF50;
+  border-color: var(--var-dorado-medio);
   box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
 }
 
@@ -478,7 +478,7 @@
 .file-input-label {
   display: block;
   padding: 0.75rem;
-  border: 2px dashed #ddd;
+  border: 2px dashed var(--borde);
   border-radius: 8px;
   text-align: center;
   cursor: pointer;
@@ -487,7 +487,7 @@
 }
 
 .file-input-label:hover {
-  border-color: #4CAF50;
+  border-color: var(--var-dorado-medio);
   background: rgba(76, 175, 80, 0.05);
 }
 

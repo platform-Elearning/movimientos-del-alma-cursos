@@ -48,7 +48,7 @@ body {
     90deg,
     #836426,
     #d3a15f,
-    #c08c44
+    var(--var-dorado-medio)
   ); /* Gradiente de colores */
   -webkit-background-clip: text;
   color: transparent; /* Hace que el fondo sea el único visible */

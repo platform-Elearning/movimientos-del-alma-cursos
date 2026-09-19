@@ -6,6 +6,7 @@ import PageAuxiliar from "../pages/pageAuxiliar/pageAuxiliar";
 import AlumnosMisCursos from "../pages/alumnos/alumnosMisCursos/alumnosMisCursos";
 import Curso from "../pages/alumnos/curso/curso";
 import Clase from "../pages/alumnos/clase/clase";
+import VistaPreviaCurso from "../pages/profesores/vistaPreviaCurso/VistaPreviaCurso";
 import ProfesoresMisCursos from "../pages/profesores/profesoresMisCursos/profesoresMisCursos";
 import PanelAdmin from "../pages/admin/panelAdmin/panelAdmin";
 import OlvideContraseña from "../pages/olvideContraseña/olvideContraseña";
@@ -70,6 +71,10 @@ const AppRouter = () => {
             <Route path="/alumnos/:alumnoId/curso/:cursoId" element={<Curso></Curso>}></Route>
             <Route path="/alumnos/:alumnoId/curso/:cursoId/modulo/:moduleId" element={<ModuleDetails></ModuleDetails>}></Route>
             <Route path="/alumnos/:alumnoId/curso/:cursoId/clase/:claseId" element={<Clase></Clase>}></Route>
+            {/* modulo.jsx navega con el modulo en el medio; sin esta ruta el
+                click en una clase desde un modulo no matchea nada y la pantalla
+                queda vacia. */}
+            <Route path="/alumnos/:alumnoId/curso/:cursoId/modulo/:moduleId/clase/:claseId" element={<Clase></Clase>}></Route>
 
             <Route path="/profesores/profesoresMisCursos/:id" element={<ProfesoresMisCursos></ProfesoresMisCursos>}></Route>
             
@@ -77,6 +82,7 @@ const AppRouter = () => {
             <Route path="/profesores/dashboard" element={<TeacherDashboard />} />
             <Route path="/profesores/curso/:courseId" element={<CourseManagement />} />
             <Route path="/profesores/curso/:courseId/completo" element={<CourseDetailManagement />} />
+            <Route path="/profesores/curso/:cursoId/vista-alumna" element={<VistaPreviaCurso />} />
             <Route path="/profesores/curso/:courseId/modulos" element={<CourseDetailManagement />} />
             <Route path="/profesores/curso/:courseId/estudiantes" element={<StudentsManagement />} />
             <Route path="/profesores/mis-cursos" element={<CourseManagement />} />

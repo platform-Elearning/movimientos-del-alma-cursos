@@ -13,7 +13,7 @@
 
 .country-select:focus {
   outline: none;
-  border-color: #c08c44;
+  border-color: var(--var-dorado-medio);
   box-shadow: 0 0 0 2px rgba(192, 140, 68, 0.15);
 }
 

@@ -1,10 +1,4 @@
 /*variables*/
-:root{
-  --var-dorado-fuerte: #83711b;
-  --var-dorado-medio: #c08c44;
-  --var-dorado-suave: #ffd9a3;
-}
-
 /* Contenedor principal responsivo */
 
 .navigation-buttons-container {
@@ -35,7 +29,7 @@
 .btnContainer:hover {
   transform: scale(1.05);
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
-  border: 1px solid #c08c44;
+  border: 1px solid var(--var-dorado-medio);
   background-color: #fdf6ec;
 }
 
@@ -55,8 +49,8 @@
   color: #fff;
   background: #252422;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  color:  #c08c44;
-  border: #ffd9a3 2px solid;
+  color:  var(--var-dorado-medio);
+  border: var(--var-dorado-suave) 2px solid;
   */
   color: #252422;
   background: #fff;
@@ -73,8 +67,8 @@
 background: linear-gradient(45deg, #0056b3, #003f7f);
 */
   color: #fff;
-  background-color: #c08c44;
-  border: #c08c44 1px solid;
+  background-color: var(--var-dorado-medio);
+  border: var(--var-dorado-medio) 1px solid;
 
   transform: translateY(-2px);
   box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);

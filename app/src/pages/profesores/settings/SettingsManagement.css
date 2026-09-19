@@ -1,7 +1,7 @@
 /* Settings Management Styles */
 .settings-management {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--var-dorado-medio) 0%, var(--var-dorado-fuerte) 100%);
   padding: 2rem;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
@@ -77,19 +77,19 @@
   cursor: pointer;
   font-weight: 500;
   font-size: 1rem;
-  color: #666;
+  color: var(--texto-suave);
   transition: all 0.3s ease;
   border-bottom: 3px solid transparent;
 }
 
 .tab-btn:hover {
   background: rgba(0, 0, 0, 0.05);
-  color: #333;
+  color: var(--texto);
 }
 
 .tab-btn.active {
-  color: #4CAF50;
-  border-bottom-color: #4CAF50;
+  color: var(--var-dorado-medio);
+  border-bottom-color: var(--var-dorado-medio);
   background: rgba(76, 175, 80, 0.05);
 }
 
@@ -105,14 +105,14 @@
 }
 
 .settings-tab h2 {
-  color: #333;
+  color: var(--texto);
   margin: 0 0 1.5rem 0;
   font-size: 1.5rem;
   font-weight: 600;
 }
 
 .section-description {
-  color: #666;
+  color: var(--texto-suave);
   margin-bottom: 2rem;
   line-height: 1.5;
 }
@@ -161,7 +161,7 @@
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 500;
-  color: #333;
+  color: var(--texto);
 }
 
 .form-group input,
@@ -169,7 +169,7 @@
 .form-group select {
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--borde);
   border-radius: 8px;
   font-size: 1rem;
   transition: border-color 0.3s ease;
@@ -181,7 +181,7 @@
 .form-group textarea:focus,
 .form-group select:focus {
   outline: none;
-  border-color: #4CAF50;
+  border-color: var(--var-dorado-medio);
   box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
 }
 
@@ -193,7 +193,7 @@
 .form-hint {
   display: block;
   margin-top: 0.25rem;
-  color: #666;
+  color: var(--texto-suave);
   font-size: 0.85rem;
 }
 
@@ -217,7 +217,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 0.75rem 1rem;
-  border: 2px solid #ddd;
+  border: 2px solid var(--borde);
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -225,23 +225,23 @@
 }
 
 .specialty-item:hover {
-  border-color: #4CAF50;
+  border-color: var(--var-dorado-medio);
   background: rgba(76, 175, 80, 0.05);
 }
 
 .specialty-item.selected {
-  border-color: #4CAF50;
+  border-color: var(--var-dorado-medio);
   background: rgba(76, 175, 80, 0.1);
 }
 
 .specialty-name {
   font-size: 0.9rem;
   font-weight: 500;
-  color: #333;
+  color: var(--texto);
 }
 
 .specialty-check {
-  color: #4CAF50;
+  color: var(--var-dorado-medio);
   font-weight: 600;
   font-size: 1rem;
 }
@@ -258,29 +258,29 @@
 }
 
 .btn-primary {
-  background: #4CAF50;
+  background: var(--var-dorado-medio);
   color: white;
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: #45a049;
+  background: var(--var-dorado-medio);
   transform: translateY(-2px);
 }
 
 .btn-primary:disabled {
-  background: #ccc;
+  background: var(--borde-suave);
   cursor: not-allowed;
   transform: none;
 }
 
 .btn-secondary {
-  background: #f0f0f0;
-  color: #333;
-  border: 1px solid #ddd;
+  background: var(--superficie-sutil);
+  color: var(--texto);
+  border: 1px solid var(--borde);
 }
 
 .btn-secondary:hover {
-  background: #e0e0e0;
+  background: var(--borde);
 }
 
 .btn-danger {
@@ -316,7 +316,7 @@
 }
 
 .preference-group h3 {
-  color: #333;
+  color: var(--texto);
   margin: 0 0 1rem 0;
   font-size: 1.1rem;
   font-weight: 600;
@@ -340,13 +340,13 @@
 
 .preference-info label {
   font-weight: 500;
-  color: #333;
+  color: var(--texto);
   margin-bottom: 0.25rem;
   display: block;
 }
 
 .preference-info p {
-  color: #666;
+  color: var(--texto-suave);
   font-size: 0.9rem;
   margin: 0;
   line-height: 1.4;
@@ -374,7 +374,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #ccc;
+  background-color: var(--borde-suave);
   transition: 0.3s;
   border-radius: 24px;
 }
@@ -392,7 +392,7 @@
 }
 
 input:checked + .toggle-slider {
-  background-color: #4CAF50;
+  background-color: var(--var-dorado-medio);
 }
 
 input:checked + .toggle-slider:before {
@@ -403,7 +403,7 @@ input:checked + .toggle-slider:before {
 .preference-select {
   min-width: 150px;
   padding: 0.5rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--borde);
   border-radius: 6px;
   font-size: 0.9rem;
   background: white;
@@ -413,7 +413,7 @@ input:checked + .toggle-slider:before {
 
 .preference-select:focus {
   outline: none;
-  border-color: #4CAF50;
+  border-color: var(--var-dorado-medio);
 }
 
 /* Responsive Design */
@@ -448,7 +448,7 @@ input:checked + .toggle-slider:before {
   
   .tab-btn.active {
     border-bottom: none;
-    border-right-color: #4CAF50;
+    border-right-color: var(--var-dorado-medio);
   }
   
   .form-row {
@@ -529,7 +529,7 @@ input:checked + .toggle-slider:before {
 
 /* Focus States */
 .specialty-item:focus {
-  outline: 2px solid #4CAF50;
+  outline: 2px solid var(--var-dorado-medio);
   outline-offset: 2px;
 }
 
@@ -551,7 +551,7 @@ input:checked + .toggle-slider:before {
   width: 16px;
   height: 16px;
   margin: -8px 0 0 -8px;
-  border: 2px solid #ffffff;
+  border: 2px solid var(--superficie);
   border-radius: 50%;
   border-top-color: transparent;
   animation: spin 1s linear infinite;

@@ -1,0 +1,161 @@
+/* Recorrido guiado. Usa los tokens de tokens.css, sin colores propios. */
+
+.tour-capa {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+}
+
+.tour-fondo {
+  position: absolute;
+  inset: 0;
+}
+
+/* El recorte se hace con una sombra enorme: oscurece todo menos el elemento. */
+.tour-foco {
+  position: fixed;
+  border-radius: var(--radio);
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6);
+  border: 2px solid var(--var-dorado-medio);
+  pointer-events: none;
+  transition: all 0.25s ease;
+}
+
+.tour-globo {
+  position: fixed;
+  width: 340px;
+  max-width: calc(100vw - 24px);
+  background: var(--superficie);
+  border-radius: 12px;
+  padding: 1.1rem 1.25rem;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--borde-dorado);
+  transition: top 0.25s ease, left 0.25s ease;
+}
+
+.tour-globo:focus {
+  outline: none;
+}
+
+.tour-contador {
+  margin: 0 0 0.35rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--texto-suave);
+}
+
+.tour-titulo {
+  margin: 0 0 0.4rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--var-dorado-fuerte);
+  line-height: 1.3;
+}
+
+.tour-texto {
+  margin: 0 0 1rem;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--texto);
+}
+
+.tour-acciones {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.tour-navegacion {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.tour-btn,
+.tour-saltar {
+  font: inherit;
+  font-size: 0.88rem;
+  padding: 0.45rem 0.9rem;
+  border-radius: var(--radio);
+  cursor: pointer;
+  transition: filter 0.15s ease;
+}
+
+.tour-btn {
+  border: 1px solid var(--borde-dorado);
+  background: var(--superficie);
+  color: var(--texto);
+}
+
+.tour-btn-principal {
+  background: var(--var-dorado-medio);
+  border-color: var(--var-dorado-medio);
+  color: var(--superficie);
+}
+
+.tour-saltar {
+  border: none;
+  background: none;
+  color: var(--texto-suave);
+  text-decoration: underline;
+  padding-left: 0;
+}
+
+.tour-btn:hover,
+.tour-saltar:hover {
+  filter: brightness(0.93);
+}
+
+.tour-btn:focus-visible,
+.tour-saltar:focus-visible {
+  outline: 2px solid var(--var-dorado-fuerte);
+  outline-offset: 2px;
+}
+
+/* Botón fijo de ayuda */
+.tour-ayuda {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 9000;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font: inherit;
+  font-size: 0.88rem;
+  padding: 0.55rem 1rem;
+  border-radius: var(--radio-pill);
+  border: 1px solid var(--borde-dorado);
+  background: var(--superficie);
+  color: var(--var-dorado-fuerte);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.14);
+  cursor: pointer;
+}
+
+.tour-ayuda:hover {
+  background: var(--var-dorado-suave);
+}
+
+.tour-ayuda:focus-visible {
+  outline: 2px solid var(--var-dorado-fuerte);
+  outline-offset: 2px;
+}
+
+@media (max-width: 600px) {
+  .tour-ayuda span {
+    display: none;
+  }
+  .tour-ayuda {
+    padding: 0.6rem 0.75rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tour-foco,
+  .tour-globo,
+  .tour-btn,
+  .tour-saltar {
+    transition: none;
+  }
+}

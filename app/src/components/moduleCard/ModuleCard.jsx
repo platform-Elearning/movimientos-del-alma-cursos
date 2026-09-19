@@ -4,7 +4,17 @@ import './ModuleCard.css';
 import btnPlay from "../../assets/botonPlay.png";
 import paperClip from "../../assets/paperClip.png";
 
-const ModuleCard = ({ moduleName, lessons }) => {
+/**
+ * Tarjeta de modulo con sus lecciones.
+ *
+ * La usan la alumna y el profesor: es la misma informacion y conviene que se
+ * vea igual. Los dos props opcionales son lo unico que cambia entre roles.
+ *
+ * @param acciones       nodo con botones de gestion, para el profesor.
+ * @param onAbrirLeccion reemplaza la navegacion por defecto cuando el rol no
+ *                       navega por las rutas de alumna.
+ */
+const ModuleCard = ({ moduleName, lessons, acciones, onAbrirLeccion }) => {
   const { alumnoId, cursoId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
@@ -19,6 +29,10 @@ const ModuleCard = ({ moduleName, lessons }) => {
   };
 
   const goToModule = (lesson) => {
+    if (onAbrirLeccion) {
+      onAbrirLeccion(lesson);
+      return;
+    }
     if (isYouTubeVideo(lesson)) {
       // Para videos, navegar a la página de la clase para verlos incrustados
       const classItem = {
@@ -57,6 +71,7 @@ const ModuleCard = ({ moduleName, lessons }) => {
       <div className="module-card-container">
         <div className="module-card-header">
           <h2>{moduleName || 'Módulo sin nombre'}</h2>
+          {acciones && <div className="module-card-acciones">{acciones}</div>}
         </div>
         <div className="module-card-lessons">
           <ul>
@@ -75,6 +90,7 @@ const ModuleCard = ({ moduleName, lessons }) => {
     <div className="module-card-container">
       <div className="module-card-header">
         <h2>{moduleName || 'Módulo'}</h2>
+        {acciones && <div className="module-card-acciones">{acciones}</div>}
       </div>
       <div className="module-card-lessons">
         <ul>

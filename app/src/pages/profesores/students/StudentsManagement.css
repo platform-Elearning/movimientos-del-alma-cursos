@@ -1,6 +1,6 @@
 .students-management {
   min-height: 100vh;
-  background-color: #f5f5f5;
+  background-color: var(--superficie-sutil);
   padding: 20px;
 }
 
@@ -12,7 +12,7 @@
 
 .loading-spinner {
   font-size: 1.2rem;
-  color: #666;
+  color: var(--texto-suave);
 }
 
 /* Header */
@@ -29,7 +29,7 @@
 
 .page-header h1 {
   margin: 0;
-  color: #333;
+  color: var(--texto);
 }
 
 /* Error message */
@@ -64,13 +64,13 @@
 .search-input {
   width: 100%;
   padding: 12px 40px 12px 15px;
-  border: 2px solid #ddd;
+  border: 2px solid var(--borde);
   border-radius: 8px;
   font-size: 1rem;
 }
 
 .search-input:focus {
-  border-color: #007bff;
+  border-color: var(--var-dorado-medio);
   outline: none;
 }
 
@@ -79,7 +79,7 @@
   right: 15px;
   top: 50%;
   transform: translateY(-50%);
-  color: #666;
+  color: var(--texto-suave);
 }
 
 /* Stats */
@@ -102,12 +102,12 @@
   display: block;
   font-size: 2rem;
   font-weight: bold;
-  color: #007bff;
+  color: var(--var-dorado-medio);
   margin-bottom: 5px;
 }
 
 .stat-label {
-  color: #666;
+  color: var(--texto-suave);
   font-size: 0.9rem;
 }
 
@@ -123,7 +123,7 @@
   background: white;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  color: #666;
+  color: var(--texto-suave);
 }
 
 .student-card {
@@ -150,17 +150,17 @@
 
 .student-info h3 {
   margin: 0 0 5px 0;
-  color: #333;
+  color: var(--texto);
 }
 
 .student-email {
-  color: #007bff;
+  color: var(--var-dorado-medio);
   text-decoration: none;
   font-size: 0.9rem;
 }
 
 .student-id {
-  color: #666;
+  color: var(--texto-suave);
   font-size: 0.85rem;
   margin: 0;
 }
@@ -171,7 +171,7 @@
 }
 
 .enrollment-date {
-  color: #666;
+  color: var(--texto-suave);
   font-size: 0.85rem;
   margin: 5px 0 0 0;
 }
@@ -184,13 +184,13 @@
 .progress-text {
   display: block;
   font-weight: 600;
-  color: #333;
+  color: var(--texto);
   margin-bottom: 5px;
 }
 
 .lessons-info {
   display: block;
-  color: #666;
+  color: var(--texto-suave);
   font-size: 0.8rem;
   margin-bottom: 8px;
 }
@@ -198,7 +198,7 @@
 .progress-bar {
   width: 100%;
   height: 8px;
-  background-color: #e9ecef;
+  background-color: var(--superficie-sutil);
   border-radius: 4px;
   overflow: hidden;
   margin-bottom: 5px;
@@ -211,7 +211,7 @@
 }
 
 .last-activity {
-  color: #666;
+  color: var(--texto-suave);
   font-size: 0.75rem;
   margin: 0;
 }
@@ -228,8 +228,8 @@
 }
 
 .status-badge.active {
-  background-color: #d4edda;
-  color: #155724;
+  background-color: var(--var-dorado-medio);
+  color: var(--var-dorado-fuerte);
 }
 
 .status-badge.inactive {
@@ -253,21 +253,21 @@
 }
 
 .btn-primary {
-  background-color: #007bff;
+  background-color: var(--tinta);
   color: white;
 }
 
 .btn-primary:hover {
-  background-color: #0056b3;
+  background-color: var(--var-dorado-fuerte);
 }
 
 .btn-secondary {
-  background-color: #6c757d;
+  background-color: var(--texto-suave);
   color: white;
 }
 
 .btn-secondary:hover {
-  background-color: #545b62;
+  background-color: var(--texto-suave);
 }
 
 /* Modal */
@@ -297,7 +297,7 @@
 
 .modal-header {
   padding: 20px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--borde);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -312,7 +312,7 @@
   border: none;
   font-size: 1.5rem;
   cursor: pointer;
-  color: #666;
+  color: var(--texto-suave);
 }
 
 .modal-body {
@@ -334,7 +334,7 @@
 
 .stat-label {
   display: block;
-  color: #666;
+  color: var(--texto-suave);
   font-size: 0.9rem;
   margin-bottom: 10px;
 }
@@ -348,7 +348,7 @@
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: #f8f9fa;
+  background: var(--superficie-sutil);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -358,7 +358,7 @@
 .progress-percentage {
   font-size: 1.5rem;
   font-weight: bold;
-  color: #333;
+  color: var(--texto);
 }
 
 .overview-details {
@@ -371,22 +371,22 @@
   display: flex;
   justify-content: space-between;
   padding: 8px 0;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--superficie-sutil);
 }
 
 .detail-label {
-  color: #666;
+  color: var(--texto-suave);
   font-weight: 500;
 }
 
 .detail-value {
-  color: #333;
+  color: var(--texto);
   font-weight: 600;
 }
 
 .lessons-progress h4 {
   margin-bottom: 15px;
-  color: #333;
+  color: var(--texto);
 }
 
 .lessons-grid {
@@ -401,19 +401,19 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: 1px solid #ddd;
+  border: 1px solid var(--borde);
   border-radius: 4px;
   font-size: 0.8rem;
 }
 
 .lesson-status.completed {
-  background-color: #d4edda;
-  border-color: #c3e6cb;
+  background-color: var(--var-dorado-medio);
+  border-color: var(--var-dorado-medio);
 }
 
 .lesson-status.pending {
-  background-color: #fff3cd;
-  border-color: #ffeaa7;
+  background-color: var(--var-dorado-suave);
+  border-color: var(--var-dorado-medio);
 }
 
 .lesson-number {
@@ -426,7 +426,7 @@
 
 .modal-footer {
   padding: 20px;
-  border-top: 1px solid #ddd;
+  border-top: 1px solid var(--borde);
   display: flex;
   gap: 10px;
   justify-content: flex-end;

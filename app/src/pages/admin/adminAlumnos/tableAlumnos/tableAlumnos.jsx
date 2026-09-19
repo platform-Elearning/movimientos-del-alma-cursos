@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { getAlumnos } from "../../../../api/alumnos";
+import { getAlumnos, updateStudentActivo } from "../../../../api/alumnos";
 import "./tableAlumnos.css";
 
 const AlumnosTable = () => {
@@ -17,6 +17,7 @@ const AlumnosTable = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const debounceTimerRef = useRef(null);
+  const [actualizandoEstado, setActualizandoEstado] = useState(null);
 
   // Función para traer los alumnos desde la API
   const fetchAlumnos = async (page = 1, search = "") => {
@@ -55,6 +56,34 @@ const AlumnosTable = () => {
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= pagination?.totalPages) {
       fetchAlumnos(newPage, debouncedSearch);
+    }
+  };
+
+  // El estado se actualiza en pantalla antes de la respuesta y se revierte si
+  // el pedido falla, para que la tabla no quede congelada en cada click.
+  const handleToggleActivo = async (alumno) => {
+    const estadoAnterior = alumno.activo;
+    const nuevoEstado = !estadoAnterior;
+    setActualizandoEstado(alumno.user_id);
+    setError("");
+    setAlumnos((prev) =>
+      prev.map((a) =>
+        a.user_id === alumno.user_id ? { ...a, activo: nuevoEstado } : a
+      )
+    );
+    try {
+      await updateStudentActivo(alumno.user_id, nuevoEstado);
+    } catch (err) {
+      setAlumnos((prev) =>
+        prev.map((a) =>
+          a.user_id === alumno.user_id ? { ...a, activo: estadoAnterior } : a
+        )
+      );
+      setError(
+        `No se pudo cambiar el estado de ${alumno.name}. Intentá de nuevo.`
+      );
+    } finally {
+      setActualizandoEstado(null);
     }
   };
 
@@ -124,6 +153,7 @@ const AlumnosTable = () => {
             <th>Nacionalidad</th>
             <th>Cursos</th>
             <th>Módulos</th>
+            <th>Estado</th>
             <th>Acciones</th>
           </tr>
         </thead>
@@ -157,6 +187,27 @@ const AlumnosTable = () => {
                 ) : (
                   "N/A"
                 )}
+              </td>
+              <td data-label="Estado">
+                <button
+                  type="button"
+                  className={`estado-toggle ${
+                    alumno.activo ? "estado-activo" : "estado-inactivo"
+                  }`}
+                  onClick={() => handleToggleActivo(alumno)}
+                  disabled={actualizandoEstado === alumno.user_id}
+                  title={
+                    alumno.activo
+                      ? "Marcar como inactiva"
+                      : "Marcar como activa"
+                  }
+                >
+                  {actualizandoEstado === alumno.user_id
+                    ? "Guardando…"
+                    : alumno.activo
+                    ? "Activa"
+                    : "Inactiva"}
+                </button>
               </td>
               <td data-label="Acciones">
                 <button

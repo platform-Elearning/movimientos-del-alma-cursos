@@ -23,6 +23,7 @@ const Register = () => {
     lastname: "",
     nationality: "",
     email: "",
+    telefono:"",
   });
 
   const [message, setMessage] = useState("");
@@ -131,6 +132,17 @@ const Register = () => {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="Correo electrónico"
+                className="input-field"
+                required
+              />
+            </div>
+            <div className="field">
+              <input
+                type="text"
+                name="telefono"
+                value={formData.telefono}
+                onChange={handleChange}
+                placeholder="Número de teléfono"
                 className="input-field"
                 required
               />

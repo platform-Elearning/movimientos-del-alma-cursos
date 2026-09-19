@@ -1,7 +1,7 @@
 /* Messages Management Styles */
 .messages-management {
   min-height: 100vh;
-  background-color: #f8f9fa; /* Fondo consistente con la plataforma */
+  background-color: var(--superficie-sutil); /* Fondo consistente con la plataforma */
   padding: 2rem;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
@@ -13,7 +13,7 @@
 }
 
 .loading-spinner {
-  color: #252422; /* Color principal de la plataforma */
+  color: var(--tinta); /* Color principal de la plataforma */
   font-size: 1.2rem;
   text-align: center;
 }
@@ -28,7 +28,7 @@
 }
 
 .back-btn {
-  background: #252422 !important; /* Color principal de la plataforma */
+  background: var(--tinta) !important; /* Color principal de la plataforma */
   color: white !important;
   border: none;
   padding: 0.75rem 1rem;
@@ -40,20 +40,20 @@
 }
 
 .back-btn:hover {
-  background: #1a1a1a;
+  background: var(--tinta);
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .page-header h1 {
-  color: #252422 !important; /* Color principal - FORZAR APLICACIÓN */
+  color: var(--tinta) !important; /* Color principal - FORZAR APLICACIÓN */
   margin: 0;
   font-size: 2rem;
   font-weight: 600;
 }
 
 .btn-primary {
-  background: #83711B; /* Color dorado de la plataforma */
+  background: var(--var-dorado-fuerte); /* Color dorado de la plataforma */
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;
@@ -66,20 +66,20 @@
 }
 
 .btn-primary:hover {
-  background: #6b5a16;
+  background: var(--var-dorado-fuerte);
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .btn-primary:disabled {
-  background: #ccc;
+  background: var(--borde-suave);
   cursor: not-allowed;
   transform: none;
 }
 
 .btn-secondary {
-  background: #f0f0f0;
-  color: #333;
+  background: var(--superficie-sutil);
+  color: var(--texto);
   border: none;
   padding: 0.75rem 1.5rem;
   border-radius: 8px;
@@ -90,7 +90,7 @@
 }
 
 .btn-secondary:hover {
-  background: #e0e0e0;
+  background: var(--borde);
 }
 
 /* Messages Container */
@@ -126,13 +126,13 @@
   bottom: 0px;
   border-radius: 20px;
   padding: 2px;
-  background: linear-gradient(90deg, #83711B, #FFBB80, #83711B);
+  background: linear-gradient(90deg, var(--var-dorado-fuerte), var(--dorado-claro), var(--var-dorado-fuerte));
   -webkit-mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
+    linear-gradient(var(--superficie) 0 0) content-box,
+    linear-gradient(var(--superficie) 0 0);
   mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
+    linear-gradient(var(--superficie) 0 0) content-box,
+    linear-gradient(var(--superficie) 0 0);
   -webkit-mask-composite: destination-out;
   mask-composite: exclude; 
   z-index: -1;
@@ -144,7 +144,7 @@
 }
 
 .conversations-header h2 {
-  color: #333;
+  color: var(--texto);
   margin: 0 0 1rem 0;
   font-size: 1.25rem;
   font-weight: 600;
@@ -157,7 +157,7 @@
 .search-input {
   width: 100%;
   padding: 0.75rem 2.5rem 0.75rem 1rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--borde);
   border-radius: 8px;
   font-size: 0.9rem;
   transition: border-color 0.3s ease;
@@ -166,7 +166,7 @@
 
 .search-input:focus {
   outline: none;
-  border-color: #83711B; /* Color dorado de la plataforma */
+  border-color: var(--var-dorado-fuerte); /* Color dorado de la plataforma */
   box-shadow: 0 0 0 2px rgba(131, 113, 27, 0.2);
 }
 
@@ -175,7 +175,7 @@
   right: 1rem;
   top: 50%;
   transform: translateY(-50%);
-  color: #666;
+  color: var(--texto-suave);
   font-size: 0.9rem;
 }
 
@@ -187,7 +187,7 @@
 .no-conversations {
   padding: 2rem;
   text-align: center;
-  color: #666;
+  color: var(--texto-suave);
 }
 
 .no-conversations p {
@@ -211,7 +211,7 @@
 
 .conversation-item.active {
   background: rgba(131, 113, 27, 0.1); /* Dorado suave */
-  border-right: 4px solid #83711B;
+  border-right: 4px solid var(--var-dorado-fuerte);
 }
 
 .conversation-avatar {
@@ -255,7 +255,7 @@
 }
 
 .conversation-header h4 {
-  color: #333;
+  color: var(--texto);
   margin: 0;
   font-size: 1rem;
   font-weight: 600;
@@ -265,13 +265,13 @@
 }
 
 .conversation-time {
-  color: #888;
+  color: var(--texto-suave);
   font-size: 0.75rem;
   flex-shrink: 0;
 }
 
 .last-message {
-  color: #666;
+  color: var(--texto-suave);
   margin: 0;
   font-size: 0.85rem;
   overflow: hidden;
@@ -301,13 +301,13 @@
   bottom: 0px;
   border-radius: 20px;
   padding: 2px;
-  background: linear-gradient(90deg, #83711B, #FFBB80, #83711B);
+  background: linear-gradient(90deg, var(--var-dorado-fuerte), var(--dorado-claro), var(--var-dorado-fuerte));
   -webkit-mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
+    linear-gradient(var(--superficie) 0 0) content-box,
+    linear-gradient(var(--superficie) 0 0);
   mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
+    linear-gradient(var(--superficie) 0 0) content-box,
+    linear-gradient(var(--superficie) 0 0);
   -webkit-mask-composite: destination-out;
   mask-composite: exclude; 
   z-index: -1;
@@ -333,14 +333,14 @@
 }
 
 .chat-student-info h3 {
-  color: #333;
+  color: var(--texto);
   margin: 0;
   font-size: 1.2rem;
   font-weight: 600;
 }
 
 .student-status {
-  color: #888;
+  color: var(--texto-suave);
   font-size: 0.85rem;
 }
 
@@ -376,13 +376,13 @@
 }
 
 .message.sent .message-content {
-  background: #83711B; /* Color dorado de la plataforma */
+  background: var(--var-dorado-fuerte); /* Color dorado de la plataforma */
   color: white;
 }
 
 .message.received .message-content {
-  background: #f5f5f5;
-  color: #333;
+  background: var(--superficie-sutil);
+  color: var(--texto);
 }
 
 .message-content p {
@@ -413,7 +413,7 @@
 .input-wrapper textarea {
   flex: 1;
   padding: 0.75rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--borde);
   border-radius: 12px;
   font-size: 1rem;
   resize: none;
@@ -423,12 +423,12 @@
 
 .input-wrapper textarea:focus {
   outline: none;
-  border-color: #83711B; /* Color dorado */
+  border-color: var(--var-dorado-fuerte); /* Color dorado */
   box-shadow: 0 0 0 2px rgba(131, 113, 27, 0.2);
 }
 
 .send-btn {
-  background: #83711B; /* Color dorado */
+  background: var(--var-dorado-fuerte); /* Color dorado */
   color: white;
   border: none;
   border-radius: 50%;
@@ -445,13 +445,13 @@
 }
 
 .send-btn:hover:not(:disabled) {
-  background: #6b5a16;
+  background: var(--var-dorado-fuerte);
   transform: scale(1.05);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .send-btn:disabled {
-  background: #ccc;
+  background: var(--borde-suave);
   cursor: not-allowed;
   transform: none;
 }
@@ -466,7 +466,7 @@
 
 .no-chat-content {
   text-align: center;
-  color: #666;
+  color: var(--texto-suave);
 }
 
 .no-chat-icon {
@@ -479,12 +479,12 @@
 .no-chat-content h3 {
   margin: 0 0 1rem 0;
   font-size: 1.5rem;
-  color: #333;
+  color: var(--texto);
 }
 
 .no-chat-content p {
   margin-bottom: 2rem;
-  color: #666;
+  color: var(--texto-suave);
 }
 
 /* Modal Styles */
@@ -525,7 +525,7 @@
 
 .modal-header h3 {
   margin: 0;
-  color: #333;
+  color: var(--texto);
   font-size: 1.25rem;
   font-weight: 600;
 }
@@ -535,7 +535,7 @@
   border: none;
   font-size: 1.5rem;
   cursor: pointer;
-  color: #666;
+  color: var(--texto-suave);
   padding: 0;
   width: 32px;
   height: 32px;
@@ -548,7 +548,7 @@
 
 .close-btn:hover {
   background: rgba(0, 0, 0, 0.1);
-  color: #333;
+  color: var(--texto);
 }
 
 .modal-body {
@@ -572,14 +572,14 @@
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 500;
-  color: #333;
+  color: var(--texto);
 }
 
 .student-select,
 .message-textarea {
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--borde);
   border-radius: 8px;
   font-size: 1rem;
   transition: border-color 0.3s ease;
@@ -590,7 +590,7 @@
 .student-select:focus,
 .message-textarea:focus {
   outline: none;
-  border-color: #83711B; /* Color dorado */
+  border-color: var(--var-dorado-fuerte); /* Color dorado */
   box-shadow: 0 0 0 2px rgba(131, 113, 27, 0.2);
 }
 
@@ -613,7 +613,7 @@
   
   .page-header h1 {
     font-size: 1.5rem;
-    color: #252422 !important; /* Asegurar color en responsive */
+    color: var(--tinta) !important; /* Asegurar color en responsive */
   }
   
   .messages-container {

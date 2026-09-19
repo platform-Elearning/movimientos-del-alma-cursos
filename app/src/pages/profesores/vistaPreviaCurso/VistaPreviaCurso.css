@@ -1,0 +1,63 @@
+/* Aviso de vista previa. Tiene que ser imposible confundirlo con la pantalla
+   real: si el profesor no nota que está previsualizando, va a reportar como
+   bugs cosas que son el comportamiento normal de una alumna. */
+.vista-previa-aviso {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  background: var(--var-dorado-suave);
+  border: 1px solid var(--borde-dorado);
+  border-radius: var(--radio);
+  padding: 0.75rem 1rem;
+  margin: 0 auto 1.25rem;
+  max-width: 1100px;
+  font-size: 0.92rem;
+  color: var(--tinta);
+}
+
+.vista-previa-aviso strong {
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  background: var(--tinta);
+  color: var(--var-dorado-suave);
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radio-pill);
+  flex-shrink: 0;
+}
+
+.vista-previa-aviso span {
+  flex: 1;
+  min-width: 220px;
+  line-height: 1.5;
+}
+
+.vista-previa-aviso button {
+  font: inherit;
+  font-size: 0.85rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: var(--radio);
+  border: 1px solid var(--tinta);
+  background: var(--superficie);
+  color: var(--tinta);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: filter 0.15s ease;
+}
+
+.vista-previa-aviso button:hover {
+  filter: brightness(0.94);
+}
+
+.vista-previa-aviso button:focus-visible {
+  outline: 2px solid var(--tinta);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vista-previa-aviso button {
+    transition: none;
+  }
+}
