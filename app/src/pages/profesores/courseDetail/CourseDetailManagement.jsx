@@ -332,7 +332,7 @@ const CourseDetailManagement = () => {
               className="btn-edit-description"
               onClick={() => setIsEditingDescription(true)}
             >
-              Editar descripción
+              Editar descripción del curso
             </button>
           </div>
         )}

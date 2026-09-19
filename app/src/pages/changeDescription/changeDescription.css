@@ -69,3 +69,27 @@
   text-align: center;
   margin: 0;
 }
+/* Miniatura de la foto de perfil: circular, igual que donde la ven las alumnas. */
+.avatar-preview {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 10px;
+}
+
+.avatar-preview img {
+  width: 86px;
+  height: 86px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--borde-dorado);
+  background: var(--superficie-sutil);
+  flex-shrink: 0;
+}
+
+.avatar-ayuda {
+  margin: 0;
+  font-size: 0.83rem;
+  color: var(--texto-suave);
+  line-height: 1.45;
+}

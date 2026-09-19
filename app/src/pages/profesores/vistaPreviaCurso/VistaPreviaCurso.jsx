@@ -26,24 +26,32 @@ const VistaPreviaCurso = () => {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (!userId || !cursoId) return;
+    if (!cursoId) return;
     let vigente = true;
     (async () => {
       try {
         setCargando(true);
         setError("");
-        // getCourseDetails envuelve el curso en { success, data }.
-        const respuesta = await getCourseDetails(cursoId, userId);
-        if (vigente) setCurso(respuesta?.data || respuesta);
-        // Mismo origen que usa la alumna: asi la vista previa muestra al
-        // profesor realmente asignado al curso, no al que esta mirando.
+        // El profesor va primero: su id es el que sirve para pedir el curso.
+        // Mismo origen que usa la alumna, asi la vista previa muestra al
+        // profesor realmente asignado y no a quien esta mirando.
+        let idParaElCurso = userId;
         try {
           const prof = await getProfesoreByCourseId(cursoId);
-          if (vigente && prof?.data?.length) setProfesor(prof.data[0]);
+          if (prof?.data?.length) {
+            if (vigente) setProfesor(prof.data[0]);
+            // Sin esto un admin no ve nada: los cursos se piden por profesor y
+            // el admin no tiene ninguno asignado.
+            if (prof.data[0].id) idParaElCurso = prof.data[0].id;
+          }
         } catch {
-          // Sin datos del profesor se cae a la cabecera simple, igual que la
-          // vista real cuando el profesor no cargo su descripcion.
+          // Sin datos del profesor se cae a la cabecera simple y se pide el
+          // curso con el usuario actual, igual que antes.
         }
+
+        // getCourseDetails envuelve el curso en { success, data }.
+        const respuesta = await getCourseDetails(cursoId, idParaElCurso);
+        if (vigente) setCurso(respuesta?.data || respuesta);
       } catch (e) {
         if (vigente) setError("No se pudo cargar el curso. Volvé a intentar.");
       } finally {

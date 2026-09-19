@@ -158,3 +158,11 @@ h4{
     gap: 15px;
   }
 }
+/* La foto del profesor, circular: es la misma persona que en el perfil. */
+.tit-cont-img img {
+  width: 140px;
+  height: 140px;
+  border-radius: 50% !important;
+  object-fit: cover;
+  border: 2px solid var(--borde-dorado);
+}
