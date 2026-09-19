@@ -25,7 +25,7 @@ const CardModuleTeacher = ({
 
       <div className="teacher-card-avatar">
         <img 
-          src={`https://ui-avatars.com/api/?name=${encodeURIComponent(student.name)}&background=4CAF50&color=fff&size=60`}
+          src={`https://ui-avatars.com/api/?name=${encodeURIComponent(student.name)}&background=C08C44&color=fff&size=60`}
           alt={student.name}
         />
       </div>
@@ -94,7 +94,11 @@ const CardModuleTeacher = ({
         <div className='card-main-2-sec'>
           <div>
             <h4 className='card-main-2-tit' >Condicion de aprobación:</h4>
-            {student.approved === true ? (<h4>Aprobado</h4>):(<h4>No Aprobado</h4>)}
+            {student.approved === true ? (
+              <span className="estado-aprobacion aprobado">Aprobado</span>
+            ) : (
+              <span className="estado-aprobacion pendiente">No aprobado</span>
+            )}
           </div>
 
           <div>

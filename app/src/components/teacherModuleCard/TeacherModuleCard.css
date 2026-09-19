@@ -1,7 +1,7 @@
 /* TeacherModuleCard - Estilo armonioso con verde y morado */
 
 .teacher-module-card {
-  background: linear-gradient(135deg, #ffffff 0%, #f8fffe 100%) !important;
+  background: linear-gradient(135deg, var(--superficie) 0%, var(--var-dorado-suave) 100%) !important;
   border: none !important;
   border-radius: 25px !important;
   padding: 24px 32px !important;
@@ -17,7 +17,7 @@
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
   transform: translateY(0) !important;
   cursor: pointer !important;
-  box-shadow: 0 4px 20px rgba(16, 185, 129, 0.1) !important;
+  box-shadow: 0 4px 20px rgba(192, 140, 68, 0.1) !important;
 }
 
 /* Borde gradiente verde-morado */
@@ -30,10 +30,10 @@
   bottom: 0px !important;
   border-radius: 25px !important;
   padding: 2px !important;
-  background: linear-gradient(135deg, var(--exito), #6366f1, var(--exito)) !important;
+  background: linear-gradient(135deg, var(--var-dorado-medio), var(--var-dorado-fuerte)) !important;
   background-size: 200% 200% !important;
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0) !important;
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0) !important;
+  -webkit-mask: linear-gradient(var(--superficie) 0 0) content-box, linear-gradient(var(--superficie) 0 0) !important;
+  mask: linear-gradient(var(--superficie) 0 0) content-box, linear-gradient(var(--superficie) 0 0) !important;
   -webkit-mask-composite: destination-out !important;
   mask-composite: exclude !important;
   z-index: -1 !important;
@@ -52,7 +52,7 @@
 /* Efecto hover suave */
 .teacher-module-card:hover {
   transform: translateY(-4px) !important;
-  box-shadow: 0 12px 40px rgba(16, 185, 129, 0.15) !important;
+  box-shadow: 0 12px 40px rgba(192, 140, 68, 0.15) !important;
 }
 
 .teacher-module-card:hover:before {
@@ -70,12 +70,12 @@
 }
 
 .teacher-module-badge {
-  background: linear-gradient(135deg, var(--exito), #059669) !important;
-  color: #ffffff !important;
+  background: linear-gradient(135deg, var(--var-dorado-medio), var(--var-dorado-fuerte)) !important;
+  color: var(--superficie) !important;
   padding: 12px 20px !important;
   border-radius: 16px !important;
   text-align: center !important;
-  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3) !important;
+  box-shadow: 0 4px 16px rgba(192, 140, 68, 0.3) !important;
   position: relative !important;
   overflow: hidden !important;
 }
@@ -122,7 +122,7 @@
 }
 
 .teacher-module-name {
-  color: #1f2937 !important;
+  color: var(--var-dorado-fuerte) !important;
   font-size: 28px !important;
   font-weight: 700 !important;
   margin: 0 !important;
@@ -132,7 +132,7 @@
 }
 
 .teacher-module-description {
-  color: #6b7280 !important;
+  color: var(--texto-suave) !important;
   font-size: 16px !important;
   line-height: 1.5 !important;
   margin: 0 !important;
@@ -152,14 +152,14 @@
 }
 
 .teacher-lessons-badge {
-  background: linear-gradient(135deg, #6366f1, #8b5cf6) !important;
-  color: #ffffff !important;
+  background: linear-gradient(135deg, var(--var-dorado-medio), var(--var-dorado-medio)) !important;
+  color: var(--superficie) !important;
   padding: 16px 24px !important;
   border-radius: 20px !important;
   display: flex !important;
   align-items: center !important;
   gap: 12px !important;
-  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.3) !important;
+  box-shadow: 0 6px 20px rgba(192, 140, 68, 0.3) !important;
   position: relative !important;
   overflow: hidden !important;
   transition: all 0.3s ease !important;
@@ -179,7 +179,7 @@
 
 .teacher-module-card:hover .teacher-lessons-badge {
   transform: scale(1.05) !important;
-  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.4) !important;
+  box-shadow: 0 8px 24px rgba(192, 140, 68, 0.4) !important;
 }
 
 .teacher-module-card:hover .teacher-lessons-badge:before {
@@ -222,27 +222,27 @@
 
 .teacher-btn-view,
 .teacher-btn-delete {
-  background: linear-gradient(135deg, #ffffff, #f8fafc) !important;
-  border: 2px solid rgba(16, 185, 129, 0.2) !important;
+  background: linear-gradient(135deg, var(--superficie), var(--superficie-sutil)) !important;
+  border: 2px solid rgba(192, 140, 68, 0.2) !important;
   border-radius: 12px !important;
   padding: 12px !important;
   cursor: pointer !important;
   transition: all 0.3s ease !important;
   position: relative !important;
   overflow: visible !important;
-  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.1) !important;
+  box-shadow: 0 2px 8px rgba(192, 140, 68, 0.1) !important;
 }
 
 .teacher-btn-view:hover {
-  background: linear-gradient(135deg, var(--exito), #059669) !important;
+  background: linear-gradient(135deg, var(--var-dorado-medio), var(--var-dorado-fuerte)) !important;
   border-color: var(--exito) !important;
   transform: translateY(-2px) !important;
-  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.3) !important;
+  box-shadow: 0 6px 16px rgba(192, 140, 68, 0.3) !important;
 }
 
 .teacher-btn-view:hover .teacher-btn-icon {
   transform: scale(1.1) !important;
-  color: #ffffff !important;
+  color: var(--superficie) !important;
 }
 
 .teacher-btn-delete:hover {
@@ -254,7 +254,7 @@
 
 .teacher-btn-delete:hover .teacher-btn-icon {
   transform: scale(1.1) !important;
-  color: #ffffff !important;
+  color: var(--superficie) !important;
 }
 
 .teacher-btn-delete-force {
@@ -269,7 +269,7 @@
 
 .teacher-btn-icon {
   font-size: 18px !important;
-  color: #6b7280 !important;
+  color: var(--texto-suave) !important;
   transition: all 0.3s ease !important;
   filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1)) !important;
 }
@@ -280,7 +280,7 @@
   right: -12px !important;
   font-size: 16px !important;
   background: linear-gradient(135deg, #ef4444, #dc2626) !important;
-  color: #ffffff !important;
+  color: var(--superficie) !important;
   border-radius: 50% !important;
   width: 28px !important;
   height: 28px !important;
@@ -289,7 +289,7 @@
   justify-content: center !important;
   box-shadow: 0 4px 16px rgba(239, 68, 68, 0.6) !important;
   animation: pulse-force 1.5s infinite !important;
-  border: 3px solid #ffffff !important;
+  border: 3px solid var(--superficie) !important;
   z-index: 20 !important;
   font-weight: bold !important;
   line-height: 1 !important;
@@ -320,7 +320,7 @@
   left: 0 !important;
   right: 0 !important;
   bottom: 0 !important;
-  background: radial-gradient(circle at center, rgba(16, 185, 129, 0.05) 0%, transparent 70%) !important;
+  background: radial-gradient(circle at center, rgba(192, 140, 68, 0.05) 0%, transparent 70%) !important;
   opacity: 0 !important;
   transition: opacity 0.4s ease !important;
   pointer-events: none !important;
@@ -528,6 +528,6 @@
     font-size: 12px !important;
     top: -8px !important;
     right: -8px !important;
-    border: 2px solid #ffffff !important;
+    border: 2px solid var(--superficie) !important;
   }
 }

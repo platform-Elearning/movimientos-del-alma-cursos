@@ -14,10 +14,11 @@
  .card-main-2{
     width:90% !important;
     max-width: 1294px !important;
-    background-color:  var(--exito);
+      background-color: var(--superficie-sutil);
+      border: 1px solid var(--borde-dorado);
     padding: 24px;
     margin: -24px auto 0px auto;
-    border-radius: 0px 0px 24px 24px;
+    border-radius: 12px;
     display: flex;
     flex-direction: column;
  }
@@ -51,8 +52,8 @@
 
 }
  .form-cert-label{
-    color: #fff;
-    font-weight: 700;
+    color: var(--superficie);
+    font-weight: 600;
     padding:  4px;
 
  }
@@ -62,19 +63,19 @@
  }
  
  .card-main-2-tit{
-    color: #fff;
+    color: var(--superficie);
  }
 
 
 .teacher-btn-aprov{
     padding: 8px !important;
     margin: 0 !important ;
-    background-color: #fff;
-    color: #047857;
-    font-weight: 700;
+    background-color: var(--superficie);
+    color: var(--var-dorado-fuerte);
+    font-weight: 600;
     padding: 12px 20px !important;
     border: none !important;
-    border-radius: 12px !important;
+    border-radius: var(--radio) !important;
 }
 
  /*card main 2 ENDD*/
@@ -82,12 +83,12 @@
     width:90% !important;
     max-width: 1294px !important;
     height: auto !important;
-    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%) !important;
+    background: var(--superficie) !important;
     display: flex !important;
     flex-direction: row !important;
-    border-radius: 24px !important;
+    border-radius: 12px !important;
     overflow: hidden !important;
-    box-shadow: 0 8px 32px rgba(16, 185, 129, 0.12) !important;
+    box-shadow: 0 8px 32px rgba(192, 140, 68, 0.12) !important;
     margin: 0px auto !important;
     border: none !important;
     align-items: center !important;
@@ -104,9 +105,9 @@
     left: 0 !important;
     right: 0 !important;
     bottom: 0 !important;
-    border-radius: 25px !important;
+    border-radius: 12px !important;
     padding: 2px !important;
-    background: linear-gradient(135deg, var(--exito), #3b82f6, #6366f1, #8b5cf6) !important;
+    background: var(--superficie) !important;
     background-size: 200% 200% !important;
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0) !important;
     mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0) !important;
@@ -127,7 +128,7 @@
 
 .teacher-student-card:hover {
     transform: translateY(-4px) !important;
-    box-shadow: 0 16px 48px rgba(16, 185, 129, 0.16) !important;
+    box-shadow: 0 16px 48px rgba(192, 140, 68, 0.16) !important;
 }
 
 .teacher-student-card:hover:before {
@@ -150,7 +151,7 @@
     width: 75px !important;
     height: 75px !important;
     border-radius: 50% !important;
-    background: linear-gradient(135deg, var(--exito), #3b82f6) !important;
+    background: var(--superficie) !important;
     z-index: -1 !important;
     animation: avatar-glow 3s ease-in-out infinite !important;
 }
@@ -171,8 +172,8 @@
     height: 65px !important;
     border-radius: 50% !important;
     object-fit: cover !important;
-    border: 3px solid #ffffff !important;
-    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.2) !important;
+    border: 3px solid var(--superficie) !important;
+    box-shadow: 0 4px 16px rgba(192, 140, 68, 0.2) !important;
     z-index: 2 !important;
     position: relative !important;
 }
@@ -194,9 +195,9 @@
 
 .teacher-card-name {
     margin: 0 !important;
-    font-size: 22px !important;
-    font-weight: 700 !important;
-    color: #1f2937 !important;
+    font-size: 20px !important;
+    font-weight: 600 !important;
+    color: var(--var-dorado-fuerte) !important;
     text-transform: uppercase !important;
     letter-spacing: -0.025em !important;
 }
@@ -204,36 +205,36 @@
 .teacher-card-email {
     margin: 0 !important;
     font-size: 14px !important;
-    color: #3b82f6 !important;
+    color: var(--var-dorado-medio) !important;
     font-weight: 500 !important;
 }
 
 .teacher-card-id {
     margin: 0 !important;
     font-size: 12px !important;
-    color: #6b7280 !important;
+    color: var(--texto-suave) !important;
     font-weight: 400 !important;
 }
 
 .teacher-card-course-info {
     margin-top: 8px !important;
     padding: 8px 12px !important;
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(16, 185, 129, 0.1)) !important;
-    border-radius: 12px !important;
-    border-left: 3px solid #3b82f6 !important;
+    background: var(--superficie) !important;
+    border-radius: var(--radio) !important;
+    border-left: 3px solid var(--var-dorado-medio) !important;
 }
 
 .teacher-card-course-name {
     margin: 0 !important;
     font-size: 14px !important;
-    color: #1f2937 !important;
+    color: var(--var-dorado-fuerte) !important;
     font-weight: 600 !important;
 }
 
 .teacher-card-enrollment-date {
     margin: 4px 0 0 0 !important;
     font-size: 12px !important;
-    color: #6b7280 !important;
+    color: var(--texto-suave) !important;
 }
 
 /* Sección de progreso moderna */
@@ -244,9 +245,9 @@
     gap: 12px !important;
     margin-right: 24px !important;
     padding: 20px !important;
-    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1)) !important;
-    border-radius: 16px !important;
-    border: 1px solid rgba(99, 102, 241, 0.2) !important;
+    background: linear-gradient(135deg, rgba(192, 140, 68, 0.1), rgba(192, 140, 68, 0.1)) !important;
+    border-radius: 12px !important;
+    border: 1px solid rgba(192, 140, 68, 0.2) !important;
     position: relative !important;
 }
 
@@ -259,13 +260,13 @@
 }
 
 .teacher-progress-text {
-    font-weight: 700 !important;
-    color: #1f2937 !important;
+    font-weight: 600 !important;
+    color: var(--var-dorado-fuerte) !important;
     font-size: 16px !important;
 }
 
 .teacher-lessons-info {
-    color: #6366f1 !important;
+    color: var(--var-dorado-medio) !important;
     font-size: 12px !important;
     font-weight: 600 !important;
 }
@@ -273,8 +274,8 @@
 .teacher-progress-bar {
     width: 100% !important;
     height: 10px !important;
-    background-color: #e5e7eb !important;
-    border-radius: 5px !important;
+    background-color: var(--var-dorado-suave) !important;
+    border-radius: var(--radio) !important;
     overflow: hidden !important;
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1) !important;
 }
@@ -282,15 +283,15 @@
 .teacher-progress-fill {
     height: 100% !important;
     transition: width 0.3s ease !important;
-    border-radius: 5px !important;
-    background: linear-gradient(90deg, var(--exito), #3b82f6) !important;
-    box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3) !important;
+    border-radius: var(--radio) !important;
+    background: linear-gradient(135deg, var(--var-dorado-medio), var(--var-dorado-fuerte)) !important;
+    box-shadow: 0 2px 4px rgba(192, 140, 68, 0.3) !important;
 }
 
 .teacher-last-activity {
     margin: 0 !important;
     font-size: 11px !important;
-    color: #6b7280 !important;
+    color: var(--texto-suave) !important;
     text-align: center !important;
     font-style: italic !important;
 }
@@ -304,182 +305,43 @@
 
 .teacher-card-status .status-badge {
     padding: 6px 14px !important;
-    border-radius: 20px !important;
+    border-radius: 12px !important;
     font-size: 11px !important;
-    font-weight: 700 !important;
+    font-weight: 600 !important;
     text-transform: uppercase !important;
     letter-spacing: 0.05em !important;
 }
 
 .teacher-card-status .status-badge.active {
-    background: linear-gradient(135deg, var(--exito), #059669) !important;
-    color: white !important;
-    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3) !important;
+    background: #e5f2eb !important;
+    color: #1f6b4a !important;
+    border: 1px solid #bcdccb !important;
+    box-shadow: none !important;
 }
 
 .teacher-card-status .status-badge.inactive {
-    background: linear-gradient(135deg, #ef4444, #dc2626) !important;
-    color: white !important;
-    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3) !important;
-}
-
-/* Botones de acción modernos */
-.teacher-card-actions {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 12px !important;
-    min-width: 140px !important;
-}
-
-.teacher-btn-primary,
-.teacher-btn-secondary {
-    padding: 12px 20px !important;
-    border: none !important;
-    border-radius: 12px !important;
-    font-size: 13px !important;
-    font-weight: 600 !important;
-    cursor: pointer !important;
-    transition: all 0.3s ease !important;
-    text-align: center !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 6px !important;
-    letter-spacing: 0.025em !important;
+    background: var(--superficie-sutil) !important;
+    color: var(--texto-suave) !important;
+    border: 1px solid var(--borde) !important;
+    box-shadow: none !important;
 }
 
 .teacher-btn-primary {
-    background: linear-gradient(135deg, var(--exito), #059669) !important;
-    color: white !important;
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3) !important;
+  background: var(--tinta) !important;
+  color: var(--superficie) !important;
+  border: 1px solid var(--tinta) !important;
 }
 
 .teacher-btn-primary:hover {
-    background: linear-gradient(135deg, #059669, #047857) !important;
-    transform: translateY(-2px) !important;
-    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4) !important;
+  filter: brightness(1.25);
 }
 
-.teacher-btn-secondary {
-    background: linear-gradient(135deg, #6366f1, #8b5cf6) !important;
-    color: white !important;
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3) !important;
+.form-cert-label {
+  color: var(--texto) !important;
+  font-weight: 600;
 }
 
-.teacher-btn-secondary:hover {
-    background: linear-gradient(135deg, #4f46e5, #7c3aed) !important;
-    transform: translateY(-2px) !important;
-    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4) !important;
+.teacher-card-email,
+.teacher-lessons-info {
+  color: var(--var-dorado-fuerte) !important;
 }
-
-/* === RESPONSIVE DESIGN === */
-@media (max-width: 1024px) {
-    .teacher-student-card {
-        width: 100% !important;
-        max-width: none !important;
-        padding: 20px !important;
-    }
-    
-    .teacher-card-name {
-        font-size: 20px !important;
-    }
-    
-    .teacher-card-actions {
-        min-width: 120px !important;
-    }
-}
-
-@media (max-width: 768px) {
-    .teacher-student-card {
-        flex-direction: column !important;
-        align-items: stretch !important;
-        padding: 20px !important;
-        border-radius: 20px !important;
-    }
-    
-    .teacher-card-avatar {
-        margin-right: 0 !important;
-        margin-bottom: 20px !important;
-        align-self: center !important;
-    }
-    
-    .teacher-card-info {
-        margin-right: 0 !important;
-        margin-bottom: 20px !important;
-        text-align: center !important;
-    }
-    
-    .teacher-card-progress {
-        margin-right: 0 !important;
-        margin-bottom: 20px !important;
-    }
-    
-    .teacher-card-status {
-        margin-right: 0 !important;
-        margin-bottom: 20px !important;
-        justify-content: center !important;
-    }
-    
-    .teacher-card-actions {
-        flex-direction: row !important;
-        justify-content: center !important;
-        gap: 16px !important;
-        min-width: auto !important;
-    }
-    
-    .teacher-card-name {
-        font-size: 18px !important;
-    }
-}
-
-@media (max-width: 480px) {
-    .teacher-student-card {
-        padding: 16px !important;
-        border-radius: 16px !important;
-    }
-    
-    .teacher-card-avatar img {
-        width: 55px !important;
-        height: 55px !important;
-    }
-    
-    .teacher-card-avatar:before {
-        width: 65px !important;
-        height: 65px !important;
-    }
-    
-    .teacher-card-name {
-        font-size: 16px !important;
-    }
-    
-    .teacher-card-email {
-        font-size: 13px !important;
-    }
-    
-    .teacher-card-id {
-        font-size: 11px !important;
-    }
-    
-    .teacher-card-actions {
-        flex-direction: column !important;
-        gap: 10px !important;
-    }
-    
-    .teacher-btn-primary,
-    .teacher-btn-secondary {
-        padding: 10px 16px !important;
-        font-size: 12px !important;
-    }
-}
-.input_url{
-    padding: 4px;
-    width: 300px;
-    border-radius: 4px;
-    border: #fff 1px solid;
-}
-a {
-    padding: 4px;
-    text-decoration: none;
-
-}
-h4{color:#046449}

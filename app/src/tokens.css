@@ -16,6 +16,10 @@
   /* Superficies */
   --superficie: #ffffff;
   --superficie-alt: #f7f7f5;
+  --superficie-sutil: #f8f9fa;
+
+  /* Negro de los botones primarios, tomado de CourseManagement */
+  --tinta: #252422;
 
   /* Texto */
   --texto: #333333;
