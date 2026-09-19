@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "./CourseDetailManagement.css";
 import BackLink from "../../../components/backLink/BackLink";
-import TeacherModuleCard from "../../../components/teacherModuleCard/TeacherModuleCard";
+import ModuleCard from "../../../components/moduleCard/ModuleCard";
 import { useAuth } from "../../../services/authContext";
 import { getCourseCompleteByTeacherId } from "../../../api/profesores";
 import { 
@@ -441,6 +441,15 @@ const CourseDetailManagement = () => {
             </div>
           )}
 
+          <div className="ver-como-alumna">
+            <button
+              type="button"
+              onClick={() => navigate(`/profesores/curso/${courseId}/vista-alumna`)}
+            >
+              Ver el curso como lo ve una alumna
+            </button>
+          </div>
+
           {!courseCompleteData.modules || courseCompleteData.modules.length === 0 ? (
             <div className="no-modules">
               <h3>No hay módulos disponibles</h3>
@@ -449,14 +458,30 @@ const CourseDetailManagement = () => {
           ) : (
             <div className="modules-grid">
             {courseCompleteData.modules.map((module, index) => (
-            <TeacherModuleCard
-            key={module.id || index}
-            module={module}
-            index={index}
-            onModuleClick={handleModuleClick}
-            onDeleteModule={handleDeleteModule}
-            onDeleteModuleWithLessons={handleDeleteModuleWithLessons}
-            />
+              <ModuleCard
+                key={module.id || index}
+                moduleName={module.name}
+                lessons={module.lessons}
+                onAbrirLeccion={() => handleModuleClick(module)}
+                acciones={
+                  <>
+                    <button type="button" onClick={() => handleModuleClick(module)}>
+                      Gestionar lecciones
+                    </button>
+                    <button
+                      type="button"
+                      className="peligro"
+                      onClick={() =>
+                        module.lessons?.length
+                          ? handleDeleteModuleWithLessons(module.id, module)
+                          : handleDeleteModule(module.id, module)
+                      }
+                    >
+                      Eliminar módulo
+                    </button>
+                  </>
+                }
+              />
             ))}
             </div>
           )}
