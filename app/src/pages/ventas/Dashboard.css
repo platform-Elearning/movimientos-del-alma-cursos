@@ -1,0 +1,65 @@
+/* Tablero del embudo. Misma vista para admin y vendedor. */
+
+.tablero {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 4rem;
+}
+
+.tablero-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+}
+
+.tablero-header h1 {
+  margin: 0;
+  font-size: 1.7rem;
+  font-weight: 600;
+  color: var(--var-dorado-fuerte);
+}
+
+.tablero-header button {
+  font: inherit;
+  font-size: 0.9rem;
+  padding: 0.55rem 1.1rem;
+  border-radius: var(--radio);
+  background: var(--tinta);
+  color: var(--superficie);
+  border: 1px solid var(--tinta);
+  cursor: pointer;
+}
+
+.tablero-header button:hover { filter: brightness(1.2); }
+.tablero-header button:focus-visible {
+  outline: 2px solid var(--var-dorado-fuerte);
+  outline-offset: 2px;
+}
+
+.tablero-metricas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 12px;
+  margin-bottom: 1.25rem;
+}
+
+.tablero-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 14px;
+}
+
+.tablero-estado,
+.tablero-error {
+  max-width: 1100px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  color: var(--texto-suave);
+}
+
+.tablero-error {
+  color: #a32d2d;
+}

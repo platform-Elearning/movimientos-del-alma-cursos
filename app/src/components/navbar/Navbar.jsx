@@ -219,6 +219,22 @@ const Navbar = () => {
           ☰
         </button>
         <ul className={`navbar-links ${isMenuOpen ? "open" : ""}`}>
+          {userRole === "seller" && (
+            <li>
+              <a
+                className="alumno-a"
+                onClick={() => navigate("/ventas/seguimiento")}
+              >
+                Seguimiento
+              </a>
+              <a
+                className="alumno-a"
+                onClick={() => navigate("/ventas/tablero")}
+              >
+                Tablero
+              </a>
+            </li>
+          )}
           {userRole === "student" && (
             <li>
               <a className="alumno-a" onClick={navigateToPageAlumnnosMisCursos}>Mis Formaciones</a>

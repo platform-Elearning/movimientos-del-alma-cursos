@@ -1,0 +1,181 @@
+/* Gráficos en SVG, con los tokens del sistema. */
+
+.grafico {
+  margin: 0;
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: 12px;
+  padding: 1rem 1.15rem;
+}
+
+.grafico figcaption {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--texto);
+  margin-bottom: 0.9rem;
+}
+
+.grafico-vacio {
+  margin: 0;
+  color: var(--texto-suave);
+  font-size: 0.88rem;
+}
+
+.grafico-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.grafico-eje {
+  font-size: 10px;
+  fill: var(--texto-suave);
+}
+
+.grafico-leyenda {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 0.6rem;
+  font-size: 0.8rem;
+  color: var(--texto-suave);
+}
+
+.grafico-leyenda span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.grafico-leyenda i,
+.apilada-leyenda i {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  display: inline-block;
+}
+
+/* Barras horizontales */
+.barras-h {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.barras-h li {
+  display: grid;
+  grid-template-columns: minmax(80px, 30%) 1fr auto;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.85rem;
+}
+
+.barra-rotulo {
+  color: var(--texto);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.barra-pista {
+  background: var(--superficie-sutil);
+  border-radius: var(--radio-pill);
+  height: 12px;
+  overflow: hidden;
+}
+
+.barra-relleno {
+  display: block;
+  height: 100%;
+  border-radius: var(--radio-pill);
+  min-width: 2px;
+}
+
+.barra-valor {
+  font-variant-numeric: tabular-nums;
+  color: var(--texto);
+  font-weight: 600;
+}
+
+/* Barra apilada */
+.apilada {
+  display: flex;
+  height: 22px;
+  border-radius: var(--radio-pill);
+  overflow: hidden;
+  gap: 2px;
+  background: var(--superficie-sutil);
+}
+
+.apilada span {
+  display: block;
+  min-width: 2px;
+}
+
+.apilada-leyenda {
+  list-style: none;
+  margin: 0.8rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.85rem;
+}
+
+.apilada-leyenda li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--texto);
+}
+
+.apilada-leyenda strong {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+}
+
+.apilada-leyenda span {
+  color: var(--texto-suave);
+  min-width: 38px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Métricas */
+.metrica {
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: 12px;
+  padding: 0.95rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.metrica-alerta {
+  border-color: var(--borde-dorado);
+  background: var(--var-dorado-suave);
+}
+
+.metrica-valor {
+  font-size: 1.9rem;
+  font-weight: 600;
+  color: var(--var-dorado-fuerte);
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+.metrica-rotulo {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--texto-suave);
+}
+
+.metrica-detalle {
+  font-size: 0.82rem;
+  color: var(--texto-suave);
+}

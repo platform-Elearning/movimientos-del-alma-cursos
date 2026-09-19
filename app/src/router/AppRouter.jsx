@@ -6,6 +6,8 @@ import PageAuxiliar from "../pages/pageAuxiliar/pageAuxiliar";
 import AlumnosMisCursos from "../pages/alumnos/alumnosMisCursos/alumnosMisCursos";
 import Curso from "../pages/alumnos/curso/curso";
 import Clase from "../pages/alumnos/clase/clase";
+import BandejaSeguimiento from "../pages/ventas/BandejaSeguimiento";
+import TableroVentas from "../pages/ventas/Dashboard";
 import VistaPreviaCurso from "../pages/profesores/vistaPreviaCurso/VistaPreviaCurso";
 import ProfesoresMisCursos from "../pages/profesores/profesoresMisCursos/profesoresMisCursos";
 import PanelAdmin from "../pages/admin/panelAdmin/panelAdmin";
@@ -63,6 +65,13 @@ const AppRouter = () => {
             
             <Route path="/admin/profesores" element = {<AdminProfesores/>}></Route>
             <Route path="/admin/editarProfesor/:id" element={<EditProfesor/>}></Route>
+            {/* Misma pantalla para los dos roles: el vendedor trabaja acá y
+                el admin ve lo mismo sin duplicar la vista. */}
+            <Route path="/ventas/seguimiento" element={<BandejaSeguimiento />} />
+            <Route path="/admin/seguimiento" element={<BandejaSeguimiento />} />
+            <Route path="/ventas/tablero" element={<TableroVentas />} />
+            <Route path="/admin/tablero" element={<TableroVentas />} />
+
             <Route path="/admin/reportes" element={<AdminReportes />}></Route>
             
             <Route path="/alumnos/miscursos/:alumnoId" element={<AlumnosMisCursos />} />
