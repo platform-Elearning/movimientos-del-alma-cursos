@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { getOpcionesContacto, inscribirContacto } from "../../api/contactos";
 import CountrySelect from "../countrySelect/CountrySelect";
+import { mensajeDeError } from "../../utils/errores";
 import "./FormularioInscripcion.css";
 
 /**
@@ -99,21 +100,7 @@ const FormularioInscripcion = ({ contacto, onInscripta, onCancelar }) => {
       // se muestra una sola vez. La lista se refresca al cerrar.
       onInscripta?.(data);
     } catch (err) {
-      const delBackend = err?.response?.data?.error;
-      const codigo = err?.response?.status;
-      if (delBackend) {
-        setError(delBackend);
-      } else if (codigo === 404) {
-        setError(
-          "El servidor no conoce esta función todavía (404). Suele ser que está " +
-            "corriendo una versión anterior: hay que reiniciarlo."
-        );
-      } else {
-        setError(
-          `No se pudo inscribir por un error del servidor${codigo ? ` (${codigo})` : ""}. ` +
-            "Los datos del formulario no son el problema."
-        );
-      }
+      setError(mensajeDeError(err, "inscribir"));
     } finally {
       setGuardando(false);
     }

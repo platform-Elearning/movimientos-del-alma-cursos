@@ -13,6 +13,7 @@ import {
   Metrica,
 } from "../../components/graficos/Graficos";
 import BackLink from "../../components/backLink/BackLink";
+import { mensajeDeError } from "../../utils/errores";
 import "./Marketing.css";
 
 /**
@@ -88,17 +89,35 @@ const Marketing = () => {
 
   const cargar = useCallback(async () => {
     setCargando(true);
-    try {
-      const [g, m, p] = await Promise.all([getGastos(), getMetricasInversion(), getPlanilla()]);
-      setGastos(g);
-      setMetricas(m);
-      setPlanilla(p);
+    // allSettled y no all: con all, una sola llamada caida dejaba la pantalla
+    // entera vacia aunque las otras dos hubieran respondido bien.
+    const [g, m, p] = await Promise.allSettled([
+      getGastos(),
+      getMetricasInversion(),
+      getPlanilla(),
+    ]);
+    if (g.status === "fulfilled") setGastos(g.value);
+    if (m.status === "fulfilled") setMetricas(m.value);
+    if (p.status === "fulfilled") setPlanilla(p.value);
+
+    const fallaron = [
+      ["los gastos", g],
+      ["las métricas", m],
+      ["la planilla", p],
+    ].filter(([, r]) => r.status === "rejected");
+
+    if (fallaron.length === 3) {
+      // Las tres juntas casi siempre son una sola causa: el servidor.
+      setError(mensajeDeError(fallaron[0][1].reason, "cargar marketing"));
+    } else if (fallaron.length) {
+      setError(
+        `No se pudo cargar ${fallaron.map(([n]) => n).join(" ni ")}. ` +
+          "Lo demás se muestra igual."
+      );
+    } else {
       setError("");
-    } catch {
-      setError("No se pudieron cargar los datos de marketing.");
-    } finally {
-      setCargando(false);
     }
+    setCargando(false);
   }, []);
 
   useEffect(() => {
@@ -123,13 +142,7 @@ const Marketing = () => {
       setGasto({ ...GASTO_VACIO, period: gasto.period });
       await cargar();
     } catch (err) {
-      const delBackend = err?.response?.data?.error;
-      setError(
-        delBackend ||
-          `No se pudo cargar el gasto por un error del servidor${
-            err?.response?.status ? ` (${err.response.status})` : ""
-          }.`
-      );
+      setError(mensajeDeError(err, "cargar el gasto"));
     } finally {
       setGuardando(false);
     }
@@ -139,8 +152,8 @@ const Marketing = () => {
     try {
       await eliminarGasto(id);
       await cargar();
-    } catch {
-      setError("No se pudo borrar el gasto.");
+    } catch (err) {
+      setError(mensajeDeError(err, "borrar el gasto"));
     }
   };
 

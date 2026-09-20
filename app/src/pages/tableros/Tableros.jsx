@@ -5,6 +5,7 @@ import { getFacturacion } from "../../api/pagos";
 import { getMetricasInversion } from "../../api/marketing";
 import { BarrasHorizontales, LineaTemporal, Metrica } from "../../components/graficos/Graficos";
 import BackLink from "../../components/backLink/BackLink";
+import { mensajeDeError } from "../../utils/errores";
 import "./Tableros.css";
 
 /**
@@ -59,7 +60,7 @@ const Tableros = () => {
         if (f.status === "fulfilled") setFact(f.value);
         if (i.status === "fulfilled") setInversion(i.value);
         if ([c, f, i].every((r) => r.status === "rejected")) {
-          setError("No se pudieron cargar los tableros.");
+          setError(mensajeDeError(c.reason, "cargar los tableros"));
         }
       })
       .finally(() => setCargando(false));

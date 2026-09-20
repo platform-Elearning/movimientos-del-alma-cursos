@@ -7,6 +7,7 @@ import {
   getPagosDelPeriodo,
 } from "../../api/pagos";
 import BackLink from "../../components/backLink/BackLink";
+import { mensajeDeError } from "../../utils/errores";
 import "./Pagos.css";
 
 /**
@@ -104,8 +105,8 @@ const Pagos = () => {
     try {
       setError("");
       setFicha(await getPagosDeAlumna(studentId));
-    } catch {
-      setError("No se pudo cargar la ficha de la alumna.");
+    } catch (err) {
+      setError(mensajeDeError(err, "cargar la ficha de la alumna"));
     }
   }, []);
 
@@ -121,8 +122,8 @@ const Pagos = () => {
     setError("");
     try {
       setMes(await getPagosDelPeriodo(periodo));
-    } catch {
-      setError("No se pudo cargar el período.");
+    } catch (err) {
+      setError(mensajeDeError(err, "cargar el período"));
     } finally {
       setCargando(false);
     }
@@ -163,13 +164,7 @@ const Pagos = () => {
       setAviso("Pago registrado.");
       await cargarFicha(elegida.id);
     } catch (err) {
-      const delBackend = err?.response?.data?.error;
-      setError(
-        delBackend ||
-          `No se pudo registrar el pago por un error del servidor${
-            err?.response?.status ? ` (${err.response.status})` : ""
-          }.`
-      );
+      setError(mensajeDeError(err, "registrar el pago"));
     } finally {
       setGuardando(false);
     }
