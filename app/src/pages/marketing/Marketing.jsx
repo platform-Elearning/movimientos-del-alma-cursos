@@ -5,18 +5,27 @@ import {
   registrarGasto,
   eliminarGasto,
   getMetricasInversion,
+  getPlanilla,
 } from "../../api/marketing";
+import {
+  BarrasHorizontales,
+  LineaTemporal,
+  Metrica,
+} from "../../components/graficos/Graficos";
 import BackLink from "../../components/backLink/BackLink";
 import "./Marketing.css";
 
 /**
- * Inversión en publicidad y cuánto costó cada consulta e inscripción.
+ * Marketing: conversiones, inversión y la planilla.
+ *
+ * Tres vistas de lo mismo, en el orden en que se miran: primero cuánta gente
+ * entró y cuánta se inscribió, después qué costó traerla, y por último el
+ * detalle fila por fila para cuando hay que buscar un caso puntual.
  *
  * Lo que esta pantalla nunca hace es mostrar un costo por inscripción a secas.
  * Siempre va con la cobertura de atribución al lado, porque el número calculado
  * es MÁS ALTO que el real: entre las consultas sin origen identificado hay
- * inscripciones de la pauta que no se están contando. Sin ese contexto, el
- * número parece confiable y no lo es.
+ * inscripciones de la pauta que no se están contando.
  */
 
 const ETIQUETAS = {
@@ -31,6 +40,11 @@ const ETIQUETAS = {
   autoregistro: "Se registró sola",
   no_identificado: "No identificado",
   sin_cargar: "Sin cargar",
+  nueva: "Nueva",
+  esperando_respuesta: "Esperando respuesta",
+  en_conversacion: "En conversación",
+  inscripta: "Inscripta",
+  perdida: "Perdida",
 };
 const legible = (v) => ETIQUETAS[v] || v || "—";
 
@@ -40,6 +54,8 @@ const plata = (monto, moneda) =>
   })}`;
 
 const porcentaje = (v) => (v === null || v === undefined ? "—" : `${Math.round(v * 100)}%`);
+
+const soloFecha = (f) => (f ? String(f).slice(0, 10) : "");
 
 const mesDeHoy = () => new Date().toISOString().slice(0, 7);
 
@@ -53,10 +69,12 @@ const GASTO_VACIO = {
 };
 
 const Marketing = () => {
+  const [vista, setVista] = useState("conversiones");
   const [opciones, setOpciones] = useState({ plataformas: [], monedas: [] });
   const [gasto, setGasto] = useState(GASTO_VACIO);
   const [gastos, setGastos] = useState([]);
   const [metricas, setMetricas] = useState(null);
+  const [planilla, setPlanilla] = useState([]);
   const [guardando, setGuardando] = useState(false);
   const [error, setError] = useState("");
   const [aviso, setAviso] = useState(null);
@@ -71,12 +89,13 @@ const Marketing = () => {
   const cargar = useCallback(async () => {
     setCargando(true);
     try {
-      const [g, m] = await Promise.all([getGastos(), getMetricasInversion()]);
+      const [g, m, p] = await Promise.all([getGastos(), getMetricasInversion(), getPlanilla()]);
       setGastos(g);
       setMetricas(m);
+      setPlanilla(p);
       setError("");
     } catch {
-      setError("No se pudo cargar la inversión.");
+      setError("No se pudieron cargar los datos de marketing.");
     } finally {
       setCargando(false);
     }
@@ -99,10 +118,7 @@ const Marketing = () => {
     setAviso(null);
     try {
       // El input de mes da "2026-09"; la base guarda el primer día del mes.
-      const { yaHabia } = await registrarGasto({
-        ...gasto,
-        period: `${gasto.period}-01`,
-      });
+      const { yaHabia } = await registrarGasto({ ...gasto, period: `${gasto.period}-01` });
       setAviso(yaHabia || null);
       setGasto({ ...GASTO_VACIO, period: gasto.period });
       await cargar();
@@ -129,104 +145,217 @@ const Marketing = () => {
   };
 
   const cobertura = metricas?.atribucion?.cobertura;
+  const totalConsultas = metricas?.atribucion?.total ?? 0;
+  const inscriptas = (metricas?.porOrigen || []).reduce(
+    (s, o) => s + (Number(o.inscripciones) || 0),
+    0
+  );
+  const conversion = totalConsultas ? inscriptas / totalConsultas : null;
+
+  /** Conversión por canal: cuál trae gente que además se inscribe. */
+  const conversionPorOrigen = (metricas?.porOrigen || [])
+    .map((o) => ({
+      etiqueta: legible(o.origin),
+      consultas: o.consultas,
+      inscripciones: o.inscripciones,
+      tasa: o.consultas ? Math.round((o.inscripciones / o.consultas) * 100) : 0,
+    }))
+    .sort((a, b) => b.consultas - a.consultas);
 
   return (
     <div className="marketing">
       <BackLink />
       <header className="marketing-header">
-        <h2>Inversión en publicidad</h2>
-        <p>
-          El gasto sale de Meta y de Google, así que hay que cargarlo a mano. Es
-          lo único que falta para saber cuánto cuesta cada inscripción.
-        </p>
+        <h2>Marketing</h2>
+        <div className="marketing-tabs">
+          {[
+            ["conversiones", "Conversiones"],
+            ["inversion", "Inversión"],
+            ["planilla", "Planilla"],
+          ].map(([clave, rotulo]) => (
+            <button
+              key={clave}
+              type="button"
+              className={vista === clave ? "activa" : ""}
+              onClick={() => setVista(clave)}
+            >
+              {rotulo}
+            </button>
+          ))}
+        </div>
       </header>
 
       {error && <p className="marketing-error">{error}</p>}
-
-      <form className="marketing-form" onSubmit={guardar}>
-        <div className="marketing-form-grid">
-          <div className="campo">
-            <label htmlFor="mk-plataforma">Plataforma</label>
-            <select id="mk-plataforma" name="platform" value={gasto.platform} onChange={cambiar}>
-              {(opciones.plataformas || []).map((p) => (
-                <option key={p} value={p}>
-                  {legible(p)}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="campo">
-            <label htmlFor="mk-mes">Mes</label>
-            <input id="mk-mes" name="period" type="month" value={gasto.period} onChange={cambiar} required />
-          </div>
-
-          <div className="campo">
-            <label htmlFor="mk-monto">Gastado</label>
-            <input
-              id="mk-monto"
-              name="amount"
-              type="number"
-              step="0.01"
-              min="0"
-              value={gasto.amount}
-              onChange={cambiar}
-              required
-            />
-          </div>
-
-          <div className="campo">
-            <label htmlFor="mk-moneda">Moneda</label>
-            <select id="mk-moneda" name="currency" value={gasto.currency} onChange={cambiar}>
-              {(opciones.monedas || []).map((m) => (
-                <option key={m} value={m}>
-                  {m}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="campo">
-            <label htmlFor="mk-campana">Campaña (opcional)</label>
-            <input
-              id="mk-campana"
-              name="campaign"
-              value={gasto.campaign}
-              onChange={cambiar}
-              placeholder="Profesorados — septiembre"
-            />
-          </div>
-        </div>
-
-        <div className="marketing-form-acciones">
-          <button type="submit" className="btn-principal" disabled={guardando}>
-            {guardando ? "Guardando…" : "Cargar gasto"}
-          </button>
-        </div>
-
-        {aviso && (
-          <div className="marketing-aviso">
-            <strong>Ojo: ya había gasto cargado para esa plataforma y ese mes.</strong>
-            <ul>
-              {aviso.map((a) => (
-                <li key={a.id}>
-                  {plata(a.amount, a.currency)}
-                  {a.campaign ? ` · ${a.campaign}` : ""}
-                </li>
-              ))}
-            </ul>
-            <p>
-              Se cargó igual. Si es el mismo gasto cargado dos veces, borrá uno:
-              duplicarlo hace que el costo por inscripción se vea peor de lo que es.
-            </p>
-          </div>
-        )}
-      </form>
-
       {cargando && <p className="marketing-vacio">Cargando…</p>}
 
-      {metricas && !cargando && (
+      {metricas && !cargando && vista === "conversiones" && (
         <>
+          <div className="marketing-metricas">
+            <Metrica rotulo="Consultas" valor={totalConsultas} />
+            <Metrica rotulo="Se inscribieron" valor={inscriptas} />
+            <Metrica
+              rotulo="Conversión"
+              valor={porcentaje(conversion)}
+              detalle="Del total de consultas"
+            />
+            <Metrica
+              rotulo="Con origen conocido"
+              valor={porcentaje(cobertura)}
+              detalle={`${metricas.atribucion.sin_identificar} sin identificar`}
+              alerta={cobertura !== null && cobertura < 0.6}
+            />
+          </div>
+
+          <div className="marketing-graficos">
+            <LineaTemporal
+              titulo="Consultas e inscripciones por mes"
+              datos={metricas.porMes || []}
+              series={[
+                { campo: "consultas", nombre: "Consultas", color: "#c08c44" },
+                { campo: "inscriptas", nombre: "Se inscribieron", color: "#83711b" },
+              ]}
+            />
+            {/* La cobertura va en su propio gráfico y no mezclada con las
+                consultas: es un porcentaje, no una cantidad, y compartir eje
+                las haría ilegibles a las dos. */}
+            <LineaTemporal
+              titulo="De cuántas sabemos el origen"
+              datos={(metricas.porMes || []).map((m) => ({
+                ...m,
+                cobertura_pct: Math.round((m.cobertura || 0) * 100),
+                conversion_pct: Math.round((m.conversion || 0) * 100),
+              }))}
+              series={[
+                { campo: "cobertura_pct", nombre: "Cobertura %", color: "#c08c44" },
+                { campo: "conversion_pct", nombre: "Conversión %", color: "#83711b" },
+              ]}
+            />
+          </div>
+
+          <BarrasHorizontales
+            titulo="De dónde llegaron las consultas"
+            datos={conversionPorOrigen}
+            campoValor="consultas"
+          />
+
+          <h3>Cuál canal convierte mejor</h3>
+          <div className="marketing-tabla-scroll">
+            <table className="marketing-tabla">
+              <thead>
+                <tr>
+                  <th>Canal</th>
+                  <th>Consultas</th>
+                  <th>Inscriptas</th>
+                  <th>Conversión</th>
+                </tr>
+              </thead>
+              <tbody>
+                {conversionPorOrigen.map((o) => (
+                  <tr key={o.etiqueta}>
+                    <td>{o.etiqueta}</td>
+                    <td className="num">{o.consultas}</td>
+                    <td className="num">{o.inscripciones}</td>
+                    <td className="num">
+                      <span className="barra">
+                        <span style={{ width: `${o.tasa}%` }} />
+                      </span>
+                      {o.tasa}%
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
+      )}
+
+      {metricas && !cargando && vista === "inversion" && (
+        <>
+          <p className="marketing-ayuda">
+            El gasto sale de Meta y de Google, así que hay que cargarlo a mano. Es
+            lo único que falta para saber cuánto cuesta cada inscripción.
+          </p>
+
+          <form className="marketing-form" onSubmit={guardar}>
+            <div className="marketing-form-grid">
+              <div className="campo">
+                <label htmlFor="mk-plataforma">Plataforma</label>
+                <select id="mk-plataforma" name="platform" value={gasto.platform} onChange={cambiar}>
+                  {(opciones.plataformas || []).map((p) => (
+                    <option key={p} value={p}>
+                      {legible(p)}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="campo">
+                <label htmlFor="mk-mes">Mes</label>
+                <input id="mk-mes" name="period" type="month" value={gasto.period} onChange={cambiar} required />
+              </div>
+
+              <div className="campo">
+                <label htmlFor="mk-monto">Gastado</label>
+                <input
+                  id="mk-monto"
+                  name="amount"
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  value={gasto.amount}
+                  onChange={cambiar}
+                  required
+                />
+              </div>
+
+              <div className="campo">
+                <label htmlFor="mk-moneda">Moneda</label>
+                <select id="mk-moneda" name="currency" value={gasto.currency} onChange={cambiar}>
+                  {(opciones.monedas || []).map((m) => (
+                    <option key={m} value={m}>
+                      {m}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="campo">
+                <label htmlFor="mk-campana">Campaña (opcional)</label>
+                <input
+                  id="mk-campana"
+                  name="campaign"
+                  value={gasto.campaign}
+                  onChange={cambiar}
+                  placeholder="Profesorados — septiembre"
+                />
+              </div>
+            </div>
+
+            <div className="marketing-form-acciones">
+              <button type="submit" className="btn-principal" disabled={guardando}>
+                {guardando ? "Guardando…" : "Cargar gasto"}
+              </button>
+            </div>
+
+            {aviso && (
+              <div className="marketing-aviso">
+                <strong>Ojo: ya había gasto cargado para esa plataforma y ese mes.</strong>
+                <ul>
+                  {aviso.map((a) => (
+                    <li key={a.id}>
+                      {plata(a.amount, a.currency)}
+                      {a.campaign ? ` · ${a.campaign}` : ""}
+                    </li>
+                  ))}
+                </ul>
+                <p>
+                  Se cargó igual. Si es el mismo gasto cargado dos veces, borrá uno:
+                  duplicarlo hace que el costo por inscripción se vea peor de lo que es.
+                </p>
+              </div>
+            )}
+          </form>
+
           <h3>Qué costó cada consulta</h3>
 
           {metricas.porPlataforma.length === 0 ? (
@@ -251,9 +380,7 @@ const Marketing = () => {
                     <div>
                       <dt>Por consulta</dt>
                       <dd>
-                        {p.costo_por_consulta === null
-                          ? "—"
-                          : plata(p.costo_por_consulta, p.currency)}
+                        {p.costo_por_consulta === null ? "—" : plata(p.costo_por_consulta, p.currency)}
                       </dd>
                     </div>
                     <div>
@@ -270,66 +397,18 @@ const Marketing = () => {
             </div>
           )}
 
-          {/* La cobertura va pegada a los costos, no escondida abajo: es lo que
-              dice si esos números se pueden usar o no. */}
           <div className={`marketing-cobertura ${cobertura !== null && cobertura < 0.6 ? "floja" : ""}`}>
-            <strong>
-              Sabemos de dónde vinieron {porcentaje(cobertura)} de las consultas
-            </strong>
+            <strong>Sabemos de dónde vinieron {porcentaje(cobertura)} de las consultas</strong>
             <span>
               {metricas.atribucion.identificadas} de {metricas.atribucion.total} ·{" "}
               {metricas.atribucion.sin_identificar} sin identificar
             </span>
             <p>
               Los costos de arriba se calculan sólo sobre las consultas con origen
-              conocido, así que el costo real por inscripción es <em>más bajo</em>{" "}
-              que el que se muestra: entre las que no se identificaron hay
-              inscripciones de la pauta que no se están contando.
+              conocido, así que el costo real por inscripción es <em>más bajo</em> que
+              el que se muestra: entre las que no se identificaron hay inscripciones de
+              la pauta que no se están contando.
             </p>
-          </div>
-
-          {metricas.coberturaPorMes.length > 0 && (
-            <>
-              <h3>Cómo viene la atribución mes a mes</h3>
-              <div className="marketing-tabla-scroll">
-                <table className="marketing-tabla">
-                  <thead>
-                    <tr>
-                      <th>Mes</th>
-                      <th>Consultas</th>
-                      <th>Con origen</th>
-                      <th>Cobertura</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {metricas.coberturaPorMes.map((m) => (
-                      <tr key={m.mes}>
-                        <td>{m.mes}</td>
-                        <td className="num">{m.consultas}</td>
-                        <td className="num">{m.identificadas}</td>
-                        <td className="num">
-                          <span className="barra">
-                            <span style={{ width: `${(m.cobertura || 0) * 100}%` }} />
-                          </span>
-                          {porcentaje(m.cobertura)}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </>
-          )}
-
-          <h3>De dónde entraron las consultas</h3>
-          <div className="marketing-origenes">
-            {metricas.porOrigen.map((o) => (
-              <span key={o.origin} className="marketing-origen">
-                {legible(o.origin)}
-                <strong>{o.consultas}</strong>
-                <small>{o.inscripciones} inscriptas</small>
-              </span>
-            ))}
           </div>
 
           <h3>Gastos cargados</h3>
@@ -357,13 +436,58 @@ const Marketing = () => {
                       <td className="num">{plata(g.amount, g.currency)}</td>
                       <td>{g.cargado_por || "—"}</td>
                       <td>
-                        <button
-                          type="button"
-                          className="marketing-borrar"
-                          onClick={() => borrar(g.id)}
-                        >
+                        <button type="button" className="marketing-borrar" onClick={() => borrar(g.id)}>
                           Borrar
                         </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </>
+      )}
+
+      {!cargando && vista === "planilla" && (
+        <>
+          <p className="marketing-ayuda">
+            Las mismas columnas de la hoja que se llenaba a mano, pero armadas
+            solas con lo que se carga en el CRM y en pagos. El importe sale de los
+            pagos reales, por eso va separado por moneda.
+          </p>
+
+          {planilla.length === 0 ? (
+            <p className="marketing-vacio">No hay consultas cargadas.</p>
+          ) : (
+            <div className="marketing-tabla-scroll">
+              <table className="marketing-tabla planilla">
+                <thead>
+                  <tr>
+                    <th>Fecha</th>
+                    <th>Nombre</th>
+                    <th>País</th>
+                    <th>Formación</th>
+                    <th>Origen</th>
+                    <th>Estado</th>
+                    <th>Inscripta</th>
+                    <th>Pagado</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {planilla.map((f) => (
+                    <tr key={f.id} className={f.inscripta ? "es-inscripta" : ""}>
+                      <td>{soloFecha(f.fecha)}</td>
+                      <td>{f.nombre}</td>
+                      <td>{f.pais || "—"}</td>
+                      <td>{f.formacion || "—"}</td>
+                      <td>{legible(f.origen)}</td>
+                      <td>{legible(f.estado)}</td>
+                      <td>{f.inscripta ? "Sí" : "No"}</td>
+                      <td className="num">
+                        {Number(f.pagado_ars) > 0 && <div>{plata(f.pagado_ars, "ARS")}</div>}
+                        {Number(f.pagado_usd) > 0 && <div>{plata(f.pagado_usd, "USD")}</div>}
+                        {Number(f.pagado_ars) === 0 && Number(f.pagado_usd) === 0 && "—"}
                       </td>
                     </tr>
                   ))}

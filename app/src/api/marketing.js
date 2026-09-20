@@ -35,6 +35,19 @@ export const eliminarGasto = async (id) => {
   return data.data;
 };
 
+/**
+ * La planilla de consultas e inscripciones, con las mismas columnas que la hoja
+ * que se llenaba a mano: fecha, nombre, país, formación, origen, estado, si se
+ * inscribió y cuánto pagó.
+ */
+export const getPlanilla = async ({ desde, hasta } = {}) => {
+  const params = new URLSearchParams();
+  if (desde) params.append("desde", desde);
+  if (hasta) params.append("hasta", hasta);
+  const { data } = await instanceUsers.get(`/marketing/planilla?${params.toString()}`);
+  return data.data;
+};
+
 /** Costo por consulta y por inscripción, con su cobertura de atribución. */
 export const getMetricasInversion = async ({ desde, hasta } = {}) => {
   const params = new URLSearchParams();

@@ -11,12 +11,63 @@
   color: var(--texto);
 }
 
-.marketing-header p {
-  margin: 0 0 1.2rem;
+.marketing-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 1.2rem;
+}
+
+.marketing-tabs {
+  display: flex;
+  gap: 8px;
+}
+
+.marketing-tabs button {
+  font: inherit;
+  font-size: 0.9rem;
+  padding: 0.45rem 1rem;
+  border-radius: var(--radio);
+  background: var(--superficie);
+  color: var(--texto);
+  border: 1px solid var(--borde);
+  cursor: pointer;
+}
+
+.marketing-tabs button.activa {
+  background: var(--tinta);
+  color: var(--superficie);
+  border-color: var(--tinta);
+}
+
+.marketing-ayuda {
+  margin: 0 0 1.1rem;
   font-size: 0.88rem;
   opacity: 0.8;
   color: var(--texto);
-  max-width: 62ch;
+  max-width: 68ch;
+}
+
+/* Métricas y gráficos del tablero de conversiones. */
+.marketing-metricas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin-bottom: 1.2rem;
+}
+
+.marketing-graficos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 1.2rem;
+}
+
+/* La fila de una inscripta se distingue sin depender sólo del color. */
+.marketing-tabla.planilla tr.es-inscripta td:first-child {
+  border-left: 3px solid #2e7d4f;
 }
 
 .marketing h3 {
