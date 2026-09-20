@@ -93,6 +93,15 @@ const PanelAdmin = () => {
         </button>
       </section>
       <section className="btnContainer">
+        <img src={emojiContacto} alt="marketingLogo" />
+        <button
+          className="navigation-button"
+          onClick={() => handleNavigate("/admin/marketing")}
+        >
+          Marketing
+        </button>
+      </section>
+      <section className="btnContainer">
         <img src={emojiReporte} alt="reporteLogo" />
         <button
           className="navigation-button"
