@@ -10,6 +10,7 @@ import BandejaSeguimiento from "../pages/ventas/BandejaSeguimiento";
 import TableroVentas from "../pages/ventas/Dashboard";
 import Pagos from "../pages/pagos/Pagos";
 import Marketing from "../pages/marketing/Marketing";
+import Tableros from "../pages/tableros/Tableros";
 import VistaPreviaCurso from "../pages/profesores/vistaPreviaCurso/VistaPreviaCurso";
 import ProfesoresMisCursos from "../pages/profesores/profesoresMisCursos/profesoresMisCursos";
 import PanelAdmin from "../pages/admin/panelAdmin/panelAdmin";
@@ -79,6 +80,7 @@ const AppRouter = () => {
             {/* Marketing es solo de admin: es plata de inversion, no de
                 operacion diaria. */}
             <Route path="/admin/marketing" element={<Marketing />} />
+            <Route path="/admin/tableros" element={<Tableros />} />
             <Route path="/admin/tablero" element={<TableroVentas />} />
 
             <Route path="/admin/reportes" element={<AdminReportes />}></Route>

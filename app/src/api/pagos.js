@@ -31,6 +31,12 @@ export const registrarPago = async (pago) => {
   return data.data;
 };
 
+/** Facturación mensual y por formación, para el tablero general. */
+export const getFacturacion = async () => {
+  const { data } = await instanceUsers.get("/payments/facturacion");
+  return data.data;
+};
+
 export const getPagosDelPeriodo = async ({ desde, hasta } = {}) => {
   const params = new URLSearchParams();
   if (desde) params.append("desde", desde);
