@@ -4,6 +4,7 @@ import {
   crearContacto,
   actualizarContacto,
 } from "../../api/contactos";
+import CountrySelect from "../countrySelect/CountrySelect";
 import "./FormularioContacto.css";
 
 /**
@@ -23,7 +24,9 @@ const VACIO = {
   phone: "",
   email: "",
   country: "",
+  identification_number: "",
   origin: "",
+  interest_course_id: "",
   interest: "",
   status: "nueva",
   lost_reason: "",
@@ -38,11 +41,15 @@ const ETIQUETAS = {
   en_conversacion: "En conversación",
   inscripta: "Inscripta",
   perdida: "Perdida",
+  meta_ads: "Meta Ads (pauta)",
+  google_ads: "Google Ads (pauta)",
   ig: "Instagram",
   fb: "Facebook",
+  whatsapp: "WhatsApp",
+  web: "Página web",
   referida: "Referida",
-  organica: "Orgánica",
   autoregistro: "Se registró sola",
+  no_identificado: "No identificado",
   otro: "Otro",
   falta_de_tiempo: "Falta de tiempo",
   precio: "Precio",
@@ -55,13 +62,23 @@ const legible = (v) => ETIQUETAS[v] || v;
 
 const FormularioContacto = ({ contacto, onGuardado, onCancelar }) => {
   const [datos, setDatos] = useState(VACIO);
-  const [opciones, setOpciones] = useState({ estados: [], origenes: [], motivosDePerdida: [] });
+  const [opciones, setOpciones] = useState({
+    estados: [],
+    origenes: [],
+    motivosDePerdida: [],
+    cursos: [],
+  });
+  const [duplicados, setDuplicados] = useState(null);
   const [guardando, setGuardando] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
     getOpcionesContacto()
-      .then(setOpciones)
+      // Se mezcla con el estado inicial en vez de reemplazarlo: un backend que
+      // todavia no conoce alguna de estas listas -- el de la version anterior,
+      // durante un deploy -- dejaria el campo en undefined y el .map de mas
+      // abajo tumbaria el formulario entero.
+      .then((datos) => setOpciones((previas) => ({ ...previas, ...datos })))
       .catch(() => setError("No se pudieron cargar las opciones del formulario."));
   }, []);
 
@@ -79,6 +96,8 @@ const FormularioContacto = ({ contacto, onGuardado, onCancelar }) => {
       country: contacto.country || "",
       origin: contacto.origin || "",
       interest: contacto.interest || "",
+      identification_number: contacto.identification_number || "",
+      interest_course_id: contacto.interest_course_id || "",
       lost_reason: contacto.lost_reason || "",
       notes: contacto.notes || "",
       first_contact_at: soloFecha(contacto.first_contact_at),
@@ -106,11 +125,15 @@ const FormularioContacto = ({ contacto, onGuardado, onCancelar }) => {
     }
     setGuardando(true);
     setError("");
+    setDuplicados(null);
     try {
-      const guardado = contacto?.id
+      const { contacto: guardado, duplicados: aviso } = contacto?.id
         ? await actualizarContacto(contacto.id, datos)
         : await crearContacto(datos);
-      onGuardado?.(guardado);
+      setDuplicados(aviso || null);
+      // El aviso viaja con el contacto guardado: quien monta el formulario
+      // necesita saberlo para no cerrarlo y dejar el aviso sin ver.
+      onGuardado?.(guardado, aviso || null);
       if (!contacto?.id) setDatos(VACIO);
     } catch (err) {
       setError(
@@ -142,34 +165,60 @@ const FormularioContacto = ({ contacto, onGuardado, onCancelar }) => {
 
         <div className="campo">
           <label htmlFor="fc-country">País</label>
-          <input id="fc-country" name="country" value={datos.country} onChange={cambiar} />
+          <CountrySelect id="fc-country" name="country" value={datos.country} onChange={cambiar} />
+        </div>
+
+        <div className="campo">
+          <label htmlFor="fc-dni">DNI o documento</label>
+          <input
+            id="fc-dni"
+            name="identification_number"
+            value={datos.identification_number}
+            onChange={cambiar}
+            placeholder="Se puede completar después"
+          />
         </div>
 
         <div className="campo">
           <label htmlFor="fc-origin">Cómo llegó</label>
           <select id="fc-origin" name="origin" value={datos.origin} onChange={cambiar}>
             <option value="">Sin dato</option>
-            {opciones.origenes.map((o) => (
+            {(opciones.origenes || []).map((o) => (
               <option key={o} value={o}>{legible(o)}</option>
             ))}
           </select>
         </div>
 
+        <div className="campo">
+          <label htmlFor="fc-formacion">Qué formación</label>
+          <select
+            id="fc-formacion"
+            name="interest_course_id"
+            value={datos.interest_course_id}
+            onChange={cambiar}
+          >
+            <option value="">Sin definir</option>
+            {(opciones.cursos || []).map((c) => (
+              <option key={c.id} value={c.id}>{c.name}</option>
+            ))}
+          </select>
+        </div>
+
         <div className="campo campo-ancho">
-          <label htmlFor="fc-interest">Qué le interesa</label>
+          <label htmlFor="fc-interest">Detalle del interés</label>
           <input
             id="fc-interest"
             name="interest"
             value={datos.interest}
             onChange={cambiar}
-            placeholder="Profesorado de Jazz"
+            placeholder="Preguntó si hay clases grabadas y si puede empezar en marzo"
           />
         </div>
 
         <div className="campo">
           <label htmlFor="fc-status">Estado</label>
           <select id="fc-status" name="status" value={datos.status} onChange={cambiar}>
-            {opciones.estados.map((s) => (
+            {(opciones.estados || []).map((s) => (
               <option key={s} value={s}>{legible(s)}</option>
             ))}
           </select>
@@ -180,7 +229,7 @@ const FormularioContacto = ({ contacto, onGuardado, onCancelar }) => {
             <label htmlFor="fc-motivo">Motivo</label>
             <select id="fc-motivo" name="lost_reason" value={datos.lost_reason} onChange={cambiar}>
               <option value="">Sin especificar</option>
-              {opciones.motivosDePerdida.map((m) => (
+              {(opciones.motivosDePerdida || []).map((m) => (
                 <option key={m} value={m}>{legible(m)}</option>
               ))}
             </select>
@@ -223,6 +272,32 @@ const FormularioContacto = ({ contacto, onGuardado, onCancelar }) => {
       </div>
 
       {error && <p className="form-contacto-error">{error}</p>}
+
+      {duplicados && (
+        <div className="form-contacto-aviso">
+          <strong>Ojo: puede que esta persona ya esté cargada.</strong>
+          <ul>
+            {duplicados.contactos?.map((c) => (
+              <li key={`c-${c.id}`}>
+                Ya hay un contacto: <b>{c.name}</b>
+                {c.identification_number ? ` · ${c.identification_number}` : ""}
+                {c.email ? ` · ${c.email}` : ""} · {legible(c.status)}
+              </li>
+            ))}
+            {duplicados.alumnas?.map((a) => (
+              <li key={`a-${a.id}`}>
+                Ya es alumna: <b>{a.name} {a.lastname}</b>
+                {a.identification_number ? ` · ${a.identification_number}` : ""}
+                {a.activo === false ? " · inactiva" : ""}
+              </li>
+            ))}
+          </ul>
+          <p>
+            Se guardó igual. Si es la misma persona, conviene seguir con la ficha
+            que ya existe en lugar de esta.
+          </p>
+        </div>
+      )}
 
       <div className="form-contacto-acciones">
         {onCancelar && (

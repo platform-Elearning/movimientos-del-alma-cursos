@@ -118,3 +118,30 @@
     transition: none;
   }
 }
+
+/* Aviso de posible duplicado. Es amarillo y no rojo a propósito: el contacto se
+   guardó bien, esto no es un error sino algo para mirar. */
+.form-contacto-aviso {
+  margin: 0.9rem 0 0;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--borde-dorado);
+  border-left: 4px solid var(--var-dorado-fuerte);
+  border-radius: var(--radio);
+  background: rgba(192, 140, 68, 0.08);
+  color: var(--texto);
+  font-size: 0.88rem;
+}
+
+.form-contacto-aviso ul {
+  margin: 0.45rem 0;
+  padding-left: 1.1rem;
+}
+
+.form-contacto-aviso li {
+  margin-bottom: 0.2rem;
+}
+
+.form-contacto-aviso p {
+  margin: 0.45rem 0 0;
+  opacity: 0.85;
+}

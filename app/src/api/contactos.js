@@ -34,14 +34,21 @@ export const getContacto = async (id) => {
   return data.data;
 };
 
+/**
+ * Guarda y, si el backend reconoció a la misma persona, devuelve el aviso.
+ *
+ * El duplicado no es un error: el contacto se guarda igual y el aviso dice
+ * dónde mirar. Rechazar el alta obligaría a resolverlo en el momento, con la
+ * consulta esperando del otro lado.
+ */
 export const crearContacto = async (contacto) => {
   const { data } = await instanceUsers.post("/contacts", contacto);
-  return data.data;
+  return { contacto: data.data, duplicados: data.duplicados };
 };
 
 export const actualizarContacto = async (id, contacto) => {
   const { data } = await instanceUsers.put(`/contacts/${id}`, contacto);
-  return data.data;
+  return { contacto: data.data, duplicados: data.duplicados };
 };
 
 /** Registra una interacción y, si se pasa, mueve el estado en el mismo paso. */
@@ -51,6 +58,17 @@ export const registrarEvento = async (id, { note, status, event_date } = {}) => 
     status,
     event_date,
   });
+  return data.data;
+};
+
+/**
+ * Convierte el contacto en alumna: crea la cuenta y deja la vinculación hecha.
+ *
+ * Si la persona ya tenía cuenta no se crea otra, se vincula — y entonces no
+ * viene contraseña, porque sigue usando la suya.
+ */
+export const inscribirContacto = async (id, datos) => {
+  const { data } = await instanceUsers.post(`/contacts/${id}/inscribir`, datos);
   return data.data;
 };
 

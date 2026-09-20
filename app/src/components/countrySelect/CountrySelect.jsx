@@ -29,9 +29,12 @@ const COUNTRIES = [
   "Zambia","Zimbabue",
 ];
 
-const CountrySelect = ({ value, onChange, name = "nationality", required = false }) => {
+// id es opcional para no tocar a quienes ya lo usan, pero sin el la etiqueta
+// del formulario queda sin nada a que apuntar.
+const CountrySelect = ({ value, onChange, name = "nationality", required = false, id }) => {
   return (
     <select
+      id={id}
       name={name}
       value={value}
       onChange={onChange}

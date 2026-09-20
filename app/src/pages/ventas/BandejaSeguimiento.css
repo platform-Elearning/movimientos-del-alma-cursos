@@ -248,3 +248,32 @@
   outline: 2px solid var(--var-dorado-fuerte);
   outline-offset: 2px;
 }
+
+/* Inscribir no es una acción más del pie: crea la cuenta y le da acceso a la
+   plataforma. Va aparte, en su propia línea, con el borde marcado. */
+.bandeja-btn-inscribir {
+  font: inherit;
+  font-size: 0.88rem;
+  margin-top: 0.7rem;
+  padding: 0.5rem 1.1rem;
+  border-radius: var(--radio);
+  background: var(--superficie);
+  color: var(--texto);
+  border: 1px solid var(--var-dorado-fuerte);
+  cursor: pointer;
+}
+
+.bandeja-btn-inscribir:hover {
+  background: rgba(192, 140, 68, 0.1);
+}
+
+.bandeja-btn-inscribir:focus-visible {
+  outline: 2px solid var(--var-dorado-fuerte);
+  outline-offset: 2px;
+}
+
+.bandeja-ya-alumna {
+  margin: 0.7rem 0 0;
+  font-size: 0.85rem;
+  color: var(--texto-suave);
+}

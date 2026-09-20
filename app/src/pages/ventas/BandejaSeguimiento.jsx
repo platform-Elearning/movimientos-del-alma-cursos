@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { getSeguimiento, registrarEvento } from "../../api/contactos";
 import FormularioContacto from "../../components/formularioContacto/FormularioContacto";
+import FormularioInscripcion from "../../components/formularioInscripcion/FormularioInscripcion";
 import BackLink from "../../components/backLink/BackLink";
 import { useNavigate } from "react-router-dom";
 import "./BandejaSeguimiento.css";
@@ -20,11 +21,15 @@ const ETIQUETAS = {
   en_conversacion: "En conversación",
   inscripta: "Inscripta",
   perdida: "Perdida",
+  meta_ads: "Meta Ads (pauta)",
+  google_ads: "Google Ads (pauta)",
   ig: "Instagram",
   fb: "Facebook",
+  whatsapp: "WhatsApp",
+  web: "Página web",
   referida: "Referida",
-  organica: "Orgánica",
   autoregistro: "Se registró sola",
+  no_identificado: "No identificado",
   otro: "Otro",
 };
 const legible = (v) => ETIQUETAS[v] || v || "Sin dato";
@@ -47,6 +52,7 @@ const BandejaSeguimiento = () => {
   const [nuevoEstado, setNuevoEstado] = useState("");
   const [guardando, setGuardando] = useState(false);
   const [mostrarAlta, setMostrarAlta] = useState(false);
+  const [inscribiendo, setInscribiendo] = useState(null);
 
   const cargar = useCallback(async () => {
     try {
@@ -123,8 +129,10 @@ const BandejaSeguimiento = () => {
       {mostrarAlta && (
         <div className="bandeja-alta">
           <FormularioContacto
-            onGuardado={() => {
-              setMostrarAlta(false);
+            onGuardado={(_guardado, duplicados) => {
+              // Si el contacto puede estar repetido el formulario queda abierto:
+              // cerrarlo haria desaparecer el aviso antes de que nadie lo lea.
+              if (!duplicados) setMostrarAlta(false);
               cargar();
             }}
             onCancelar={() => setMostrarAlta(false)}
@@ -202,7 +210,6 @@ const BandejaSeguimiento = () => {
                     <option value="">Dejar el estado como está</option>
                     <option value="esperando_respuesta">Esperando respuesta</option>
                     <option value="en_conversacion">En conversación</option>
-                    <option value="inscripta">Se inscribió</option>
                     <option value="perdida">Perdida</option>
                   </select>
                   <button
@@ -214,6 +221,29 @@ const BandejaSeguimiento = () => {
                     {guardando ? "Registrando…" : "Registrar"}
                   </button>
                 </div>
+
+                {/* Inscribir vive separado de registrar una interacción: una
+                    anota lo que pasó, la otra le crea la cuenta y le da acceso
+                    a la plataforma. */}
+                {c.student_id ? (
+                  <p className="bandeja-ya-alumna">Ya es alumna de la academia.</p>
+                ) : inscribiendo?.id === c.id ? (
+                  <FormularioInscripcion
+                    contacto={c}
+                    onCancelar={() => {
+                      setInscribiendo(null);
+                      cargar();
+                    }}
+                  />
+                ) : (
+                  <button
+                    type="button"
+                    className="bandeja-btn-inscribir"
+                    onClick={() => setInscribiendo(c)}
+                  >
+                    Inscribir como alumna
+                  </button>
+                )}
               </div>
             )}
           </li>
