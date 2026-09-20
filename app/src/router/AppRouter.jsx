@@ -8,6 +8,7 @@ import Curso from "../pages/alumnos/curso/curso";
 import Clase from "../pages/alumnos/clase/clase";
 import BandejaSeguimiento from "../pages/ventas/BandejaSeguimiento";
 import TableroVentas from "../pages/ventas/Dashboard";
+import Pagos from "../pages/pagos/Pagos";
 import VistaPreviaCurso from "../pages/profesores/vistaPreviaCurso/VistaPreviaCurso";
 import ProfesoresMisCursos from "../pages/profesores/profesoresMisCursos/profesoresMisCursos";
 import PanelAdmin from "../pages/admin/panelAdmin/panelAdmin";
@@ -70,6 +71,10 @@ const AppRouter = () => {
             <Route path="/ventas/seguimiento" element={<BandejaSeguimiento />} />
             <Route path="/admin/seguimiento" element={<BandejaSeguimiento />} />
             <Route path="/ventas/tablero" element={<TableroVentas />} />
+            {/* Pagos los cargan la vendedora y el admin: la misma pantalla
+                colgada de las dos secciones, como seguimiento y tablero. */}
+            <Route path="/ventas/pagos" element={<Pagos />} />
+            <Route path="/admin/pagos" element={<Pagos />} />
             <Route path="/admin/tablero" element={<TableroVentas />} />
 
             <Route path="/admin/reportes" element={<AdminReportes />}></Route>

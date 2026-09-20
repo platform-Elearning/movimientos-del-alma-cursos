@@ -1,0 +1,355 @@
+/* Pagos. Usa los tokens del sistema: sin colores propios salvo los semáforos. */
+
+.pagos {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 3rem;
+}
+
+.pagos-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 1.2rem;
+}
+
+.pagos-header h2 {
+  margin: 0;
+  color: var(--texto);
+}
+
+.pagos-tabs {
+  display: flex;
+  gap: 8px;
+}
+
+.pagos-tabs button {
+  font: inherit;
+  font-size: 0.9rem;
+  padding: 0.45rem 1rem;
+  border-radius: var(--radio);
+  background: var(--superficie);
+  color: var(--texto);
+  border: 1px solid var(--borde);
+  cursor: pointer;
+}
+
+.pagos-tabs button.activa {
+  background: var(--tinta);
+  color: var(--superficie);
+  border-color: var(--tinta);
+}
+
+.pagos-columnas {
+  display: grid;
+  grid-template-columns: minmax(200px, 260px) 1fr;
+  gap: 18px;
+  align-items: start;
+}
+
+@media (max-width: 720px) {
+  .pagos-columnas {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pagos-buscador {
+  background: var(--superficie);
+  border: 1px solid var(--borde-dorado);
+  border-radius: 12px;
+  padding: 0.9rem 1rem;
+}
+
+.pagos-buscador label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: var(--texto);
+}
+
+.pagos-buscador input {
+  font: inherit;
+  font-size: 0.9rem;
+  width: 100%;
+  padding: 0.45rem 0.6rem;
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  background: var(--superficie);
+  color: var(--texto);
+}
+
+.pagos-buscador ul {
+  list-style: none;
+  margin: 0.7rem 0 0;
+  padding: 0;
+  max-height: 340px;
+  overflow-y: auto;
+}
+
+.pagos-buscador li.vacio {
+  font-size: 0.85rem;
+  opacity: 0.7;
+  padding: 0.4rem 0;
+}
+
+.pagos-buscador li button {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  padding: 0.45rem 0.55rem;
+  border: 0;
+  border-radius: var(--radio);
+  background: transparent;
+  color: var(--texto);
+  cursor: pointer;
+}
+
+.pagos-buscador li button:hover {
+  background: var(--superficie-sutil);
+}
+
+.pagos-buscador li button.elegida {
+  background: rgba(192, 140, 68, 0.14);
+}
+
+.pagos-buscador li button span {
+  font-size: 0.78rem;
+  opacity: 0.75;
+}
+
+.pagos-ficha {
+  background: var(--superficie);
+  border: 1px solid var(--borde-dorado);
+  border-radius: 12px;
+  padding: 1.1rem 1.25rem;
+  min-width: 0;
+}
+
+.pagos-ficha h3 {
+  margin: 0 0 0.8rem;
+  color: var(--texto);
+}
+
+.pagos-subtitulo {
+  margin: 1.4rem 0 0.6rem;
+  color: var(--texto);
+}
+
+/* Por qué módulo va: es lo primero que se mira. */
+.pagos-modulos {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 1rem;
+}
+
+.pagos-modulo {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 0.7rem 0.9rem;
+  border-radius: var(--radio);
+  border-left: 4px solid var(--borde);
+  background: var(--superficie-sutil);
+}
+
+.pagos-modulo.al-dia {
+  border-left-color: #2e7d4f;
+}
+
+.pagos-modulo.debe {
+  border-left-color: #b8860b;
+}
+
+.pagos-modulo .curso {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--texto);
+}
+
+.pagos-modulo .proximo {
+  font-size: 0.95rem;
+  color: var(--texto);
+}
+
+.pagos-modulo .detalle {
+  font-size: 0.8rem;
+  opacity: 0.75;
+}
+
+.pagos-sin-inscripcion,
+.pagos-vacio {
+  font-size: 0.88rem;
+  opacity: 0.75;
+  margin: 0.5rem 0;
+}
+
+.pagos-totales {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 0.8rem 0 1rem;
+}
+
+.pagos-total {
+  display: flex;
+  flex-direction: column;
+  padding: 0.55rem 0.9rem;
+  border: 1px solid var(--borde-dorado);
+  border-radius: var(--radio);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--texto);
+}
+
+.pagos-total small {
+  font-size: 0.72rem;
+  font-weight: 400;
+  opacity: 0.75;
+}
+
+.pagos-por-concepto {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 1rem;
+  font-size: 0.85rem;
+  color: var(--texto);
+}
+
+.pagos-form {
+  border-top: 1px solid var(--borde);
+  padding-top: 1rem;
+  margin-top: 1rem;
+}
+
+.pagos-form h4 {
+  margin: 0 0 0.7rem;
+  color: var(--texto);
+}
+
+.pagos-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px 14px;
+}
+
+.pagos .campo {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.pagos .campo-ancho {
+  grid-column: 1 / -1;
+}
+
+.pagos .campo label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--texto);
+}
+
+.pagos .campo input,
+.pagos .campo select {
+  font: inherit;
+  font-size: 0.9rem;
+  padding: 0.45rem 0.6rem;
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  background: var(--superficie);
+  color: var(--texto);
+  width: 100%;
+}
+
+.pagos .campo input:focus,
+.pagos .campo select:focus {
+  outline: none;
+  border-color: var(--var-dorado-medio);
+  box-shadow: 0 0 0 3px rgba(192, 140, 68, 0.15);
+}
+
+.pagos-form-acciones {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.9rem;
+}
+
+.pagos .btn-principal {
+  font: inherit;
+  font-size: 0.9rem;
+  padding: 0.5rem 1.2rem;
+  border-radius: var(--radio);
+  background: var(--tinta);
+  color: var(--superficie);
+  border: 1px solid var(--tinta);
+  cursor: pointer;
+}
+
+.pagos .btn-principal:disabled {
+  opacity: 0.65;
+  cursor: progress;
+}
+
+.pagos-error {
+  padding: 0.6rem 0.8rem;
+  border-radius: var(--radio);
+  background: #fceaea;
+  color: #a32d2d;
+  font-size: 0.88rem;
+}
+
+.pagos-aviso {
+  margin: 0.7rem 0 0;
+  padding: 0.5rem 0.8rem;
+  border-radius: var(--radio);
+  background: rgba(46, 125, 79, 0.12);
+  color: #2e7d4f;
+  font-size: 0.86rem;
+}
+
+.pagos-periodo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px;
+  margin-bottom: 1rem;
+}
+
+/* La tabla scrollea adentro de su caja: la página nunca se va al costado. */
+.pagos-tabla-scroll {
+  overflow-x: auto;
+}
+
+.pagos-tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.86rem;
+}
+
+.pagos-tabla th,
+.pagos-tabla td {
+  text-align: left;
+  padding: 0.5rem 0.6rem;
+  border-bottom: 1px solid var(--borde);
+  white-space: nowrap;
+  color: var(--texto);
+}
+
+.pagos-tabla th {
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.75;
+}
+
+.pagos-tabla td.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
