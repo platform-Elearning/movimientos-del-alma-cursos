@@ -70,9 +70,9 @@ const AppRouter = () => {
             {/* Misma pantalla para los dos roles: el vendedor trabaja acá y
                 el admin ve lo mismo sin duplicar la vista. */}
             {/* La bandeja y el embudo son una sola pantalla en dos pestañas. */}
-            <Route path="/ventas/seguimiento" element={<Ventas inicial="bandeja" />} />
-            <Route path="/admin/seguimiento" element={<Ventas inicial="bandeja" />} />
-            <Route path="/ventas/tablero" element={<Ventas inicial="embudo" />} />
+            <Route path="/ventas/seguimiento" element={<Ventas />} />
+            <Route path="/admin/seguimiento" element={<Ventas />} />
+            <Route path="/ventas/tablero" element={<Ventas />} />
             {/* Pagos los cargan la vendedora y el admin: la misma pantalla
                 colgada de las dos secciones, como seguimiento y tablero. */}
             <Route path="/ventas/pagos" element={<Pagos />} />
@@ -81,7 +81,7 @@ const AppRouter = () => {
                 operacion diaria. */}
             <Route path="/admin/marketing" element={<Marketing />} />
             <Route path="/admin/tableros" element={<Tableros />} />
-            <Route path="/admin/tablero" element={<Ventas inicial="embudo" />} />
+            <Route path="/admin/tablero" element={<Ventas />} />
 
             <Route path="/admin/reportes" element={<AdminReportes />}></Route>
             
