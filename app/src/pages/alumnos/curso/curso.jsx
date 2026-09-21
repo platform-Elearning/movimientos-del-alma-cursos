@@ -30,11 +30,15 @@ const CourseDetails = () => {
   const getProfesorByCourse = async (courseId) => {
     try {
       const response = await getProfesoreByCourseId(courseId);
-      if (response.success && response.data) {
+      // length y no solo data: un curso sin profesor devuelve una lista vacia,
+      // y data[0] seria undefined.
+      if (response.success && response.data?.length) {
         setProfesor(response.data[0]);
       }
     } catch (error) {
-      console.error("Error al obtener el profesor:", error);
+      // Que no haya profesor no puede impedir ver el curso. Se deja el aviso en
+      // consola y la pantalla sigue con la cabecera simple.
+      console.warn("No se pudo obtener el profesor del curso:", error?.message);
     }
   };
   useEffect(() => {
@@ -185,7 +189,7 @@ const CourseDetails = () => {
           />
         </div>
 
-      {profesor.description_teacher ? (
+      {profesor?.description_teacher ? (
         <div className="tit-cont">
           <div className="tit-cont-img">
           <img 
