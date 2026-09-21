@@ -6,6 +6,7 @@ import emojiAlumno from "../../../assets/emoji-alumnos.png";
 import emojiProfesor from "../../../assets/emoji-profesores.png";
 import emojiCurso from "../../../assets/emoji-cursos.png";
 import emojiReporte from "../../../assets/work.png";
+import emojiContacto from "../../../assets/user.png";
 
 const PanelAdmin = () => {
   const { isAuthenticated } = useAuth();
@@ -62,6 +63,42 @@ const PanelAdmin = () => {
           onClick={() => handleNavigate("/admin/cursos")}
         >
           Cursos
+        </button>
+      </section>
+      <section className="btnContainer">
+        <img src={emojiContacto} alt="ventasLogo" />
+        <button
+          className="navigation-button"
+          onClick={() => handleNavigate("/admin/seguimiento")}
+        >
+          Ventas
+        </button>
+      </section>
+      <section className="btnContainer">
+        <img src={emojiCurso} alt="tablerosLogo" />
+        <button
+          className="navigation-button"
+          onClick={() => handleNavigate("/admin/tableros")}
+        >
+          Tableros
+        </button>
+      </section>
+      <section className="btnContainer">
+        <img src={emojiCurso} alt="pagosLogo" />
+        <button
+          className="navigation-button"
+          onClick={() => handleNavigate("/admin/pagos")}
+        >
+          Pagos
+        </button>
+      </section>
+      <section className="btnContainer">
+        <img src={emojiContacto} alt="marketingLogo" />
+        <button
+          className="navigation-button"
+          onClick={() => handleNavigate("/admin/marketing")}
+        >
+          Marketing
         </button>
       </section>
       <section className="btnContainer">

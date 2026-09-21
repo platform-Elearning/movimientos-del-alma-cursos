@@ -1,0 +1,28 @@
+/* Embudo de ventas. Los gráficos traen su propio estilo; acá va la grilla. */
+
+.embudo-metricas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin-bottom: 1.2rem;
+}
+
+.embudo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.embudo-estado {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  color: var(--texto);
+}
+
+.embudo-error {
+  padding: 0.6rem 0.8rem;
+  border-radius: var(--radio);
+  background: #fceaea;
+  color: #a32d2d;
+  font-size: 0.88rem;
+}

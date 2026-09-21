@@ -1,0 +1,279 @@
+/* Bandeja de seguimiento. Cola de trabajo, no listado. */
+
+.bandeja {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 4rem;
+}
+
+.bandeja-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+}
+
+.bandeja-header h1 {
+  margin: 0;
+  font-size: 1.7rem;
+  font-weight: 600;
+  color: var(--var-dorado-fuerte);
+}
+
+.bandeja-sub {
+  margin: 0.25rem 0 0;
+  color: var(--texto-suave);
+  font-size: 0.92rem;
+  max-width: 46ch;
+}
+
+.bandeja-btn-alta,
+.bandeja-btn-registrar {
+  font: inherit;
+  font-size: 0.9rem;
+  padding: 0.55rem 1.1rem;
+  border-radius: var(--radio);
+  background: var(--tinta);
+  color: var(--superficie);
+  border: 1px solid var(--tinta);
+  cursor: pointer;
+}
+
+.bandeja-btn-alta:hover,
+.bandeja-btn-registrar:hover:not(:disabled) {
+  filter: brightness(1.2);
+}
+
+.bandeja-btn-registrar:disabled {
+  opacity: 0.65;
+  cursor: progress;
+}
+
+.bandeja-alta {
+  margin-bottom: 1.5rem;
+}
+
+.bandeja-resumen {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.bandeja-metrica {
+  flex: 1;
+  min-width: 150px;
+  background: var(--superficie-sutil);
+  border: 1px solid var(--borde);
+  border-radius: 12px;
+  padding: 0.9rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.bandeja-metrica .valor {
+  font-size: 1.9rem;
+  font-weight: 600;
+  color: var(--var-dorado-fuerte);
+  line-height: 1.1;
+}
+
+.bandeja-metrica .rotulo {
+  font-size: 0.8rem;
+  color: var(--texto-suave);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.bandeja-error {
+  background: #fceaea;
+  color: #a32d2d;
+  padding: 0.7rem 0.9rem;
+  border-radius: var(--radio);
+  font-size: 0.9rem;
+}
+
+.bandeja-cargando,
+.bandeja-vacia {
+  color: var(--texto-suave);
+  padding: 1.5rem 0;
+}
+
+.bandeja-lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bandeja-item {
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* La urgencia se ve en el borde izquierdo, además del número de días: el
+   color solo no alcanza para quien no lo distingue. */
+.bandeja-item.critico {
+  border-left: 4px solid #a32d2d;
+}
+.bandeja-item.atencion {
+  border-left: 4px solid var(--var-dorado-medio);
+}
+.bandeja-item.reciente,
+.bandeja-item.sin-dato {
+  border-left: 4px solid var(--borde);
+}
+
+.bandeja-fila {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0.85rem 1rem;
+  background: none;
+  border: none;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.bandeja-fila:hover {
+  background: var(--superficie-sutil);
+}
+
+.bandeja-dias {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 52px;
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--texto);
+  line-height: 1;
+}
+
+.bandeja-dias small {
+  font-size: 0.65rem;
+  font-weight: 400;
+  color: var(--texto-suave);
+  text-transform: uppercase;
+}
+
+.bandeja-datos {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.bandeja-datos strong {
+  font-size: 1rem;
+  color: var(--texto);
+}
+
+.bandeja-meta,
+.bandeja-contacto {
+  font-size: 0.83rem;
+  color: var(--texto-suave);
+}
+
+.bandeja-flecha {
+  color: var(--texto-suave);
+  font-size: 0.9rem;
+}
+
+.bandeja-acciones {
+  padding: 0 1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-top: 1px solid var(--borde);
+  padding-top: 0.9rem;
+}
+
+.bandeja-notas {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--texto-suave);
+  background: var(--superficie-sutil);
+  padding: 0.5rem 0.7rem;
+  border-radius: var(--radio);
+}
+
+.bandeja-acciones label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--texto);
+}
+
+.bandeja-acciones textarea,
+.bandeja-acciones select {
+  font: inherit;
+  font-size: 0.9rem;
+  padding: 0.5rem 0.7rem;
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  background: var(--superficie);
+  color: var(--texto);
+}
+
+.bandeja-acciones textarea {
+  resize: vertical;
+}
+
+.bandeja-acciones textarea:focus,
+.bandeja-acciones select:focus {
+  outline: none;
+  border-color: var(--var-dorado-medio);
+  box-shadow: 0 0 0 3px rgba(192, 140, 68, 0.15);
+}
+
+.bandeja-acciones-pie {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.bandeja-fila:focus-visible,
+.bandeja-btn-alta:focus-visible,
+.bandeja-btn-registrar:focus-visible {
+  outline: 2px solid var(--var-dorado-fuerte);
+  outline-offset: 2px;
+}
+
+/* Inscribir no es una acción más del pie: crea la cuenta y le da acceso a la
+   plataforma. Va aparte, en su propia línea, con el borde marcado. */
+.bandeja-btn-inscribir {
+  font: inherit;
+  font-size: 0.88rem;
+  margin-top: 0.7rem;
+  padding: 0.5rem 1.1rem;
+  border-radius: var(--radio);
+  background: var(--superficie);
+  color: var(--texto);
+  border: 1px solid var(--var-dorado-fuerte);
+  cursor: pointer;
+}
+
+.bandeja-btn-inscribir:hover {
+  background: rgba(192, 140, 68, 0.1);
+}
+
+.bandeja-btn-inscribir:focus-visible {
+  outline: 2px solid var(--var-dorado-fuerte);
+  outline-offset: 2px;
+}
+
+.bandeja-ya-alumna {
+  margin: 0.7rem 0 0;
+  font-size: 0.85rem;
+  color: var(--texto-suave);
+}

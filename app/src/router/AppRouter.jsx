@@ -6,6 +6,10 @@ import PageAuxiliar from "../pages/pageAuxiliar/pageAuxiliar";
 import AlumnosMisCursos from "../pages/alumnos/alumnosMisCursos/alumnosMisCursos";
 import Curso from "../pages/alumnos/curso/curso";
 import Clase from "../pages/alumnos/clase/clase";
+import Ventas from "../pages/ventas/Ventas";
+import Pagos from "../pages/pagos/Pagos";
+import Marketing from "../pages/marketing/Marketing";
+import Tableros from "../pages/tableros/Tableros";
 import VistaPreviaCurso from "../pages/profesores/vistaPreviaCurso/VistaPreviaCurso";
 import ProfesoresMisCursos from "../pages/profesores/profesoresMisCursos/profesoresMisCursos";
 import PanelAdmin from "../pages/admin/panelAdmin/panelAdmin";
@@ -63,6 +67,22 @@ const AppRouter = () => {
             
             <Route path="/admin/profesores" element = {<AdminProfesores/>}></Route>
             <Route path="/admin/editarProfesor/:id" element={<EditProfesor/>}></Route>
+            {/* Misma pantalla para los dos roles: el vendedor trabaja acá y
+                el admin ve lo mismo sin duplicar la vista. */}
+            {/* La bandeja y el embudo son una sola pantalla en dos pestañas. */}
+            <Route path="/ventas/seguimiento" element={<Ventas />} />
+            <Route path="/admin/seguimiento" element={<Ventas />} />
+            <Route path="/ventas/tablero" element={<Ventas />} />
+            {/* Pagos los cargan la vendedora y el admin: la misma pantalla
+                colgada de las dos secciones, como seguimiento y tablero. */}
+            <Route path="/ventas/pagos" element={<Pagos />} />
+            <Route path="/admin/pagos" element={<Pagos />} />
+            {/* Marketing es solo de admin: es plata de inversion, no de
+                operacion diaria. */}
+            <Route path="/admin/marketing" element={<Marketing />} />
+            <Route path="/admin/tableros" element={<Tableros />} />
+            <Route path="/admin/tablero" element={<Ventas />} />
+
             <Route path="/admin/reportes" element={<AdminReportes />}></Route>
             
             <Route path="/alumnos/miscursos/:alumnoId" element={<AlumnosMisCursos />} />

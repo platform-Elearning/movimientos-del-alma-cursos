@@ -1,0 +1,372 @@
+/* Inversión en publicidad. Tokens del sistema, sin colores propios. */
+
+.marketing {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 3rem;
+}
+
+.marketing-header h2 {
+  margin: 0 0 0.3rem;
+  color: var(--texto);
+}
+
+.marketing-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 1.2rem;
+}
+
+.marketing-tabs {
+  display: flex;
+  gap: 8px;
+}
+
+.marketing-tabs button {
+  font: inherit;
+  font-size: 0.9rem;
+  padding: 0.45rem 1rem;
+  border-radius: var(--radio);
+  background: var(--superficie);
+  color: var(--texto);
+  border: 1px solid var(--borde);
+  cursor: pointer;
+}
+
+.marketing-tabs button.activa {
+  background: var(--tinta);
+  color: var(--superficie);
+  border-color: var(--tinta);
+}
+
+.marketing-ayuda {
+  margin: 0 0 1.1rem;
+  font-size: 0.88rem;
+  opacity: 0.8;
+  color: var(--texto);
+  max-width: 68ch;
+}
+
+/* Métricas y gráficos del tablero de conversiones. */
+.marketing-metricas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin-bottom: 1.2rem;
+}
+
+.marketing-graficos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 1.2rem;
+}
+
+/* La fila de una inscripta se distingue sin depender sólo del color. */
+.marketing-tabla.planilla tr.es-inscripta td:first-child {
+  border-left: 3px solid #2e7d4f;
+}
+
+.marketing h3 {
+  margin: 1.6rem 0 0.7rem;
+  font-size: 1.02rem;
+  color: var(--texto);
+}
+
+.marketing-form {
+  background: var(--superficie);
+  border: 1px solid var(--borde-dorado);
+  border-radius: 12px;
+  padding: 1rem 1.2rem;
+}
+
+.marketing-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px 14px;
+}
+
+.marketing .campo {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.marketing .campo label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--texto);
+}
+
+.marketing .campo input,
+.marketing .campo select {
+  font: inherit;
+  font-size: 0.9rem;
+  padding: 0.45rem 0.6rem;
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  background: var(--superficie);
+  color: var(--texto);
+  width: 100%;
+}
+
+.marketing .campo input:focus,
+.marketing .campo select:focus {
+  outline: none;
+  border-color: var(--var-dorado-medio);
+  box-shadow: 0 0 0 3px rgba(192, 140, 68, 0.15);
+}
+
+.marketing-form-acciones {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.9rem;
+}
+
+.marketing .btn-principal {
+  font: inherit;
+  font-size: 0.9rem;
+  padding: 0.5rem 1.2rem;
+  border-radius: var(--radio);
+  background: var(--tinta);
+  color: var(--superficie);
+  border: 1px solid var(--tinta);
+  cursor: pointer;
+}
+
+.marketing .btn-principal:disabled {
+  opacity: 0.65;
+  cursor: progress;
+}
+
+.marketing-error {
+  padding: 0.6rem 0.8rem;
+  border-radius: var(--radio);
+  background: #fceaea;
+  color: #a32d2d;
+  font-size: 0.88rem;
+}
+
+.marketing-aviso {
+  margin-top: 0.9rem;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--borde-dorado);
+  border-left: 4px solid var(--var-dorado-fuerte);
+  border-radius: var(--radio);
+  background: rgba(192, 140, 68, 0.08);
+  font-size: 0.86rem;
+  color: var(--texto);
+}
+
+.marketing-aviso ul {
+  margin: 0.4rem 0;
+  padding-left: 1.1rem;
+}
+
+.marketing-aviso p {
+  margin: 0.4rem 0 0;
+  opacity: 0.85;
+}
+
+.marketing-tarjetas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 12px;
+}
+
+.marketing-tarjeta {
+  background: var(--superficie);
+  border: 1px solid var(--borde-dorado);
+  border-radius: 12px;
+  padding: 0.9rem 1rem;
+}
+
+.marketing-tarjeta .plataforma {
+  display: block;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.75;
+  color: var(--texto);
+}
+
+.marketing-tarjeta .gasto {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0.2rem 0 0.6rem;
+  color: var(--texto);
+}
+
+.marketing-tarjeta dl {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 10px;
+  margin: 0;
+}
+
+.marketing-tarjeta dt {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  opacity: 0.7;
+  color: var(--texto);
+}
+
+.marketing-tarjeta dd {
+  margin: 0;
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: var(--texto);
+}
+
+/* La cobertura de atribución: el contexto sin el cual los costos engañan. */
+.marketing-cobertura {
+  margin-top: 12px;
+  padding: 0.8rem 1rem;
+  border: 1px solid var(--borde-dorado);
+  border-left: 4px solid #2e7d4f;
+  border-radius: var(--radio);
+  background: var(--superficie-sutil);
+  color: var(--texto);
+}
+
+.marketing-cobertura.floja {
+  border-left-color: #b8860b;
+}
+
+.marketing-cobertura strong {
+  display: block;
+  font-size: 1rem;
+}
+
+.marketing-cobertura span {
+  display: block;
+  font-size: 0.82rem;
+  opacity: 0.8;
+  margin-top: 2px;
+}
+
+.marketing-cobertura p {
+  margin: 0.5rem 0 0;
+  font-size: 0.84rem;
+  opacity: 0.85;
+  max-width: 68ch;
+}
+
+.marketing-origenes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.marketing-origen {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 0.85rem;
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  font-size: 0.8rem;
+  color: var(--texto);
+}
+
+.marketing-origen strong {
+  font-size: 1.25rem;
+}
+
+.marketing-origen small {
+  opacity: 0.7;
+}
+
+.marketing-vacio {
+  font-size: 0.88rem;
+  opacity: 0.75;
+}
+
+.marketing-tabla-scroll {
+  overflow-x: auto;
+}
+
+.marketing-tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.86rem;
+}
+
+.marketing-tabla th,
+.marketing-tabla td {
+  text-align: left;
+  padding: 0.5rem 0.6rem;
+  border-bottom: 1px solid var(--borde);
+  white-space: nowrap;
+  color: var(--texto);
+}
+
+.marketing-tabla th {
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.75;
+}
+
+.marketing-tabla td.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Barra de cobertura: se lee de un vistazo si el hueco se achica. */
+.marketing-tabla .barra {
+  display: inline-block;
+  width: 70px;
+  height: 6px;
+  margin-right: 8px;
+  border-radius: 3px;
+  background: var(--borde);
+  overflow: hidden;
+  vertical-align: middle;
+}
+
+.marketing-tabla .barra span {
+  display: block;
+  height: 100%;
+  background: #2e7d4f;
+}
+
+.marketing-borrar {
+  font: inherit;
+  font-size: 0.8rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: var(--radio);
+  background: transparent;
+  color: #a32d2d;
+  border: 1px solid var(--borde);
+  cursor: pointer;
+}
+
+.marketing-borrar:hover {
+  background: #fceaea;
+}
+
+/* Cuántas filas quedaron afuera del corte, y cómo traerlas. */
+.marketing-mas {
+  margin-top: 0.8rem;
+  font-size: 0.85rem;
+  opacity: 0.85;
+  color: var(--texto);
+}
+
+.marketing-mas button {
+  font: inherit;
+  font-size: 0.85rem;
+  padding: 0.25rem 0.7rem;
+  margin-left: 6px;
+  border-radius: var(--radio);
+  background: var(--superficie);
+  color: var(--texto);
+  border: 1px solid var(--borde-dorado);
+  cursor: pointer;
+}

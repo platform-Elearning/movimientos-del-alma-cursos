@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import AuthUtils from "../../utils/authUtils";
 import { update_description_for_teacher, getProfesorById } from "../../api/profesores";
 import "./changeDescription.css";
+import { obtenerLinkDirecto } from "../../utils/drive";
+import imgProf from "../../assets/emoji-profesores.png";
 
 const ChangeDescription = () => {
   const [formData, setFormData] = useState({
@@ -86,10 +88,10 @@ const ChangeDescription = () => {
 
   return (
     <div className="change-description-container">
-      <h2 className="form-title">Cambiar Descripción</h2>
+      <h2 className="form-title">Editar perfil</h2>
       <form onSubmit={handleSubmit} className="change-description-form">
         <div className="form-group" >
-        <label htmlFor="description_teacher">Nueva Descripción</label>
+        <label htmlFor="description_teacher">Descripción</label>
         <input
           id="description_teacher"
           name="description_teacher"
@@ -101,7 +103,24 @@ const ChangeDescription = () => {
         />
         </div>
         <div className="form-group" >
-        <label htmlFor="url_avatar">Url de imagen de perfil</label>
+        <label htmlFor="url_avatar">Foto de perfil</label>
+        <div className="avatar-preview">
+          <img
+            src={
+              formData.url_avatar
+                ? obtenerLinkDirecto(formData.url_avatar)
+                : imgProf
+            }
+            alt="Vista previa de tu foto de perfil"
+            onError={(e) => {
+              // Un link mal pegado no deja el hueco roto: cae en el genérico.
+              e.currentTarget.src = imgProf;
+            }}
+          />
+          <p className="avatar-ayuda">
+            Así te van a ver tus alumnas. Pegá el link de la imagen en Drive.
+          </p>
+        </div>
         <input
           id="url_avatar"
           name="url_avatar"
@@ -116,7 +135,7 @@ const ChangeDescription = () => {
           className="submit-button"
           disabled={isLoading || isLoadingProfile || !formData.id}
         >
-          {isLoading ? "Actualizando..." : "Actualizar Descripción"}
+          {isLoading ? "Guardando…" : "Guardar cambios"}
         </button>
         {isLoadingProfile && <p>Cargando datos actuales...</p>}
         {error && <p className="error-message">{error}</p>}

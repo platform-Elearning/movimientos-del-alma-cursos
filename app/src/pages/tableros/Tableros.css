@@ -1,0 +1,105 @@
+/* Tablero general. Tokens del sistema; los gráficos ponen sus propios colores. */
+
+.tableros {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 3rem;
+}
+
+.tableros-header h2 {
+  margin: 0 0 0.3rem;
+  color: var(--texto);
+}
+
+.tableros-header p {
+  margin: 0 0 1.3rem;
+  font-size: 0.88rem;
+  opacity: 0.8;
+  color: var(--texto);
+}
+
+.tableros h3 {
+  margin: 1.8rem 0 0.7rem;
+  font-size: 1.02rem;
+  color: var(--texto);
+}
+
+.tableros-estado,
+.tableros-error {
+  padding: 1rem 1.25rem;
+  color: var(--texto);
+  font-size: 0.9rem;
+}
+
+.tableros-error {
+  border-radius: var(--radio);
+  background: #fceaea;
+  color: #a32d2d;
+}
+
+.tableros-metricas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.tableros-graficos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+  margin: 1.2rem 0;
+}
+
+.tableros-accesos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 12px;
+}
+
+.tableros-acceso {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left;
+  font: inherit;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--borde-dorado);
+  border-radius: 12px;
+  background: var(--superficie);
+  color: var(--texto);
+  cursor: pointer;
+}
+
+.tableros-acceso:hover {
+  background: var(--superficie-sutil);
+}
+
+.tableros-acceso:focus-visible {
+  outline: 2px solid var(--var-dorado-fuerte);
+  outline-offset: 2px;
+}
+
+.tableros-acceso strong {
+  font-size: 0.95rem;
+}
+
+.tableros-acceso span {
+  font-size: 0.8rem;
+  opacity: 0.75;
+}
+
+/* Lo que este tablero deliberadamente no calcula. */
+.tableros-nota {
+  margin-top: 1.8rem;
+  padding: 0.7rem 0.9rem;
+  border-left: 3px solid var(--borde);
+  font-size: 0.84rem;
+  opacity: 0.8;
+  color: var(--texto);
+  max-width: 70ch;
+}
+
+.tableros-nota code {
+  font-size: 0.82rem;
+}

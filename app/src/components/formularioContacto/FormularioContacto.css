@@ -1,0 +1,147 @@
+/* Formulario único de contacto. Usa los tokens: sin colores propios. */
+
+.form-contacto {
+  background: var(--superficie);
+  border: 1px solid var(--borde-dorado);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+}
+
+.form-contacto-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px 18px;
+}
+
+.form-contacto .campo {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+/* Nombre, interés y notas ocupan la fila entera: son los que más se leen. */
+.form-contacto .campo-ancho {
+  grid-column: 1 / -1;
+}
+
+.form-contacto label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--texto);
+}
+
+.form-contacto input,
+.form-contacto select,
+.form-contacto textarea {
+  font: inherit;
+  font-size: 0.92rem;
+  padding: 0.5rem 0.7rem;
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  background: var(--superficie);
+  color: var(--texto);
+  width: 100%;
+}
+
+.form-contacto textarea {
+  resize: vertical;
+  min-height: 70px;
+}
+
+.form-contacto input:focus,
+.form-contacto select:focus,
+.form-contacto textarea:focus {
+  outline: none;
+  border-color: var(--var-dorado-medio);
+  box-shadow: 0 0 0 3px rgba(192, 140, 68, 0.15);
+}
+
+.form-contacto-error {
+  margin: 0.9rem 0 0;
+  padding: 0.6rem 0.8rem;
+  border-radius: var(--radio);
+  background: #fceaea;
+  color: #a32d2d;
+  font-size: 0.88rem;
+}
+
+.form-contacto-acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 1.1rem;
+}
+
+.form-contacto .btn-principal,
+.form-contacto .btn-secundario {
+  font: inherit;
+  font-size: 0.9rem;
+  padding: 0.55rem 1.2rem;
+  border-radius: var(--radio);
+  cursor: pointer;
+  transition: filter 0.15s ease;
+}
+
+.form-contacto .btn-principal {
+  background: var(--tinta);
+  color: var(--superficie);
+  border: 1px solid var(--tinta);
+}
+
+.form-contacto .btn-secundario {
+  background: var(--superficie);
+  color: var(--texto);
+  border: 1px solid var(--borde);
+}
+
+.form-contacto .btn-principal:hover:not(:disabled),
+.form-contacto .btn-secundario:hover {
+  filter: brightness(1.15);
+}
+
+/* Mientras guarda: sin doble envío y con el cursor diciéndolo. */
+.form-contacto .btn-principal:disabled {
+  opacity: 0.65;
+  cursor: progress;
+}
+
+.form-contacto .btn-principal:focus-visible,
+.form-contacto .btn-secundario:focus-visible {
+  outline: 2px solid var(--var-dorado-fuerte);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .form-contacto .btn-principal,
+  .form-contacto .btn-secundario {
+    transition: none;
+  }
+}
+
+/* Aviso de posible duplicado. Es amarillo y no rojo a propósito: el contacto se
+   guardó bien, esto no es un error sino algo para mirar. */
+.form-contacto-aviso {
+  margin: 0.9rem 0 0;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--borde-dorado);
+  border-left: 4px solid var(--var-dorado-fuerte);
+  border-radius: var(--radio);
+  background: rgba(192, 140, 68, 0.08);
+  color: var(--texto);
+  font-size: 0.88rem;
+}
+
+.form-contacto-aviso ul {
+  margin: 0.45rem 0;
+  padding-left: 1.1rem;
+}
+
+.form-contacto-aviso li {
+  margin-bottom: 0.2rem;
+}
+
+.form-contacto-aviso p {
+  margin: 0.45rem 0 0;
+  opacity: 0.85;
+}
