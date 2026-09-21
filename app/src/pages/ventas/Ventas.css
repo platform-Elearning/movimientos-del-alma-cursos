@@ -1,0 +1,58 @@
+/* Contenedor de ventas: título, pestañas y la vista elegida. */
+
+.ventas {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 3rem;
+}
+
+.ventas-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 1.2rem;
+}
+
+.ventas-header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--texto);
+}
+
+.ventas-tabs {
+  display: flex;
+  gap: 8px;
+}
+
+.ventas-tabs button {
+  font: inherit;
+  font-size: 0.9rem;
+  padding: 0.45rem 1rem;
+  border-radius: var(--radio);
+  background: var(--superficie);
+  color: var(--texto);
+  border: 1px solid var(--borde);
+  cursor: pointer;
+}
+
+.ventas-tabs button.activa {
+  background: var(--tinta);
+  color: var(--superficie);
+  border-color: var(--tinta);
+}
+
+.ventas-tabs button:focus-visible {
+  outline: 2px solid var(--var-dorado-fuerte);
+  outline-offset: 2px;
+}
+
+/* La bandeja y el embudo ya traen su propio ancho; acá sólo se anulan los
+   márgenes exteriores que tenían cuando eran pantallas sueltas. */
+.ventas .bandeja,
+.ventas .embudo-vista {
+  max-width: none;
+  padding: 0;
+  margin: 0;
+}

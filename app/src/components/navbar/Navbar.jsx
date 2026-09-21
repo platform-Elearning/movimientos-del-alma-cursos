@@ -225,19 +225,13 @@ const Navbar = () => {
                 className="alumno-a"
                 onClick={() => navigate("/ventas/seguimiento")}
               >
-                Seguimiento
+                Ventas
               </a>
               <a
                 className="alumno-a"
                 onClick={() => navigate("/ventas/pagos")}
               >
                 Pagos
-              </a>
-              <a
-                className="alumno-a"
-                onClick={() => navigate("/ventas/tablero")}
-              >
-                Tablero
               </a>
             </li>
           )}

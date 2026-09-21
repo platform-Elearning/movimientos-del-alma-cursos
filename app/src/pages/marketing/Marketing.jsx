@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   getOpcionesMarketing,
   getGastos,
@@ -14,6 +15,7 @@ import {
 } from "../../components/graficos/Graficos";
 import BackLink from "../../components/backLink/BackLink";
 import { mensajeDeError } from "../../utils/errores";
+import { legibleOpcional as legible } from "../../utils/etiquetas";
 import "./Marketing.css";
 
 /**
@@ -29,25 +31,6 @@ import "./Marketing.css";
  * inscripciones de la pauta que no se están contando.
  */
 
-const ETIQUETAS = {
-  meta_ads: "Meta Ads",
-  google_ads: "Google Ads",
-  otro: "Otro",
-  ig: "Instagram",
-  fb: "Facebook",
-  whatsapp: "WhatsApp",
-  web: "Página web",
-  referida: "Referida",
-  autoregistro: "Se registró sola",
-  no_identificado: "No identificado",
-  sin_cargar: "Sin cargar",
-  nueva: "Nueva",
-  esperando_respuesta: "Esperando respuesta",
-  en_conversacion: "En conversación",
-  inscripta: "Inscripta",
-  perdida: "Perdida",
-};
-const legible = (v) => ETIQUETAS[v] || v || "—";
 
 const plata = (monto, moneda) =>
   `${moneda === "USD" ? "US$" : "$"} ${Number(monto).toLocaleString("es-AR", {
@@ -70,6 +53,7 @@ const GASTO_VACIO = {
 };
 
 const Marketing = () => {
+  const navigate = useNavigate();
   const [vista, setVista] = useState("conversiones");
   const [opciones, setOpciones] = useState({ plataformas: [], monedas: [] });
   const [gasto, setGasto] = useState(GASTO_VACIO);
@@ -177,7 +161,7 @@ const Marketing = () => {
 
   return (
     <div className="marketing">
-      <BackLink />
+      <BackLink title="Volver" onClick={() => navigate(-1)} />
       <header className="marketing-header">
         <h2>Marketing</h2>
         <div className="marketing-tabs">

@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   getOpcionesPago,
   buscarAlumnas,
@@ -8,6 +9,7 @@ import {
 } from "../../api/pagos";
 import BackLink from "../../components/backLink/BackLink";
 import { mensajeDeError } from "../../utils/errores";
+import { legibleOpcional as legible } from "../../utils/etiquetas";
 import "./Pagos.css";
 
 /**
@@ -24,18 +26,6 @@ import "./Pagos.css";
  * equivocada.
  */
 
-const ETIQUETAS = {
-  matricula: "Matrícula",
-  modulo: "Módulo",
-  examen: "Examen",
-  certificado: "Certificado",
-  otro: "Otro",
-  transferencia: "Transferencia",
-  mercadopago: "MercadoPago",
-  efectivo: "Efectivo",
-  paypal: "PayPal",
-};
-const legible = (v) => ETIQUETAS[v] || v || "—";
 
 /** Los importes se muestran con su moneda pegada: nunca un número solo. */
 const plata = (monto, moneda) =>
@@ -67,6 +57,7 @@ const PAGO_VACIO = {
 };
 
 const Pagos = () => {
+  const navigate = useNavigate();
   const [vista, setVista] = useState("alumna");
   const [opciones, setOpciones] = useState({ conceptos: [], monedas: [], metodos: [] });
 
@@ -95,10 +86,19 @@ const Pagos = () => {
   // El buscador espera a que se deje de tipear: sin esto sale una consulta por
   // cada tecla.
   useEffect(() => {
+    // vigente descarta la respuesta de una búsqueda que ya quedó vieja: sin
+    // esto, escribir rápido puede hacer que la respuesta de "ma" llegue después
+    // de la de "marta" y pise la lista con resultados que no corresponden.
+    let vigente = true;
     const t = setTimeout(() => {
-      buscarAlumnas(busqueda).then(setAlumnas).catch(() => setAlumnas([]));
+      buscarAlumnas(busqueda)
+        .then((r) => vigente && setAlumnas(r))
+        .catch(() => vigente && setAlumnas([]));
     }, 300);
-    return () => clearTimeout(t);
+    return () => {
+      vigente = false;
+      clearTimeout(t);
+    };
   }, [busqueda]);
 
   const cargarFicha = useCallback(async (studentId) => {
@@ -132,6 +132,19 @@ const Pagos = () => {
   useEffect(() => {
     if (vista === "mes") cargarMes();
   }, [vista, cargarMes]);
+
+  // Si la alumna no está inscripta a ninguna formación, "módulo" sale de la
+  // lista de conceptos: el concepto elegido tiene que salir con él, o el
+  // selector queda mostrando un valor que ya no ofrece.
+  useEffect(() => {
+    if (ficha && ficha.modulos.length === 0) {
+      setPago((prev) =>
+        prev.concept === "modulo"
+          ? { ...prev, concept: "matricula", modules_count: "" }
+          : prev
+      );
+    }
+  }, [ficha]);
 
   const cambiarPago = (e) => {
     const { name, value } = e.target;
@@ -172,7 +185,7 @@ const Pagos = () => {
 
   return (
     <div className="pagos">
-      <BackLink />
+      <BackLink title="Volver" onClick={() => navigate(-1)} />
       <header className="pagos-header">
         <h2>Pagos</h2>
         <div className="pagos-tabs">
@@ -283,11 +296,15 @@ const Pagos = () => {
                         value={pago.concept}
                         onChange={cambiarPago}
                       >
-                        {(opciones.conceptos || []).map((c) => (
-                          <option key={c} value={c}>
-                            {legible(c)}
-                          </option>
-                        ))}
+                        {(opciones.conceptos || [])
+                          // Sin inscripción no hay módulos que pagar: el pago no
+                          // tendría dónde sumar.
+                          .filter((c) => c !== "modulo" || ficha.modulos.length > 0)
+                          .map((c) => (
+                            <option key={c} value={c}>
+                              {legible(c)}
+                            </option>
+                          ))}
                       </select>
                     </div>
 
@@ -365,14 +382,21 @@ const Pagos = () => {
 
                     {ficha.modulos.length > 0 && (
                       <div className="campo">
-                        <label htmlFor="pg-formacion">Por qué formación</label>
+                        <label htmlFor="pg-formacion">
+                          Por qué formación{pago.concept === "modulo" ? " *" : ""}
+                        </label>
                         <select
                           id="pg-formacion"
                           name="enrollment_id"
                           value={pago.enrollment_id}
                           onChange={cambiarPago}
+                          required={pago.concept === "modulo"}
                         >
-                          <option value="">Sin formación</option>
+                          {/* Un pago de módulos sin formación no sumaría al
+                              contador de módulos habilitados. */}
+                          <option value="">
+                            {pago.concept === "modulo" ? "Elegí la formación" : "Sin formación"}
+                          </option>
                           {ficha.modulos.map((m) => (
                             <option key={m.enrollment_id} value={m.enrollment_id}>
                               {m.course_name}

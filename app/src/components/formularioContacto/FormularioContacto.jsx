@@ -5,6 +5,7 @@ import {
   actualizarContacto,
 } from "../../api/contactos";
 import CountrySelect from "../countrySelect/CountrySelect";
+import { legible } from "../../utils/etiquetas";
 import "./FormularioContacto.css";
 
 /**
@@ -35,30 +36,7 @@ const VACIO = {
   last_contact_at: "",
 };
 
-const ETIQUETAS = {
-  nueva: "Nueva",
-  esperando_respuesta: "Esperando respuesta",
-  en_conversacion: "En conversación",
-  inscripta: "Inscripta",
-  perdida: "Perdida",
-  meta_ads: "Meta Ads (pauta)",
-  google_ads: "Google Ads (pauta)",
-  ig: "Instagram",
-  fb: "Facebook",
-  whatsapp: "WhatsApp",
-  web: "Página web",
-  referida: "Referida",
-  autoregistro: "Se registró sola",
-  no_identificado: "No identificado",
-  otro: "Otro",
-  falta_de_tiempo: "Falta de tiempo",
-  precio: "Precio",
-  otra_academia: "Se fue a otra academia",
-  no_era_lo_que_buscaba: "No era lo que buscaba",
-  nunca_respondio: "Nunca respondió",
-};
 
-const legible = (v) => ETIQUETAS[v] || v;
 
 const FormularioContacto = ({ contacto, onGuardado, onCancelar }) => {
   const [datos, setDatos] = useState(VACIO);

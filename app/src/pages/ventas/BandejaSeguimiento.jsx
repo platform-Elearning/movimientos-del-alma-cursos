@@ -2,8 +2,8 @@ import { useState, useEffect, useCallback } from "react";
 import { getSeguimiento, registrarEvento } from "../../api/contactos";
 import FormularioContacto from "../../components/formularioContacto/FormularioContacto";
 import FormularioInscripcion from "../../components/formularioInscripcion/FormularioInscripcion";
-import BackLink from "../../components/backLink/BackLink";
-import { useNavigate } from "react-router-dom";
+import { legible } from "../../utils/etiquetas";
+import { mensajeDeError } from "../../utils/errores";
 import "./BandejaSeguimiento.css";
 
 /**
@@ -15,24 +15,6 @@ import "./BandejaSeguimiento.css";
  * esperando, eso tiene que doler.
  */
 
-const ETIQUETAS = {
-  nueva: "Nueva",
-  esperando_respuesta: "Esperando respuesta",
-  en_conversacion: "En conversación",
-  inscripta: "Inscripta",
-  perdida: "Perdida",
-  meta_ads: "Meta Ads (pauta)",
-  google_ads: "Google Ads (pauta)",
-  ig: "Instagram",
-  fb: "Facebook",
-  whatsapp: "WhatsApp",
-  web: "Página web",
-  referida: "Referida",
-  autoregistro: "Se registró sola",
-  no_identificado: "No identificado",
-  otro: "Otro",
-};
-const legible = (v) => ETIQUETAS[v] || v || "Sin dato";
 
 /** La urgencia sale del tiempo esperando, no de un campo cargado a mano. */
 const urgencia = (dias) => {
@@ -43,7 +25,6 @@ const urgencia = (dias) => {
 };
 
 const BandejaSeguimiento = () => {
-  const navigate = useNavigate();
   const [cola, setCola] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState("");
@@ -59,8 +40,8 @@ const BandejaSeguimiento = () => {
       setCargando(true);
       setError("");
       setCola(await getSeguimiento());
-    } catch {
-      setError("No se pudo cargar la bandeja. Reintentá en un momento.");
+    } catch (err) {
+      setError(mensajeDeError(err, "cargar la bandeja"));
     } finally {
       setCargando(false);
     }
@@ -107,11 +88,9 @@ const BandejaSeguimiento = () => {
 
   return (
     <div className="bandeja">
-      <BackLink title="Volver" onClick={() => navigate(-1)} />
 
       <header className="bandeja-header">
         <div>
-          <h1>Seguimiento</h1>
           <p className="bandeja-sub">
             Ordenados por quién espera hace más tiempo. Los que nunca fueron
             atendidos van primero.

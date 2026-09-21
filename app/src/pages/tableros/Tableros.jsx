@@ -87,7 +87,7 @@ const Tableros = () => {
 
   return (
     <div className="tableros">
-      <BackLink />
+      <BackLink title="Volver" onClick={() => navigate(-1)} />
       <header className="tableros-header">
         <h2>Tableros</h2>
         <p>Las cifras de arriba de todo, y desde acá al detalle de cada una.</p>
@@ -154,8 +154,8 @@ const Tableros = () => {
       <h3>Entrar al detalle</h3>
       <div className="tableros-accesos">
         {[
-          ["Embudo de ventas", "Estados, orígenes y motivos de pérdida", "/admin/tablero"],
-          ["Seguimiento", "A quién hay que escribirle hoy", "/admin/seguimiento"],
+          ["Ventas · seguimiento", "A quién hay que escribirle hoy", "/admin/seguimiento"],
+          ["Ventas · embudo", "Dónde se cae la gente y qué trae cada canal", "/admin/tablero"],
           ["Pagos", "Ficha por alumna y cierre del mes", "/admin/pagos"],
           ["Marketing", "Conversiones, inversión y planilla", "/admin/marketing"],
         ].map(([titulo, detalle, ruta]) => (
