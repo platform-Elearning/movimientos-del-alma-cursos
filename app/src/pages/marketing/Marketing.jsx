@@ -59,7 +59,8 @@ const Marketing = () => {
   const [gasto, setGasto] = useState(GASTO_VACIO);
   const [gastos, setGastos] = useState([]);
   const [metricas, setMetricas] = useState(null);
-  const [planilla, setPlanilla] = useState([]);
+  const [planilla, setPlanilla] = useState({ filas: [], total: 0, limite: 200 });
+  const [limitePlanilla, setLimitePlanilla] = useState(200);
   const [guardando, setGuardando] = useState(false);
   const [error, setError] = useState("");
   const [aviso, setAviso] = useState(null);
@@ -78,7 +79,7 @@ const Marketing = () => {
     const [g, m, p] = await Promise.allSettled([
       getGastos(),
       getMetricasInversion(),
-      getPlanilla(),
+      getPlanilla({ limite: limitePlanilla }),
     ]);
     if (g.status === "fulfilled") setGastos(g.value);
     if (m.status === "fulfilled") setMetricas(m.value);
@@ -102,7 +103,7 @@ const Marketing = () => {
       setError("");
     }
     setCargando(false);
-  }, []);
+  }, [limitePlanilla]);
 
   useEffect(() => {
     cargar();
@@ -454,7 +455,7 @@ const Marketing = () => {
             pagos reales, por eso va separado por moneda.
           </p>
 
-          {planilla.length === 0 ? (
+          {planilla.filas.length === 0 ? (
             <p className="marketing-vacio">No hay consultas cargadas.</p>
           ) : (
             <div className="marketing-tabla-scroll">
@@ -472,7 +473,7 @@ const Marketing = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {planilla.map((f) => (
+                  {planilla.filas.map((f) => (
                     <tr key={f.id} className={f.inscripta ? "es-inscripta" : ""}>
                       <td>{soloFecha(f.fecha)}</td>
                       <td>{f.nombre}</td>
@@ -491,6 +492,15 @@ const Marketing = () => {
                 </tbody>
               </table>
             </div>
+          )}
+
+          {planilla.total > planilla.filas.length && (
+            <p className="marketing-mas">
+              Mostrando {planilla.filas.length} de {planilla.total} consultas.{" "}
+              <button type="button" onClick={() => setLimitePlanilla(planilla.total)}>
+                Mostrar todas
+              </button>
+            </p>
           )}
         </>
       )}

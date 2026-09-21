@@ -40,12 +40,15 @@ export const eliminarGasto = async (id) => {
  * que se llenaba a mano: fecha, nombre, país, formación, origen, estado, si se
  * inscribió y cuánto pagó.
  */
-export const getPlanilla = async ({ desde, hasta } = {}) => {
+export const getPlanilla = async ({ desde, hasta, limite } = {}) => {
   const params = new URLSearchParams();
   if (desde) params.append("desde", desde);
   if (hasta) params.append("hasta", hasta);
+  if (limite) params.append("limite", limite);
   const { data } = await instanceUsers.get(`/marketing/planilla?${params.toString()}`);
-  return data.data;
+  // Vienen las filas y el total: la pantalla tiene que poder decir cuántas
+  // quedaron afuera en vez de cortar en silencio.
+  return { filas: data.filas, total: data.total, limite: data.limite };
 };
 
 /** Costo por consulta y por inscripción, con su cobertura de atribución. */

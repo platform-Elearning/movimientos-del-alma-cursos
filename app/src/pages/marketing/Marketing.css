@@ -350,3 +350,23 @@
 .marketing-borrar:hover {
   background: #fceaea;
 }
+
+/* Cuántas filas quedaron afuera del corte, y cómo traerlas. */
+.marketing-mas {
+  margin-top: 0.8rem;
+  font-size: 0.85rem;
+  opacity: 0.85;
+  color: var(--texto);
+}
+
+.marketing-mas button {
+  font: inherit;
+  font-size: 0.85rem;
+  padding: 0.25rem 0.7rem;
+  margin-left: 6px;
+  border-radius: var(--radio);
+  background: var(--superficie);
+  color: var(--texto);
+  border: 1px solid var(--borde-dorado);
+  cursor: pointer;
+}
