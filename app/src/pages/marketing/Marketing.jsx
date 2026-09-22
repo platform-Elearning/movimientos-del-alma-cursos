@@ -16,6 +16,7 @@ import {
 import BackLink from "../../components/backLink/BackLink";
 import { mensajeDeError } from "../../utils/errores";
 import { legibleOpcional as legible } from "../../utils/etiquetas";
+import { mesLocal } from "../../utils/fechas";
 import "./Marketing.css";
 
 /**
@@ -41,12 +42,10 @@ const porcentaje = (v) => (v === null || v === undefined ? "—" : `${Math.round
 
 const soloFecha = (f) => (f ? String(f).slice(0, 10) : "");
 
-const mesDeHoy = () => new Date().toISOString().slice(0, 7);
-
 const GASTO_VACIO = {
   platform: "meta_ads",
   campaign: "",
-  period: mesDeHoy(),
+  period: mesLocal(),
   amount: "",
   currency: "ARS",
   notes: "",

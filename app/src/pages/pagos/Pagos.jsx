@@ -9,6 +9,7 @@ import {
 } from "../../api/pagos";
 import BackLink from "../../components/backLink/BackLink";
 import { mensajeDeError } from "../../utils/errores";
+import { hoyLocal, mesCorriente } from "../../utils/fechas";
 import { legibleOpcional as legible } from "../../utils/etiquetas";
 import "./Pagos.css";
 
@@ -36,22 +37,13 @@ const plata = (monto, moneda) =>
 
 const soloFecha = (f) => (f ? String(f).slice(0, 10) : "");
 
-/** El mes corriente, que es el período que se mira el 99% de las veces. */
-const mesActual = () => {
-  const hoy = new Date();
-  const primero = new Date(hoy.getFullYear(), hoy.getMonth(), 1);
-  const ultimo = new Date(hoy.getFullYear(), hoy.getMonth() + 1, 0);
-  const iso = (d) => d.toISOString().slice(0, 10);
-  return { desde: iso(primero), hasta: iso(ultimo) };
-};
-
 const PAGO_VACIO = {
   concept: "modulo",
   modules_count: 1,
   amount: "",
   currency: "ARS",
   method: "transferencia",
-  paid_at: soloFecha(new Date().toISOString()),
+  paid_at: hoyLocal(),
   notes: "",
   enrollment_id: "",
 };
@@ -71,7 +63,7 @@ const Pagos = () => {
   const [error, setError] = useState("");
   const [aviso, setAviso] = useState("");
 
-  const [periodo, setPeriodo] = useState(mesActual());
+  const [periodo, setPeriodo] = useState(mesCorriente());
   const [mes, setMes] = useState(null);
   const [cargando, setCargando] = useState(false);
 

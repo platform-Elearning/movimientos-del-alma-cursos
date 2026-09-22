@@ -277,3 +277,26 @@
   font-size: 0.85rem;
   color: var(--texto-suave);
 }
+
+/* Editar desde la bandeja: mismo peso visual que inscribir, porque las dos son
+   acciones sobre el contacto y no sobre la interacción. */
+.bandeja-btn-editar {
+  font: inherit;
+  font-size: 0.85rem;
+  margin-top: 0.7rem;
+  margin-right: 8px;
+  padding: 0.45rem 1rem;
+  border-radius: var(--radio);
+  background: var(--superficie);
+  color: var(--texto);
+  border: 1px solid var(--borde);
+  cursor: pointer;
+}
+
+.bandeja-btn-editar:hover {
+  background: var(--superficie-sutil);
+}
+
+.bandeja-edicion {
+  margin-top: 0.8rem;
+}

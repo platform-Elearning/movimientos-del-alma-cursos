@@ -1,0 +1,195 @@
+/* Lista de contactos: buscar, editar, borrar. Tokens del sistema. */
+
+.contactos-filtros {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px 14px;
+  margin-bottom: 1.1rem;
+}
+
+.contactos .campo {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.contactos .campo-ancho {
+  grid-column: span 2;
+}
+
+@media (max-width: 560px) {
+  .contactos .campo-ancho {
+    grid-column: span 1;
+  }
+}
+
+.contactos .campo label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--texto);
+}
+
+.contactos .campo input,
+.contactos .campo select {
+  font: inherit;
+  font-size: 0.9rem;
+  padding: 0.45rem 0.6rem;
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  background: var(--superficie);
+  color: var(--texto);
+  width: 100%;
+}
+
+.contactos .campo input:focus,
+.contactos .campo select:focus {
+  outline: none;
+  border-color: var(--var-dorado-medio);
+  box-shadow: 0 0 0 3px rgba(192, 140, 68, 0.15);
+}
+
+.contactos-cuenta {
+  margin: 0 0 0.5rem;
+  font-size: 0.82rem;
+  opacity: 0.75;
+  color: var(--texto);
+}
+
+.contactos-vacio {
+  font-size: 0.88rem;
+  opacity: 0.75;
+  color: var(--texto);
+}
+
+.contactos-error {
+  padding: 0.6rem 0.8rem;
+  border-radius: var(--radio);
+  background: #fceaea;
+  color: #a32d2d;
+  font-size: 0.88rem;
+}
+
+.contactos-aviso {
+  padding: 0.5rem 0.8rem;
+  border-radius: var(--radio);
+  background: rgba(46, 125, 79, 0.12);
+  color: #2e7d4f;
+  font-size: 0.86rem;
+}
+
+.contactos-tabla-scroll {
+  overflow-x: auto;
+}
+
+.contactos-tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.86rem;
+}
+
+.contactos-tabla th,
+.contactos-tabla td {
+  text-align: left;
+  padding: 0.5rem 0.6rem;
+  border-bottom: 1px solid var(--borde);
+  white-space: nowrap;
+  color: var(--texto);
+}
+
+.contactos-tabla th {
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.75;
+}
+
+.contactos-tabla td.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.contactos-chico {
+  font-size: 0.8rem;
+  opacity: 0.85;
+}
+
+/* Las que ya son alumnas se marcan con borde, no sólo con color. */
+.contactos-tabla tr.es-alumna td:first-child {
+  border-left: 3px solid #2e7d4f;
+}
+
+.contactos-tag {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 6px;
+  border-radius: 10px;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background: rgba(46, 125, 79, 0.15);
+  color: #2e7d4f;
+}
+
+.contactos-acciones {
+  display: flex;
+  gap: 6px;
+}
+
+.contactos-acciones button,
+.contactos-confirmar-acciones button {
+  font: inherit;
+  font-size: 0.8rem;
+  padding: 0.25rem 0.7rem;
+  border-radius: var(--radio);
+  background: var(--superficie);
+  color: var(--texto);
+  border: 1px solid var(--borde);
+  cursor: pointer;
+}
+
+.contactos-acciones button:hover {
+  background: var(--superficie-sutil);
+}
+
+.contactos-acciones button.borrar,
+.contactos-confirmar-acciones button.borrar {
+  color: #a32d2d;
+}
+
+.contactos-acciones button.borrar:hover,
+.contactos-confirmar-acciones button.borrar:hover {
+  background: #fceaea;
+}
+
+/* Confirmación de borrado: lo único irreversible de esta pantalla. */
+.contactos-confirmar {
+  margin-top: 1rem;
+  padding: 0.9rem 1.1rem;
+  border: 1px solid var(--borde-dorado);
+  border-left: 4px solid #a32d2d;
+  border-radius: var(--radio);
+  background: var(--superficie);
+}
+
+.contactos-confirmar p {
+  margin: 0 0 0.7rem;
+  font-size: 0.89rem;
+  color: var(--texto);
+}
+
+.contactos-confirmar-acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.contactos-edicion {
+  margin-top: 1.2rem;
+}
+
+.contactos-edicion h3 {
+  margin: 0 0 0.6rem;
+  font-size: 1rem;
+  color: var(--texto);
+}

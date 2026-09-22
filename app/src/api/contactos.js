@@ -12,15 +12,25 @@ export const getOpcionesContacto = async () => {
   return data.data;
 };
 
-export const getContactos = async ({ estado, origen, busqueda, limite, offset } = {}) => {
+export const getContactos = async ({
+  estado,
+  origen,
+  asignado,
+  busqueda,
+  limite,
+  offset,
+} = {}) => {
   const params = new URLSearchParams();
   if (estado) params.append("estado", estado);
   if (origen) params.append("origen", origen);
+  if (asignado) params.append("asignado", asignado);
   if (busqueda) params.append("busqueda", busqueda);
   if (limite) params.append("limite", limite);
   if (offset) params.append("offset", offset);
   const { data } = await instanceUsers.get(`/contacts?${params.toString()}`);
-  return data;
+  // Vienen los contactos y el total: la lista dice cuántos hay más allá de la
+  // página que se está mirando.
+  return { contactos: data.contactos, total: data.total };
 };
 
 /** La cola de seguimiento: a quién escribirle hoy, del que más espera al que menos. */
@@ -49,6 +59,17 @@ export const crearContacto = async (contacto) => {
 export const actualizarContacto = async (id, contacto) => {
   const { data } = await instanceUsers.put(`/contacts/${id}`, contacto);
   return { contacto: data.data, duplicados: data.duplicados };
+};
+
+/**
+ * Borra un contacto.
+ *
+ * El backend rechaza los que ya son alumnas: ese contacto es el único registro
+ * de cómo llegó la persona. Para esos casos se edita.
+ */
+export const eliminarContacto = async (id) => {
+  const { data } = await instanceUsers.delete(`/contacts/${id}`);
+  return data.data;
 };
 
 /** Registra una interacción y, si se pasa, mueve el estado en el mismo paso. */
