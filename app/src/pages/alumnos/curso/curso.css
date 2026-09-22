@@ -34,20 +34,25 @@ h4{
   letter-spacing: 0.5px;
   box-shadow: 0 4px 20px rgba(131, 113, 27, 0.3);
 }
+/* Sin alto fijo: una descripción larga tiene que empujar la caja, no salirse
+   por abajo y caer encima de los módulos. Pasó en producción con un curso cuya
+   descripción ocupaba el doble de los 200px que estaban clavados acá. */
 .tit-cont {
   display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
   background-color: #fff;
   justify-content: space-around;
-  align-items: start;
+  align-items: stretch;
   border-radius: 16px;
   padding: 16px;
   margin: 16px;
-  height: 200px;
 }
 
 .tit-cont-img {
-  height: 180px;
+  box-sizing: border-box;
   width: 10%;
+  min-width: 90px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -60,27 +65,31 @@ h4{
 }
 
 .tit-cont-prof {
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: start;
   width: 30%;
-  height: 170px;
-  padding:  16px;
+  min-width: 0;
+  padding: 16px;
   border: var(--var-dorado-fuerte) 1px solid;
-  border-radius:14px ;
+  border-radius: 14px;
+  /* min-width:0 y overflow-wrap para que un nombre o un mail largo corten en
+     vez de estirar la caja. */
+  overflow-wrap: anywhere;
 }
 
 .tit-cont-curso {
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: start;
   width: 50%;
+  min-width: 0;
   border: var(--var-dorado-fuerte) 1px solid;
-
-  border-radius:14px ;
-  color: #fff;
-  height: 170px;
-  padding:  16px;
+  border-radius: 14px;
+  padding: 16px;
+  overflow-wrap: anywhere;
 }
 
 .course-title span {
@@ -135,6 +144,25 @@ h4{
 }
 
 @media (max-width: 768px) {
+  /* Apiladas: con 375px de ancho, tres columnas dejan renglones de dos
+     palabras y la caja se vuelve ilegible. */
+  .tit-cont {
+    flex-direction: column;
+    align-items: stretch;
+    margin: 12px;
+    padding: 12px;
+  }
+
+  .tit-cont-img,
+  .tit-cont-prof,
+  .tit-cont-curso {
+    width: 100%;
+  }
+
+  .tit-cont-img {
+    min-width: 0;
+  }
+
   .course-title {
     font-size: 2rem;
     padding: 30px 15px;
