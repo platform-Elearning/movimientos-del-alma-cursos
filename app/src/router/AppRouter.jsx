@@ -71,6 +71,8 @@ const AppRouter = () => {
                 el admin ve lo mismo sin duplicar la vista. */}
             {/* La bandeja y el embudo son una sola pantalla en dos pestañas. */}
             <Route path="/ventas/seguimiento" element={<Ventas />} />
+            <Route path="/ventas/contactos" element={<Ventas />} />
+            <Route path="/admin/contactos" element={<Ventas />} />
             <Route path="/admin/seguimiento" element={<Ventas />} />
             <Route path="/ventas/tablero" element={<Ventas />} />
             {/* Pagos los cargan la vendedora y el admin: la misma pantalla

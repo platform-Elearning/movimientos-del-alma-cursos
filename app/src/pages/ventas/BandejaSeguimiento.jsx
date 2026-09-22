@@ -34,6 +34,7 @@ const BandejaSeguimiento = () => {
   const [guardando, setGuardando] = useState(false);
   const [mostrarAlta, setMostrarAlta] = useState(false);
   const [inscribiendo, setInscribiendo] = useState(null);
+  const [editando, setEditando] = useState(null);
 
   const cargar = useCallback(async () => {
     try {
@@ -200,6 +201,29 @@ const BandejaSeguimiento = () => {
                     {guardando ? "Registrando…" : "Registrar"}
                   </button>
                 </div>
+
+                {editando?.id === c.id ? (
+                  <div className="bandeja-edicion">
+                    <FormularioContacto
+                      contacto={c}
+                      onGuardado={(_guardado, duplicados) => {
+                        if (!duplicados) setEditando(null);
+                        // Recargar importa acá: si se corrigieron las fechas,
+                        // el contacto cambia de lugar en la cola.
+                        cargar();
+                      }}
+                      onCancelar={() => setEditando(null)}
+                    />
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    className="bandeja-btn-editar"
+                    onClick={() => setEditando(c)}
+                  >
+                    Editar datos y fechas
+                  </button>
+                )}
 
                 {/* Inscribir vive separado de registrar una interacción: una
                     anota lo que pasó, la otra le crea la cuenta y le da acceso

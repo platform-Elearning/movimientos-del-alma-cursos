@@ -1,6 +1,7 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import BandejaSeguimiento from "./BandejaSeguimiento";
 import EmbudoVentas from "./EmbudoVentas";
+import Contactos from "./Contactos";
 import BackLink from "../../components/backLink/BackLink";
 import "./Ventas.css";
 
@@ -20,6 +21,7 @@ import "./Ventas.css";
 
 const PESTANAS = [
   ["bandeja", "Seguimiento", "seguimiento"],
+  ["contactos", "Todos los contactos", "contactos"],
   ["embudo", "Embudo", "tablero"],
 ];
 
@@ -30,7 +32,11 @@ const Ventas = () => {
   // /admin o /ventas: la pantalla es la misma y se conserva la sección por la
   // que se entró, que es la que tiene sentido en el "volver".
   const seccion = pathname.startsWith("/admin") ? "/admin" : "/ventas";
-  const vista = pathname.endsWith("/tablero") ? "embudo" : "bandeja";
+  const vista = pathname.endsWith("/tablero")
+    ? "embudo"
+    : pathname.endsWith("/contactos")
+      ? "contactos"
+      : "bandeja";
 
   return (
     <div className="ventas">
@@ -56,7 +62,9 @@ const Ventas = () => {
 
       {/* Se monta una sola: cada vista pide sus datos al montarse, y tener las
           dos vivas duplicaría las consultas en cada cambio de pestaña. */}
-      {vista === "bandeja" ? <BandejaSeguimiento /> : <EmbudoVentas />}
+      {vista === "bandeja" && <BandejaSeguimiento />}
+      {vista === "contactos" && <Contactos />}
+      {vista === "embudo" && <EmbudoVentas />}
     </div>
   );
 };
