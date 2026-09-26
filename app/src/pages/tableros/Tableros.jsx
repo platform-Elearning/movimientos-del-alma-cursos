@@ -7,6 +7,7 @@ import { BarrasHorizontales, LineaTemporal, Metrica } from "../../components/gra
 import BackLink from "../../components/backLink/BackLink";
 import { mensajeDeError } from "../../utils/errores";
 import "./Tableros.css";
+import { plataRedonda, porcentaje } from "../../utils/formato";
 
 /**
  * El tablero de todo: las cifras que se miran primero y desde dónde entrar al
@@ -21,13 +22,6 @@ import "./Tableros.css";
  * un CSV cargado a mano, porque esta base no tiene gastos de profesores ni
  * distribuciones. Mostrar un "resultado" acá sería inventarlo.
  */
-
-const plata = (monto, moneda) =>
-  `${moneda === "USD" ? "US$" : "$"} ${Number(monto).toLocaleString("es-AR", {
-    maximumFractionDigits: 0,
-  })}`;
-
-const porcentaje = (v) => (v === null || v === undefined ? "—" : `${Math.round(v * 100)}%`);
 
 /**
  * La serie mensual de facturación llega con una fila por mes y moneda. Se pivota
@@ -108,8 +102,8 @@ const Tableros = () => {
       </div>
 
       <div className="tableros-metricas">
-        <Metrica rotulo="Facturado en pesos" valor={plata(facturadoARS, "ARS")} />
-        <Metrica rotulo="Facturado en dólares" valor={plata(facturadoUSD, "USD")} />
+        <Metrica rotulo="Facturado en pesos" valor={plataRedonda(facturadoARS, "ARS")} />
+        <Metrica rotulo="Facturado en dólares" valor={plataRedonda(facturadoUSD, "USD")} />
         <Metrica
           rotulo="Con origen conocido"
           valor={porcentaje(cobertura)}

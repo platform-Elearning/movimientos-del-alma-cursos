@@ -15,6 +15,7 @@ import { mensajeDeError } from "../../utils/errores";
 import { hoyLocal, mesCorriente } from "../../utils/fechas";
 import { legibleOpcional as legible } from "../../utils/etiquetas";
 import "./Pagos.css";
+import { plata } from "../../utils/formato";
 
 /**
  * Pagos: la ficha de una alumna y el cierre del mes.
@@ -29,14 +30,6 @@ import "./Pagos.css";
  * desplegable en una lista general es como se cargan pagos a la alumna
  * equivocada. Por lo mismo, editar y borrar también viven en la ficha.
  */
-
-
-/** Los importes se muestran con su moneda pegada: nunca un número solo. */
-const plata = (monto, moneda) =>
-  `${moneda === "USD" ? "US$" : "$"} ${Number(monto).toLocaleString("es-AR", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  })}`;
 
 const soloFecha = (f) => (f ? String(f).slice(0, 10) : "");
 
