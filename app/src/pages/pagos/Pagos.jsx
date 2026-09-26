@@ -5,8 +5,11 @@ import {
   buscarAlumnas,
   getPagosDeAlumna,
   registrarPago,
+  actualizarPago,
+  eliminarPago,
   getPagosDelPeriodo,
 } from "../../api/pagos";
+import { useAuth } from "../../services/authContext";
 import BackLink from "../../components/backLink/BackLink";
 import { mensajeDeError } from "../../utils/errores";
 import { hoyLocal, mesCorriente } from "../../utils/fechas";
@@ -24,7 +27,7 @@ import "./Pagos.css";
  * El pago se carga SIEMPRE desde la ficha de la alumna, nunca desde la lista
  * del mes: un pago siempre es de alguien, y elegir a la persona de un
  * desplegable en una lista general es como se cargan pagos a la alumna
- * equivocada.
+ * equivocada. Por lo mismo, editar y borrar también viven en la ficha.
  */
 
 
@@ -36,6 +39,18 @@ const plata = (monto, moneda) =>
   })}`;
 
 const soloFecha = (f) => (f ? String(f).slice(0, 10) : "");
+
+/** Un pago de la ficha, en la forma que espera el formulario. */
+const pagoAFormulario = (p) => ({
+  concept: p.concept,
+  modules_count: p.modules_count ?? "",
+  amount: String(p.amount),
+  currency: p.currency,
+  method: p.method || "",
+  paid_at: soloFecha(p.paid_at),
+  notes: p.notes || "",
+  enrollment_id: p.enrollment_id ? String(p.enrollment_id) : "",
+});
 
 const PAGO_VACIO = {
   concept: "modulo",
@@ -50,6 +65,9 @@ const PAGO_VACIO = {
 
 const Pagos = () => {
   const navigate = useNavigate();
+  // Borrar es solo de admin (el backend también lo exige): a la vendedora ni
+  // se le muestra el botón, para no ofrecerle algo que le va a dar 403.
+  const { userRole } = useAuth();
   const [vista, setVista] = useState("alumna");
   const [opciones, setOpciones] = useState({ conceptos: [], monedas: [], metodos: [] });
 
@@ -59,6 +77,8 @@ const Pagos = () => {
   const [ficha, setFicha] = useState(null);
 
   const [pago, setPago] = useState(PAGO_VACIO);
+  // null = el formulario registra un pago nuevo; un id = está corrigiendo ese.
+  const [editandoId, setEditandoId] = useState(null);
   const [guardando, setGuardando] = useState(false);
   const [error, setError] = useState("");
   const [aviso, setAviso] = useState("");
@@ -106,6 +126,8 @@ const Pagos = () => {
     setElegida(alumna);
     setAviso("");
     setPago(PAGO_VACIO);
+    // Una edición a medias no puede quedar colgada sobre otra alumna.
+    setEditandoId(null);
     await cargarFicha(alumna.id);
   };
 
@@ -129,14 +151,14 @@ const Pagos = () => {
   // lista de conceptos: el concepto elegido tiene que salir con él, o el
   // selector queda mostrando un valor que ya no ofrece.
   useEffect(() => {
-    if (ficha && ficha.modulos.length === 0) {
+    if (ficha && ficha.modulos.length === 0 && !editandoId) {
       setPago((prev) =>
         prev.concept === "modulo"
           ? { ...prev, concept: "matricula", modules_count: "" }
           : prev
       );
     }
-  }, [ficha]);
+  }, [ficha, editandoId]);
 
   const cambiarPago = (e) => {
     const { name, value } = e.target;
@@ -158,20 +180,60 @@ const Pagos = () => {
     setGuardando(true);
     setError("");
     setAviso("");
+    const datos = {
+      ...pago,
+      enrollment_id: pago.enrollment_id || undefined,
+      modules_count: pago.concept === "modulo" ? Number(pago.modules_count) || 1 : undefined,
+    };
     try {
-      await registrarPago({
-        ...pago,
-        student_id: elegida.id,
-        enrollment_id: pago.enrollment_id || undefined,
-        modules_count: pago.concept === "modulo" ? Number(pago.modules_count) || 1 : undefined,
-      });
+      if (editandoId) {
+        await actualizarPago(editandoId, datos);
+        setAviso("Pago corregido.");
+      } else {
+        await registrarPago({ ...datos, student_id: elegida.id });
+        setAviso("Pago registrado.");
+      }
       setPago(PAGO_VACIO);
-      setAviso("Pago registrado.");
+      setEditandoId(null);
       await cargarFicha(elegida.id);
     } catch (err) {
-      setError(mensajeDeError(err, "registrar el pago"));
+      setError(mensajeDeError(err, editandoId ? "corregir el pago" : "registrar el pago"));
     } finally {
       setGuardando(false);
+    }
+  };
+
+  const editar = (p) => {
+    setEditandoId(p.id);
+    setPago(pagoAFormulario(p));
+    setError("");
+    setAviso("");
+    document.getElementById("pg-form")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  const cancelarEdicion = () => {
+    setEditandoId(null);
+    setPago(PAGO_VACIO);
+    setError("");
+  };
+
+  const borrar = async (p) => {
+    // El pago es el único registro de que esa plata entró: se pide confirmar
+    // mostrando qué se va a borrar, no un "¿seguro?" genérico.
+    const ok = window.confirm(
+      `¿Eliminar el pago de ${plata(p.amount, p.currency)} (${legible(p.concept)}) ` +
+        `del ${soloFecha(p.paid_at)}? No se puede deshacer.`
+    );
+    if (!ok) return;
+    setError("");
+    setAviso("");
+    try {
+      await eliminarPago(p.id);
+      if (editandoId === p.id) cancelarEdicion();
+      setAviso("Pago eliminado.");
+      await cargarFicha(elegida.id);
+    } catch (err) {
+      setError(mensajeDeError(err, "eliminar el pago"));
     }
   };
 
@@ -277,8 +339,12 @@ const Pagos = () => {
                   ))}
                 </div>
 
-                <form className="pagos-form" onSubmit={guardar}>
-                  <h4>Registrar un pago</h4>
+                <form
+                  id="pg-form"
+                  className={`pagos-form ${editandoId ? "editando" : ""}`}
+                  onSubmit={guardar}
+                >
+                  <h4>{editandoId ? "Corregir un pago" : "Registrar un pago"}</h4>
                   <div className="pagos-form-grid">
                     <div className="campo">
                       <label htmlFor="pg-concepto">Concepto</label>
@@ -413,8 +479,22 @@ const Pagos = () => {
                   {aviso && <p className="pagos-aviso">{aviso}</p>}
 
                   <div className="pagos-form-acciones">
+                    {editandoId && (
+                      <button
+                        type="button"
+                        className="btn-secundario"
+                        onClick={cancelarEdicion}
+                        disabled={guardando}
+                      >
+                        Cancelar
+                      </button>
+                    )}
                     <button type="submit" className="btn-principal" disabled={guardando}>
-                      {guardando ? "Registrando…" : "Registrar pago"}
+                      {guardando
+                        ? "Guardando…"
+                        : editandoId
+                          ? "Guardar cambios"
+                          : "Registrar pago"}
                     </button>
                   </div>
                 </form>
@@ -433,11 +513,12 @@ const Pagos = () => {
                           <th>Medio</th>
                           <th>Formación</th>
                           <th>Cargó</th>
+                          <th aria-label="Acciones" />
                         </tr>
                       </thead>
                       <tbody>
                         {ficha.pagos.map((p) => (
-                          <tr key={p.id}>
+                          <tr key={p.id} className={editandoId === p.id ? "editando" : ""}>
                             <td>{soloFecha(p.paid_at)}</td>
                             <td>
                               {legible(p.concept)}
@@ -446,7 +527,31 @@ const Pagos = () => {
                             <td className="num">{plata(p.amount, p.currency)}</td>
                             <td>{legible(p.method)}</td>
                             <td>{p.course_name || "—"}</td>
-                            <td>{p.cargado_por || "—"}</td>
+                            <td>
+                              {p.cargado_por || "—"}
+                              {p.updated_at && (
+                                <small
+                                  className="pagos-editado"
+                                  title={`Editado el ${soloFecha(p.updated_at)}`}
+                                >
+                                  editó {p.editado_por || "—"}
+                                </small>
+                              )}
+                            </td>
+                            <td className="acciones">
+                              <button type="button" className="btn-fila" onClick={() => editar(p)}>
+                                Editar
+                              </button>
+                              {userRole === "admin" && (
+                                <button
+                                  type="button"
+                                  className="btn-fila peligro"
+                                  onClick={() => borrar(p)}
+                                >
+                                  Eliminar
+                                </button>
+                              )}
+                            </td>
                           </tr>
                         ))}
                       </tbody>

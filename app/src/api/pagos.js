@@ -45,6 +45,13 @@ export const getPagosDelPeriodo = async ({ desde, hasta } = {}) => {
   return data.data;
 };
 
+/** Corrige un pago. La alumna no se cambia: eso es borrar y volver a cargar. */
+export const actualizarPago = async (id, pago) => {
+  const { data } = await instanceUsers.put(`/payments/${id}`, pago);
+  return data.data;
+};
+
+/** Solo admin. */
 export const eliminarPago = async (id) => {
   const { data } = await instanceUsers.delete(`/payments/${id}`);
   return data.data;
