@@ -18,6 +18,7 @@ import { mensajeDeError } from "../../utils/errores";
 import { legibleOpcional as legible } from "../../utils/etiquetas";
 import { mesLocal } from "../../utils/fechas";
 import "./Marketing.css";
+import { plataRedonda, porcentaje } from "../../utils/formato";
 
 /**
  * Marketing: conversiones, inversión y la planilla.
@@ -31,14 +32,6 @@ import "./Marketing.css";
  * es MÁS ALTO que el real: entre las consultas sin origen identificado hay
  * inscripciones de la pauta que no se están contando.
  */
-
-
-const plata = (monto, moneda) =>
-  `${moneda === "USD" ? "US$" : "$"} ${Number(monto).toLocaleString("es-AR", {
-    maximumFractionDigits: 0,
-  })}`;
-
-const porcentaje = (v) => (v === null || v === undefined ? "—" : `${Math.round(v * 100)}%`);
 
 const soloFecha = (f) => (f ? String(f).slice(0, 10) : "");
 
@@ -340,7 +333,7 @@ const Marketing = () => {
                 <ul>
                   {aviso.map((a) => (
                     <li key={a.id}>
-                      {plata(a.amount, a.currency)}
+                      {plataRedonda(a.amount, a.currency)}
                       {a.campaign ? ` · ${a.campaign}` : ""}
                     </li>
                   ))}
@@ -364,7 +357,7 @@ const Marketing = () => {
               {metricas.porPlataforma.map((p) => (
                 <div key={`${p.platform}-${p.currency}`} className="marketing-tarjeta">
                   <span className="plataforma">{legible(p.platform)}</span>
-                  <span className="gasto">{plata(p.gasto, p.currency)}</span>
+                  <span className="gasto">{plataRedonda(p.gasto, p.currency)}</span>
                   <dl>
                     <div>
                       <dt>Consultas</dt>
@@ -377,7 +370,7 @@ const Marketing = () => {
                     <div>
                       <dt>Por consulta</dt>
                       <dd>
-                        {p.costo_por_consulta === null ? "—" : plata(p.costo_por_consulta, p.currency)}
+                        {p.costo_por_consulta === null ? "—" : plataRedonda(p.costo_por_consulta, p.currency)}
                       </dd>
                     </div>
                     <div>
@@ -385,7 +378,7 @@ const Marketing = () => {
                       <dd>
                         {p.costo_por_inscripcion === null
                           ? "—"
-                          : plata(p.costo_por_inscripcion, p.currency)}
+                          : plataRedonda(p.costo_por_inscripcion, p.currency)}
                       </dd>
                     </div>
                   </dl>
@@ -430,7 +423,7 @@ const Marketing = () => {
                       <td>{String(g.period).slice(0, 7)}</td>
                       <td>{legible(g.platform)}</td>
                       <td>{g.campaign || "—"}</td>
-                      <td className="num">{plata(g.amount, g.currency)}</td>
+                      <td className="num">{plataRedonda(g.amount, g.currency)}</td>
                       <td>{g.cargado_por || "—"}</td>
                       <td>
                         <button type="button" className="marketing-borrar" onClick={() => borrar(g.id)}>
@@ -482,8 +475,8 @@ const Marketing = () => {
                       <td>{legible(f.estado)}</td>
                       <td>{f.inscripta ? "Sí" : "No"}</td>
                       <td className="num">
-                        {Number(f.pagado_ars) > 0 && <div>{plata(f.pagado_ars, "ARS")}</div>}
-                        {Number(f.pagado_usd) > 0 && <div>{plata(f.pagado_usd, "USD")}</div>}
+                        {Number(f.pagado_ars) > 0 && <div>{plataRedonda(f.pagado_ars, "ARS")}</div>}
+                        {Number(f.pagado_usd) > 0 && <div>{plataRedonda(f.pagado_usd, "USD")}</div>}
                         {Number(f.pagado_ars) === 0 && Number(f.pagado_usd) === 0 && "—"}
                       </td>
                     </tr>

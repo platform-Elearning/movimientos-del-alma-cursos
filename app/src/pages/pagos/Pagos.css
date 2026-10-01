@@ -278,6 +278,7 @@
 .pagos-form-acciones {
   display: flex;
   justify-content: flex-end;
+  gap: 8px;
   margin-top: 0.9rem;
 }
 
@@ -290,6 +291,58 @@
   color: var(--superficie);
   border: 1px solid var(--tinta);
   cursor: pointer;
+}
+
+.pagos .btn-secundario {
+  font: inherit;
+  font-size: 0.9rem;
+  padding: 0.5rem 1.2rem;
+  border-radius: var(--radio);
+  background: transparent;
+  color: var(--tinta);
+  border: 1px solid var(--borde);
+  cursor: pointer;
+}
+
+/* Mientras se corrige un pago, el formulario y la fila se marcan: que no se
+   confunda con cargar uno nuevo. */
+.pagos-form.editando {
+  background: rgba(192, 140, 68, 0.08);
+  border-top-color: var(--var-dorado-medio);
+  padding: 1rem;
+  border-radius: var(--radio);
+}
+
+.pagos-tabla tr.editando td {
+  background: rgba(192, 140, 68, 0.1);
+}
+
+.pagos-tabla td.acciones {
+  white-space: nowrap;
+  text-align: right;
+}
+
+.pagos .btn-fila {
+  font: inherit;
+  font-size: 0.8rem;
+  padding: 0.2rem 0.55rem;
+  margin-left: 0.3rem;
+  border-radius: var(--radio);
+  background: transparent;
+  color: var(--tinta);
+  border: 1px solid var(--borde);
+  cursor: pointer;
+}
+
+.pagos .btn-fila.peligro {
+  color: #a32d2d;
+  border-color: rgba(163, 45, 45, 0.35);
+}
+
+.pagos-editado {
+  display: block;
+  font-size: 0.74rem;
+  opacity: 0.7;
 }
 
 .pagos .btn-principal:disabled {
