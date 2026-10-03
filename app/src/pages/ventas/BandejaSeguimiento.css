@@ -55,6 +55,19 @@
   margin-bottom: 1.5rem;
 }
 
+/* Importar y agregar, lado a lado; el de importar es el secundario. */
+.bandeja-altas {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.bandeja-btn-importar {
+  background: var(--superficie);
+  color: var(--texto);
+  border-color: var(--borde);
+}
+
 .bandeja-resumen {
   display: flex;
   gap: 12px;
