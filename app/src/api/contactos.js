@@ -97,3 +97,16 @@ export const getMetricasContactos = async () => {
   const { data } = await instanceUsers.get("/contacts/metricas");
   return data.data;
 };
+
+/**
+ * Importa contactos de una planilla ya leída.
+ *
+ * Con `confirmar` en falso solo analiza: devuelve qué pasaría con cada fila
+ * (nueva, ya existe o con error) sin guardar nada, que es la vista previa. Con
+ * `confirmar` en true crea las nuevas. Si alguna fila tiene error el backend
+ * rechaza el lote entero (422) y el detalle viene en err.response.data.data.
+ */
+export const importarContactos = async (filas, confirmar = false) => {
+  const { data } = await instanceUsers.post("/contacts/importar", { filas, confirmar });
+  return data.data;
+};

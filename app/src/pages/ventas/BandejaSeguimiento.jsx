@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { getSeguimiento, registrarEvento } from "../../api/contactos";
 import FormularioContacto from "../../components/formularioContacto/FormularioContacto";
+import ImportarContactos from "../../components/importarContactos/ImportarContactos";
 import FormularioInscripcion from "../../components/formularioInscripcion/FormularioInscripcion";
 import { legible } from "../../utils/etiquetas";
 import { mensajeDeError } from "../../utils/errores";
@@ -33,6 +34,7 @@ const BandejaSeguimiento = () => {
   const [nuevoEstado, setNuevoEstado] = useState("");
   const [guardando, setGuardando] = useState(false);
   const [mostrarAlta, setMostrarAlta] = useState(false);
+  const [mostrarImportar, setMostrarImportar] = useState(false);
   const [inscribiendo, setInscribiendo] = useState(null);
   const [editando, setEditando] = useState(null);
 
@@ -97,14 +99,41 @@ const BandejaSeguimiento = () => {
             atendidos van primero.
           </p>
         </div>
-        <button
-          type="button"
-          className="bandeja-btn-alta"
-          onClick={() => setMostrarAlta((v) => !v)}
-        >
-          {mostrarAlta ? "Cerrar" : "Agregar contacto"}
-        </button>
+        <div className="bandeja-altas">
+          <button
+            type="button"
+            className="bandeja-btn-alta bandeja-btn-importar"
+            onClick={() => {
+              setMostrarImportar((v) => !v);
+              setMostrarAlta(false);
+            }}
+          >
+            {mostrarImportar ? "Cerrar importación" : "Importar planilla"}
+          </button>
+          <button
+            type="button"
+            className="bandeja-btn-alta"
+            onClick={() => {
+              setMostrarAlta((v) => !v);
+              setMostrarImportar(false);
+            }}
+          >
+            {mostrarAlta ? "Cerrar" : "Agregar contacto"}
+          </button>
+        </div>
       </header>
+
+      {mostrarImportar && (
+        <div className="bandeja-alta">
+          <ImportarContactos
+            onTerminado={() => {
+              setMostrarImportar(false);
+              cargar();
+            }}
+            onCancelar={() => setMostrarImportar(false)}
+          />
+        </div>
+      )}
 
       {mostrarAlta && (
         <div className="bandeja-alta">
