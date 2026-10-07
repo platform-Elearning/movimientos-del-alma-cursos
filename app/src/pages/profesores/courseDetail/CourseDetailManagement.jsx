@@ -5,13 +5,20 @@ import BackLink from "../../../components/backLink/BackLink";
 import ModuleCard from "../../../components/moduleCard/ModuleCard";
 import { useAuth } from "../../../services/authContext";
 import { getCourseCompleteByTeacherId } from "../../../api/profesores";
-import { 
-  createCourseModule, 
+import {
+  createCourseModule,
   deleteCourseModule,
   createLesson,
   deleteLesson,
-  updateCourseDescription
+  updateCourseDescription,
+  updateModule,
+  updateLesson,
+  getImpactoModulo,
+  getImpactoClase,
 } from "../../../api/cursos";
+import ConfirmarBorrado from "../../../components/confirmarBorrado/ConfirmarBorrado";
+import { lineasDeImpactoModulo, lineasDeImpactoClase } from "../../../utils/cursos";
+import { mensajeDeError, esSesionVencida } from "../../../utils/errores";
 
 const CourseDetailManagement = () => {
   const { courseId } = useParams();
@@ -39,15 +46,33 @@ const CourseDetailManagement = () => {
     lesson_number: ''
   });
 
+  // Edición de un módulo o una lección en un formulario emergente, y borrado con
+  // confirmación. Un solo estado de cada uno: nunca hay dos abiertos a la vez.
+  const [edicion, setEdicion] = useState(null);
+  const [guardandoEdicion, setGuardandoEdicion] = useState(false);
+  const [errorEdicion, setErrorEdicion] = useState('');
+  const [borrado, setBorrado] = useState(null);
+
+  // Solo una sesión vencida saca a la persona de la pantalla. Cualquier otra
+  // falla -- un permiso, un número repetido -- se muestra con su motivo: con
+  // "cualquier 403 cierra la sesión", a un profesor al que el backend le dice
+  // "este curso no es tuyo" lo deslogueaba sin explicarle nada.
+  const manejarError = (err, accion) => {
+    if (esSesionVencida(err)) logout();
+    else setError(mensajeDeError(err, accion));
+  };
+
   useEffect(() => {
     if (isAuthenticated !== null && courseId && userId) {
       loadCourseCompleteData();
     }
   }, [courseId, isAuthenticated, userId]);
 
-  const loadCourseCompleteData = async () => {
+  const loadCourseCompleteData = async (silenciosa = false) => {
     try {
-      setIsLoading(true);
+      // Tras crear, editar o borrar no se tapa toda la pantalla con el spinner:
+      // se perdería lo que se está mirando.
+      if (!silenciosa) setIsLoading(true);
       
       if (!isAuthenticated || userRole !== 'teacher') {
         navigate('/login');
@@ -63,17 +88,16 @@ const CourseDetailManagement = () => {
         if (courseData) {
           setCourseCompleteData(courseData);
           setDescriptionText(courseData.description || '');
+          // Si hay un módulo abierto, se actualiza con los datos nuevos.
+          setSelectedModule((previo) =>
+            previo ? (courseData.modules || []).find((m) => m.id === previo.id) || null : previo
+          );
         } else {
           setError("No se encontró información del curso");
         }
       }
     } catch (error) {
-      // Manejo simple de errores - si es 401/403 hacer logout, sino mostrar error
-      if (error.response?.status === 401 || error.response?.status === 403) {
-        logout();
-      } else {
-        setError("Error al cargar los datos del curso");
-      }
+      manejarError(error, 'cargar los datos del curso');
     } finally {
       setIsLoading(false);
     }
@@ -90,11 +114,7 @@ const CourseDetailManagement = () => {
       setIsEditingDescription(false);
       setError('');
     } catch (error) {
-      if (error.response?.status === 401 || error.response?.status === 403) {
-        logout();
-      } else {
-        setError('Error al actualizar la descripción del curso');
-      }
+      manejarError(error, 'actualizar la descripción del curso');
     }
   };
 
@@ -110,36 +130,6 @@ const CourseDetailManagement = () => {
       setSelectedModule(null);
     } else {
       navigate('/profesores/dashboard');
-    }
-  };
-
-  const handleDeleteModuleWithLessons = async (moduleId, module) => {
-    const hasLessons = module.lessons && module.lessons.length > 0;
-    
-    if (hasLessons) {
-      const confirmDeleteLessons = window.confirm(
-        `Este módulo tiene ${module.lessons.length} lecciones. ¿Quieres eliminar primero todas las lecciones y luego el módulo?`
-      );
-      
-      if (confirmDeleteLessons) {
-        try {
-          for (const lesson of module.lessons) {
-            await deleteLesson(lesson.id);
-          }
-          
-          await deleteCourseModule(moduleId);
-          await loadCourseCompleteData();
-          setError('');
-        } catch (error) {
-          if (error.response?.status === 401 || error.response?.status === 403) {
-            logout();
-          } else {
-            setError('Error al eliminar el módulo y sus lecciones');
-          }
-        }
-      }
-    } else {
-      handleDeleteModule(moduleId, module);
     }
   };
 
@@ -178,40 +168,13 @@ const CourseDetailManagement = () => {
       };
 
       await createCourseModule(moduleData);
-      await loadCourseCompleteData();
+      await loadCourseCompleteData(true);
       
       setModuleFormData({ name: '', description: '', module_number: '' });
       setShowModuleForm(false);
       setError('');
     } catch (error) {
-      if (error.response?.status === 401 || error.response?.status === 403) {
-        logout();
-      } else {
-        setError('Error al crear el módulo');
-      }
-    }
-  };
-
-  const handleDeleteModule = async (moduleId, module) => {
-    const hasLessons = module.lessons && module.lessons.length > 0;
-    
-    let confirmMessage = '¿Estás seguro de que quieres eliminar este módulo?';
-    if (hasLessons) {
-      confirmMessage = `Este módulo tiene ${module.lessons.length} lecciones. Al eliminarlo, también se eliminarán todas sus lecciones. ¿Continuar?`;
-    }
-    
-    if (window.confirm(confirmMessage)) {
-      try {
-        await deleteCourseModule(moduleId);
-        await loadCourseCompleteData();
-        setError('');
-      } catch (error) {
-        if (error.response?.status === 401 || error.response?.status === 403) {
-          logout();
-        } else {
-          setError('Error al eliminar el módulo');
-        }
-      }
+      manejarError(error, 'crear el módulo');
     }
   };
 
@@ -228,39 +191,110 @@ const CourseDetailManagement = () => {
       };
 
       await createLesson(lessonData);
-      await loadCourseCompleteData();
-      
-      const updatedModule = courseCompleteData.modules.find(m => m.id === selectedModule.id);
-      setSelectedModule(updatedModule);
-      
+      await loadCourseCompleteData(true);
+
       setLessonFormData({ title: '', description: '', url: '', lesson_number: '' });
       setShowLessonForm(false);
       setError('');
     } catch (error) {
-      if (error.response?.status === 401 || error.response?.status === 403) {
-        logout();
-      } else {
-        setError('Error al crear la lección');
-      }
+      manejarError(error, 'crear la lección');
     }
   };
 
-  const handleDeleteLesson = async (lessonId) => {
-    if (window.confirm('¿Estás seguro de que quieres eliminar esta lección?')) {
-      try {
-        await deleteLesson(lessonId);
-        await loadCourseCompleteData();
-        
-        const updatedModule = courseCompleteData.modules.find(m => m.id === selectedModule.id);
-        setSelectedModule(updatedModule);
-        setError('');
-      } catch (error) {
-        if (error.response?.status === 401 || error.response?.status === 403) {
-          logout();
-        } else {
-          setError('Error al eliminar la lección');
-        }
+  const abrirEdicionModulo = (m) => {
+    setErrorEdicion('');
+    setEdicion({
+      tipo: 'modulo',
+      id: m.id,
+      datos: {
+        module_number: String(m.module_number ?? ''),
+        name: m.name || '',
+        description: m.description || '',
+      },
+    });
+  };
+
+  const abrirEdicionLeccion = (l) => {
+    setErrorEdicion('');
+    setEdicion({
+      tipo: 'leccion',
+      id: l.id,
+      datos: {
+        lesson_number: String(l.lesson_number ?? ''),
+        title: l.title || '',
+        description: l.description || '',
+        url: l.url || '',
+      },
+    });
+  };
+
+  const cambiarEdicion = (campo, valor) =>
+    setEdicion((previa) => ({ ...previa, datos: { ...previa.datos, [campo]: valor } }));
+
+  const guardarEdicion = async (e) => {
+    e.preventDefault();
+    setGuardandoEdicion(true);
+    setErrorEdicion('');
+    try {
+      if (edicion.tipo === 'modulo') await updateModule(edicion.id, edicion.datos);
+      else await updateLesson(edicion.id, edicion.datos);
+      setEdicion(null);
+      await loadCourseCompleteData(true);
+      setError('');
+    } catch (err) {
+      if (esSesionVencida(err)) {
+        logout();
+        return;
       }
+      setErrorEdicion(
+        mensajeDeError(err, edicion.tipo === 'modulo' ? 'guardar el módulo' : 'guardar la lección')
+      );
+    } finally {
+      setGuardandoEdicion(false);
+    }
+  };
+
+  // Borrar pide confirmar y dice qué se pierde: antes eran un confirm() del
+  // navegador y, para un módulo con lecciones, un borrado lección por lección.
+  const pedirBorrado = async (tipo, item) => {
+    setBorrado({ tipo, item, impacto: null, cargando: true, enProceso: false, error: '' });
+    try {
+      const impacto = tipo === 'modulo' ? await getImpactoModulo(item.id) : await getImpactoClase(item.id);
+      setBorrado((previo) => previo && { ...previo, impacto, cargando: false });
+    } catch (err) {
+      if (esSesionVencida(err)) {
+        logout();
+        return;
+      }
+      setBorrado(
+        (previo) =>
+          previo && { ...previo, cargando: false, error: mensajeDeError(err, 'calcular qué se pierde') }
+      );
+    }
+  };
+
+  const confirmarBorrado = async () => {
+    const { tipo, item } = borrado;
+    setBorrado((previo) => ({ ...previo, enProceso: true, error: '' }));
+    try {
+      if (tipo === 'modulo') await deleteCourseModule(item.id);
+      else await deleteLesson(item.id);
+      setBorrado(null);
+      await loadCourseCompleteData(true);
+      setError('');
+    } catch (err) {
+      if (esSesionVencida(err)) {
+        logout();
+        return;
+      }
+      setBorrado(
+        (previo) =>
+          previo && {
+            ...previo,
+            enProceso: false,
+            error: mensajeDeError(err, tipo === 'modulo' ? 'borrar el módulo' : 'borrar la lección'),
+          }
+      );
     }
   };
 
@@ -468,14 +502,13 @@ const CourseDetailManagement = () => {
                     <button type="button" onClick={() => handleModuleClick(module)}>
                       Gestionar lecciones
                     </button>
+                    <button type="button" onClick={() => abrirEdicionModulo(module)}>
+                      Editar módulo
+                    </button>
                     <button
                       type="button"
                       className="peligro"
-                      onClick={() =>
-                        module.lessons?.length
-                          ? handleDeleteModuleWithLessons(module.id, module)
-                          : handleDeleteModule(module.id, module)
-                      }
+                      onClick={() => pedirBorrado('modulo', module)}
                     >
                       Eliminar módulo
                     </button>
@@ -589,9 +622,20 @@ const CourseDetailManagement = () => {
                           🔗
                         </a>
                         <button
+                          type="button"
+                          className="btn-view"
+                          onClick={() => abrirEdicionLeccion(lesson)}
+                          title="Editar lección"
+                          aria-label={`Editar la lección ${lesson.title}`}
+                        >
+                          ✏️
+                        </button>
+                        <button
+                          type="button"
                           className="btn-delete"
-                          onClick={() => handleDeleteLesson(lesson.id)}
+                          onClick={() => pedirBorrado('leccion', lesson)}
                           title="Eliminar lección"
+                          aria-label={`Eliminar la lección ${lesson.title}`}
                         >
                           🗑️
                         </button>
@@ -607,6 +651,148 @@ const CourseDetailManagement = () => {
             </div>
           )}
         </div>
+      )}
+
+      {edicion && (
+        <div className="form-overlay">
+          <div className="form-container">
+            <form onSubmit={guardarEdicion} className="crud-form">
+              <h3>{edicion.tipo === 'modulo' ? 'Editar módulo' : 'Editar lección'}</h3>
+              {edicion.tipo === 'modulo' ? (
+                <>
+                  <div className="form-group">
+                    <label>Número de Módulo:</label>
+                    <input
+                      type="number"
+                      min="1"
+                      value={edicion.datos.module_number}
+                      onChange={(e) => cambiarEdicion('module_number', e.target.value)}
+                      required
+                    />
+                    <small>Cambiar el número cambia el orden de los módulos, y el orden decide qué ve cada alumna.</small>
+                  </div>
+                  <div className="form-group">
+                    <label>Nombre del Módulo:</label>
+                    <input
+                      type="text"
+                      value={edicion.datos.name}
+                      onChange={(e) => cambiarEdicion('name', e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Descripción:</label>
+                    <textarea
+                      value={edicion.datos.description}
+                      onChange={(e) => cambiarEdicion('description', e.target.value)}
+                      required
+                    />
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="form-group">
+                    <label>Número de Lección:</label>
+                    <input
+                      type="number"
+                      min="1"
+                      value={edicion.datos.lesson_number}
+                      onChange={(e) => cambiarEdicion('lesson_number', e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Título de la Lección:</label>
+                    <input
+                      type="text"
+                      value={edicion.datos.title}
+                      onChange={(e) => cambiarEdicion('title', e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Descripción:</label>
+                    <textarea
+                      value={edicion.datos.description}
+                      onChange={(e) => cambiarEdicion('description', e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>URL del Video:</label>
+                    <input
+                      type="url"
+                      value={edicion.datos.url}
+                      onChange={(e) => cambiarEdicion('url', e.target.value)}
+                      required
+                    />
+                    <small>Tiene que empezar con http:// o https://</small>
+                  </div>
+                </>
+              )}
+              {errorEdicion && (
+                <p className="edicion-error" role="alert">
+                  {errorEdicion}
+                </p>
+              )}
+              <div className="form-actions">
+                <button type="submit" className="btn-primary" disabled={guardandoEdicion}>
+                  {guardandoEdicion ? 'Guardando…' : 'Guardar cambios'}
+                </button>
+                <button
+                  type="button"
+                  className="btn-secondary"
+                  onClick={() => setEdicion(null)}
+                  disabled={guardandoEdicion}
+                >
+                  Cancelar
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {borrado && (
+        <ConfirmarBorrado
+          titulo={
+            borrado.tipo === 'modulo'
+              ? `Eliminar el módulo "${borrado.item.name}"`
+              : `Eliminar la lección "${borrado.item.title}"`
+          }
+          cargando={borrado.cargando}
+          enProceso={borrado.enProceso}
+          error={borrado.error}
+          // Si no se pudo calcular qué se pierde, no se deja borrar a ciegas.
+          bloqueado={!borrado.cargando && !borrado.impacto}
+          textoConfirmar={borrado.tipo === 'modulo' ? 'Sí, eliminar módulo' : 'Sí, eliminar lección'}
+          onConfirmar={confirmarBorrado}
+          onCancelar={() => !borrado.enProceso && setBorrado(null)}
+        >
+          {(() => {
+            const lineas = !borrado.impacto
+              ? []
+              : borrado.tipo === 'modulo'
+                ? lineasDeImpactoModulo(borrado.impacto)
+                : lineasDeImpactoClase(borrado.impacto);
+            return lineas.length ? (
+              <ul>
+                {lineas.map((l) => (
+                  <li key={l}>{l}</li>
+                ))}
+              </ul>
+            ) : (
+              <p>
+                {borrado.tipo === 'modulo'
+                  ? 'Este módulo no tiene clases ni alumnas que se vean afectadas.'
+                  : 'Esta lección no tiene comentarios.'}
+              </p>
+            );
+          })()}
+          <p>
+            Si solo hay que corregir algo, usá <strong>Editar</strong>: no pierde nada.
+          </p>
+        </ConfirmarBorrado>
       )}
     </div>
   );

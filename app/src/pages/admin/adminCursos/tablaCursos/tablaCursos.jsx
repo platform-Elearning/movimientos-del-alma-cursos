@@ -3,6 +3,7 @@ import getCourses from "../../../../api/cursos";
 import AddStudentModal from "../createStudent/AddStudentModal";
 import UnenrollStudentModal from "../deleteStudent/UnenrollStudentModal";
 import EliminarCurso from "../eliminarCurso/EliminarCurso";
+import BotonBorrar from "../../../../components/confirmarBorrado/BotonBorrar";
 import { useNavigate } from "react-router-dom";
 import "./tablaCursos.css";
 
@@ -122,13 +123,10 @@ const CoursesTable = () => {
                 >
                   Desinscribir alumno
                 </button>
-                <button
-                  className="action-button delete-button"
+                <BotonBorrar
+                  etiqueta={`Eliminar el curso ${course.name}`}
                   onClick={() => setCursoABorrar(course)}
-                  title="Borrar el curso con sus módulos y clases"
-                >
-                  Eliminar curso
-                </button>
+                />
               </td>
             </tr>
           ))}

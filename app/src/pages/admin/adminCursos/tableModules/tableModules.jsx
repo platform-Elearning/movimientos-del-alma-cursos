@@ -9,6 +9,7 @@ import {
 } from "../../../../api/cursos";
 import { useParams, useNavigate } from "react-router-dom";
 import ConfirmarBorrado from "../../../../components/confirmarBorrado/ConfirmarBorrado";
+import BotonBorrar from "../../../../components/confirmarBorrado/BotonBorrar";
 import { lineasDeImpactoModulo } from "../../../../utils/cursos";
 import { mensajeDeError } from "../../../../utils/errores";
 
@@ -224,9 +225,10 @@ const ModulesTable = ({ version = 0 }) => {
                     <button type="button" className="af-boton af-editar" onClick={() => empezarEdicion(module)}>
                       Editar
                     </button>
-                    <button type="button" className="af-boton af-borrar" onClick={() => pedirBorrado(module)}>
-                      Eliminar
-                    </button>
+                    <BotonBorrar
+                      etiqueta={`Eliminar el módulo ${module.name}`}
+                      onClick={() => pedirBorrado(module)}
+                    />
                   </div>
                 </td>
               </tr>

@@ -26,3 +26,22 @@ export const mensajeDeError = (err, accion = "cargar los datos") => {
   }
   return `No se pudo ${accion} por un error del servidor (${err.response.status}).`;
 };
+
+/**
+ * ¿El error es una sesión vencida o inválida, y no un permiso denegado?
+ *
+ * Una pantalla que ante CUALQUIER 401/403 cierra la sesión desloguea a un
+ * profesor al que solo le dijeron "este curso no está asignado a tu usuario". El
+ * backend distingue los dos casos: el token vencido o inválido responde 401, o
+ * 403 con el error "Forbidden"; un permiso denegado responde 403 con un motivo
+ * propio. Solo el primero debería sacar a la persona de la sesión.
+ */
+export const esSesionVencida = (err) => {
+  const status = err?.response?.status;
+  if (status === 401) return true;
+  if (status === 403) {
+    const data = err.response.data;
+    return !data || data.error === "Forbidden";
+  }
+  return false;
+};

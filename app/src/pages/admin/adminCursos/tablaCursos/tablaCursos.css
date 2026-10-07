@@ -70,8 +70,22 @@
 .actions-cell {
     display: flex;
     justify-content: center;
-    flex-wrap: wrap;
-    gap: 6px 0;
+    /* Una sola fila: el borrar es solo un ícono y entra. Con varios cursos, que
+       cada fila ocupe lo mismo es lo que mantiene la tabla ordenada. */
+    flex-wrap: nowrap;
+    align-items: center;
+}
+
+.actions-cell .boton-borrar-icono {
+    margin-left: 0.1rem;
+}
+
+/* En pantallas angostas no hay lugar para todo en una fila. */
+@media (max-width: 1100px) {
+    .actions-cell {
+        flex-wrap: wrap;
+        gap: 6px 0;
+    }
 }
 
 /* Botones de acciones */

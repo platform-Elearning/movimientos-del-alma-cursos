@@ -1,0 +1,34 @@
+/* Botón de borrar con solo el ícono. Cuadrado y de tamaño fijo, para alinearse
+   con los botones de texto de la misma fila. El rojo de peligro no tiene token. */
+
+.boton-borrar-icono {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 36px;
+  height: 34px;
+  padding: 0;
+  font-size: 0.95rem;
+  border: 1px solid #c62828;
+  border-radius: 6px;
+  background: #fff;
+  color: #c62828;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.boton-borrar-icono:hover:not(:disabled) {
+  background: #c62828;
+  color: #fff;
+}
+
+.boton-borrar-icono:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.boton-borrar-icono:focus-visible {
+  outline: 2px solid var(--var-dorado-medio);
+  outline-offset: 2px;
+}

@@ -7,6 +7,7 @@ import {
 } from '../../../../api/cursos';
 import { useParams } from 'react-router-dom';
 import ConfirmarBorrado from '../../../../components/confirmarBorrado/ConfirmarBorrado';
+import BotonBorrar from '../../../../components/confirmarBorrado/BotonBorrar';
 import { lineasDeImpactoClase } from '../../../../utils/cursos';
 import { mensajeDeError } from '../../../../utils/errores';
 import './tablaLessons.css';
@@ -207,9 +208,10 @@ const TablaLessons = ({ version = 0 }) => {
                     <button type="button" className="af-boton af-editar" onClick={() => empezarEdicion(lesson)}>
                       Editar
                     </button>
-                    <button type="button" className="af-boton af-borrar" onClick={() => pedirBorrado(lesson)}>
-                      Eliminar
-                    </button>
+                    <BotonBorrar
+                      etiqueta={`Eliminar la clase ${lesson.title}`}
+                      onClick={() => pedirBorrado(lesson)}
+                    />
                   </div>
                 </td>
               </tr>
