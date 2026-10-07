@@ -18,6 +18,8 @@ import {
 } from "../../../api/cursos";
 import ConfirmarBorrado from "../../../components/confirmarBorrado/ConfirmarBorrado";
 import BotonBorrar from "../../../components/confirmarBorrado/BotonBorrar";
+import BotonIcono from "../../../components/botonIcono/BotonIcono";
+import { FaPlay, FaExternalLinkAlt, FaPen, FaVideo } from "react-icons/fa";
 import { lineasDeImpactoModulo, lineasDeImpactoClase } from "../../../utils/cursos";
 import { mensajeDeError, esSesionVencida } from "../../../utils/errores";
 
@@ -503,9 +505,11 @@ const CourseDetailManagement = () => {
                     <button type="button" onClick={() => handleModuleClick(module)}>
                       Gestionar lecciones
                     </button>
-                    <button type="button" onClick={() => abrirEdicionModulo(module)}>
-                      Editar módulo
-                    </button>
+                    <BotonIcono
+                      icono={FaPen}
+                      etiqueta={`Editar el módulo ${module.name}`}
+                      onClick={() => abrirEdicionModulo(module)}
+                    />
                     <BotonBorrar
                       etiqueta={`Eliminar el módulo ${module.name}`}
                       onClick={() => pedirBorrado('modulo', module)}
@@ -602,32 +606,22 @@ const CourseDetailManagement = () => {
                     <div className="lesson-header">
                       <h4 className="lesson-title">{lesson.title}</h4>
                       <div className="lesson-actions">
-                        <button
-                          type="button"
-                          className="btn-view"
+                        <BotonIcono
+                          icono={FaPlay}
+                          variante="principal"
+                          etiqueta={`Ver la clase ${lesson.title}`}
                           onClick={() => handleViewLesson(lesson)}
-                          title="Ver clase"
-                        >
-                          ▶️
-                        </button>
-                        <a
+                        />
+                        <BotonIcono
+                          icono={FaExternalLinkAlt}
+                          etiqueta="Abrir el video en otra pestaña"
                           href={lesson.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="btn-view"
-                          title="Abrir video en pestaña"
-                        >
-                          🔗
-                        </a>
-                        <button
-                          type="button"
-                          className="btn-view"
+                        />
+                        <BotonIcono
+                          icono={FaPen}
+                          etiqueta={`Editar la lección ${lesson.title}`}
                           onClick={() => abrirEdicionLeccion(lesson)}
-                          title="Editar lección"
-                          aria-label={`Editar la lección ${lesson.title}`}
-                        >
-                          ✏️
-                        </button>
+                        />
                         <BotonBorrar
                           etiqueta={`Eliminar la lección ${lesson.title}`}
                           onClick={() => pedirBorrado('leccion', lesson)}
@@ -636,7 +630,9 @@ const CourseDetailManagement = () => {
                     </div>
                     <p className="lesson-description">{lesson.description}</p>
                     {lesson.url && (
-                      <span className="lesson-video">📹 Video disponible</span>
+                      <span className="lesson-video">
+                        <FaVideo aria-hidden="true" /> Video disponible
+                      </span>
                     )}
                   </div>
                 </div>

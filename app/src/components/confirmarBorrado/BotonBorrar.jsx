@@ -1,25 +1,16 @@
 import { FaTrashAlt } from "react-icons/fa";
-import "./BotonBorrar.css";
+import BotonIcono from "../botonIcono/BotonIcono";
 
 /**
- * Botón de borrar, solo con el ícono del tacho.
+ * Botón de borrar: el tacho, en rojo.
  *
  * Es de ícono para que entre en la fila junto a los demás botones: con el texto
  * "Eliminar curso" la fila se partía en dos y, con varios cursos, la tabla
- * quedaba desordenada. Sin texto el botón no dice qué hace, así que el nombre
- * va en aria-label (lo leen los lectores de pantalla) y en title (el tooltip).
+ * quedaba desordenada. Es el botón de ícono del sitio (ver BotonIcono) con la
+ * variante de peligro, así que mide lo mismo que los demás de su fila.
  */
 const BotonBorrar = ({ onClick, etiqueta = "Eliminar", disabled = false }) => (
-  <button
-    type="button"
-    className="boton-borrar-icono"
-    onClick={onClick}
-    disabled={disabled}
-    aria-label={etiqueta}
-    title={etiqueta}
-  >
-    <FaTrashAlt aria-hidden="true" />
-  </button>
+  <BotonIcono icono={FaTrashAlt} variante="borrar" etiqueta={etiqueta} onClick={onClick} disabled={disabled} />
 );
 
 export default BotonBorrar;

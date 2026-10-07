@@ -286,8 +286,8 @@
   margin-top: 14px;
 }
 
-/* El botón de borrar (solo ícono) tiene su propio estilo: no se le aplica este. */
-.module-card-acciones button:not(.boton-borrar-icono) {
+/* Los botones de solo ícono (BotonIcono) tienen su propio estilo: no se le aplica este. */
+.module-card-acciones button:not(.boton-icono) {
   font: inherit;
   font-size: 0.82rem;
   padding: 0.35rem 0.8rem;
@@ -300,7 +300,7 @@
   transition: filter 0.15s ease;
 }
 
-.module-card-acciones button:not(.boton-borrar-icono):hover {
+.module-card-acciones button:not(.boton-icono):hover {
   filter: brightness(0.94);
 }
 
