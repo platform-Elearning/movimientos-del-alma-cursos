@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import getCourses from "../../../../api/cursos";
 import AddStudentModal from "../createStudent/AddStudentModal";
 import UnenrollStudentModal from "../deleteStudent/UnenrollStudentModal";
+import EliminarCurso from "../eliminarCurso/EliminarCurso";
 import { useNavigate } from "react-router-dom";
 import "./tablaCursos.css";
 
@@ -13,6 +14,8 @@ const CoursesTable = () => {
   const [showModal, setShowModal] = useState(false);
   const [showUnenrollModal, setShowUnenrollModal] = useState(false);
   const [selectedCourseId, setSelectedCourseId] = useState(null);
+  const [cursoABorrar, setCursoABorrar] = useState(null);
+  const [aviso, setAviso] = useState("");
 
   // Función para traer los cursos desde la API
   const fetchCourses = async () => {
@@ -94,10 +97,11 @@ const CoursesTable = () => {
               <td>{course.description}</td>
               <td className="actions-cell">
                 <button
-                  className="action-button edit-button" 
+                  className="action-button edit-button"
                   onClick={() => handleEditClick(course.id)}
+                  title="Cambiar nombre y descripción, y gestionar módulos y clases"
                 >
-                  Editar
+                  Editar curso
                 </button>
                 <button 
                   className="action-button view-button"
@@ -112,11 +116,18 @@ const CoursesTable = () => {
                   Agregar Alumno
                 </button>
                 <button
-                  className="action-button delete-button"
+                  className="action-button unenroll-button"
                   onClick={() => handleDeleteStudentClick(course.id)}
-                  title="Desinscribir alumno del curso"
+                  title="Sacar a una alumna de este curso (no borra a la alumna ni el curso)"
                 >
-                  Eliminar Alumno
+                  Desinscribir alumno
+                </button>
+                <button
+                  className="action-button delete-button"
+                  onClick={() => setCursoABorrar(course)}
+                  title="Borrar el curso con sus módulos y clases"
+                >
+                  Eliminar curso
                 </button>
               </td>
             </tr>
@@ -124,6 +135,24 @@ const CoursesTable = () => {
         </tbody>
       </table>
       </div>
+
+      {aviso && (
+        <p className="cursos-aviso" role="status">
+          {aviso}
+        </p>
+      )}
+
+      {cursoABorrar && (
+        <EliminarCurso
+          curso={cursoABorrar}
+          onCerrar={() => setCursoABorrar(null)}
+          onBorrado={(curso) => {
+            setCursoABorrar(null);
+            setAviso(`Se eliminó el curso "${curso.name}".`);
+            fetchCourses();
+          }}
+        />
+      )}
 
       {showModal && <AddStudentModal courseId={selectedCourseId} onClose={closeModal} />}
       {showUnenrollModal && (

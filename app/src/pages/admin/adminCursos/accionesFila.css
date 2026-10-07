@@ -1,0 +1,164 @@
+/* Acciones por fila de las tablas de módulos y clases, y el formulario de datos
+   del curso. Prefijo af- (acciones de fila). Usa los tokens; los colores de
+   estado (verde, rojo) no tienen token todavía. */
+
+.af-acciones {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.af-boton {
+  font: inherit;
+  font-size: 0.82rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  border: 1px solid var(--borde);
+  background: var(--superficie);
+  color: var(--texto);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.af-boton:hover:not(:disabled) {
+  filter: brightness(0.96);
+}
+
+.af-boton:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.af-ver {
+  border-color: var(--var-dorado-medio);
+}
+
+.af-editar {
+  background: #ffc107;
+  border-color: #ffc107;
+}
+
+.af-borrar {
+  background: #fff;
+  border-color: #c62828;
+  color: #c62828;
+}
+
+.af-borrar:hover:not(:disabled) {
+  background: #c62828;
+  color: #fff;
+  filter: none;
+}
+
+.af-guardar {
+  background: var(--tinta);
+  border-color: var(--tinta);
+  color: var(--superficie);
+}
+
+.af-boton:focus-visible {
+  outline: 2px solid var(--var-dorado-medio);
+  outline-offset: 2px;
+}
+
+/* Edición en la misma fila. */
+.af-input {
+  width: 100%;
+  box-sizing: border-box;
+  font: inherit;
+  font-size: 0.88rem;
+  padding: 0.4rem 0.5rem;
+  border: 1px solid var(--borde);
+  border-radius: 6px;
+  background: var(--superficie);
+  color: var(--texto);
+}
+
+.af-input:focus {
+  outline: none;
+  border-color: var(--var-dorado-medio);
+  box-shadow: 0 0 0 3px rgba(192, 140, 68, 0.15);
+}
+
+.af-input-numero {
+  max-width: 80px;
+}
+
+textarea.af-input {
+  resize: vertical;
+  min-height: 56px;
+}
+
+.af-nota {
+  margin: 4px 0 0;
+  font-size: 0.76rem;
+  color: var(--texto-suave);
+}
+
+.af-error {
+  margin: 6px 0 0;
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  background: #fceaea;
+  color: #a32d2d;
+  font-size: 0.82rem;
+}
+
+.af-aviso {
+  margin: 10px auto;
+  max-width: 900px;
+  padding: 0.55rem 0.85rem;
+  border-radius: 8px;
+  background: #e6f4e7;
+  color: #2e7d32;
+  font-size: 0.88rem;
+}
+
+.af-vacio {
+  padding: 1.2rem;
+  text-align: center;
+  color: var(--texto-suave);
+  font-size: 0.9rem;
+}
+
+/* Datos del curso (nombre y descripción), arriba de la pantalla de edición. */
+.af-datos-curso {
+  max-width: 900px;
+  margin: 20px auto;
+  padding: 1.1rem 1.3rem;
+  background: var(--superficie);
+  border: 1px solid var(--borde-dorado);
+  border-radius: 12px;
+}
+
+.af-datos-curso h2 {
+  margin: 0 0 0.8rem;
+  font-size: 1.1rem;
+  color: var(--var-dorado-fuerte);
+}
+
+.af-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 0.8rem;
+}
+
+.af-campo label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--texto);
+}
+
+.af-pie {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+@media (max-width: 700px) {
+  .af-datos-curso {
+    margin: 12px;
+  }
+}
