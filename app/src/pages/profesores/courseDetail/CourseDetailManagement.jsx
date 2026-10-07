@@ -17,6 +17,7 @@ import {
   getImpactoClase,
 } from "../../../api/cursos";
 import ConfirmarBorrado from "../../../components/confirmarBorrado/ConfirmarBorrado";
+import BotonBorrar from "../../../components/confirmarBorrado/BotonBorrar";
 import { lineasDeImpactoModulo, lineasDeImpactoClase } from "../../../utils/cursos";
 import { mensajeDeError, esSesionVencida } from "../../../utils/errores";
 
@@ -505,13 +506,10 @@ const CourseDetailManagement = () => {
                     <button type="button" onClick={() => abrirEdicionModulo(module)}>
                       Editar módulo
                     </button>
-                    <button
-                      type="button"
-                      className="peligro"
+                    <BotonBorrar
+                      etiqueta={`Eliminar el módulo ${module.name}`}
                       onClick={() => pedirBorrado('modulo', module)}
-                    >
-                      Eliminar módulo
-                    </button>
+                    />
                   </>
                 }
               />
@@ -630,15 +628,10 @@ const CourseDetailManagement = () => {
                         >
                           ✏️
                         </button>
-                        <button
-                          type="button"
-                          className="btn-delete"
+                        <BotonBorrar
+                          etiqueta={`Eliminar la lección ${lesson.title}`}
                           onClick={() => pedirBorrado('leccion', lesson)}
-                          title="Eliminar lección"
-                          aria-label={`Eliminar la lección ${lesson.title}`}
-                        >
-                          🗑️
-                        </button>
+                        />
                       </div>
                     </div>
                     <p className="lesson-description">{lesson.description}</p>
