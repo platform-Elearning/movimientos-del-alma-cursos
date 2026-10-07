@@ -206,4 +206,42 @@ export const updateCourseDescription = async (id, description) => {
   }
 };
 
+/** Modifica nombre y descripción del curso. Solo admin. */
+export const updateCourse = async (id, { name, description }) => {
+  const response = await instanceCursos.put(`/courses/updateCourse/${id}`, { name, description });
+  return response.data;
+};
+
+/** Modifica un módulo: nombre, descripción y número (el número es el orden). */
+export const updateModule = async (id, { name, description, module_number }) => {
+  const response = await instanceCursos.put(`/courses/updateModule/${id}`, {
+    name,
+    description,
+    module_number,
+  });
+  return response.data;
+};
+
+/** Modifica una clase: título, descripción, enlace y número. */
+export const updateLesson = async (id, { title, description, url, lesson_number }) => {
+  const response = await instanceCursos.put(`/courses/updateLesson/${id}`, {
+    title,
+    description,
+    url,
+    lesson_number,
+  });
+  return response.data;
+};
+
+/** Lo que se pierde si se borra el módulo: clases, comentarios, alumnas con acceso. */
+export const getImpactoModulo = async (id) => {
+  const { data } = await instanceCursos.get(`/courses/getModuleImpact/${id}`);
+  return data.data;
+};
+
+export const getImpactoClase = async (id) => {
+  const { data } = await instanceCursos.get(`/courses/getLessonImpact/${id}`);
+  return data.data;
+};
+
 export default getAllCursos;

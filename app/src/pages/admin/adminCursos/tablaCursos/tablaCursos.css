@@ -70,6 +70,22 @@
 .actions-cell {
     display: flex;
     justify-content: center;
+    /* Una sola fila: el borrar es solo un ícono y entra. Con varios cursos, que
+       cada fila ocupe lo mismo es lo que mantiene la tabla ordenada. */
+    flex-wrap: nowrap;
+    align-items: center;
+}
+
+.actions-cell .boton-icono {
+    margin-left: 0.1rem;
+}
+
+/* En pantallas angostas no hay lugar para todo en una fila. */
+@media (max-width: 1100px) {
+    .actions-cell {
+        flex-wrap: wrap;
+        gap: 6px 0;
+    }
 }
 
 /* Botones de acciones */
@@ -123,6 +139,27 @@
 
 .delete-button:hover {
     background-color: #c82333;
+}
+
+/* Desinscribir no borra nada: se ve como acción secundaria y no como peligro. */
+.unenroll-button {
+    background-color: #fff;
+    color: var(--texto);
+    border: var(--var-dorado-medio) 1px solid;
+}
+
+.unenroll-button:hover {
+    background-color: var(--var-dorado-suave);
+}
+
+.cursos-aviso {
+    margin: 1rem auto 0;
+    max-width: 900px;
+    padding: 0.6rem 0.9rem;
+    border-radius: 8px;
+    background: #e6f4e7;
+    color: #2e7d32;
+    font-size: 0.9rem;
 }
 
 .action-button:active {

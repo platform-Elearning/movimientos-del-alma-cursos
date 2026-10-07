@@ -4,7 +4,7 @@ import "./agregarModulo.css";
 import { useParams, useNavigate } from "react-router-dom";
 import BackLink from "../../../../components/backLink/BackLink";
 
-const CreateModule = () => {
+const CreateModule = ({ onCreated }) => {
   const { cursoId } = useParams();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -34,6 +34,8 @@ const CreateModule = () => {
     try {
       await createModule(formData);
       setMessage("Módulo creado exitosamente");
+      // Avisa para que la tabla de módulos se recargue sola.
+      onCreated?.();
 
       setFormData({
         course_id: cursoId,
@@ -42,7 +44,9 @@ const CreateModule = () => {
         description: "",
       });
     } catch (err) {
-      setError("Error al crear el módulo");
+      // El backend explica el motivo (número repetido, falta un dato): mostrarlo
+      // en lugar de un "error" genérico que obliga a adivinar.
+      setError(err?.response?.data?.error || err?.response?.data?.message || "Error al crear el módulo");
     }
   };
 
