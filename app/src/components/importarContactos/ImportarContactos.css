@@ -1,0 +1,293 @@
+/* Importar contactos desde planilla. Usa los tokens: sin colores propios, salvo
+   los tres de estado (verde, ámbar, rojo) que no existen como token todavía. */
+
+.importar {
+  background: var(--superficie);
+  border: 1px solid var(--borde-dorado);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+}
+
+.importar h3 {
+  margin: 0 0 0.9rem;
+  font-size: 1.1rem;
+  color: var(--var-dorado-fuerte);
+}
+
+.importar h4 {
+  margin: 1.4rem 0 0.6rem;
+  font-size: 0.95rem;
+  color: var(--texto);
+}
+
+/* La zona donde se pega o se suelta el archivo. */
+.importar-zona {
+  border: 2px dashed var(--borde-dorado);
+  border-radius: 12px;
+  padding: 1rem;
+  background: var(--superficie-sutil);
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.importar-zona.arrastrando {
+  background: var(--var-dorado-suave);
+  border-color: var(--var-dorado-medio);
+}
+
+.importar-zona label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--texto);
+  margin-bottom: 0.5rem;
+}
+
+.importar-zona textarea {
+  width: 100%;
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 0.8rem;
+  padding: 0.6rem 0.7rem;
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  background: var(--superficie);
+  color: var(--texto);
+  resize: vertical;
+  box-sizing: border-box;
+  white-space: pre;
+}
+
+.importar-zona textarea:focus {
+  outline: none;
+  border-color: var(--var-dorado-medio);
+  box-shadow: 0 0 0 3px rgba(192, 140, 68, 0.15);
+}
+
+.importar-zona-pie {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 0.6rem;
+}
+
+.importar-ayuda {
+  font-size: 0.8rem;
+  color: var(--texto-suave);
+}
+
+.importar-error {
+  margin: 0.9rem 0 0;
+  padding: 0.6rem 0.8rem;
+  border-radius: var(--radio);
+  background: #fceaea;
+  color: #a32d2d;
+  font-size: 0.88rem;
+}
+
+/* Qué es cada columna: un selector con una muestra del primer dato debajo. */
+.importar-columnas {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+}
+
+.importar-columna {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 130px;
+  max-width: 170px;
+}
+
+.importar-columna select,
+.importar-campo select {
+  font: inherit;
+  font-size: 0.85rem;
+  padding: 0.4rem 0.5rem;
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  background: var(--superficie);
+  color: var(--texto);
+  width: 100%;
+}
+
+.importar-muestra {
+  font-size: 0.78rem;
+  color: var(--texto-suave);
+  background: var(--superficie-alt);
+  border-radius: 6px;
+  padding: 0.25rem 0.45rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.importar-opciones {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 0.9rem;
+}
+
+.importar-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 240px;
+  flex: 1 1 240px;
+}
+
+.importar-campo label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--texto);
+}
+
+/* Los cuatro filtros que además cuentan. */
+.importar-resumen {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 0.7rem;
+}
+
+.importar-resumen button {
+  font: inherit;
+  font-size: 0.85rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: var(--radio-pill);
+  border: 1px solid var(--borde);
+  background: var(--superficie);
+  color: var(--texto);
+  cursor: pointer;
+}
+
+.importar-resumen button.activo {
+  background: var(--tinta);
+  color: var(--superficie);
+  border-color: var(--tinta);
+}
+
+.importar-resumen button.ok b { color: #2e7d32; }
+.importar-resumen button.dup b { color: #a86a00; }
+.importar-resumen button.err b { color: #a32d2d; }
+.importar-resumen button.activo b { color: inherit; }
+
+.importar-tabla-caja {
+  max-height: 380px;
+  overflow: auto;
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+}
+
+.importar-tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+
+.importar-tabla th {
+  position: sticky;
+  top: 0;
+  background: var(--superficie-alt);
+  text-align: left;
+  padding: 0.5rem 0.6rem;
+  border-bottom: 1px solid var(--borde);
+  white-space: nowrap;
+}
+
+.importar-tabla td {
+  padding: 0.4rem 0.6rem;
+  border-bottom: 1px solid var(--superficie-alt);
+  vertical-align: top;
+}
+
+.importar-tabla tr.fila-duplicada td { background: #fff8ec; }
+.importar-tabla tr.fila-error td { background: #fdf1f1; }
+
+.chip {
+  display: inline-block;
+  padding: 0.1rem 0.55rem;
+  border-radius: var(--radio-pill);
+  background: var(--superficie-alt);
+  color: var(--texto-suave);
+  font-size: 0.78rem;
+}
+
+.chip.ok { background: #e6f4e7; color: #2e7d32; }
+.chip.dup { background: #fdecc8; color: #8a5a00; }
+.chip.err { background: #fceaea; color: #a32d2d; border-radius: 8px; }
+
+.aviso {
+  display: block;
+  margin-top: 3px;
+  font-size: 0.75rem;
+  color: #8a5a00;
+}
+
+.importar-vacio {
+  margin: 0;
+  padding: 1rem;
+  text-align: center;
+  color: var(--texto-suave);
+  font-size: 0.85rem;
+}
+
+.importar-acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 1.1rem;
+  flex-wrap: wrap;
+}
+
+.importar-principal,
+.importar-secundario {
+  font: inherit;
+  font-size: 0.9rem;
+  padding: 0.55rem 1.2rem;
+  border-radius: var(--radio);
+  cursor: pointer;
+  transition: filter 0.15s ease;
+}
+
+.importar-principal {
+  background: var(--tinta);
+  color: var(--superficie);
+  border: 1px solid var(--tinta);
+}
+
+.importar-secundario {
+  background: var(--superficie);
+  color: var(--texto);
+  border: 1px solid var(--borde);
+}
+
+.importar-principal:hover:not(:disabled),
+.importar-secundario:hover {
+  filter: brightness(1.15);
+}
+
+.importar-principal:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.importar-principal:focus-visible,
+.importar-secundario:focus-visible,
+.importar-resumen button:focus-visible,
+.importar-zona textarea:focus-visible {
+  outline: 2px solid var(--var-dorado-medio);
+  outline-offset: 2px;
+}
+
+.importar-hecho p {
+  margin: 0.4rem 0 0;
+}
+
+@media (max-width: 600px) {
+  .importar {
+    padding: 1rem;
+  }
+}
