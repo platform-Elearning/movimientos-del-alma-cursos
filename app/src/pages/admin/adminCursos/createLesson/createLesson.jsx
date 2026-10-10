@@ -4,7 +4,7 @@ import "./createLesson.css";
 import { useParams, useNavigate } from "react-router-dom";
 import BackLink from "../../../../components/backLink/BackLink";
 
-const CreateLesson = () => {
+const CreateLesson = ({ onCreated }) => {
   const { cursoId, moduleId } = useParams();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -36,6 +36,8 @@ const CreateLesson = () => {
     try {
       await createLesson(formData);
       setMessage("Lección creada exitosamente");
+      // Avisa para que la tabla de clases se recargue sola.
+      onCreated?.();
 
       setFormData({
         course_id: cursoId,
@@ -46,7 +48,8 @@ const CreateLesson = () => {
         url: "",
       });
     } catch (err) {
-      setError("Error al crear la lección");
+      // El backend explica el motivo (número repetido, enlace inválido): mostrarlo.
+      setError(err?.response?.data?.error || err?.response?.data?.message || "Error al crear la lección");
     }
   };
 

@@ -1,0 +1,62 @@
+/* Botón de ícono. Todo del mismo tamaño, para que una fila de acciones quede
+   alineada. Usa los tokens; el rojo de peligro no tiene token todavía. */
+
+.boton-icono {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  font-size: 0.95rem;
+  line-height: 1;
+  border: 1px solid var(--borde-dorado);
+  border-radius: 8px;
+  background: var(--superficie);
+  color: var(--var-dorado-fuerte);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.boton-icono:hover:not(:disabled) {
+  background: var(--var-dorado-suave);
+  border-color: var(--var-dorado-medio);
+}
+
+/* La acción principal de la fila: el mismo degradado dorado del número de la
+   lección y del botón de play de las tarjetas. */
+.boton-icono--principal {
+  background: linear-gradient(135deg, var(--var-dorado-medio), var(--var-dorado-fuerte));
+  border-color: var(--var-dorado-fuerte);
+  color: var(--superficie);
+  box-shadow: 0 2px 6px rgba(192, 140, 68, 0.25);
+}
+
+.boton-icono--principal:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--var-dorado-fuerte), var(--var-dorado-medio));
+  border-color: var(--var-dorado-fuerte);
+}
+
+.boton-icono--borrar {
+  border-color: #c62828;
+  color: #c62828;
+}
+
+.boton-icono--borrar:hover:not(:disabled) {
+  background: #c62828;
+  border-color: #c62828;
+  color: #fff;
+}
+
+.boton-icono:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.boton-icono:focus-visible {
+  outline: 2px solid var(--var-dorado-fuerte);
+  outline-offset: 2px;
+}
