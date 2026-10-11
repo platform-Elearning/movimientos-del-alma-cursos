@@ -16,6 +16,7 @@ import { hoyLocal, mesCorriente } from "../../utils/fechas";
 import { legibleOpcional as legible } from "../../utils/etiquetas";
 import "./Pagos.css";
 import { plata } from "../../utils/formato";
+import { confirmacionDeBorrado, pagoAFormulario, soloFecha } from "../../utils/pagos";
 
 /**
  * Pagos: la ficha de una alumna y el cierre del mes.
@@ -30,20 +31,6 @@ import { plata } from "../../utils/formato";
  * desplegable en una lista general es como se cargan pagos a la alumna
  * equivocada. Por lo mismo, editar y borrar también viven en la ficha.
  */
-
-const soloFecha = (f) => (f ? String(f).slice(0, 10) : "");
-
-/** Un pago de la ficha, en la forma que espera el formulario. */
-const pagoAFormulario = (p) => ({
-  concept: p.concept,
-  modules_count: p.modules_count ?? "",
-  amount: String(p.amount),
-  currency: p.currency,
-  method: p.method || "",
-  paid_at: soloFecha(p.paid_at),
-  notes: p.notes || "",
-  enrollment_id: p.enrollment_id ? String(p.enrollment_id) : "",
-});
 
 const PAGO_VACIO = {
   concept: "modulo",
@@ -72,6 +59,8 @@ const Pagos = () => {
   const [pago, setPago] = useState(PAGO_VACIO);
   // null = el formulario registra un pago nuevo; un id = está corrigiendo ese.
   const [editandoId, setEditandoId] = useState(null);
+  // Si la corrección empezó en el cierre del mes, al terminar se vuelve ahí.
+  const [volverAlMes, setVolverAlMes] = useState(false);
   const [guardando, setGuardando] = useState(false);
   const [error, setError] = useState("");
   const [aviso, setAviso] = useState("");
@@ -109,9 +98,12 @@ const Pagos = () => {
   const cargarFicha = useCallback(async (studentId) => {
     try {
       setError("");
-      setFicha(await getPagosDeAlumna(studentId));
+      const datos = await getPagosDeAlumna(studentId);
+      setFicha(datos);
+      return datos;
     } catch (err) {
       setError(mensajeDeError(err, "cargar la ficha de la alumna"));
+      return null;
     }
   }, []);
 
@@ -121,7 +113,42 @@ const Pagos = () => {
     setPago(PAGO_VACIO);
     // Una edición a medias no puede quedar colgada sobre otra alumna.
     setEditandoId(null);
+    setVolverAlMes(false);
     await cargarFicha(alumna.id);
+  };
+
+  /**
+   * Desde el cierre del mes: abre la ficha de la alumna del pago y, si se pidió
+   * corregirlo, lo deja cargado en el formulario. Se corrige ahí y no en la
+   * tabla del mes porque el formulario necesita las formaciones de la alumna,
+   * y un solo formulario es una sola lógica de validación.
+   */
+  const abrirFicha = async (p, { corregir = false } = {}) => {
+    setVista("alumna");
+    setElegida({
+      id: p.student_id,
+      name: p.name,
+      lastname: p.lastname,
+      identification_number: p.identification_number,
+    });
+    setPago(PAGO_VACIO);
+    setEditandoId(null);
+    setAviso("");
+    const datos = await cargarFicha(p.student_id);
+    if (!corregir || !datos) return;
+    const pagoDeLaFicha = datos.pagos.find((x) => x.id === p.id);
+    if (!pagoDeLaFicha) {
+      setError("Ese pago ya no está en la ficha de la alumna: puede que lo hayan borrado.");
+      return;
+    }
+    setVolverAlMes(true);
+    editar(pagoDeLaFicha);
+  };
+
+  const irAlMes = (avisoParaElMes = "") => {
+    setVolverAlMes(false);
+    setVista("mes");
+    setAviso(avisoParaElMes);
   };
 
   const cargarMes = useCallback(async () => {
@@ -188,6 +215,11 @@ const Pagos = () => {
       }
       setPago(PAGO_VACIO);
       setEditandoId(null);
+      if (volverAlMes) {
+        // Volver a la vista recarga el período: el cierre muestra el pago corregido.
+        irAlMes("Pago corregido.");
+        return;
+      }
       await cargarFicha(elegida.id);
     } catch (err) {
       setError(mensajeDeError(err, editandoId ? "corregir el pago" : "registrar el pago"));
@@ -201,23 +233,27 @@ const Pagos = () => {
     setPago(pagoAFormulario(p));
     setError("");
     setAviso("");
-    document.getElementById("pg-form")?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
+
+  // Se baja al formulario cuando ya está en pantalla: viniendo del cierre del
+  // mes, la ficha recién se dibuja después de cargarla.
+  useEffect(() => {
+    if (editandoId) {
+      document.getElementById("pg-form")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [editandoId]);
 
   const cancelarEdicion = () => {
     setEditandoId(null);
     setPago(PAGO_VACIO);
     setError("");
+    if (volverAlMes) irAlMes();
   };
 
   const borrar = async (p) => {
     // El pago es el único registro de que esa plata entró: se pide confirmar
     // mostrando qué se va a borrar, no un "¿seguro?" genérico.
-    const ok = window.confirm(
-      `¿Eliminar el pago de ${plata(p.amount, p.currency)} (${legible(p.concept)}) ` +
-        `del ${soloFecha(p.paid_at)}? No se puede deshacer.`
-    );
-    if (!ok) return;
+    if (!window.confirm(confirmacionDeBorrado(p))) return;
     setError("");
     setAviso("");
     try {
@@ -225,6 +261,19 @@ const Pagos = () => {
       if (editandoId === p.id) cancelarEdicion();
       setAviso("Pago eliminado.");
       await cargarFicha(elegida.id);
+    } catch (err) {
+      setError(mensajeDeError(err, "eliminar el pago"));
+    }
+  };
+
+  const borrarDelMes = async (p) => {
+    if (!window.confirm(confirmacionDeBorrado(p))) return;
+    setError("");
+    setAviso("");
+    try {
+      await eliminarPago(p.id);
+      setAviso("Pago eliminado.");
+      await cargarMes();
     } catch (err) {
       setError(mensajeDeError(err, "eliminar el pago"));
     }
@@ -292,6 +341,15 @@ const Pagos = () => {
                 <h3>
                   {elegida.name} {elegida.lastname}
                 </h3>
+
+                {volverAlMes && (
+                  <p className="pagos-desde-mes">
+                    Estás corrigiendo un pago del cierre del mes. Al guardar volvés ahí.{" "}
+                    <button type="button" className="btn-fila" onClick={cancelarEdicion}>
+                      Volver sin cambios
+                    </button>
+                  </p>
+                )}
 
                 {/* Lo primero: por qué módulo va. Es la pregunta que se hace
                     antes de habilitarle el siguiente. */}
@@ -584,6 +642,7 @@ const Pagos = () => {
           </div>
 
           {cargando && <p className="pagos-vacio">Cargando…</p>}
+          {aviso && !cargando && <p className="pagos-aviso">{aviso}</p>}
 
           {mes && !cargando && (
             <>
@@ -624,6 +683,7 @@ const Pagos = () => {
                         <th>Medio</th>
                         <th>Formación</th>
                         <th>Cargó</th>
+                        <th aria-label="Acciones" />
                       </tr>
                     </thead>
                     <tbody>
@@ -631,7 +691,14 @@ const Pagos = () => {
                         <tr key={p.id}>
                           <td>{soloFecha(p.paid_at)}</td>
                           <td>
-                            {p.name} {p.lastname}
+                            <button
+                              type="button"
+                              className="pagos-link"
+                              title="Ver la ficha de la alumna"
+                              onClick={() => abrirFicha(p)}
+                            >
+                              {p.name} {p.lastname}
+                            </button>
                           </td>
                           <td>
                             {legible(p.concept)}
@@ -640,7 +707,32 @@ const Pagos = () => {
                           <td className="num">{plata(p.amount, p.currency)}</td>
                           <td>{legible(p.method)}</td>
                           <td>{p.course_name || "—"}</td>
-                          <td>{p.cargado_por || "—"}</td>
+                          <td>
+                            {p.cargado_por || "—"}
+                            {p.updated_at && (
+                              <small className="pagos-editado" title={`Editado el ${soloFecha(p.updated_at)}`}>
+                                editó {p.editado_por || "—"}
+                              </small>
+                            )}
+                          </td>
+                          <td className="acciones">
+                            <button
+                              type="button"
+                              className="btn-fila"
+                              onClick={() => abrirFicha(p, { corregir: true })}
+                            >
+                              Editar
+                            </button>
+                            {userRole === "admin" && (
+                              <button
+                                type="button"
+                                className="btn-fila peligro"
+                                onClick={() => borrarDelMes(p)}
+                              >
+                                Eliminar
+                              </button>
+                            )}
+                          </td>
                         </tr>
                       ))}
                     </tbody>
