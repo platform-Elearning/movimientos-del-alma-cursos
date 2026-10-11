@@ -16,7 +16,13 @@ import { hoyLocal, mesCorriente } from "../../utils/fechas";
 import { legibleOpcional as legible } from "../../utils/etiquetas";
 import "./Pagos.css";
 import { plata } from "../../utils/formato";
-import { confirmacionDeBorrado, pagoAFormulario, soloFecha } from "../../utils/pagos";
+import {
+  confirmacionDeBorrado,
+  pagoAFormulario,
+  soloFecha,
+  totalesPorMoneda,
+} from "../../utils/pagos";
+import { filtrarPorTexto } from "../../utils/buscar";
 
 /**
  * Pagos: la ficha de una alumna y el cierre del mes.
@@ -67,6 +73,7 @@ const Pagos = () => {
 
   const [periodo, setPeriodo] = useState(mesCorriente());
   const [mes, setMes] = useState(null);
+  const [buscarEnMes, setBuscarEnMes] = useState("");
   const [cargando, setCargando] = useState(false);
 
   useEffect(() => {
@@ -265,6 +272,24 @@ const Pagos = () => {
       setError(mensajeDeError(err, "eliminar el pago"));
     }
   };
+
+  // El buscador del cierre filtra lo que ya trajo el período: es para encontrar
+  // un pago puntual (una alumna, un importe raro), no para pedir otro período.
+  const pagosDelMes = mes
+    ? filtrarPorTexto(mes.pagos, buscarEnMes, (p) => [
+        p.name,
+        p.lastname,
+        p.identification_number,
+        legible(p.concept),
+        legible(p.method),
+        p.course_name,
+        p.cargado_por,
+        p.editado_por,
+        p.notes,
+        String(Number(p.amount)),
+      ])
+    : [];
+  const filtrando = Boolean(buscarEnMes.trim());
 
   const borrarDelMes = async (p) => {
     if (!window.confirm(confirmacionDeBorrado(p))) return;
@@ -570,7 +595,7 @@ const Pagos = () => {
                       <tbody>
                         {ficha.pagos.map((p) => (
                           <tr key={p.id} className={editandoId === p.id ? "editando" : ""}>
-                            <td>{soloFecha(p.paid_at)}</td>
+                            <td className="fecha">{soloFecha(p.paid_at)}</td>
                             <td>
                               {legible(p.concept)}
                               {p.modules_count ? ` ×${p.modules_count}` : ""}
@@ -639,6 +664,16 @@ const Pagos = () => {
             <button type="button" className="btn-principal" onClick={cargarMes}>
               Ver
             </button>
+            <div className="campo pagos-buscar-mes">
+              <label htmlFor="pg-buscar-mes">Buscar en el período</label>
+              <input
+                id="pg-buscar-mes"
+                type="search"
+                value={buscarEnMes}
+                onChange={(e) => setBuscarEnMes(e.target.value)}
+                placeholder="Alumna, DNI, concepto, medio, importe…"
+              />
+            </div>
           </div>
 
           {cargando && <p className="pagos-vacio">Cargando…</p>}
@@ -669,9 +704,20 @@ const Pagos = () => {
                 </div>
               )}
 
+              {filtrando && mes.pagos.length > 0 && (
+                <p className="pagos-filtrado">
+                  {pagosDelMes.length === 0
+                    ? "Ningún pago coincide con la búsqueda."
+                    : `${pagosDelMes.length} de ${mes.pagos.length} pagos coinciden: `}
+                  {totalesPorMoneda(pagosDelMes).map((t) => (
+                    <strong key={t.currency}>{plata(t.total, t.currency)} </strong>
+                  ))}
+                </p>
+              )}
+
               {mes.pagos.length === 0 ? (
                 <p className="pagos-vacio">Sin pagos en el período.</p>
-              ) : (
+              ) : pagosDelMes.length === 0 ? null : (
                 <div className="pagos-tabla-scroll">
                   <table className="pagos-tabla">
                     <thead>
@@ -687,9 +733,9 @@ const Pagos = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {mes.pagos.map((p) => (
+                      {pagosDelMes.map((p) => (
                         <tr key={p.id}>
-                          <td>{soloFecha(p.paid_at)}</td>
+                          <td className="fecha">{soloFecha(p.paid_at)}</td>
                           <td>
                             <button
                               type="button"

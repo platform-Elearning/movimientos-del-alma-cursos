@@ -1,5 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
-import { getSeguimiento, registrarEvento } from "../../api/contactos";
+import {
+  getSeguimiento,
+  registrarEvento,
+  guardarOrdenSeguimiento,
+  borrarOrdenSeguimiento,
+} from "../../api/contactos";
+import { filtrarPorTexto, moverEnLista } from "../../utils/buscar";
 import FormularioContacto from "../../components/formularioContacto/FormularioContacto";
 import ImportarContactos from "../../components/importarContactos/ImportarContactos";
 import FormularioInscripcion from "../../components/formularioInscripcion/FormularioInscripcion";
@@ -14,6 +20,12 @@ import "./BandejaSeguimiento.css";
  * pregunta y está ordenada por antigüedad, con los que nunca fueron atendidos
  * arriba de todo. El contador es lo primero que se ve, a propósito: si hay 471
  * esperando, eso tiene que doler.
+ *
+ * El orden se puede cambiar a mano, arrastrando (o con las flechas, en el
+ * celular, donde arrastrar no anda), y se guarda para todo el equipo. Lo que
+ * entra después de ordenar aparece arriba: es nuevo y nadie lo vio. Con una
+ * búsqueda escrita no se reordena: no está claro a dónde iría algo que se
+ * mueve entre resultados sueltos.
  */
 
 
@@ -37,6 +49,10 @@ const BandejaSeguimiento = () => {
   const [mostrarImportar, setMostrarImportar] = useState(false);
   const [inscribiendo, setInscribiendo] = useState(null);
   const [editando, setEditando] = useState(null);
+  const [busqueda, setBusqueda] = useState("");
+  const [arrastrando, setArrastrando] = useState(null);
+  const [sobre, setSobre] = useState(null);
+  const [ordenando, setOrdenando] = useState(false);
 
   const cargar = useCallback(async () => {
     try {
@@ -88,6 +104,54 @@ const BandejaSeguimiento = () => {
   };
 
   const sinAtender = cola.filter((c) => !c.last_contact_at).length;
+  const visibles = filtrarPorTexto(cola, busqueda, (c) => [
+    c.name,
+    c.phone,
+    c.email,
+    c.interest,
+    legible(c.status),
+    legible(c.origin),
+    c.notes,
+  ]);
+  const buscando = Boolean(busqueda.trim());
+  const hayOrdenManual = cola.some((c) => c.follow_up_position !== null && c.follow_up_position !== undefined);
+
+  /**
+   * Mueve un contacto y guarda el orden. Se muestra enseguida y, si el
+   * servidor falla, vuelve a como estaba: la pantalla no puede quedar con un
+   * orden que nadie más ve.
+   */
+  const mover = async (desde, hacia) => {
+    if (buscando || ordenando) return;
+    const nueva = moverEnLista(cola, desde, hacia);
+    if (nueva === cola) return;
+    const anterior = cola;
+    setCola(nueva);
+    setOrdenando(true);
+    setError("");
+    try {
+      await guardarOrdenSeguimiento(nueva.map((c) => c.id));
+      await cargar();
+    } catch (err) {
+      setCola(anterior);
+      setError(mensajeDeError(err, "guardar el orden"));
+    } finally {
+      setOrdenando(false);
+    }
+  };
+
+  const volverAlAutomatico = async () => {
+    setOrdenando(true);
+    setError("");
+    try {
+      await borrarOrdenSeguimiento();
+      await cargar();
+    } catch (err) {
+      setError(mensajeDeError(err, "volver al orden automático"));
+    } finally {
+      setOrdenando(false);
+    }
+  };
 
   return (
     <div className="bandeja">
@@ -160,6 +224,32 @@ const BandejaSeguimiento = () => {
         </div>
       </div>
 
+      <div className="bandeja-herramientas">
+        <input
+          type="search"
+          className="bandeja-buscar"
+          value={busqueda}
+          onChange={(e) => setBusqueda(e.target.value)}
+          placeholder="Buscar por nombre, teléfono, email, interés…"
+          aria-label="Buscar en la bandeja"
+        />
+        {hayOrdenManual && (
+          <button
+            type="button"
+            className="bandeja-btn-automatico"
+            onClick={volverAlAutomatico}
+            disabled={ordenando}
+          >
+            Volver al orden automático
+          </button>
+        )}
+      </div>
+      <p className="bandeja-ayuda-orden">
+        {buscando
+          ? `${visibles.length} de ${cola.length} coinciden. Para reordenar, borrá la búsqueda.`
+          : "Arrastrá ⋮⋮ (o usá las flechas) para cambiar el orden. Se guarda para todo el equipo."}
+      </p>
+
       {error && <p className="bandeja-error">{error}</p>}
       {cargando && <p className="bandeja-cargando">Cargando la bandeja…</p>}
 
@@ -170,8 +260,64 @@ const BandejaSeguimiento = () => {
       )}
 
       <ul className="bandeja-lista">
-        {cola.map((c) => (
-          <li key={c.id} className={`bandeja-item ${urgencia(c.dias_esperando)}`}>
+        {visibles.map((c, i) => (
+          <li
+            key={c.id}
+            className={`bandeja-item ${urgencia(c.dias_esperando)} ${
+              arrastrando === i ? "arrastrando" : ""
+            } ${sobre === i && arrastrando !== i ? "destino" : ""}`}
+            onDragOver={(e) => {
+              if (buscando || arrastrando === null) return;
+              e.preventDefault();
+              setSobre(i);
+            }}
+            onDrop={(e) => {
+              e.preventDefault();
+              if (arrastrando !== null) mover(arrastrando, i);
+              setArrastrando(null);
+              setSobre(null);
+            }}
+          >
+            {!buscando && (
+              <div className="bandeja-orden">
+                {/* Sólo el asa es arrastrable: si fuera toda la fila, no se
+                    podría seleccionar texto ni hacer clic tranquilo. */}
+                <span
+                  className="bandeja-asa"
+                  draggable={!ordenando}
+                  onDragStart={(e) => {
+                    e.dataTransfer.effectAllowed = "move";
+                    setArrastrando(i);
+                  }}
+                  onDragEnd={() => {
+                    setArrastrando(null);
+                    setSobre(null);
+                  }}
+                  title="Arrastrar para cambiar el orden"
+                  aria-hidden="true"
+                >
+                  ⋮⋮
+                </span>
+                <button
+                  type="button"
+                  className="bandeja-flecha-orden"
+                  onClick={() => mover(i, i - 1)}
+                  disabled={i === 0 || ordenando}
+                  aria-label={`Subir a ${c.name}`}
+                >
+                  ▲
+                </button>
+                <button
+                  type="button"
+                  className="bandeja-flecha-orden"
+                  onClick={() => mover(i, i + 1)}
+                  disabled={i === visibles.length - 1 || ordenando}
+                  aria-label={`Bajar a ${c.name}`}
+                >
+                  ▼
+                </button>
+              </div>
+            )}
             <button
               type="button"
               className="bandeja-fila"

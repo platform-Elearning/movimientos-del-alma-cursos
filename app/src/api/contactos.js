@@ -39,6 +39,21 @@ export const getSeguimiento = async (limite = 100) => {
   return data.data;
 };
 
+/**
+ * Guarda el orden manual de la bandeja: los ids, del primero al último. El
+ * resto de la cola queda detrás en el orden que tenía.
+ */
+export const guardarOrdenSeguimiento = async (ids) => {
+  const { data } = await instanceUsers.put("/contacts/seguimiento/orden", { ids });
+  return data;
+};
+
+/** Vuelve la bandeja al orden automático, por tiempo esperando. */
+export const borrarOrdenSeguimiento = async () => {
+  const { data } = await instanceUsers.delete("/contacts/seguimiento/orden");
+  return data;
+};
+
 export const getContacto = async (id) => {
   const { data } = await instanceUsers.get(`/contacts/${id}`);
   return data.data;

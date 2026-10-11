@@ -28,3 +28,20 @@ export const confirmacionDeBorrado = (p) => {
     `del ${soloFecha(p.paid_at)}? No se puede deshacer.`
   );
 };
+
+/**
+ * Total por moneda de una lista de pagos (lo que queda después de buscar en el
+ * cierre del mes). Una fila por moneda: pesos y dólares nunca se suman.
+ */
+export const totalesPorMoneda = (pagos) => {
+  const porMoneda = {};
+  for (const p of pagos) {
+    const t = (porMoneda[p.currency] ||= { currency: p.currency, total: 0, cantidad: 0 });
+    // En centavos para no arrastrar error de punto flotante al sumar.
+    t.total += Math.round(Number(p.amount) * 100);
+    t.cantidad += 1;
+  }
+  return Object.values(porMoneda)
+    .map((t) => ({ ...t, total: t.total / 100 }))
+    .sort((a, b) => a.currency.localeCompare(b.currency));
+};
