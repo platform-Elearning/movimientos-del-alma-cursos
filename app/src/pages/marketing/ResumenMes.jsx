@@ -4,7 +4,8 @@ import { Metrica } from "../../components/graficos/Graficos";
 import { mensajeDeError } from "../../utils/errores";
 import { legibleOpcional as legible } from "../../utils/etiquetas";
 import { mesLocal } from "../../utils/fechas";
-import { plataRedonda, porcentaje, veces, variacion } from "../../utils/formato";
+import { plataRedonda, porcentaje, veces } from "../../utils/formato";
+import { conVariacion, explicarCostos, nombreDelMes } from "../../utils/resumen";
 
 /**
  * El resumen del mes: la pestaña RESUMEN de la planilla, calculada sola con lo
@@ -20,26 +21,6 @@ import { plataRedonda, porcentaje, veces, variacion } from "../../utils/formato"
  * Los ingresos son lo que pagaron las inscriptas del mes en el mes en que se
  * inscribieron. Todo va separado por moneda.
  */
-
-/**
- * "+12 % vs agosto". Si el mes anterior tuvo cero, no hay porcentaje posible,
- * pero el dato existe y se dice: "0 en agosto" no es lo mismo que "sin datos".
- */
-const conVariacion = (actual, anterior, nombreMes, formato = (x) => x) => {
-  if (anterior === null || anterior === undefined) return `sin datos de ${nombreMes}`;
-  if (Number(anterior) === 0) return `${formato(0)} en ${nombreMes}`;
-  return `${variacion(actual, anterior)} vs ${nombreMes}`;
-};
-
-/** "2026-09" -> "septiembre 2026" */
-const nombreDelMes = (mes) => {
-  const [anio, m] = mes.split("-").map(Number);
-  const texto = new Date(anio, m - 1, 1).toLocaleDateString("es-AR", {
-    month: "long",
-    year: "numeric",
-  });
-  return texto.charAt(0).toUpperCase() + texto.slice(1);
-};
 
 const ResumenMes = () => {
   const [mes, setMes] = useState(mesLocal());
@@ -207,14 +188,14 @@ const ResumenMes = () => {
                   </tbody>
                 </table>
               </div>
+              {/* El texto sale de los datos del mes: qué falla de cada costo
+                  depende de cuántas consultas tienen origen y de cuál. */}
               <div className={`marketing-cobertura ${cobertura !== null && cobertura < 0.6 ? "floja" : ""}`}>
-                <strong>Del mes completo</strong> le atribuye a la pauta todo lo que entró
-                en el mes, como la planilla: si hubo consultas que llegaron solas, el
-                costo real es más alto. <strong>Atribuido</strong> cuenta sólo las
-                consultas con ese origen cargado, y hoy sabemos el origen de{" "}
-                {porcentaje(cobertura)} de las consultas: el costo real es más bajo que
-                ese. La verdad está entre los dos, y se acerca al atribuido a medida que
-                se carga el origen.
+                {explicarCostos(actual).map(({ titulo, texto }) => (
+                  <p key={titulo}>
+                    <strong>{titulo}</strong> {texto}
+                  </p>
+                ))}
               </div>
             </>
           )}
