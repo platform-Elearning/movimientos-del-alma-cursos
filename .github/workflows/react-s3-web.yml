@@ -14,17 +14,14 @@ on:
 
 jobs:
   # Los tests corren antes que el deploy, en cada push a develop (y a main,
-  # porque el deploy de main tambien depende de este job). Mientras tenga
-  # continue-on-error, un fallo se ve en rojo pero no frena el deploy.
+  # porque el deploy de main tambien depende de este job). Si fallan, el deploy
+  # no arranca y no se toca ni S3 ni terraform.
   #
   # El lint todavia no esta aca: hoy tiene ~350 errores heredados y meterlo
   # bloquearia todos los deploys hasta limpiarlo.
   test:
     name: tests
     runs-on: ubuntu-latest
-    # Por ahora informativo: si falla se ve en rojo, pero el deploy sigue.
-    # Sacar esta linea para que un test roto frene el deploy.
-    continue-on-error: true
     defaults:
       run:
         working-directory: app
