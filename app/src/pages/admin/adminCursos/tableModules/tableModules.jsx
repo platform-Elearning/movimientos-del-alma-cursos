@@ -10,7 +10,7 @@ import {
 import { useParams, useNavigate } from "react-router-dom";
 import ConfirmarBorrado from "../../../../components/confirmarBorrado/ConfirmarBorrado";
 import BotonBorrar from "../../../../components/confirmarBorrado/BotonBorrar";
-import { lineasDeImpactoModulo } from "../../../../utils/cursos";
+import { lineasDeBloqueoModulo } from "../../../../utils/cursos";
 import { mensajeDeError } from "../../../../utils/errores";
 
 /**
@@ -131,7 +131,7 @@ const ModulesTable = ({ version = 0 }) => {
   if (loading) return <p className="custom-modules-table__loading">Cargando módulos...</p>;
   if (error) return <p className="custom-modules-table__error">Error: {error}</p>;
 
-  const lineas = impacto ? lineasDeImpactoModulo(impacto) : [];
+  const lineas = impacto ? lineasDeBloqueoModulo(impacto.bloqueos) : [];
 
   return (
     <div className="custom-modules-table">
@@ -244,20 +244,23 @@ const ModulesTable = ({ version = 0 }) => {
           cargando={cargandoImpacto}
           enProceso={borrando}
           error={errorBorrado}
-          // Si no se pudo calcular qué se pierde, no se deja borrar a ciegas.
-          bloqueado={!cargandoImpacto && !impacto}
+          // Con clases o con alumnas que lo ven no se borra; y si no se pudo saber, tampoco a ciegas.
+          bloqueado={!cargandoImpacto && (!impacto || lineas.length > 0)}
           textoConfirmar="Sí, eliminar módulo"
           onConfirmar={confirmarBorrado}
           onCancelar={cerrarBorrado}
         >
           {lineas.length ? (
-            <ul>
-              {lineas.map((l) => (
-                <li key={l}>{l}</li>
-              ))}
-            </ul>
+            <>
+              <p>No se puede eliminar todavía:</p>
+              <ul>
+                {lineas.map((l) => (
+                  <li key={l}>{l}</li>
+                ))}
+              </ul>
+            </>
           ) : (
-            <p>Este módulo no tiene clases ni alumnas que se vean afectadas.</p>
+            <p>Este módulo está vacío y ninguna alumna lo tiene habilitado: se puede eliminar.</p>
           )}
           <p>
             Si solo hay que corregir algo, usá <strong>Editar</strong>: no pierde nada.

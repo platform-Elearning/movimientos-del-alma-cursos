@@ -239,6 +239,12 @@ export const getImpactoModulo = async (id) => {
   return data.data;
 };
 
+/** Lo que impide borrar un curso: cuántos módulos, alumnas y profesores tiene. */
+export const getImpactoCurso = async (id) => {
+  const { data } = await instanceCursos.get(`/courses/getCourseImpact/${id}`);
+  return data.data;
+};
+
 export const getImpactoClase = async (id) => {
   const { data } = await instanceCursos.get(`/courses/getLessonImpact/${id}`);
   return data.data;

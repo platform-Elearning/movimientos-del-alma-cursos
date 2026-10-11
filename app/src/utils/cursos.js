@@ -1,43 +1,64 @@
 /**
- * Textos de la gestión de cursos: qué se pierde al borrar y por qué no se pudo.
+ * Textos de la gestión de cursos: qué impide borrar y qué se pierde al hacerlo.
  *
  * Son funciones puras para poder probarlas sin pantalla. Lo que se le muestra a
  * quien va a confirmar tiene que ser exacto: "se borran 12 clases" no puede
  * decir "se borran 1 clases".
+ *
+ * El borrado va de abajo hacia arriba y el backend lo hace cumplir: un curso se
+ * borra vacío (sin módulos, alumnas ni profesores), y un módulo sin clases y sin
+ * que ninguna alumna lo tenga habilitado. Estas funciones solo explican, antes de
+ * pedir confirmación, lo mismo que el backend va a exigir.
  */
 import { mensajeDeError } from "./errores";
 
 /** "1 clase" / "12 clases". */
 export const plural = (n, uno, varios) => `${n} ${n === 1 ? uno : varios}`;
 
-/**
- * Las líneas que se le muestran a quien va a borrar un módulo, a partir de lo
- * que cuenta el backend. Solo aparece lo que existe: no tiene sentido decir "0
- * comentarios".
- */
-export const lineasDeImpactoModulo = (i) => {
+/** ¿Hay algo que impida borrar? `bloqueos` es un objeto de conteos. */
+export const hayBloqueos = (bloqueos) => !!bloqueos && Object.values(bloqueos).some((n) => n > 0);
+
+/** Qué hay que hacer antes de poder borrar un curso, una línea por cosa. */
+export const lineasDeBloqueoCurso = ({ modulos = 0, alumnas = 0, profesores = 0 } = {}) => {
   const lineas = [];
-  if (i.clases) lineas.push(`Se borran ${plural(i.clases, "clase", "clases")} del módulo.`);
-  if (i.comentarios) {
-    const resp = i.respuestas ? ` y ${plural(i.respuestas, "respuesta", "respuestas")}` : "";
-    lineas.push(`Se borran ${plural(i.comentarios, "comentario", "comentarios")}${resp} de esas clases.`);
-  }
-  if (i.alumnas_con_acceso) {
+  if (modulos) {
     lineas.push(
-      `${plural(i.alumnas_con_acceso, "alumna tiene", "alumnas tienen")} habilitado este módulo hoy y dejaría${
-        i.alumnas_con_acceso === 1 ? "" : "n"
-      } de verlo.`
+      `Tiene ${plural(modulos, "módulo", "módulos")}: hay que borrarlos primero, empezando por sus clases (en "Editar curso").`
     );
-    // El acceso se cuenta por posición ("los primeros N módulos"): al sacar uno,
-    // el siguiente ocupa su lugar y esas alumnas pasarían a ver un módulo que no
-    // tenían habilitado. Es lo más fácil de no ver, y lo que hay que decir.
+  }
+  if (alumnas) {
     lineas.push(
-      "Como el acceso se cuenta por posición, en su lugar verían un módulo posterior que no tenían habilitado."
+      `Tiene ${plural(alumnas, "alumna inscripta", "alumnas inscriptas")}: hay que desinscribirlas primero ("Desinscribir alumno").`
+    );
+  }
+  if (profesores) {
+    lineas.push(
+      `Tiene ${plural(profesores, "profesor asignado", "profesores asignados")}: hay que desasignarlos primero (en Profesores).`
     );
   }
   return lineas;
 };
 
+/**
+ * Qué hay que hacer antes de poder borrar un módulo. El acceso se cuenta por
+ * posición ("los primeros N módulos"): sacar uno que una alumna ve le haría
+ * aparecer un módulo posterior que no tenía habilitado. Por eso no se borra, y lo
+ * que sí se puede es editarlo.
+ */
+export const lineasDeBloqueoModulo = ({ clases = 0, alumnas = 0 } = {}) => {
+  const lineas = [];
+  if (clases) {
+    lineas.push(`Tiene ${plural(clases, "clase", "clases")}: hay que borrarlas primero, una por una.`);
+  }
+  if (alumnas) {
+    lineas.push(
+      `${plural(alumnas, "alumna lo tiene", "alumnas lo tienen")} habilitado hoy: un módulo que alguien está viendo no se puede borrar. Se puede editar.`
+    );
+  }
+  return lineas;
+};
+
+/** Lo que arrastra borrar una clase: sus comentarios y respuestas. */
 export const lineasDeImpactoClase = (i) => {
   const lineas = [];
   if (i.comentarios) {
@@ -48,21 +69,12 @@ export const lineasDeImpactoClase = (i) => {
 };
 
 /**
- * Por qué no se pudo borrar un curso, en español. El backend frena el borrado si
- * tiene alumnas o profesores y lo dice en inglés; acá se traduce, con el número.
+ * Por qué no se pudo borrar un curso. El backend ya lo explica en español y con
+ * los números (409); acá solo se recurre a un texto propio si no vino ninguno.
  */
 export const motivoDeBorradoDeCurso = (err) => {
-  const msg = err?.response?.data?.errorMessage || "";
-  const alumnas = msg.match(/(\d+) student\(s\) enrolled/);
-  if (alumnas) {
-    const n = Number(alumnas[1]);
-    return `No se puede borrar: tiene ${plural(n, "alumna inscripta", "alumnas inscriptas")}. Desinscribilas primero.`;
-  }
-  const profes = msg.match(/(\d+) teacher\(s\) assigned/);
-  if (profes) {
-    const n = Number(profes[1]);
-    return `No se puede borrar: tiene ${plural(n, "profesor asignado", "profesores asignados")}. Desasignalos primero.`;
-  }
+  const delBackend = err?.response?.data?.error;
+  if (delBackend) return delBackend;
   if (err?.response?.status === 404) return "El curso ya no existe.";
   return mensajeDeError(err, "borrar el curso");
 };
