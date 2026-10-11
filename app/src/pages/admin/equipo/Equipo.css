@@ -1,0 +1,96 @@
+/* Equipo. Usa los tokens del sistema (tokens.css). */
+
+.equipo {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 3rem;
+}
+
+.equipo h2 {
+  margin: 0.8rem 0 0.4rem;
+}
+
+.equipo-ayuda {
+  font-size: 0.9rem;
+  margin: 0 0 1rem;
+}
+
+.equipo-error {
+  padding: 0.6rem 0.8rem;
+  border-radius: var(--radio);
+  background: #fceaea;
+  color: #a32d2d;
+  font-size: 0.88rem;
+}
+
+.equipo-creada {
+  padding: 0.9rem 1rem;
+  margin-bottom: 1.2rem;
+  border-radius: var(--radio);
+  border: 1px solid #2e7d4f;
+  background: rgba(46, 125, 79, 0.08);
+  font-size: 0.9rem;
+}
+
+.equipo-creada code {
+  font-size: 1.05rem;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  user-select: all;
+}
+
+.equipo-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px;
+  margin-bottom: 1.5rem;
+}
+
+.equipo .campo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.85rem;
+}
+
+.equipo .campo input,
+.equipo .campo select {
+  font: inherit;
+  padding: 0.45rem 0.6rem;
+  border-radius: var(--radio);
+  border: 1px solid var(--borde);
+  min-width: 220px;
+}
+
+.equipo .btn-principal {
+  font: inherit;
+  font-size: 0.9rem;
+  padding: 0.5rem 1.2rem;
+  border-radius: var(--radio);
+  background: var(--tinta);
+  color: var(--superficie);
+  border: 1px solid var(--tinta);
+  cursor: pointer;
+}
+
+.equipo-tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.equipo-tabla th,
+.equipo-tabla td {
+  text-align: left;
+  padding: 0.5rem 0.6rem;
+  border-bottom: 1px solid var(--borde);
+}
+
+.equipo-tabla th {
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}

@@ -6,6 +6,7 @@ import "./main.css";
 import Navbar from "./components/navbar/Navbar.jsx";
 import BotonAyuda from "./components/tour/BotonAyuda.jsx";
 import { AuthProvider } from "./services/authContext.jsx";
+import RestriccionDeRol from "./components/restriccionDeRol/RestriccionDeRol.jsx";
 
 const App = () => {
   const location = useLocation();
@@ -21,6 +22,7 @@ const App = () => {
     <>
       {!hideNavbar && <Navbar />}
       {!hideNavbar && <BotonAyuda />}
+      <RestriccionDeRol />
       <AppRouter />
     </>
   );

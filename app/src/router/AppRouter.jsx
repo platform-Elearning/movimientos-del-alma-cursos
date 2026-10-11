@@ -10,6 +10,7 @@ import Ventas from "../pages/ventas/Ventas";
 import Pagos from "../pages/pagos/Pagos";
 import Marketing from "../pages/marketing/Marketing";
 import Tableros from "../pages/tableros/Tableros";
+import Equipo from "../pages/admin/equipo/Equipo";
 import VistaPreviaCurso from "../pages/profesores/vistaPreviaCurso/VistaPreviaCurso";
 import ProfesoresMisCursos from "../pages/profesores/profesoresMisCursos/profesoresMisCursos";
 import PanelAdmin from "../pages/admin/panelAdmin/panelAdmin";
@@ -79,9 +80,12 @@ const AppRouter = () => {
                 colgada de las dos secciones, como seguimiento y tablero. */}
             <Route path="/ventas/pagos" element={<Pagos />} />
             <Route path="/admin/pagos" element={<Pagos />} />
-            {/* Marketing es solo de admin: es plata de inversion, no de
-                operacion diaria. */}
+            {/* Marketing lo ven el admin y el perfil de marketing, que entra
+                directo a /marketing y no ve nada más. */}
             <Route path="/admin/marketing" element={<Marketing />} />
+            <Route path="/marketing" element={<Marketing />} />
+            {/* Alta de ventas y marketing: solo admin. */}
+            <Route path="/admin/equipo" element={<Equipo />} />
             <Route path="/admin/tableros" element={<Tableros />} />
             <Route path="/admin/tablero" element={<Ventas />} />
 
