@@ -184,10 +184,11 @@ const Contactos = () => {
                       </td>
                       <td>{legible(c.status)}</td>
                       <td>{legible(c.origin)}</td>
-                      <td>{soloFecha(c.first_contact_at) || "—"}</td>
-                      <td>{soloFecha(c.last_contact_at) || "sin contactar"}</td>
+                      <td className="fecha">{soloFecha(c.first_contact_at) || "—"}</td>
+                      <td className="fecha">{soloFecha(c.last_contact_at) || "sin contactar"}</td>
                       <td className="num">{dias === null ? "—" : dias}</td>
                       <td className="contactos-acciones">
+                        <div>
                         <button type="button" onClick={() => setEditando(c)}>
                           Editar
                         </button>
@@ -202,6 +203,7 @@ const Contactos = () => {
                             Borrar
                           </button>
                         )}
+                        </div>
                       </td>
                     </tr>
                   );

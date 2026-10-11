@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { confirmacionDeBorrado, pagoAFormulario } from "../pagos";
+import { confirmacionDeBorrado, pagoAFormulario, totalesPorMoneda } from "../pagos";
 
 describe("confirmacionDeBorrado", () => {
   it("desde el cierre del mes nombra a la alumna", () => {
@@ -45,5 +45,25 @@ describe("pagoAFormulario", () => {
       notes: "",
       enrollment_id: "7",
     });
+  });
+});
+
+describe("totalesPorMoneda", () => {
+  it("suma por moneda y nunca mezcla pesos con dólares", () => {
+    expect(
+      totalesPorMoneda([
+        { amount: "95000.00", currency: "ARS" },
+        { amount: "0.10", currency: "ARS" },
+        { amount: "0.20", currency: "ARS" },
+        { amount: 120, currency: "USD" },
+      ])
+    ).toEqual([
+      { currency: "ARS", total: 95000.3, cantidad: 3 },
+      { currency: "USD", total: 120, cantidad: 1 },
+    ]);
+  });
+
+  it("sin pagos, sin totales", () => {
+    expect(totalesPorMoneda([])).toEqual([]);
   });
 });

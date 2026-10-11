@@ -93,8 +93,30 @@
   text-align: left;
   padding: 0.5rem 0.6rem;
   border-bottom: 1px solid var(--borde);
-  white-space: nowrap;
   color: var(--texto);
+  vertical-align: top;
+}
+
+/* Fechas, números y encabezados no se parten; nombre y contacto sí bajan de
+   línea. Con todo en una línea los botones quedaban fuera de la pantalla. */
+.contactos-tabla th,
+.contactos-tabla td.num,
+.contactos-tabla td.fecha {
+  white-space: nowrap;
+}
+
+.contactos-tabla td.contactos-chico {
+  overflow-wrap: anywhere;
+  min-width: 140px;
+}
+
+/* Las acciones quedan fijas a la derecha, siempre a la vista. */
+.contactos-tabla th:last-child,
+.contactos-tabla td.contactos-acciones {
+  position: sticky;
+  right: 0;
+  background: var(--superficie);
+  box-shadow: -8px 0 8px -8px rgba(0, 0, 0, 0.18);
 }
 
 .contactos-tabla th {
@@ -131,7 +153,8 @@
   color: #2e7d4f;
 }
 
-.contactos-acciones {
+/* El flex va en un div adentro: en la celda misma rompería el "sticky". */
+.contactos-acciones > div {
   display: flex;
   gap: 6px;
 }

@@ -319,6 +319,7 @@
 
 .pagos-tabla td.acciones {
   white-space: nowrap;
+  z-index: 1;
   text-align: right;
 }
 
@@ -391,8 +392,27 @@
   text-align: left;
   padding: 0.5rem 0.6rem;
   border-bottom: 1px solid var(--borde);
-  white-space: nowrap;
   color: var(--texto);
+  vertical-align: top;
+}
+
+/* Fechas, importes y encabezados no se parten; los textos largos (alumna,
+   formación, quién cargó) sí bajan de línea. Con todo en una sola línea la
+   tabla quedaba más ancha que la pantalla y los botones, al final, afuera. */
+.pagos-tabla th,
+.pagos-tabla td.num,
+.pagos-tabla td.fecha {
+  white-space: nowrap;
+}
+
+/* Las acciones quedan fijas a la derecha: aunque la tabla scrollee, Editar y
+   Eliminar siempre se ven. */
+.pagos-tabla th:last-child,
+.pagos-tabla td.acciones {
+  position: sticky;
+  right: 0;
+  background: var(--superficie);
+  box-shadow: -8px 0 8px -8px rgba(0, 0, 0, 0.18);
 }
 
 .pagos-tabla th {
@@ -431,4 +451,17 @@
   border-radius: var(--radio);
   background: rgba(192, 140, 68, 0.1);
   font-size: 0.86rem;
+}
+
+.pagos-buscar-mes {
+  flex: 1 1 260px;
+}
+
+.pagos-buscar-mes input {
+  width: 100%;
+}
+
+.pagos-filtrado {
+  margin: 0.4rem 0 0.8rem;
+  font-size: 0.88rem;
 }
