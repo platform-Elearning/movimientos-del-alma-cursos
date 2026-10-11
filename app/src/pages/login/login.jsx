@@ -6,6 +6,7 @@ import { MdEmail, MdLock, MdError } from "react-icons/md";
 import { useAuth } from "../../services/authContext";
 import missionVisionImg from "../../assets/missionVisionImg.png";
 import logo from "../../assets/logo2.png";
+import { destinoSegunRol } from "../../utils/roles";
 
 const Login = () => {
   const {
@@ -31,13 +32,8 @@ const Login = () => {
   // ✅ CAMBIO PRINCIPAL: useEffect corregido
   useEffect(() => {
     if (isAuthenticated) {
-      if (userRole === "student") {
-        navigate(`/alumnos/miscursos/${userId}`);
-      } else if (userRole === "teacher") {
-        navigate(`/profesores/profesoresMisCursos/${userId}`);
-      } else if (userRole === "admin") {
-        navigate("/admin");
-      }
+      const destino = destinoSegunRol(userRole, userId);
+      if (destino) navigate(destino);
     }
   }, [isAuthenticated, navigate, userRole, userId]);
 

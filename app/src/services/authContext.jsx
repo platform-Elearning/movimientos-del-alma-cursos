@@ -54,6 +54,8 @@ export const AuthProvider = ({ children }) => {
             
             if (dataDecoded.role === "admin") {
                 setUserNav("administrador");
+            } else if (dataDecoded.role === "marketing") {
+                setUserNav("marketing");
             } else {
                 setUserNav(dataDecoded.name);
             }
@@ -211,6 +213,8 @@ export const AuthProvider = ({ children }) => {
             
             if (user.role === "admin") {
                 setUserNav("administrador");
+            } else if (user.role === "marketing") {
+                setUserNav("marketing");
             } else {
                 setUserNav(user.name);
             }

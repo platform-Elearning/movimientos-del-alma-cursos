@@ -235,6 +235,13 @@ const Navbar = () => {
               </a>
             </li>
           )}
+          {userRole === "marketing" && (
+            <li>
+              <a className="alumno-a" onClick={() => navigate("/marketing")}>
+                Marketing
+              </a>
+            </li>
+          )}
           {userRole === "student" && (
             <li>
               <a className="alumno-a" onClick={navigateToPageAlumnnosMisCursos}>Mis Formaciones</a>
