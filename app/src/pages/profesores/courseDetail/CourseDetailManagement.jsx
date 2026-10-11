@@ -20,7 +20,7 @@ import ConfirmarBorrado from "../../../components/confirmarBorrado/ConfirmarBorr
 import BotonBorrar from "../../../components/confirmarBorrado/BotonBorrar";
 import BotonIcono from "../../../components/botonIcono/BotonIcono";
 import { FaPlay, FaExternalLinkAlt, FaPen, FaVideo } from "react-icons/fa";
-import { lineasDeImpactoModulo, lineasDeImpactoClase } from "../../../utils/cursos";
+import { lineasDeBloqueoModulo, lineasDeImpactoClase } from "../../../utils/cursos";
 import { mensajeDeError, esSesionVencida } from "../../../utils/errores";
 
 const CourseDetailManagement = () => {
@@ -753,17 +753,33 @@ const CourseDetailManagement = () => {
           enProceso={borrado.enProceso}
           error={borrado.error}
           // Si no se pudo calcular qué se pierde, no se deja borrar a ciegas.
-          bloqueado={!borrado.cargando && !borrado.impacto}
+          // Un módulo con clases o que una alumna ve no se borra; y si no se pudo saber, tampoco a ciegas.
+          bloqueado={
+            !borrado.cargando &&
+            (!borrado.impacto ||
+              (borrado.tipo === 'modulo' && lineasDeBloqueoModulo(borrado.impacto.bloqueos).length > 0))
+          }
           textoConfirmar={borrado.tipo === 'modulo' ? 'Sí, eliminar módulo' : 'Sí, eliminar lección'}
           onConfirmar={confirmarBorrado}
           onCancelar={() => !borrado.enProceso && setBorrado(null)}
         >
           {(() => {
-            const lineas = !borrado.impacto
-              ? []
-              : borrado.tipo === 'modulo'
-                ? lineasDeImpactoModulo(borrado.impacto)
-                : lineasDeImpactoClase(borrado.impacto);
+            if (borrado.tipo === 'modulo') {
+              const bloqueo = borrado.impacto ? lineasDeBloqueoModulo(borrado.impacto.bloqueos) : [];
+              return bloqueo.length ? (
+                <>
+                  <p>No se puede eliminar todavía:</p>
+                  <ul>
+                    {bloqueo.map((l) => (
+                      <li key={l}>{l}</li>
+                    ))}
+                  </ul>
+                </>
+              ) : (
+                <p>Este módulo está vacío y ninguna alumna lo tiene habilitado: se puede eliminar.</p>
+              );
+            }
+            const lineas = borrado.impacto ? lineasDeImpactoClase(borrado.impacto) : [];
             return lineas.length ? (
               <ul>
                 {lineas.map((l) => (
@@ -771,11 +787,7 @@ const CourseDetailManagement = () => {
                 ))}
               </ul>
             ) : (
-              <p>
-                {borrado.tipo === 'modulo'
-                  ? 'Este módulo no tiene clases ni alumnas que se vean afectadas.'
-                  : 'Esta lección no tiene comentarios.'}
-              </p>
+              <p>Esta lección no tiene comentarios.</p>
             );
           })()}
           <p>

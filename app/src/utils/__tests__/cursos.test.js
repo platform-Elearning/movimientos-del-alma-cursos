@@ -1,7 +1,9 @@
 import { describe, it, expect } from "vitest";
 import {
   plural,
-  lineasDeImpactoModulo,
+  hayBloqueos,
+  lineasDeBloqueoCurso,
+  lineasDeBloqueoModulo,
   lineasDeImpactoClase,
   motivoDeBorradoDeCurso,
 } from "../cursos";
@@ -16,37 +18,61 @@ describe("plural", () => {
   });
 });
 
-describe("lineasDeImpactoModulo", () => {
-  it("un módulo vacío y sin alumnas no avisa de nada", () => {
-    expect(
-      lineasDeImpactoModulo({ clases: 0, comentarios: 0, respuestas: 0, alumnas_inscriptas: 0, alumnas_con_acceso: 0 })
-    ).toEqual([]);
+describe("hayBloqueos", () => {
+  it("es verdadero si algún conteo es mayor a cero", () => {
+    expect(hayBloqueos({ modulos: 0, alumnas: 0, profesores: 1 })).toBe(true);
+    expect(hayBloqueos({ clases: 0, alumnas: 0 })).toBe(false);
   });
 
-  it("cuenta clases, comentarios y respuestas con el plural correcto", () => {
-    const l = lineasDeImpactoModulo({
-      clases: 1, comentarios: 3, respuestas: 1, alumnas_inscriptas: 0, alumnas_con_acceso: 0,
-    });
-    expect(l[0]).toBe("Se borran 1 clase del módulo.");
-    expect(l[1]).toBe("Se borran 3 comentarios y 1 respuesta de esas clases.");
+  it("sin datos no hay bloqueos que mostrar", () => {
+    expect(hayBloqueos(undefined)).toBe(false);
+    expect(hayBloqueos(null)).toBe(false);
+    expect(hayBloqueos({})).toBe(false);
+  });
+});
+
+describe("lineasDeBloqueoCurso", () => {
+  it("un curso vacío no tiene nada que hacer antes", () => {
+    expect(lineasDeBloqueoCurso({ modulos: 0, alumnas: 0, profesores: 0 })).toEqual([]);
+    expect(lineasDeBloqueoCurso()).toEqual([]);
   });
 
-  it("no habla de respuestas si no hay", () => {
-    const l = lineasDeImpactoModulo({ clases: 2, comentarios: 1, respuestas: 0, alumnas_inscriptas: 0, alumnas_con_acceso: 0 });
-    expect(l[1]).toBe("Se borran 1 comentario de esas clases.");
+  it("dice qué hay y qué hacer primero, con el plural correcto", () => {
+    const l = lineasDeBloqueoCurso({ modulos: 1, alumnas: 2, profesores: 1 });
+    expect(l).toHaveLength(3);
+    expect(l[0]).toMatch(/Tiene 1 módulo: hay que borrarlos primero/);
+    expect(l[1]).toMatch(/Tiene 2 alumnas inscriptas: hay que desinscribirlas/);
+    expect(l[2]).toMatch(/Tiene 1 profesor asignado: hay que desasignarlos/);
   });
 
-  it("avisa a cuántas alumnas se les achica lo que ven, concordando el verbo", () => {
-    const una = lineasDeImpactoModulo({ clases: 0, comentarios: 0, respuestas: 0, alumnas_inscriptas: 1, alumnas_con_acceso: 1 });
-    expect(una[0]).toBe("1 alumna tiene habilitado este módulo hoy y dejaría de verlo.");
-    const varias = lineasDeImpactoModulo({ clases: 0, comentarios: 0, respuestas: 0, alumnas_inscriptas: 5, alumnas_con_acceso: 4 });
-    expect(varias[0]).toBe("4 alumnas tienen habilitado este módulo hoy y dejarían de verlo.");
-    expect(varias[1]).toMatch(/módulo posterior que no tenían habilitado/);
+  it("solo menciona lo que realmente hay", () => {
+    const l = lineasDeBloqueoCurso({ modulos: 0, alumnas: 1, profesores: 0 });
+    expect(l).toHaveLength(1);
+    expect(l[0]).toMatch(/1 alumna inscripta/);
+  });
+});
+
+describe("lineasDeBloqueoModulo", () => {
+  it("un módulo vacío que nadie ve no tiene nada que hacer antes", () => {
+    expect(lineasDeBloqueoModulo({ clases: 0, alumnas: 0 })).toEqual([]);
   });
 
-  it("si nadie lo tiene habilitado no avisa del corrimiento, aunque haya inscriptas", () => {
-    const l = lineasDeImpactoModulo({ clases: 1, comentarios: 0, respuestas: 0, alumnas_inscriptas: 5, alumnas_con_acceso: 0 });
-    expect(l).toEqual(["Se borran 1 clase del módulo."]);
+  it("pide borrar las clases primero, y concuerda el plural", () => {
+    expect(lineasDeBloqueoModulo({ clases: 1, alumnas: 0 })).toEqual([
+      "Tiene 1 clase: hay que borrarlas primero, una por una.",
+    ]);
+    expect(lineasDeBloqueoModulo({ clases: 12, alumnas: 0 })[0]).toMatch(/Tiene 12 clases/);
+  });
+
+  it("explica que un módulo que una alumna ve no se borra, y que se puede editar", () => {
+    const una = lineasDeBloqueoModulo({ clases: 0, alumnas: 1 });
+    expect(una[0]).toMatch(/1 alumna lo tiene habilitado hoy/);
+    expect(una[0]).toMatch(/Se puede editar/);
+    expect(lineasDeBloqueoModulo({ clases: 0, alumnas: 4 })[0]).toMatch(/4 alumnas lo tienen habilitado/);
+  });
+
+  it("junta las dos razones cuando hay clases y alumnas", () => {
+    expect(lineasDeBloqueoModulo({ clases: 2, alumnas: 3 })).toHaveLength(2);
   });
 });
 
@@ -54,28 +80,31 @@ describe("lineasDeImpactoClase", () => {
   it("solo habla de comentarios si hay", () => {
     expect(lineasDeImpactoClase({ comentarios: 0, respuestas: 0 })).toEqual([]);
     expect(lineasDeImpactoClase({ comentarios: 2, respuestas: 0 })).toEqual(["Se borran 2 comentarios de esta clase."]);
+    expect(lineasDeImpactoClase({ comentarios: 3, respuestas: 1 })).toEqual([
+      "Se borran 3 comentarios y 1 respuesta de esta clase.",
+    ]);
   });
 });
 
 describe("motivoDeBorradoDeCurso", () => {
-  it("traduce el bloqueo por alumnas inscriptas, con el número", () => {
-    const e = error(400, { errorMessage: "Cannot delete course. Course has 3 student(s) enrolled. Please unenroll all students first." });
-    expect(motivoDeBorradoDeCurso(e)).toBe("No se puede borrar: tiene 3 alumnas inscriptas. Desinscribilas primero.");
-    const una = error(400, { errorMessage: "Cannot delete course. Course has 1 student(s) enrolled." });
-    expect(motivoDeBorradoDeCurso(una)).toMatch(/1 alumna inscripta\./);
+  it("muestra lo que explica el backend, que ya viene en español y con los números", () => {
+    const e = error(409, {
+      error: "No se puede eliminar el curso: tiene 3 módulos. Primero hay que borrar los módulos.",
+    });
+    expect(motivoDeBorradoDeCurso(e)).toBe(
+      "No se puede eliminar el curso: tiene 3 módulos. Primero hay que borrar los módulos."
+    );
   });
 
-  it("traduce el bloqueo por profesores asignados", () => {
-    const e = error(400, { errorMessage: "Cannot delete course. Course has 2 teacher(s) assigned. Please unassign all teachers first." });
-    expect(motivoDeBorradoDeCurso(e)).toBe("No se puede borrar: tiene 2 profesores asignados. Desasignalos primero.");
-  });
-
-  it("un curso que ya no existe y un fallo cualquiera", () => {
+  it("un curso que ya no existe, sin motivo del backend", () => {
     expect(motivoDeBorradoDeCurso(error(404, {}))).toBe("El curso ya no existe.");
+  });
+
+  it("un fallo cualquiera no manda a revisar los datos", () => {
     expect(motivoDeBorradoDeCurso(error(500, {}))).toMatch(/error del servidor \(500\)/);
   });
 
-  it("sin respuesta del servidor no manda a revisar datos", () => {
+  it("sin respuesta del servidor lo dice", () => {
     expect(motivoDeBorradoDeCurso({})).toMatch(/No hay respuesta del servidor/);
   });
 });
