@@ -14,17 +14,17 @@ on:
 
 jobs:
   # Los tests corren antes que el deploy, en cada push a develop (y a main,
-  # porque el deploy de main tambien depende de este job). Mientras tenga
-  # continue-on-error, un fallo se ve en rojo pero no frena el deploy.
+  # porque el deploy de main tambien depende de este job). Si fallan, el deploy
+  # no arranca y no se toca ni S3 ni terraform.
   #
   # El lint todavia no esta aca: hoy tiene ~350 errores heredados y meterlo
   # bloquearia todos los deploys hasta limpiarlo.
   test:
     name: tests
-    runs-on: ubuntu-latest
-    # Por ahora informativo: si falla se ve en rojo, pero el deploy sigue.
-    # Sacar esta linea para que un test roto frene el deploy.
-    continue-on-error: true
+    # Version fija y no ubuntu-latest: GitHub mueve ese alias de 24.04 a 26.04
+    # entre el 19/10 y el 19/11/2026, y el job cambiaria de sistema sin aviso.
+    # Subir de version es un cambio deliberado, probado en una rama.
+    runs-on: ubuntu-24.04
     defaults:
       run:
         working-directory: app
@@ -48,7 +48,10 @@ jobs:
   deploy:
     name: push web on s3
     needs: test
-    runs-on: ubuntu-latest
+    # Version fija y no ubuntu-latest: GitHub mueve ese alias de 24.04 a 26.04
+    # entre el 19/10 y el 19/11/2026, y el job cambiaria de sistema sin aviso.
+    # Subir de version es un cambio deliberado, probado en una rama.
+    runs-on: ubuntu-24.04
     steps:
       - name: Get repository name
         run: echo "REPO=$(echo ${{ github.repository }} | cut -d'/' -f 2 | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
