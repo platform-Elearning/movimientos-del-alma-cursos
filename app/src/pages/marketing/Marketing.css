@@ -370,3 +370,32 @@
   border: 1px solid var(--borde-dorado);
   cursor: pointer;
 }
+
+/* Resumen del mes */
+.resumen-mes-encabezado {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 16px;
+  margin-bottom: 1rem;
+}
+
+.resumen-mes-encabezado h3 {
+  margin: 0;
+}
+
+.resumen-mes-encabezado .campo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.resumen-moneda h4 {
+  margin: 1.2rem 0 0.4rem;
+}
+
+.resumen-desgloses {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 0 24px;
+}

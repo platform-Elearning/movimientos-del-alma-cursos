@@ -14,6 +14,7 @@ import {
   Metrica,
 } from "../../components/graficos/Graficos";
 import BackLink from "../../components/backLink/BackLink";
+import ResumenMes from "./ResumenMes";
 import { mensajeDeError } from "../../utils/errores";
 import { legibleOpcional as legible } from "../../utils/etiquetas";
 import { mesLocal } from "../../utils/fechas";
@@ -21,9 +22,11 @@ import "./Marketing.css";
 import { plataRedonda, porcentaje } from "../../utils/formato";
 
 /**
- * Marketing: conversiones, inversión y la planilla.
+ * Marketing: el resumen del mes, conversiones, inversión y la planilla.
  *
- * Tres vistas de lo mismo, en el orden en que se miran: primero cuánta gente
+ * El resumen va primero: es la cuenta del mes que antes se hacía a mano en la
+ * pestaña RESUMEN de la planilla. Las otras tres son el detalle, en el orden en
+ * que se miran: primero cuánta gente
  * entró y cuánta se inscribió, después qué costó traerla, y por último el
  * detalle fila por fila para cuando hay que buscar un caso puntual.
  *
@@ -42,11 +45,24 @@ const GASTO_VACIO = {
   amount: "",
   currency: "ARS",
   notes: "",
+  // Lo que reporta la plataforma. Opcionales: vacío es "no se cargó".
+  results: "",
+  reach: "",
+  impressions: "",
+  link_clicks: "",
 };
+
+/** Las métricas de la plataforma que se copian del administrador de anuncios. */
+const METRICAS_DE_PAUTA = [
+  ["results", "Resultados"],
+  ["reach", "Alcance"],
+  ["impressions", "Impresiones"],
+  ["link_clicks", "Clics en el enlace"],
+];
 
 const Marketing = () => {
   const navigate = useNavigate();
-  const [vista, setVista] = useState("conversiones");
+  const [vista, setVista] = useState("resumen");
   const [opciones, setOpciones] = useState({ plataformas: [], monedas: [] });
   const [gasto, setGasto] = useState(GASTO_VACIO);
   const [gastos, setGastos] = useState([]);
@@ -159,6 +175,7 @@ const Marketing = () => {
         <h2>Marketing</h2>
         <div className="marketing-tabs">
           {[
+            ["resumen", "Resumen del mes"],
             ["conversiones", "Conversiones"],
             ["inversion", "Inversión"],
             ["planilla", "Planilla"],
@@ -175,8 +192,11 @@ const Marketing = () => {
         </div>
       </header>
 
-      {error && <p className="marketing-error">{error}</p>}
-      {cargando && <p className="marketing-vacio">Cargando…</p>}
+      {/* El resumen carga sus propios datos, por mes: no depende de lo de abajo. */}
+      {vista === "resumen" && <ResumenMes />}
+
+      {vista !== "resumen" && error && <p className="marketing-error">{error}</p>}
+      {vista !== "resumen" && cargando && <p className="marketing-vacio">Cargando…</p>}
 
       {metricas && !cargando && vista === "conversiones" && (
         <>
@@ -319,7 +339,26 @@ const Marketing = () => {
                   placeholder="Profesorados — septiembre"
                 />
               </div>
+
+              {METRICAS_DE_PAUTA.map(([campo, rotulo]) => (
+                <div className="campo" key={campo}>
+                  <label htmlFor={`mk-${campo}`}>{rotulo} (opcional)</label>
+                  <input
+                    id={`mk-${campo}`}
+                    name={campo}
+                    type="number"
+                    min="0"
+                    step="1"
+                    value={gasto[campo]}
+                    onChange={cambiar}
+                  />
+                </div>
+              ))}
             </div>
+            <p className="marketing-ayuda">
+              Los opcionales salen del administrador de anuncios. Con ellos el resumen
+              del mes calcula CPM, CTR, CPC y costo por resultado.
+            </p>
 
             <div className="marketing-form-acciones">
               <button type="submit" className="btn-principal" disabled={guardando}>

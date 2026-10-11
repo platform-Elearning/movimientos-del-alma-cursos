@@ -59,3 +59,14 @@ export const getMetricasInversion = async ({ desde, hasta } = {}) => {
   const { data } = await instanceUsers.get(`/marketing/metricas?${params.toString()}`);
   return data.data;
 };
+
+/**
+ * El resumen de un mes ("2026-09"), con el anterior para comparar. Es la
+ * pestaña RESUMEN de la planilla, calculada sola.
+ */
+export const getResumenMes = async (mes) => {
+  const params = new URLSearchParams();
+  if (mes) params.append("mes", mes);
+  const { data } = await instanceUsers.get(`/marketing/resumen?${params.toString()}`);
+  return data.data;
+};
