@@ -268,27 +268,48 @@
   color: #c0392b;
 }
 
-/* Mis logros */
-.mis-logros {
-  max-width: 1000px;
-  margin: 0 auto 40px;
+/* Tu constancia: lo que es de la alumna y no de una formacion */
+.mi-constancia {
+  max-width: 700px;
+  margin: 0 auto 32px;
   padding: 0 20px;
   text-align: center;
 }
 
-.mis-logros h3 {
+.mi-constancia h3 {
   margin: 0 0 14px;
+  padding: 0;
   font-size: 1.6rem;
   color: var(--var-dorado-fuerte);
 }
 
-.mis-logros-grilla {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 16px;
-  list-style: none;
+.mi-constancia-fila {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+}
+
+.mi-constancia-fila .insignia {
+  width: 220px;
+  box-sizing: border-box;
+}
+
+.mi-constancia-racha {
+  max-width: 280px;
   margin: 0;
   padding: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--tinta);
+}
+
+.mi-constancia-nota {
+  margin: 16px 0 0;
+  padding: 0;
+  font-size: 0.9rem;
+  color: var(--texto-suave);
 }
 
 .insignia {
@@ -325,12 +346,70 @@
   opacity: 1;
 }
 
-.insignia-veces {
+/* Insignias de una formacion, debajo de su tarjeta */
+.insignia-con-logros {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.insignias-curso {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 220px;
+  margin: 0 0 16px;
+  padding: 0;
+  list-style: none;
+}
+
+.insignia-mini {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 5px 12px;
+  border-radius: var(--radio-pill);
+  border: 1px dashed var(--borde-suave);
+  background: var(--superficie);
+  color: var(--texto-suave);
+  font-size: 0.85rem;
+}
+
+.insignia-mini-emoji {
+  font-size: 1.1rem;
+  filter: grayscale(1);
+  opacity: 0.45;
+}
+
+.insignia-mini--ganada {
+  border: 1px solid var(--borde-dorado);
+  background: linear-gradient(160deg, #fffaf2, var(--var-dorado-suave));
+  color: var(--tinta);
+  font-weight: 600;
+}
+
+.insignia-mini--ganada .insignia-mini-emoji {
+  filter: none;
+  opacity: 1;
+}
+
+/* Barra sobre fondo oscuro (la tarjeta del certificado) */
+.progreso--oscura .progreso-pista {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: transparent;
+}
+
+.progreso--oscura .progreso-cifra {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.sr-only {
   position: absolute;
-  top: 10px;
-  right: 12px;
-  font-weight: 700;
-  color: var(--var-dorado-fuerte);
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 }
 
 @media (max-width: 600px) {
