@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { getMuroDelCurso, elegirCompartirLogros, getResumenDeProgreso } from "../../api/progreso";
+import { getMuroDelCurso, elegirCompartirLogros } from "../../api/progreso";
 import { fraseDelMuro } from "../../utils/progreso";
 import { tiempoRelativo } from "../../utils/fechas";
 import "./progreso.css";
@@ -18,12 +18,9 @@ const MuroDeLogros = ({ cursoId, recargar }) => {
 
   const cargar = useCallback(async () => {
     try {
-      const [muro, resumen] = await Promise.all([
-        getMuroDelCurso(cursoId),
-        getResumenDeProgreso(),
-      ]);
-      setLogros(muro);
-      setCompartir(resumen.compartirLogros);
+      const muro = await getMuroDelCurso(cursoId);
+      setLogros(muro.logros);
+      setCompartir(muro.compartirLogros);
       setError(null);
     } catch {
       setError("No pudimos cargar el muro de logros.");

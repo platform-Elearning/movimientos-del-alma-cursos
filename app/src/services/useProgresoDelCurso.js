@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { getProgresoDelCurso, marcarClaseCompletada } from "../api/progreso";
 
 /**
@@ -16,6 +16,10 @@ export const useProgresoDelCurso = (cursoId, activo) => {
   // Sube cada vez que se gana un logro: el muro lo escucha para recargarse.
   const [versionDeLogros, setVersionDeLogros] = useState(0);
   const [error, setError] = useState(null);
+  // Clases con un pedido en vuelo. Dos toques rapidos sobre la misma clase
+  // mandarian dos pedidos que pueden llegar en otro orden y dejar la pantalla
+  // distinta de lo guardado: mientras uno no vuelve, el siguiente se ignora.
+  const enVuelo = useRef(new Set());
 
   useEffect(() => {
     if (!activo || !cursoId) return;
@@ -37,6 +41,8 @@ export const useProgresoDelCurso = (cursoId, activo) => {
   }, [cursoId, activo]);
 
   const marcar = useCallback(async (claseId, completada) => {
+    if (enVuelo.current.has(claseId)) return null;
+    enVuelo.current.add(claseId);
     setError(null);
     // Optimista: el ✓ aparece al toque, y vuelve atras si el servidor falla.
     const cambiar = (agregar) =>
@@ -58,6 +64,8 @@ export const useProgresoDelCurso = (cursoId, activo) => {
       cambiar(!completada);
       setError("No pudimos guardar tu avance. Probá de nuevo.");
       return null;
+    } finally {
+      enVuelo.current.delete(claseId);
     }
   }, []);
 

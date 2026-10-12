@@ -25,6 +25,7 @@ export const marcarClaseCompletada = async (lessonId, completada) => {
   return response.data.data;
 };
 
+/** Devuelve { logros, compartirLogros }. */
 export const getMuroDelCurso = async (courseId) => {
   const response = await instanceCursos.get(`/progress/cursos/${courseId}/muro`);
   return response.data.data;

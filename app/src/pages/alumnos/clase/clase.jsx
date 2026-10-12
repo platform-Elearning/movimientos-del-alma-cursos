@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import "./clase.css";
 import BackLink from "../../../components/backLink/BackLink";
@@ -110,7 +110,8 @@ const Clase = () => {
 
   const handleMarcarHecha = async () => {
     const resultado = await progreso.marcar(classItem.id, !hecha);
-    setRecienHecha(Boolean(resultado?.completada));
+    // null: el toque se ignoro (habia otro en vuelo) o fallo; no cambia nada.
+    if (resultado) setRecienHecha(resultado.completada);
   };
 
   const token = Cookies.get("token") || localStorage.getItem("token");
@@ -386,23 +387,20 @@ const Clase = () => {
     }
   };
 
-  if (!classItem) {
-    return (
-      <p>
-        Clase no encontrada. Por favor, regresa y selecciona una clase válida.
-      </p>
-    );
-  }
-
   // Al curso y no "atras": con anterior/siguiente, atras seria la clase previa.
   const goToCourse = () => {
     navigate(`/alumnos/${alumnoId}/curso/${cursoId}`);
   };
 
   const idDeComentario = (c) => c.id ?? c._id ?? c.comment_id;
+  // Igual que al marcar clases: un corazon con pedido en vuelo ignora el
+  // segundo toque, para que no lleguen dos pedidos en otro orden.
+  const corazonesEnVuelo = useRef(new Set());
 
   const handleCorazon = async (comment) => {
     const commentId = idDeComentario(comment);
+    if (corazonesEnVuelo.current.has(commentId)) return;
+    corazonesEnVuelo.current.add(commentId);
     const leGusta = !comment.le_gusta;
     const aplicar = (cambios) =>
       setComments((previos) =>
@@ -414,6 +412,8 @@ const Clase = () => {
       aplicar(await reaccionarAComentario(commentId, leGusta));
     } catch {
       aplicar({ le_gusta: comment.le_gusta, corazones: comment.corazones });
+    } finally {
+      corazonesEnVuelo.current.delete(commentId);
     }
   };
 

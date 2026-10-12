@@ -9,11 +9,16 @@ const COLORES = ["#c08c44", "#ffbb80", "#ffd9a3", "#e8a0bf", "#83711b", "#f6c6d9
  * emoji, y una frase. Se cierra con el boton, con Escape o tocando afuera.
  */
 const Celebracion = ({ logros, onCerrar, siguiente }) => {
+  const abierta = Boolean(logros?.length);
+
+  // Escape la cierra, solo mientras esta abierta: si no, cualquier Escape de la
+  // pagina (cerrar otro menu) pasaria por aca.
   useEffect(() => {
+    if (!abierta) return undefined;
     const alTeclear = (e) => e.key === "Escape" && onCerrar();
     window.addEventListener("keydown", alTeclear);
     return () => window.removeEventListener("keydown", alTeclear);
-  }, [onCerrar]);
+  }, [abierta, onCerrar]);
 
   // Posiciones fijas por apertura: si se recalcularan en cada render el confeti
   // saltaria de lugar.
@@ -29,7 +34,7 @@ const Celebracion = ({ logros, onCerrar, siguiente }) => {
     []
   );
 
-  if (!logros?.length) return null;
+  if (!abierta) return null;
   const modulo = logros.find((l) => l.kind === "modulo_completo");
 
   return (
