@@ -1,5 +1,6 @@
 import "./CardInsignia.css"
 import logo from "../../assets/logo2.png";
+import BarraDeProgreso from "../progreso/BarraDeProgreso";
 
 // El link al certificado y el link de verificacion son dos cosas distintas:
 // el primero es el documento, el segundo es la pagina publica que prueba que ese
@@ -7,7 +8,8 @@ import logo from "../../assets/logo2.png";
 // la credencial ve su codigo, porque llega por la ruta autenticada del alumno.
 const VERIFY_BASE = import.meta.env.VITE_VERIFY_BASE_URL || "";
 
-const CardInsignia = ({ enrollment }) => {
+// progreso: { completadas, total } de la alumna en ese curso, opcional.
+const CardInsignia = ({ enrollment, progreso }) => {
   const verifyUrl = enrollment.verification_code
     ? `${VERIFY_BASE}/verificar/${enrollment.verification_code}`
     : null;
@@ -46,6 +48,9 @@ const CardInsignia = ({ enrollment }) => {
         ) : (
           <div>
             <p className="p_card_no">En curso</p>
+            {progreso && progreso.total > 0 && (
+              <BarraDeProgreso completadas={progreso.completadas} total={progreso.total} compacta />
+            )}
           </div>
         )}
       </div>

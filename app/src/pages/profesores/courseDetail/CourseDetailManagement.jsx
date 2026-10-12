@@ -150,7 +150,7 @@ const CourseDetailManagement = () => {
     };
 
     navigate(
-      `/alumnos/${userId}/curso/${courseId}/clase/${classItem.lessonNumber || classItem.id}`,
+      `/alumnos/${userId}/curso/${courseId}/clase/${classItem.id}`,
       { state: { classItem } }
     );
   };

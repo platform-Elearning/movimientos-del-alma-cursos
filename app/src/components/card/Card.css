@@ -142,3 +142,7 @@
         font-size: 0.88rem;
     }
 }
+.card-progreso {
+    width: 100%;
+    margin-bottom: 16px;
+}

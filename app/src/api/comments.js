@@ -82,3 +82,10 @@ export const deleteCommentReply = async (id) => {
     throw error;
   }
 };
+/** Pone o saca el corazon de quien esta logueada. Devuelve { corazones, le_gusta }. */
+export const reaccionarAComentario = async (commentId, leGusta) => {
+  const response = await instanceCursos.put(`/lesson-comments/${commentId}/corazon`, {
+    le_gusta: leGusta,
+  });
+  return response.data.data;
+};

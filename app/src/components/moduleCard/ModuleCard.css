@@ -318,3 +318,37 @@
 .module-card-acciones button.peligro:hover {
   background: #fceaea;
 }
+
+/* Progreso de la alumna */
+.module-card-avance {
+    margin: 10px 0 0;
+    font-weight: 600;
+}
+
+.module-card-check {
+    flex-shrink: 0;
+    width: 30px;
+    height: 30px;
+    margin-right: 14px;
+    border-radius: 50%;
+    border: 2px solid var(--var-dorado-medio);
+    background: var(--superficie);
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.module-card-check:hover:not(:disabled) {
+    transform: scale(1.1);
+}
+
+.module-card-check--hecha {
+    background: var(--var-dorado-medio);
+}
+
+.module-card-lesson-item--hecha .module-card-lesson-title {
+    color: var(--var-dorado-fuerte);
+}

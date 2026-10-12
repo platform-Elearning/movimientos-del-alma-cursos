@@ -1,5 +1,5 @@
 import { describe, it, expect, afterEach, vi } from "vitest";
-import { hoyLocal, mesLocal, mesCorriente } from "../fechas";
+import { hoyLocal, mesLocal, mesCorriente, tiempoRelativo } from "../fechas";
 
 // Corre con TZ=America/Argentina/Buenos_Aires (ver el script "test"): el bug
 // que esto cuida sólo aparece cuando la zona local no es UTC.
@@ -19,5 +19,23 @@ describe("fechas locales", () => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date("2028-02-10T15:00:00Z"));
     expect(mesCorriente()).toEqual({ desde: "2028-02-01", hasta: "2028-02-29" });
+  });
+});
+
+describe("tiempoRelativo", () => {
+  const ahora = new Date("2026-10-12T15:00:00Z");
+
+  it("dice recién en el primer minuto", () => {
+    expect(tiempoRelativo("2026-10-12T14:59:30Z", ahora)).toBe("recién");
+  });
+
+  it("usa la unidad mas grande, en singular o plural", () => {
+    expect(tiempoRelativo("2026-10-12T14:00:00Z", ahora)).toBe("hace 1 hora");
+    expect(tiempoRelativo("2026-10-09T15:00:00Z", ahora)).toBe("hace 3 días");
+    expect(tiempoRelativo("2026-09-28T15:00:00Z", ahora)).toBe("hace 2 semanas");
+  });
+
+  it("una fecha invalida no rompe", () => {
+    expect(tiempoRelativo("no es fecha", ahora)).toBe("");
   });
 });
