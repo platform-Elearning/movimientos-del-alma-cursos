@@ -1,0 +1,345 @@
+/* Progreso, logros, racha y muro de la alumna. Colores de tokens.css. */
+
+.progreso {
+  width: 100%;
+}
+
+.progreso-frase {
+  margin: 0 0 8px;
+  font-weight: 600;
+  color: var(--tinta);
+}
+
+.progreso-pista {
+  height: 12px;
+  border-radius: var(--radio-pill);
+  background: var(--superficie-alt);
+  border: 1px solid var(--borde-dorado-tenue);
+  overflow: hidden;
+}
+
+.progreso--compacta .progreso-pista {
+  height: 8px;
+}
+
+.progreso-relleno {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--var-dorado-medio), var(--dorado-claro));
+  transition: width 0.5s ease;
+}
+
+.progreso-cifra {
+  margin: 6px 0 0;
+  font-size: 0.85rem;
+  color: var(--texto-suave);
+}
+
+/* Racha */
+.racha {
+  display: inline-block;
+  margin: 0;
+  padding: 6px 14px;
+  border-radius: var(--radio-pill);
+  background: var(--var-dorado-suave);
+  color: var(--tinta);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.racha--centrada {
+  display: block;
+  width: fit-content;
+  margin: 0 auto 20px;
+}
+
+/* Botones */
+.boton-dorado,
+.boton-suave {
+  border: none;
+  border-radius: var(--radio-pill);
+  padding: 10px 22px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.boton-dorado {
+  background: linear-gradient(135deg, var(--var-dorado-medio), var(--dorado-claro));
+  color: #fff;
+  box-shadow: 0 3px 10px rgba(131, 113, 27, 0.3);
+}
+
+.boton-suave {
+  background: var(--superficie-alt);
+  color: var(--tinta);
+  border: 1px solid var(--borde-dorado);
+}
+
+.boton-dorado:hover:not(:disabled),
+.boton-suave:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.boton-dorado:disabled,
+.boton-suave:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+/* Celebracion */
+.celebracion-fondo {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(37, 36, 34, 0.55);
+  overflow: hidden;
+}
+
+.celebracion-confeti span {
+  position: absolute;
+  top: -12px;
+  width: 9px;
+  height: 14px;
+  border-radius: 2px;
+  opacity: 0.9;
+  animation-name: caer;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+@keyframes caer {
+  to {
+    top: 105%;
+    transform: rotate(720deg);
+  }
+}
+
+.celebracion-tarjeta {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  padding: 28px 24px;
+  border-radius: 16px;
+  background: var(--superficie);
+  text-align: center;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+  animation: aparecer 0.35s ease-out;
+}
+
+@keyframes aparecer {
+  from {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+}
+
+.celebracion-tarjeta h2 {
+  margin: 0 0 16px;
+  color: var(--var-dorado-fuerte);
+}
+
+.celebracion-logros {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+
+.celebracion-logros li {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.celebracion-logros li + li {
+  border-top: 1px solid var(--borde-dorado-tenue);
+}
+
+/* padding: 0 explicito: otra pagina pone un padding global a todos los <p>. */
+.celebracion-logros p {
+  margin: 2px 0 0;
+  padding: 0;
+  color: var(--texto-suave);
+}
+
+.celebracion-emoji {
+  font-size: 2.2rem;
+}
+
+.celebracion-frase {
+  margin: 16px 0 0;
+  font-style: italic;
+  color: var(--texto);
+}
+
+.celebracion-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 22px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .celebracion-confeti {
+    display: none;
+  }
+  .celebracion-tarjeta,
+  .progreso-relleno {
+    animation: none;
+    transition: none;
+  }
+}
+
+/* Muro */
+.muro {
+  margin: 32px auto 0;
+  max-width: 900px;
+  padding: 20px 24px;
+  border-radius: 12px;
+  background: var(--superficie);
+  border: 1px solid var(--borde-dorado-tenue);
+}
+
+.muro-encabezado {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.muro-encabezado h3 {
+  margin: 0;
+  padding: 0;
+  font-size: 1.35rem;
+  color: var(--var-dorado-fuerte);
+}
+
+.muro-compartir {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 0.9rem;
+  color: var(--texto);
+  cursor: pointer;
+}
+
+.muro-lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.muro-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--superficie-alt);
+}
+
+.muro-item--mio span {
+  font-weight: 600;
+}
+
+.muro-item time {
+  flex-shrink: 0;
+  font-size: 0.8rem;
+  color: var(--texto-suave);
+}
+
+.muro-vacio,
+.muro-nota {
+  margin: 8px 0 0;
+  color: var(--texto-suave);
+  font-size: 0.9rem;
+}
+
+.muro-error {
+  color: #c0392b;
+}
+
+/* Mis logros */
+.mis-logros {
+  max-width: 1000px;
+  margin: 0 auto 40px;
+  padding: 0 20px;
+  text-align: center;
+}
+
+.mis-logros h3 {
+  margin: 0 0 14px;
+  font-size: 1.6rem;
+  color: var(--var-dorado-fuerte);
+}
+
+.mis-logros-grilla {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.insignia {
+  position: relative;
+  padding: 20px 16px;
+  border-radius: 14px;
+  background: var(--superficie);
+  border: 1px dashed var(--borde-suave);
+  color: var(--texto-suave);
+}
+
+.insignia .insignia-emoji {
+  display: block;
+  font-size: 2.6rem;
+  filter: grayscale(1);
+  opacity: 0.45;
+}
+
+.insignia p {
+  margin: 6px 0 0;
+  padding: 0;
+  font-size: 0.85rem;
+}
+
+.insignia--ganada {
+  border: 1px solid var(--borde-dorado);
+  background: linear-gradient(160deg, #fffaf2, var(--var-dorado-suave));
+  color: var(--tinta);
+  box-shadow: 0 4px 14px rgba(192, 140, 68, 0.2);
+}
+
+.insignia--ganada .insignia-emoji {
+  filter: none;
+  opacity: 1;
+}
+
+.insignia-veces {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  font-weight: 700;
+  color: var(--var-dorado-fuerte);
+}
+
+@media (max-width: 600px) {
+  .muro {
+    margin: 24px 16px 0;
+    padding: 16px;
+  }
+  .muro-item {
+    flex-direction: column;
+    gap: 2px;
+  }
+}

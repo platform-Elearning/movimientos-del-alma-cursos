@@ -37,3 +37,25 @@ export const mesCorriente = () => {
     hasta: aFecha(new Date(d.getFullYear(), d.getMonth() + 1, 0)),
   };
 };
+
+/**
+ * "hace 5 minutos", "hace 3 días": para el muro de logros, donde importa cuan
+ * reciente es y no la hora exacta. ahora se pasa en los tests.
+ */
+export const tiempoRelativo = (fecha, ahora = new Date()) => {
+  const momento = new Date(fecha);
+  if (isNaN(momento)) return "";
+  const segundos = Math.max(0, Math.round((ahora - momento) / 1000));
+  const unidades = [
+    [60 * 60 * 24 * 30, "mes", "meses"],
+    [60 * 60 * 24 * 7, "semana", "semanas"],
+    [60 * 60 * 24, "día", "días"],
+    [60 * 60, "hora", "horas"],
+    [60, "minuto", "minutos"],
+  ];
+  for (const [tamaño, singular, plural] of unidades) {
+    const n = Math.floor(segundos / tamaño);
+    if (n >= 1) return `hace ${n} ${n === 1 ? singular : plural}`;
+  }
+  return "recién";
+};

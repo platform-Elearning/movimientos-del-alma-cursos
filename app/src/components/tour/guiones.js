@@ -19,6 +19,18 @@ export const guionAlumna = [
       "Acá aparecen todas las formaciones en las que estás inscripta. Tocá cualquiera para entrar y ver sus módulos y clases.",
   },
   {
+    selector: ".continuar-tarjeta",
+    titulo: "Seguí donde lo dejaste",
+    texto:
+      "Acá aparece la última clase que abriste, para retomar con un toque. Arriba vas a ver cuántos días bailaste esta semana.",
+  },
+  {
+    selector: ".curso-avance",
+    titulo: "Tu avance",
+    texto:
+      "Cuántas clases llevás de esta formación. Cada clase que marcás como hecha suma, y al completar un módulo ganás una insignia.",
+  },
+  {
     selector: ".lock-overlay",
     titulo: "Contenido bloqueado",
     texto:
@@ -29,6 +41,18 @@ export const guionAlumna = [
     titulo: "La clase",
     texto:
       "Acá está el video junto con el material de la clase. Podés verlo las veces que quieras y cuando quieras: no hay horarios ni vencimiento.",
+  },
+  {
+    selector: ".clase-navegacion",
+    titulo: "Marcá tus clases",
+    texto:
+      "Cuando termines, tocá “Ya la bailé ✓” para sumar a tu avance. Con los botones de los costados pasás a la clase anterior o a la siguiente.",
+  },
+  {
+    selector: ".muro",
+    titulo: "Muro de logros",
+    texto:
+      "Los logros de tus compañeras de esta formación. Los tuyos solo se muestran si lo elegís con el casillero de arriba.",
   },
   {
     selector: ".comment-form, .comment-input, .comment-submit",

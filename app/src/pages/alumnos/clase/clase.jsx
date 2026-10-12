@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import "./clase.css";
 import BackLink from "../../../components/backLink/BackLink";
@@ -11,7 +11,13 @@ import {
   getCommentsRepliesByCommentId,
   updateCommentReply,
   deleteCommentReply,
+  reaccionarAComentario,
 } from "../../../api/comments";
+import { registrarVisitaDeClase } from "../../../api/progreso";
+import { cargarModulosDelCurso } from "../../../services/clasesDelCurso";
+import { useProgresoDelCurso } from "../../../services/useProgresoDelCurso";
+import { ordenarClases, vecinasDe } from "../../../utils/progreso";
+import Celebracion from "../../../components/progreso/Celebracion";
 import { useAuth } from "../../../services/authContext";
 import { jwtDecode } from "jwt-decode";
 import Cookies from "js-cookie";
@@ -49,12 +55,64 @@ const getEmbedUrl = (url) => {
 };
 
 const Clase = () => {
-  useParams();
+  const { alumnoId, cursoId, claseId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  const { classItem } = location.state || {};
+  const { userId, userName, userLastname, userRole } = useAuth();
+  const esAlumna = userRole === "student";
+
+  // Todas las clases del curso, en orden. De aca sale la clase actual por el id
+  // de la ruta: antes llegaba solo en el estado de la navegacion y al recargar
+  // la pagina se perdia el video. Tambien dan la clase anterior y la siguiente.
+  const [clases, setClases] = useState([]);
+  const [cargandoClases, setCargandoClases] = useState(true);
+
+  useEffect(() => {
+    if (!userRole || !cursoId) return;
+    let vigente = true;
+    cargarModulosDelCurso({ userRole, alumnoId, cursoId })
+      .then(({ modulos }) => {
+        if (vigente) setClases(ordenarClases(modulos));
+      })
+      .catch(() => {
+        // Si no carga, se muestra lo que vino en la navegacion, si vino algo.
+      })
+      .finally(() => {
+        if (vigente) setCargandoClases(false);
+      });
+    return () => {
+      vigente = false;
+    };
+  }, [userRole, alumnoId, cursoId]);
+
+  const { actual, anterior, siguiente } = vecinasDe(clases, claseId);
+  const classItem = useMemo(
+    () => (actual ? { ...actual, lessonUrl: actual.url } : location.state?.classItem),
+    [actual, location.state]
+  );
   const content = getEmbedUrl(classItem?.lessonUrl || classItem?.url);
-  const { userId, userName, userLastname } = useAuth();
+
+  const progreso = useProgresoDelCurso(cursoId, esAlumna);
+  const hecha = Boolean(classItem?.id && progreso.completadas?.has(classItem.id));
+  const [recienHecha, setRecienHecha] = useState(false);
+
+  // Abrir la clase la deja como "la ultima que viste" y suma el dia de practica.
+  useEffect(() => {
+    if (esAlumna && classItem?.id) {
+      registrarVisitaDeClase(classItem.id).catch(() => {});
+    }
+  }, [esAlumna, classItem?.id]);
+
+  const irAClase = (clase) =>
+    navigate(`/alumnos/${alumnoId}/curso/${cursoId}/clase/${clase.id}`, {
+      state: { classItem: { ...clase, lessonUrl: clase.url } },
+    });
+
+  const handleMarcarHecha = async () => {
+    const resultado = await progreso.marcar(classItem.id, !hecha);
+    // null: el toque se ignoro (habia otro en vuelo) o fallo; no cambia nada.
+    if (resultado) setRecienHecha(resultado.completada);
+  };
 
   const token = Cookies.get("token") || localStorage.getItem("token");
   const userEmail = useMemo(() => {
@@ -329,16 +387,34 @@ const Clase = () => {
     }
   };
 
-  if (!classItem) {
-    return (
-      <p>
-        Clase no encontrada. Por favor, regresa y selecciona una clase válida.
-      </p>
-    );
-  }
-
+  // Al curso y no "atras": con anterior/siguiente, atras seria la clase previa.
   const goToCourse = () => {
-    navigate(-1);
+    navigate(`/alumnos/${alumnoId}/curso/${cursoId}`);
+  };
+
+  const idDeComentario = (c) => c.id ?? c._id ?? c.comment_id;
+  // Igual que al marcar clases: un corazon con pedido en vuelo ignora el
+  // segundo toque, para que no lleguen dos pedidos en otro orden.
+  const corazonesEnVuelo = useRef(new Set());
+
+  const handleCorazon = async (comment) => {
+    const commentId = idDeComentario(comment);
+    if (corazonesEnVuelo.current.has(commentId)) return;
+    corazonesEnVuelo.current.add(commentId);
+    const leGusta = !comment.le_gusta;
+    const aplicar = (cambios) =>
+      setComments((previos) =>
+        previos.map((c) => (idDeComentario(c) === commentId ? { ...c, ...cambios } : c))
+      );
+    // Optimista: el corazon se pinta al toque.
+    aplicar({ le_gusta: leGusta, corazones: Math.max(0, (comment.corazones || 0) + (leGusta ? 1 : -1)) });
+    try {
+      aplicar(await reaccionarAComentario(commentId, leGusta));
+    } catch {
+      aplicar({ le_gusta: comment.le_gusta, corazones: comment.corazones });
+    } finally {
+      corazonesEnVuelo.current.delete(commentId);
+    }
   };
 
   const formatDate = (dateString) => {
@@ -375,12 +451,24 @@ const Clase = () => {
     }
   };
 
+  if (!classItem) {
+    return (
+      <div className="class-details-container">
+        <BackLink title="Volver al Material" onClick={goToCourse} />
+        <p className="clase-aviso">
+          {cargandoClases ? "Cargando clase..." : "No encontramos esta clase. Volvé al material para elegirla."}
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="class-details-container">
       <BackLink
         title="Volver al Material"
         onClick={goToCourse}
       />
+      {classItem.moduleName && <p className="clase-modulo">{classItem.moduleName}</p>}
       <h2>
         {classItem.lessonTitle}: {classItem.lessonDescription}
       </h2>
@@ -388,6 +476,58 @@ const Clase = () => {
       <div className="video-container">
         {content.url ? renderContent() : <p>No hay contenido disponible para esta clase.</p>}
       </div>
+
+      <div className="clase-navegacion">
+        <button
+          type="button"
+          className="boton-suave"
+          onClick={() => irAClase(anterior)}
+          disabled={!anterior}
+          title={anterior ? anterior.lessonTitle : undefined}
+        >
+          ← Clase anterior
+        </button>
+
+        {esAlumna && progreso.completadas && (
+          <button
+            type="button"
+            className={hecha ? "clase-hecha clase-hecha--si" : "clase-hecha"}
+            onClick={handleMarcarHecha}
+            aria-pressed={hecha}
+          >
+            {hecha ? "✓ ¡Ya la bailé!" : "Ya la bailé ✓"}
+          </button>
+        )}
+
+        <button
+          type="button"
+          className={recienHecha && siguiente ? "boton-dorado clase-siguiente--destacada" : "boton-dorado"}
+          onClick={() => irAClase(siguiente)}
+          disabled={!siguiente}
+          title={siguiente ? siguiente.lessonTitle : undefined}
+        >
+          Clase siguiente →
+        </button>
+      </div>
+      {progreso.error && <p className="send-error clase-aviso">{progreso.error}</p>}
+      {!siguiente && hecha && clases.length > 0 && (
+        <p className="clase-aviso">¡Llegaste a la última clase que tenés habilitada! 🎉</p>
+      )}
+
+      <Celebracion
+        logros={progreso.logrosNuevos}
+        onCerrar={progreso.cerrarCelebracion}
+        siguiente={
+          siguiente
+            ? {
+                onClick: () => {
+                  progreso.cerrarCelebracion();
+                  irAClase(siguiente);
+                },
+              }
+            : null
+        }
+      />
 
       <div className="comments-section">
         <h3 className="comments-title">Comentarios</h3>
@@ -436,6 +576,17 @@ const Clase = () => {
                       {`${comment.nombre || ""} ${comment.apellido || ""}`.trim() || comment.email || "Usuario"}
                     </span>
                     <span className="comment-date">{formatDate(comment.created_at)}</span>
+                    {commentId && (
+                      <button
+                        type="button"
+                        className={comment.le_gusta ? "corazon corazon--activo" : "corazon"}
+                        onClick={() => handleCorazon(comment)}
+                        aria-pressed={Boolean(comment.le_gusta)}
+                        aria-label={comment.le_gusta ? "Quitar corazón" : "Dar corazón"}
+                      >
+                        {comment.le_gusta ? "❤️" : "🤍"} {comment.corazones || 0}
+                      </button>
+                    )}
                   </div>
 
                   {isEditing ? (
@@ -640,4 +791,11 @@ const Clase = () => {
   );
 };
 
-export default Clase;
+// Una instancia por clase: al pasar a la siguiente se arranca de cero (sin el
+// comentario a medio escribir ni las respuestas abiertas de la anterior).
+const ClasePorId = () => {
+  const { claseId } = useParams();
+  return <Clase key={claseId} />;
+};
+
+export default ClasePorId;

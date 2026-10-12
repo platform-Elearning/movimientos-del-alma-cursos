@@ -13,8 +13,12 @@ import paperClip from "../../assets/paperClip.png";
  * @param acciones       nodo con botones de gestion, para el profesor.
  * @param onAbrirLeccion reemplaza la navegacion por defecto cuando el rol no
  *                       navega por las rutas de alumna.
+ * @param completadas    Set con los ids de las clases que la alumna ya hizo.
+ *                       Sin el, la tarjeta no muestra progreso (profesor).
+ * @param onMarcar       (clase, completada) => void, para marcar desde la lista
+ *                       las clases que no tienen video (un PDF, un apunte).
  */
-const ModuleCard = ({ moduleName, lessons, acciones, onAbrirLeccion }) => {
+const ModuleCard = ({ moduleName, lessons, acciones, onAbrirLeccion, completadas, onMarcar }) => {
   const { alumnoId, cursoId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
@@ -44,7 +48,9 @@ const ModuleCard = ({ moduleName, lessons, acciones, onAbrirLeccion }) => {
       };
       
       navigate(
-        `/alumnos/${alumnoId}/curso/${cursoId}/clase/${lesson.lessonNumber}`,
+        // Por id y no por numero: el numero se repite entre modulos, y la
+        // pagina de la clase busca la clase por este id al recargar.
+        `/alumnos/${alumnoId}/curso/${cursoId}/clase/${lesson.id}`,
         {
           state: { classItem },
         }
@@ -86,10 +92,19 @@ const ModuleCard = ({ moduleName, lessons, acciones, onAbrirLeccion }) => {
     );
   }
 
+  const conProgreso = completadas instanceof Set;
+  const hechas = conProgreso ? lessons.filter((l) => completadas.has(l.id)).length : 0;
+  const moduloCompleto = conProgreso && hechas === lessons.length;
+
   return (
     <div className="module-card-container">
       <div className="module-card-header">
         <h2>{moduleName || 'Módulo'}</h2>
+        {conProgreso && (
+          <p className="module-card-avance">
+            {moduloCompleto ? "¡Módulo completo! 🌸" : `${hechas} de ${lessons.length} clases`}
+          </p>
+        )}
         {acciones && <div className="module-card-acciones">{acciones}</div>}
       </div>
       <div className="module-card-lessons">
@@ -99,10 +114,11 @@ const ModuleCard = ({ moduleName, lessons, acciones, onAbrirLeccion }) => {
             // Obtener título y descripción con fallbacks
             const lessonTitle = lesson.lessonTitle || lesson.title || `Clase ${index + 1}`;
             const lessonDescription = lesson.lessonDescription || lesson.description || 'Sin descripción';
-            
+            const hecha = conProgreso && completadas.has(lesson.id);
+
             return (
               <li 
-                className="module-card-lesson-item" 
+                className={`module-card-lesson-item${hecha ? " module-card-lesson-item--hecha" : ""}`}
                 key={lesson.id || index}
                 onClick={() => goToModule({
                   ...lesson,
@@ -110,6 +126,23 @@ const ModuleCard = ({ moduleName, lessons, acciones, onAbrirLeccion }) => {
                   lessonDescription
                 })}
               >
+                {conProgreso && (
+                  <button
+                    type="button"
+                    className={`module-card-check${hecha ? " module-card-check--hecha" : ""}`}
+                    aria-pressed={hecha}
+                    aria-label={hecha ? `Desmarcar ${lessonTitle}` : `Marcar ${lessonTitle} como hecha`}
+                    title={hecha ? "Ya la bailaste ✓ (tocá para desmarcar)" : "Marcar como hecha"}
+                    disabled={!onMarcar}
+                    onClick={(e) => {
+                      // Marcar no abre la clase.
+                      e.stopPropagation();
+                      onMarcar?.(lesson, !hecha);
+                    }}
+                  >
+                    {hecha ? "✓" : ""}
+                  </button>
+                )}
                 <div className="module-card-lesson-content">
                   <span className="module-card-lesson-title">{lessonTitle}:</span> 
                   <span className="module-card-lesson-desc">{lessonDescription}</span>
