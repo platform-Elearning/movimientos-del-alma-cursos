@@ -1,5 +1,5 @@
 import { legibleOpcional as legible } from "./etiquetas";
-import { variacion } from "./formato";
+import { plataRedonda, variacion } from "./formato";
 
 /**
  * Los textos del resumen del mes. Salen de los datos y no son fijos: un texto
@@ -87,4 +87,25 @@ export const explicarCostos = (actual) => {
   });
 
   return [{ titulo: "Del mes completo", texto: mesCompleto }, ...atribuidos];
+};
+
+/**
+ * Por qué lo cobrado en el mes no es lo que pagaron las nuevas. Con datos del
+ * mes: cuánto y de cuántas alumnas viene de quienes ya cursaban (módulos de una
+ * inscripción anterior), que entra a la caja pero no lo trajo la pauta del mes.
+ * Null si no hay diferencia que explicar.
+ */
+export const explicarCobrado = (m) => {
+  const deAntes = m.cobrado_mes - m.ingresos;
+  if (!m.cobrado_mes || deAntes <= 0) return null;
+  const alumnas = Math.max(0, m.alumnas_que_pagaron_mes - m.alumnas_que_pagaron);
+  const quienes =
+    alumnas > 0
+      ? `${alumnas} ${alumnas === 1 ? "alumna que ya cursaba" : "alumnas que ya cursaban"}`
+      : "alumnas que ya cursaban";
+  return (
+    `Lo cobrado en el mes incluye ${plataRedonda(deAntes, m.currency)} de ${quienes}: ` +
+    "entra a la caja, pero no lo trajo la pauta del mes. Por eso el retorno de la " +
+    "pauta se calcula sólo sobre lo que pagaron las nuevas."
+  );
 };
