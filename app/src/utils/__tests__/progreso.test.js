@@ -8,6 +8,8 @@ import {
   fraseDeAvance,
   fraseDeRacha,
   fraseDeCelebracion,
+  insigniasDelCurso,
+  tieneConstancia,
 } from "../progreso";
 
 const modulos = [
@@ -94,5 +96,44 @@ describe("logros y muro", () => {
   it("la frase de celebracion es estable para la misma semilla", () => {
     expect(fraseDeCelebracion(5)).toBe(fraseDeCelebracion(5));
     expect(typeof fraseDeCelebracion(undefined)).toBe("string");
+  });
+});
+
+describe("insignias por formacion", () => {
+  const logros = [
+    { kind: "primer_paso", course_id: 1 },
+    { kind: "modulo_completo", course_id: 1, module_id: 10 },
+    { kind: "primer_paso", course_id: 2 },
+    { kind: "modulo_completo", course_id: 2, module_id: 20 },
+    { kind: "modulo_completo", course_id: 2, module_id: 21 },
+    { kind: "constancia", course_id: null },
+  ];
+  const porTipo = (lista) => Object.fromEntries(lista.map((i) => [i.kind, i]));
+
+  it("cada formacion cuenta solo sus logros", () => {
+    const afro = porTipo(insigniasDelCurso(logros, 1, 3));
+    expect(afro.primer_paso.ganada).toBe(true);
+    expect(afro.modulo_completo).toMatchObject({ ganada: true, etiqueta: "1 de 3 módulos" });
+    expect(afro.curso_completo.ganada).toBe(false);
+
+    const jazz = porTipo(insigniasDelCurso(logros, 2, 4));
+    expect(jazz.modulo_completo.etiqueta).toBe("2 de 4 módulos");
+  });
+
+  it("una formacion sin logros las muestra todas por ganar", () => {
+    const nada = insigniasDelCurso(logros, 3, 5);
+    expect(nada.every((i) => !i.ganada)).toBe(true);
+    expect(nada.find((i) => i.kind === "modulo_completo").etiqueta).toBe("0 de 5 módulos");
+  });
+
+  it("la constancia no es de ninguna formacion", () => {
+    expect(insigniasDelCurso(logros, 1, 3).some((i) => i.kind === "constancia")).toBe(false);
+    expect(tieneConstancia(logros)).toBe(true);
+    expect(tieneConstancia([])).toBe(false);
+  });
+
+  it("nunca dice mas modulos completos que modulos", () => {
+    // Si se quito un modulo despues de completarlo, no queda "2 de 1".
+    expect(porTipo(insigniasDelCurso(logros, 2, 1)).modulo_completo.etiqueta).toBe("2 de 2 módulos");
   });
 });

@@ -129,3 +129,42 @@ const FRASES_DE_CIERRE = [
 /** Una frase para celebrar; la misma para el mismo modulo, para que no cambie al recargar. */
 export const fraseDeCelebracion = (semilla = 0) =>
   FRASES_DE_CIERRE[Math.abs(Number(semilla) || 0) % FRASES_DE_CIERRE.length];
+
+/**
+ * Las insignias de UNA formacion, para mostrarlas junto a su tarjeta. Cada
+ * logro es de un curso (salvo constancia, que es de la alumna y va aparte): si
+ * se mostraran todas juntas, con dos formaciones no se sabria de cual es cada
+ * una.
+ *
+ * modulos: cuantos modulos con clases tiene habilitados en ese curso.
+ */
+export const insigniasDelCurso = (logros = [], courseId, modulos = 0) => {
+  const delCurso = logros.filter((l) => l.course_id === courseId);
+  const tiene = (kind) => delCurso.some((l) => l.kind === kind);
+  const modulosCompletos = delCurso.filter((l) => l.kind === "modulo_completo").length;
+  const total = Math.max(modulos, modulosCompletos);
+
+  return [
+    {
+      kind: "primer_paso",
+      ...LOGROS.primer_paso,
+      ganada: tiene("primer_paso"),
+      etiqueta: LOGROS.primer_paso.titulo,
+    },
+    {
+      kind: "modulo_completo",
+      ...LOGROS.modulo_completo,
+      ganada: modulosCompletos > 0,
+      etiqueta: total > 0 ? `${modulosCompletos} de ${total} módulos` : "Módulos",
+    },
+    {
+      kind: "curso_completo",
+      ...LOGROS.curso_completo,
+      ganada: tiene("curso_completo"),
+      etiqueta: LOGROS.curso_completo.titulo,
+    },
+  ];
+};
+
+/** Si la alumna ya gano la constancia (es suya, no de un curso). */
+export const tieneConstancia = (logros = []) => logros.some((l) => l.kind === "constancia");

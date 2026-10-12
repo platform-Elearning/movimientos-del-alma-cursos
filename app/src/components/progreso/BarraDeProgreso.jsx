@@ -1,11 +1,16 @@
 import { porcentaje, fraseDeAvance } from "../../utils/progreso";
 import "./progreso.css";
 
-/** "Llevás 7 de 12 clases 💃" con su barra. compacta: sin frase, para tarjetas chicas. */
-const BarraDeProgreso = ({ completadas, total, compacta = false }) => {
+/**
+ * "Llevás 7 de 12 clases 💃" con su barra. compacta: sin frase, para tarjetas
+ * chicas. oscura: sobre fondo oscuro, donde la pista clara de siempre se veia
+ * como una barra llena aunque fuera 0%.
+ */
+const BarraDeProgreso = ({ completadas, total, compacta = false, oscura = false }) => {
   const valor = porcentaje(completadas, total);
+  const clases = ["progreso", compacta && "progreso--compacta", oscura && "progreso--oscura"];
   return (
-    <div className={`progreso ${compacta ? "progreso--compacta" : ""}`}>
+    <div className={clases.filter(Boolean).join(" ")}>
       {!compacta && <p className="progreso-frase">{fraseDeAvance(completadas, total)}</p>}
       <div
         className="progreso-pista"

@@ -7,7 +7,7 @@ import { getCoursesByStudentId, getAllCoursesPublic } from "../../../api/cursos"
 import { getEnrollmentsByAlumnoId } from "../../../api/alumnos";
 import { getResumenDeProgreso } from "../../../api/progreso";
 import { useAuth } from "../../../services/authContext";
-import MisLogros from "../../../components/progreso/MisLogros";
+import MiConstancia from "../../../components/progreso/MiConstancia";
 
 const AlumnosMisCertificaciones = () =>{
   const {alumnoId} = useParams();
@@ -49,7 +49,7 @@ return(
       <div className="title-container" >
         <h2 className="cursos-title">Mis Certificaciones</h2>
       </div>
-      {resumen && <MisLogros logros={resumen.logros} racha={resumen.racha} />}
+      {resumen && <MiConstancia logros={resumen.logros} racha={resumen.racha} />}
       <div className="cont">
     {enrollments.map((enr)=>{
       return(
@@ -58,6 +58,7 @@ return(
           key={enr.course_id}
           enrollment={enr}
           progreso={resumen?.cursos.find((c) => c.course_id === enr.course_id)}
+          logros={resumen?.logros}
           ></CardInsignia>
         )      
       }
