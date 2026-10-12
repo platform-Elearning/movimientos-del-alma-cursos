@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { conVariacion, explicarCostos, nombreDelMes } from "../resumen";
+import { conVariacion, explicarCobrado, explicarCostos, nombreDelMes } from "../resumen";
 
 const mes = ({ consultas = 314, inscriptas = 9, identificadas, sin_identificar, plataformas = [] }) => ({
   consultas,
@@ -88,5 +88,28 @@ describe("textos del resumen", () => {
     expect(conVariacion(9, 0, "agosto")).toBe("0 en agosto");
     expect(conVariacion(9, undefined, "agosto")).toBe("sin datos de agosto");
     expect(conVariacion(336, 300, "agosto")).toBe("+12 % vs agosto");
+  });
+});
+
+describe("explicarCobrado", () => {
+  const septiembre = {
+    currency: "ARS",
+    ingresos: 465000,
+    alumnas_que_pagaron: 4,
+    cobrado_mes: 1034261,
+    alumnas_que_pagaron_mes: 9,
+  };
+
+  it("dice cuánto y de cuántas alumnas viene de quienes ya cursaban", () => {
+    expect(explicarCobrado(septiembre)).toMatch(/\$ 569\.261 de 5 alumnas que ya cursaban/);
+  });
+
+  it("en singular cuando es una", () => {
+    expect(explicarCobrado({ ...septiembre, alumnas_que_pagaron_mes: 5 })).toMatch(/1 alumna que ya cursaba/);
+  });
+
+  it("si todo lo cobrado es de las nuevas, no hay nada que explicar", () => {
+    expect(explicarCobrado({ ...septiembre, cobrado_mes: 465000, alumnas_que_pagaron_mes: 4 })).toBeNull();
+    expect(explicarCobrado({ ...septiembre, cobrado_mes: 0 })).toBeNull();
   });
 });

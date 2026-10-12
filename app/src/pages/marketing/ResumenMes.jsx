@@ -5,7 +5,7 @@ import { mensajeDeError } from "../../utils/errores";
 import { legibleOpcional as legible } from "../../utils/etiquetas";
 import { mesLocal } from "../../utils/fechas";
 import { plataRedonda, porcentaje, veces } from "../../utils/formato";
-import { conVariacion, explicarCostos, nombreDelMes } from "../../utils/resumen";
+import { conVariacion, explicarCobrado, explicarCostos, nombreDelMes } from "../../utils/resumen";
 
 /**
  * El resumen del mes: la pestaña RESUMEN de la planilla, calculada sola con lo
@@ -105,9 +105,10 @@ const ResumenMes = () => {
             return (
               <div key={m.currency} className="resumen-moneda">
                 <h4>En {m.currency === "USD" ? "dólares" : "pesos"}</h4>
+                <p className="resumen-bloque">Inscripciones nuevas del mes</p>
                 <div className="marketing-metricas">
                   <Metrica
-                    rotulo="Cobrado a las inscriptas"
+                    rotulo="Cobrado a las nuevas"
                     valor={plataRedonda(m.ingresos, m.currency)}
                     detalle={conVariacion(m.ingresos, p?.ingresos, anterior, (x) =>
                       plataRedonda(x, m.currency)
@@ -135,6 +136,26 @@ const ResumenMes = () => {
                     alerta={m.ganancia_sobre_pauta < 0}
                   />
                 </div>
+
+                {/* Todo lo que entró a la caja en el mes, nuevas o no: el número
+                    de la planilla. Va aparte para no atribuirle a la pauta el
+                    módulo de quien se inscribió hace meses. */}
+                <p className="resumen-bloque">Todo lo cobrado en el mes</p>
+                <div className="marketing-metricas">
+                  <Metrica
+                    rotulo="Cobrado en el mes"
+                    valor={plataRedonda(m.cobrado_mes, m.currency)}
+                    detalle={`${m.alumnas_que_pagaron_mes} alumnas · ${m.pagos_mes} pagos`}
+                  />
+                  <Metrica
+                    rotulo="Retorno sobre lo cobrado"
+                    valor={veces(m.retorno_sobre_cobrado_mes)}
+                    detalle={
+                      m.retorno_sobre_cobrado_mes === null ? "sin gasto cargado" : "cobrado del mes ÷ invertido"
+                    }
+                  />
+                </div>
+                {explicarCobrado(m) && <p className="resumen-nota">{explicarCobrado(m)}</p>}
               </div>
             );
           })}
