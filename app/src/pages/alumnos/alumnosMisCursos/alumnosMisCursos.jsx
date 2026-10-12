@@ -3,6 +3,9 @@ import { useParams, useNavigate } from "react-router-dom";
 import { getCoursesByStudentId, getAllCoursesPublic } from "../../../api/cursos";
 import "./alumnosMisCursos.css";
 import Card from "../../../components/card/Card";
+import { getResumenDeProgreso } from "../../../api/progreso";
+import { useAuth } from "../../../services/authContext";
+import { fraseDeRacha } from "../../../utils/progreso";
 
 const AlumnosMisCursos = () => {
   const { alumnoId } = useParams(); 
@@ -12,6 +15,16 @@ const AlumnosMisCursos = () => {
   const [enrolledCourseIds, setEnrolledCourseIds] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [resumen, setResumen] = useState(null);
+  const { userRole } = useAuth();
+
+  useEffect(() => {
+    // Solo la alumna tiene progreso. Si falla, la pantalla sigue sin él.
+    if (userRole !== "student") return;
+    getResumenDeProgreso()
+      .then(setResumen)
+      .catch(() => setResumen(null));
+  }, [userRole, alumnoId]);
 
   const fetchCursos = async () => {
     try {
@@ -65,6 +78,13 @@ const AlumnosMisCursos = () => {
     window.open(`https://wa.me/${whatsappNumber}?text=${message}`, "_blank");
   };
 
+  const progresoDe = (cursoId) => resumen?.cursos.find((c) => c.course_id === cursoId);
+  const ultima = resumen?.ultimaClase;
+  const racha = fraseDeRacha(resumen?.racha);
+
+  const continuar = () =>
+    navigate(`/alumnos/${alumnoId}/curso/${ultima.course_id}/clase/${ultima.lesson_id}`);
+
   if (loading) return <p className="loading-message">Cargando cursos...</p>;
   if (error) return <p className="error-message">{error}</p>;
 
@@ -73,6 +93,25 @@ const AlumnosMisCursos = () => {
       <div className="title-container" >
         <h2 className="cursos-title">Mis Formaciones</h2>
       </div>
+      {(ultima || racha) && (
+        <div className="continuar-contenedor">
+          {racha && <p className="racha">{racha}</p>}
+          {ultima && (
+            <div className="continuar-tarjeta">
+              <div className="continuar-texto">
+                <span className="continuar-etiqueta">Continuar donde lo dejaste</span>
+                <h3>{ultima.title}</h3>
+                <p>
+                  {ultima.course_name} · {ultima.module_name}
+                </p>
+              </div>
+              <button type="button" className="boton-dorado" onClick={continuar}>
+                {ultima.completada ? "Volver a verla ▶" : "Seguir ▶"}
+              </button>
+            </div>
+          )}
+        </div>
+      )}
       <div className="card-container">
         {allCourses.map((curso) => {
           const isEnrolled = enrolledCourseIds.includes(curso.id);
@@ -92,6 +131,7 @@ const AlumnosMisCursos = () => {
                 nombre={curso.name}
                 description={curso.description}
                 btnText={isEnrolled ? "IR AL MATERIAL" : ""}
+                progreso={isEnrolled ? progresoDe(curso.id) : undefined}
               />
 
             </div>
