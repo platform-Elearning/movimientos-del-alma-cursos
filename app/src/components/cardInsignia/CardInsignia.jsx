@@ -1,4 +1,4 @@
-import "./CardInsignia.css"
+import "./CardInsignia.css";
 import logo from "../../assets/logo2.png";
 import BarraDeProgreso from "../progreso/BarraDeProgreso";
 import InsigniasDelCurso from "../progreso/InsigniasDelCurso";
@@ -13,52 +13,64 @@ const VERIFY_BASE = import.meta.env.VITE_VERIFY_BASE_URL || "";
 // logros: todos los de la alumna; la tarjeta muestra solo los de su curso. Sin
 // logros (no es alumna) no se muestra la fila de insignias.
 const CardInsignia = ({ enrollment, progreso, logros }) => {
+  const aprobada = enrollment.approved === true;
   const verifyUrl = enrollment.verification_code
     ? `${VERIFY_BASE}/verificar/${enrollment.verification_code}`
     : null;
 
   return (
     <div className="insignia-con-logros">
-      <div className="insignia-card">
-        <div>
-          <img src={logo} alt="Logo" className="insignia-icon" />
-        </div>
+      <div className={`insignia-card ${aprobada ? "es-aprobada" : "en-curso"}`}>
+        <img src={logo} alt="" className="insignia-icon" />
         <div className="insignia-content">
-          <h3 className="p_card">{enrollment.course_name}</h3>
+          <h3 className="insignia-titulo">{enrollment.course_name}</h3>
 
-          {enrollment.approved === true ? (
-            <div>
+          {aprobada ? (
+            <div className="insignia-estado">
               <p className="p_card">Aprobado</p>
 
-              {enrollment.url_certificate !== null ? (
+              {enrollment.url_certificate ? (
                 <a
                   href={enrollment.url_certificate}
                   target="_blank"
                   rel="noreferrer"
-                  className="a_card"
+                  className="a_card a_card--primary"
                 >
-                  Link al certificado
+                  Ver certificado
                 </a>
               ) : (
-                <p className="p_card_no_p">certificado en proceso</p>
+                <p className="p_card_no_p">Certificado en proceso</p>
               )}
 
               {verifyUrl && (
-                <a href={verifyUrl} target="_blank" rel="noreferrer" className="a_card">
+                <a
+                  href={verifyUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="a_card"
+                >
                   Credencial pública
                 </a>
               )}
             </div>
           ) : (
-            <div>
+            <div className="insignia-estado">
               <p className="p_card_no">En curso</p>
               {progreso && progreso.total > 0 && (
-                <BarraDeProgreso completadas={progreso.completadas} total={progreso.total} compacta oscura />
+                <div className="insignia-progreso">
+                  <BarraDeProgreso
+                    completadas={progreso.completadas}
+                    total={progreso.total}
+                    compacta
+                    oscura
+                  />
+                </div>
               )}
             </div>
           )}
         </div>
       </div>
+
       {logros && (
         <InsigniasDelCurso
           logros={logros}

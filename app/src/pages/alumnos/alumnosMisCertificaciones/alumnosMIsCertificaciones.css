@@ -1,46 +1,118 @@
-.title-container {
-  background: linear-gradient(135deg, var(--var-dorado-fuerte) 0%, var(--dorado-claro) 50%, var(--var-dorado-fuerte) 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* Página */
+.certificaciones-container {
+  width: 100%;
+  min-height: 100vh;
+  padding-bottom: var(--space-4);
+  background: var(--bg);
+}
+
+.certificaciones-content {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: var(--content-width);
+  margin: 0 auto;
+  padding: var(--space-4) var(--space-3) 0;
+}
+
+/* Secciones: Aprobadas / En curso */
+.certificaciones-section {
+  margin-top: var(--space-4);
+}
+
+.certificaciones-section:first-child {
+  margin-top: 0;
+}
+
+.certificaciones-section-title {
+  margin: 0 0 var(--space-2);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold-700);
+}
+
+/* Grilla de banderines (cada celda cabe el banderín de 190px + su margen) */
+.certificaciones-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(206px, 1fr));
+  gap: var(--space-2);
+  align-items: start;
+  justify-items: center;
+}
+
+/* Estado vacío */
+.certificaciones-vacio {
+  box-sizing: border-box;
+  max-width: 480px;
+  margin: var(--space-4) auto 0;
+  padding: var(--space-4) var(--space-3);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  text-align: center;
+}
+
+.certificaciones-vacio h2 {
+  margin: 0 0 var(--space-1);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--ink-900);
+}
+
+.certificaciones-vacio p {
+  margin: 0 0 var(--space-3);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--ink-600);
+}
+
+.certificaciones-btn {
+  padding: 10px 20px;
+  background: var(--gold-700);
+  border: 1px solid var(--gold-700);
+  border-radius: var(--radius-sm);
+  color: #fff;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.certificaciones-btn:hover {
+  background: var(--gold-600);
+  border-color: var(--gold-600);
+}
+
+.certificaciones-btn:focus-visible {
+  outline: 2px solid var(--gold-500);
+  outline-offset: 2px;
+}
+
+/* Estados de carga y error */
+.loading-message,
+.error-message {
   padding: 40px 20px;
-  margin-bottom: 40px;
-  box-shadow: 0 4px 20px rgba(131, 113, 27, 0.3);
-  position: relative;
-  overflow: hidden;
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 500;
 }
 
-.title-container::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, transparent 100%);
-  pointer-events: none;
+.loading-message {
+  color: var(--gold-700);
 }
 
-.cursos-title {
-  margin: 0;
-  font-size: 3rem;
-  font-weight: 700;
-  color: #ffffff;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-  letter-spacing: 1px;
-  position: relative;
-  z-index: 1;
+.error-message {
+  background: #fdecea;
+  border: 1px solid #f3c4bf;
+  border-radius: var(--radius-md);
+  color: var(--danger);
 }
 
-.cont{
-  background-color: #fff;
-  border:  var(--var-dorado-fuerte) 1px solid; 
-  border-radius: 16px;
-  margin: 24px;
-  padding: 0px;
-  display: flex;
-  flex-wrap: wrap;       /* Permite que las tarjetas bajen a la siguiente fila */
-  justify-content: center; /* Centra las tarjetas si sobra espacio */
-  gap: 20px;             /* Espacio entre tarjetas (es mejor que usar márgenes) */
-  padding: 20px;
+@media (max-width: 600px) {
+  .certificaciones-content {
+    padding: var(--space-3) var(--space-2) 0;
+  }
 }

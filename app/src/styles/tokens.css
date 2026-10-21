@@ -1,0 +1,42 @@
+:root {
+  /* Color: dorado de marca */
+  --gold-50: #fbf5e6;
+  --gold-100: #f4e8cf;
+  --gold-300: #e3c07a; /* títulos sobre fondo oscuro */
+  --gold-500: #c79a45;
+  --gold-600: #a8802f;
+  --gold-700: #876a24; /* texto y botones sobre fondo claro (contraste AA) */
+
+  /* Color: neutros cálidos */
+  /*--ink-900: #2b2118;*/
+  --ink-900: #876a24;
+  --ink-600: #5c4f42;
+  --bg: #faf6ee;
+  --surface: #ffffff;
+  --border: #e6dac3;
+
+  /* Color: estados */
+  --danger: #b3261e;
+  --success: #3b6d11;
+  --success-light: #a9d18e; /* sobre fondo oscuro */
+
+  /* Layout */
+  --content-width: 960px;
+
+  /* Forma */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --shadow-sm: 0 1px 4px rgba(43, 33, 24, 0.06);
+  --shadow-card: 0 4px 16px rgba(43, 33, 24, 0.08);
+  --shadow-popover: 0 8px 24px rgba(43, 33, 24, 0.14);
+
+  /* Espaciado (escala de 8) */
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+}
+
+body {
+  margin: 0;
+}

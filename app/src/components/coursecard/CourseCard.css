@@ -1,0 +1,148 @@
+.course-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.course-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-popover);
+}
+
+/* Banda superior */
+.course-card-band {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 64px;
+}
+
+.is-available .course-card-band {
+  background: linear-gradient(
+    90deg,
+    var(--gold-700),
+    var(--gold-600) 50%,
+    var(--gold-700)
+  );
+  color: #fff;
+}
+
+.is-active .course-card-band {
+  background: var(--ink-900);
+  color: var(--gold-300);
+}
+
+.course-card-chip {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--gold-100);
+  color: var(--gold-700);
+  font-size: 0.68rem;
+  font-weight: 600;
+}
+
+.is-active .course-card-chip {
+  background: #e8f1e4;
+  color: var(--success);
+}
+
+/* Cuerpo */
+.course-card-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: var(--space-2);
+}
+
+.course-card-title {
+  margin: 0 0 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--ink-900);
+}
+
+.course-card-description {
+  display: -webkit-box;
+  margin: 0 0 var(--space-2);
+  overflow: hidden;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--ink-600);
+}
+
+.course-card-progress {
+  margin-bottom: var(--space-2);
+}
+
+.course-card-actions {
+  margin-top: auto;
+}
+
+/* Botones */
+.course-card-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.course-card-btn.primary {
+  background: var(--gold-700);
+  border: 1px solid var(--gold-700);
+  color: #fff;
+}
+
+.course-card-btn.primary:hover {
+  background: var(--gold-600);
+  border-color: var(--gold-600);
+}
+
+.course-card-btn.secondary {
+  background: transparent;
+  border: 1px solid var(--gold-500);
+  color: var(--gold-700);
+}
+
+.course-card-btn.secondary:hover {
+  background: var(--gold-50);
+}
+
+.course-card-btn:focus-visible {
+  outline: 2px solid var(--gold-500);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .course-card,
+  .course-card-btn {
+    transition: none;
+  }
+
+  .course-card:hover {
+    transform: none;
+  }
+}

@@ -1,98 +1,171 @@
-.insignia-card {
-  margin: 8px;
-  display: flex;
-  flex-direction: column; /* Apilamos contenido verticalmente */
-  align-items: center;
-  text-align: center;
-  padding: 25px 20px;
-  
-  /* Estilo Oscuro */
-  background: #1e1e2d ; 
-  border:  var(--var-dorado-fuerte) 4px solid;
-  color: #ffffff;
-  
-  
-  border-radius: 15px; 
-  min-height: 300px; 
-  width: 200px;
-  /* Sombra elegante */
-  box-shadow: 100 10px 15px #4CAF50;
-  transition: transform 0.3s ease, clip-path 0.3s ease;
-  clip-path: polygon(0% 0%, 100% 0%, 100% 55%, 50% 90%, 0% 55%);
+/* Banderín de certificación.
+   Mantiene los nombres de clase de estado (p_card, p_card_no, p_card_no_p, a_card)
+   y suma modificadores para el alto: .en-curso y .es-aprobada. */
 
+.insignia-card {
+  position: relative;
+  isolation: isolate;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 190px;
+  margin: 8px;
+  padding: 16px 14px 56px;
+  background: var(--gold-500); /* este color es el borde dorado */
+  color: #fff;
+  text-align: center;
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - 42px),
+    50% 100%,
+    0 calc(100% - 42px)
+  );
+  transition: transform 0.2s ease, background-color 0.2s ease, clip-path 0.2s ease;
+}
+
+.insignia-card.en-curso {
+  min-height: 250px;
+}
+
+/* Las aprobadas llevan acciones, así que son más altas */
+.insignia-card.es-aprobada {
+  min-height: 300px;
+}
+
+/* Relleno oscuro, 2px más chico que el borde dorado */
+.insignia-card::before {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  z-index: -1;
+  background: var(--ink-900);
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - 40px),
+    50% 100%,
+    0 calc(100% - 40px)
+  );
 }
 
 .insignia-card:hover {
-  transform: translateY(-5px);
-  border-color: #4CAF50; /* Un toque de verde al pasar el mouse */
-  clip-path: polygon(0% 0%, 100% 0%, 100% 60%, 50% 95%, 0% 60%);
-  box-shadow: 100 10px 15px #4CAF50;
-
+  transform: translateY(-4px);
+  background: var(--gold-300);
 
 }
 
+/* Logo */
 .insignia-icon {
-  background: transparent; /* Un tono más claro que el fondo principal */
-  width: 100px;
-  height: 80px;
+  display: block;
+  width: auto;
+  max-width: 100px;
+  height: 44px;
+  margin-bottom: 8px;
+  object-fit: contain;
+}
+
+.insignia-content,
+.insignia-estado {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  margin-bottom: 15px;
+  width: 100%;
 }
 
-.insignia-content h3 {
+/* Título */
+.insignia-titulo {
+  margin: 0 0 8px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  line-height: 1.3;
+  color: #fff;
+}
+
+/* Estado: En curso / Aprobado */
+.p_card,
+.p_card_no {
   margin: 0;
-  font-size: 16px;
-  color: #ffffff;
-}
-
-h3{
-  margin: 80px ;
-  font-size: 12px;
-  color: var(--var-dorado-medio); 
+  font-size: 0.78rem;
   font-weight: 600;
 }
 
+.p_card {
+  color: var(--success-light);
+}
 
-.a_card{
-  list-style: none; 
-  margin: 12px ;
-  font-size: 12px;
-  color: var(--var-dorado-medio); 
+.p_card::before {
+  content: "\2713";
+  margin-right: 4px;
+}
 
-  font-weight: 600;
-  transition: font-weight ease 0.5s;
+.p_card_no {
+  color: var(--gold-500);
+}
+
+/* Barra de progreso dentro del banderín (cursos en curso) */
+.insignia-progreso {
+  width: 100%;
+  margin-top: 10px;
+}
+
+/* Certificado en proceso */
+.p_card_no_p {
+  margin: 12px 0 0;
+  font-size: 0.7rem;
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--border);
+}
+
+/* Links: credencial pública, certificado */
+.a_card {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin: 10px 0 0;
+  list-style: none;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--gold-300);
+  text-decoration: underline;
   cursor: pointer;
+  transition: color 0.2s ease;
 }
 
-.a_card:hover{
-
-  color:  #4CAF50; 
-  font-weight: 800;
+.a_card:hover {
+  color: #fff;
 }
 
-.p_card{
-  margin: 8px ;
-  font-size: 16px;
+.a_card:focus-visible {
+  outline: 2px solid var(--gold-300);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Botón "Ver certificado" */
+.a_card--primary {
   margin-top: 12px;
-  color: #4CAF50; /* Un toque de verde al pasar el mouse */
+  padding: 6px 12px;
+  background: var(--gold-500);
+  border-radius: var(--radius-sm);
+  color: white;
   font-weight: 600;
+  text-decoration: none;
 }
 
-
-.p_card_no{
-  margin: 8px ;
-  font-size: 16px;
-  margin-top: 12px;
-  color: var(--var-dorado-medio); 
-  font-weight: 600;
+.a_card--primary:hover {
+  background: var(--gold-300);
+  color: var(--ink-900);
 }
 
-.p_card_no_p{
-  margin: 8px ;
-  font-size: 12px;
-  margin-top: 12px;
-  color: var(--var-dorado-medio); 
-  font-weight: 600;
+@media (prefers-reduced-motion: reduce) {
+  .insignia-card {
+    transition: none;
+  }
+
+  .insignia-card:hover {
+    transform: none;
+  }
 }

@@ -203,6 +203,15 @@ const Navbar = () => {
     return <p className="loading-message">Verificando autenticación...</p>;
   }
 
+  const isActive = (prefix) => location.pathname.startsWith(prefix);
+const initials = (userNav || "")
+  .split(" ")
+  .filter(Boolean)
+  .slice(0, 2)
+  .map((w) => w[0])
+  .join("")
+  .toUpperCase();
+
   return (
     <nav className="navbar">
       <div className="navbar-container">
@@ -244,13 +253,28 @@ const Navbar = () => {
           )}
           {userRole === "student" && (
             <li>
-              <a className="alumno-a" onClick={navigateToPageAlumnnosMisCursos}>Mis Formaciones</a>
-              <a className="alumno-a" onClick={navigateToPageAlumnnosMisCertificaciones}>Mis Certificaciones</a>
-
+              <a
+                  className={`alumno-a ${isActive("/alumnos/miscursos") ? "active" : ""}`}
+                  onClick={navigateToPageAlumnnosMisCursos}
+                >
+                  Mis Formaciones
+                </a>
+                <a
+                  className={`alumno-a ${isActive("/alumnos/miscertificaciones") ? "active" : ""}`}
+                  onClick={navigateToPageAlumnnosMisCertificaciones}
+                >
+                  Mis Certificaciones
+                </a>
             </li>
           )}
           <li>
             <button className="report-button" onClick={openReportModal}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="8" x2="12" y2="12" />
+                <line x1="12" y1="16" x2="12.01" y2="16" />
+              </svg>
               Reportar Problema
             </button>
           </li>
@@ -341,9 +365,9 @@ const Navbar = () => {
               )}
             </li>
           )}
-          <li className="user-section" onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}>
-            <img src={userImg} alt="User" className="user-icon" />
-            <h5 className="username">{userNav}</h5>
+            <li className="user-section" onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}>
+              <div className="user-avatar">{initials}</div>
+              <h5 className="username">{userNav}</h5>
             {isUserMenuOpen && (
               <div className="user-dropdown">
                 {userRole === "student" && (
@@ -370,13 +394,14 @@ const Navbar = () => {
             )}
           </li>
           <li className="logout-section">
-            <img
-              src={logoutImg}
-              alt="Logout"
-              className="logout-icon"
-              onClick={logout}
-            />
-            <h5 className="logout">Logout</h5>
+            <button className="icon-button" onClick={logout} aria-label="Cerrar sesión" title="Cerrar sesión">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" y1="12" x2="9" y2="12" />
+              </svg>
+            </button>
           </li>
         </ul>
       </div>

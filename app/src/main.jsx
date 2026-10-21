@@ -3,6 +3,7 @@ import { BrowserRouter, useLocation } from "react-router-dom";
 import AppRouter from "./router/AppRouter.jsx";
 import "./tokens.css";
 import "./main.css";
+import "./styles/tokens.css";
 import Navbar from "./components/navbar/Navbar.jsx";
 import BotonAyuda from "./components/tour/BotonAyuda.jsx";
 import { AuthProvider } from "./services/authContext.jsx";
